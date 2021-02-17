@@ -1,0 +1,55 @@
+input,select{
+    background-color: #F3F3F4;
+    border-color: #616977;
+    border-radius: 20px;
+  }
+input:focus { 
+    outline: none !important;
+    border-color: #DB8993;
+    box-shadow: 0 0 10px #D16572;
+}
+button:hover{
+    background-color: #E8505B;
+}
+  button{
+    border-radius: 250px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  border-radius: 20px;
+  }
+  .strike {
+    margin: 15px;
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap; 
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: gray;
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 15px;
+}
+small{
+    color: red; margin: 5px;
+    font-size: x-small;
+  }

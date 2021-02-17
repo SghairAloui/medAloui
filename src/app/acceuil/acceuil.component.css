@@ -1,0 +1,155 @@
+html,body{
+    overflow-x: hidden;
+    
+}
+.containerBox{
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+.bodyBox{
+    position: absolute;
+    height: 100%;
+    width: 92%;
+    background-color:white ;
+    right: 0%;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    top: 0px;
+    transition: 1s;
+}
+.menuBox{
+    height: 100%;
+    width: 11%;
+    background-color:#202631;
+    position: relative;
+    left: 0px;
+    opacity: 90%;
+    transition: 1s ;
+    color: #202631;
+}
+.menuBox:hover{
+    height: 100%;
+    width: 18%;
+    background-color:#202631;
+    position: relative;
+    transition: 1s ;
+    opacity: 100%;
+    color: white;   
+}
+.menuBox:hover + #bodyBox{
+    position: absolute;
+    height: 100%;
+    width: 92%;
+    background-color:white ;
+    right: -8%;
+    top: 0px;
+    transition: 1s;
+}
+.homeIcon{
+    position: absolute;
+    width: 60%;
+    left: 15%;
+}
+.textHomeIcon{
+    position: absolute;
+    top: 10%;
+    left: 50px;
+}
+.aboutIcon{
+    position: absolute;
+    width: 60%;
+    left: 15%;
+}
+.textAboutIcon{
+    position: absolute;
+    top: 10%;
+    left: 50px;
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap
+}
+.settingIcon{
+    position: absolute;
+    bottom: 5%;
+    left: 15%;
+    width: 60%;
+}
+.textSettingIcon{
+    position: absolute;
+    top: 10%;
+    left: 50px;
+}
+.menuIcon{
+    width: 100%;
+    position: absolute;
+    padding-left: 15%;
+    top: 50%;
+    transform: translateY(-75%);
+}
+.arrowContainer{
+    position: absolute;
+    right: 30%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.bodyImage{
+    position: absolute;
+    left: 2%;
+    height: 100%;
+    width: 40%;
+}
+.bodyImageContainer{
+    position: absolute;
+    height: 50%;
+    width: 100%;
+    bottom: 4%;
+}
+.bodyFormContainer{
+    position: absolute;
+    height: 100%;
+    width: 60%;
+    right: 0px;
+}
+.signInFormContainer{
+    position: absolute;
+    height: 90%;
+    width: 64%;
+    top: 5%;
+    left: 18%;
+    right: 18%;
+    bottom: 5%;
+}
+.centerSingInForm{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.fa-home{
+    color: white;
+}
+.fa-chevron-right{
+    color: white;
+}
+.fa-home:hover{
+    color: #D16572;
+}
+.fa-address-card{
+    color: white;
+}
+.fa-address-card:hover{
+    color: #D16572;
+}
+.fa-cog{
+    color: white;
+}
+.fa-cog:hover{
+    color: #D16572;
+}
+.fa-times{
+    color: white;
+}
+.fa-times:hover{
+    color: #D16572;
+}
