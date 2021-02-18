@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AcceuilService } from './acceuil.service';
 
 @Component({
   selector: 'app-acceuil',
@@ -7,20 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AcceuilComponent implements OnInit {
 
-  constructor() { }
+  constructor(private acceuilService: AcceuilService) { }
   signUpForm: boolean = false;
-  openForm:boolean = true;
+  FormName:any;
   ngOnInit(): void {
+    this.acceuilService.displayForm$.subscribe(data=>{
+      this.FormName=data;
+    })
   }
   recieveMessage($event){
     this.signUpForm=$event;
-  }
-  xxxx($event:any){
-    console.log("done");
-    this.openForm=$event;
-  }
-  closePopUp(){
-    this.openForm=false;
   }
 
 }

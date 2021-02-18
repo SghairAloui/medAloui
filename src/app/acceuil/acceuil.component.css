@@ -1,10 +1,9 @@
 html,body{
     overflow-x: hidden;
-    
 }
 .popUpContainer{
     position: absolute;
-    height: 400px;
+    height: 500px;
     width: 600px;
     top: 50%;
     left: 50%;
@@ -18,7 +17,7 @@ html,body{
 .popUpContainerWithoutCancel{
     position: absolute;
     width: 100%;
-    height: 95%;
+    height: 85%;
     bottom: 0%;
 }
 .popUpContainerWithCancel{
@@ -27,6 +26,23 @@ html,body{
     height: auto;
     top: 5%;
     right: 5%;
+}
+.hr{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    top: 0%;
+    right: 0%;
+    background-color: #d165728a;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;;
+}
+.formName{
+    position: absolute;
+    width: auto;
+    height: 10%;
+    top: 6%;
+    left: 5%;
 }
 .containerBox{
     height: 100%;
@@ -169,30 +185,42 @@ html,body{
 }
 .fa-home{
     color: white;
+    transition: 0.3s;
 }
 .fa-chevron-right{
     color: white;
+    transition: 0.3s;
 }
 .fa-home:hover{
     color: #D16572;
+    transform:scale(1.3);
+    transition: 0.3s;
 }
 .fa-address-card{
     color: white;
+    transition: 0.3s;
 }
 .fa-address-card:hover{
     color: #D16572;
+    transform:scale(1.3);
+    transition: 0.3s;
 }
 .fa-cog{
     color: white;
+    transition: 0.3s;
 }
 .fa-cog:hover{
     color: #D16572;
+    transform:scale(1.3);
+    transition: 0.3s;
+}
+.fa-times:hover{
+    transform:scale(1.3);
+    transition: 0.3s;
 }
 .fa-times{
     color: #202631;
-}
-.fa-times:hover{
-    color: #D16572;
+    transition: 0.3s;
 }
 .IconButton{
     border: none;

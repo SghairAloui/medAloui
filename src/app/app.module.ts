@@ -8,6 +8,9 @@ import { AcceuilComponent } from './acceuil/acceuil.component';
 import { SignInFormComponent } from './Form/sign-in-form/sign-in-form.component';
 import { SignUpFormComponent } from './Form/sign-up-form/sign-up-form.component';
 import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.component';
+import { AcceuilService } from './acceuil/acceuil.service';
+import { PharmacistSignUpComponent } from './form/pharmacist-sign-up/pharmacist-sign-up.component';
+import { DoctorSignUpComponent } from './form/doctor-sign-up/doctor-sign-up.component';
 
 @NgModule({
   declarations: [
@@ -15,14 +18,16 @@ import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.comp
     AcceuilComponent,
     SignInFormComponent,
     SignUpFormComponent,
-    ClientSignUpComponent
+    ClientSignUpComponent,
+    PharmacistSignUpComponent,
+    DoctorSignUpComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [AcceuilService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

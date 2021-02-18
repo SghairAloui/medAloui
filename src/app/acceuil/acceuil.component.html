@@ -41,16 +41,53 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="openForm">
+        <div *ngIf="FormName=='Client'">
             <div class="popUpContainer">
+             <div class="hr"></div>
              <div class="popUpContainerWithoutCancel">
-                <app-sign-up-form (outPutOpenClientSignUp)="xxxx($event)" style="display: none;"></app-sign-up-form>  
+                <app-sign-up-form style="display: none;"></app-sign-up-form>  
                 <app-client-sign-up></app-client-sign-up>  
              </div>
+             <div class="formName">
+                <h3>Sign Up</h3>
+                As Client
+            </div>
              <div class="popUpContainerWithCancel">
-                <button class="IconButton" (click)="closePopUp()"><i class="fas fa-times fa-2x"></i></button>
+                <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
              </div>
            </div>
        </div>
+       <div *ngIf="FormName=='Pharmacist'">
+        <div class="popUpContainer">
+         <div class="hr"></div>
+         <div class="popUpContainerWithoutCancel">
+            <app-sign-up-form style="display: none;"></app-sign-up-form>  
+            <app-pharmacist-sign-up></app-pharmacist-sign-up>  
+         </div>
+         <div class="formName">
+            <h3>Sign Up</h3>
+            As Pharmacist
+        </div>
+         <div class="popUpContainerWithCancel">
+            <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+         </div>
+       </div>
+   </div>
+   <div *ngIf="FormName=='Doctor'">
+    <div class="popUpContainer">
+     <div class="hr"></div>
+     <div class="popUpContainerWithoutCancel">
+        <app-sign-up-form style="display: none;"></app-sign-up-form>  
+        <app-doctor-sign-up></app-doctor-sign-up>  
+     </div>
+     <div class="formName">
+        <h3>Sign Up</h3>
+        As Doctor
+    </div>
+     <div class="popUpContainerWithCancel">
+        <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+     </div>
+   </div>
+</div>
     </body>
 </html>
