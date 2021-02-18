@@ -1,1 +1,10 @@
-<p>sign-up-form works!</p>
+<div class="container">
+ <div style="color: #202631;">Choose your account type :</div><br>
+    <div class="buttons">
+        <button class="userTypeBtn" (click)="openClientFormFromSignUp()"> CLIENT </button><br>
+        <button class="userTypeBtn"> PHARMACIST </button><br>
+        <button class="userTypeBtn"> DOCTOR </button>
+    </div>
+    <div class="strike"><span>Or</span></div>
+    <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480; " (click)="openSignIn()">Go back</button>
+</div>

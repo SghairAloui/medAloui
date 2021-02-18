@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { EventEmitter, Component, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -8,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class SignInFormComponent implements OnInit {
 
   constructor() { }
-
+  @Output() outPutOpenSignUp = new EventEmitter<boolean>();
   ngOnInit(): void {
   }
-
+  openSignUp(){
+    this.outPutOpenSignUp.emit(true);
+  }
 }

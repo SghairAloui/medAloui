@@ -7,13 +7,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 import { SignInFormComponent } from './Form/sign-in-form/sign-in-form.component';
 import { SignUpFormComponent } from './Form/sign-up-form/sign-up-form.component';
+import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AcceuilComponent,
     SignInFormComponent,
-    SignUpFormComponent
+    SignUpFormComponent,
+    ClientSignUpComponent
   ],
   imports: [
     BrowserModule,
