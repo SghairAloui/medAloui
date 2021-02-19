@@ -1,0 +1,50 @@
+<html>
+    <body>
+        <div class="containerBox" >
+            <div class="menuBox" id="menuBox">
+                <div class="menuIcon">
+                    <div class="homeIcon">
+                        <div class="textHomeIcon" id="textHomeIcon">HOME</div>
+                        <button class="IconButton" (click)="goTo('/acceuil')">
+                            <i class="fas fa-home fa-2x"></i>
+                        </button>
+                    </div><br><br><br>
+                    <div class="aboutIcon">
+                        <button class="IconButton" (click)="goTo('/about-us')">
+                            <i class="fas fa-address-card fa-2x"></i>
+                        </button>
+                        <div class="textAboutIcon" id="textAboutIcon">ABOUT US</div>
+                    </div>
+                </div>
+                <div class="arrowContainer">
+                    <i class="fas fa-chevron-right fa-1x"></i>
+                </div>
+                <div class="settingIcon">
+                    <button class="IconButton">
+                        <i class="fas fa-cog fa-2x"></i>
+                    </button>
+                    <div class="textSettingIcon" id="textSettingIcon">SETTING</div>
+                </div>
+            </div>
+            <div class="bodyBox" id="bodyBox">
+                <div class="firstHalfBody">
+                    <div class="aboutUsTitle">
+                        <strong>ABOUT US</strong>
+                    </div>
+                    <div class="aboutUsText">
+                        <strong>SANTELIB</strong> est une application web <br> permet d’accéder aux agendas des médecins<br> ainsi de prendre un rendez-vous avec eux...
+                    </div>
+                </div>
+                <div class="secondHalfBody">
+                    <div class="imagecontainer">
+                        <img src="../../../assets/aboutUs.png" style="width: 100%;">
+                    </div>
+                </div>
+                <div class="aboutUsFooter">
+                    <div class="aboutUsArrow" id="aboutUsArrow"><i class="fas fa-sort-up fa-2x" id="fa-sort-up"></i></div>
+                    <div class="contactUsTitle">CONTACT US</div>
+                </div>
+           </div>
+        </div>
+    </body>
+</html>

@@ -11,6 +11,7 @@ import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.comp
 import { AcceuilService } from './acceuil/acceuil.service';
 import { PharmacistSignUpComponent } from './form/pharmacist-sign-up/pharmacist-sign-up.component';
 import { DoctorSignUpComponent } from './form/doctor-sign-up/doctor-sign-up.component';
+import { AboutUsComponent } from './About Us/about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DoctorSignUpComponent } from './form/doctor-sign-up/doctor-sign-up.comp
     SignUpFormComponent,
     ClientSignUpComponent,
     PharmacistSignUpComponent,
-    DoctorSignUpComponent
+    DoctorSignUpComponent,
+    AboutUsComponent
   ],
   imports: [
     BrowserModule,

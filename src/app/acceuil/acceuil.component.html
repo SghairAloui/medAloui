@@ -5,10 +5,14 @@
                 <div class="menuIcon">
                     <div class="homeIcon">
                         <div class="textHomeIcon" id="textHomeIcon">HOME</div>
-                        <a href="#"><i class="fas fa-home fa-2x"></i></a> 
+                        <button class="IconButton" (click)="goTo('/acceuil')">
+                            <i class="fas fa-home fa-2x"></i>
+                        </button>
                     </div><br><br><br>
                     <div class="aboutIcon">
-                        <a href="#"><i class="fas fa-address-card fa-2x"></i></a>
+                        <button class="IconButton" (click)="goTo('/about-us')">
+                            <i class="fas fa-address-card fa-2x"></i>
+                        </button>
                         <div class="textAboutIcon" id="textAboutIcon">ABOUT US</div>
                     </div>
                 </div>
@@ -16,7 +20,9 @@
                     <i class="fas fa-chevron-right fa-1x"></i>
                 </div>
                 <div class="settingIcon">
-                    <a href="#" ><i class="fas fa-cog fa-2x"></i></a>
+                    <button class="IconButton">
+                        <i class="fas fa-cog fa-2x"></i>
+                    </button>
                     <div class="textSettingIcon" id="textSettingIcon">SETTING</div>
                 </div>
             </div>
@@ -62,7 +68,7 @@
          <div class="hr"></div>
          <div class="popUpContainerWithoutCancel">
             <app-sign-up-form style="display: none;"></app-sign-up-form>  
-            <app-pharmacist-sign-up></app-pharmacist-sign-up>  
+            <app-client-sign-up></app-client-sign-up>  
          </div>
          <div class="formName">
             <h3>Sign Up</h3>

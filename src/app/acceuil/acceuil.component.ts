@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AcceuilService } from './acceuil.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { AcceuilService } from './acceuil.service';
 })
 export class AcceuilComponent implements OnInit {
 
-  constructor(private acceuilService: AcceuilService) { }
+  constructor(private acceuilService: AcceuilService, private router:Router) { }
   signUpForm: boolean = false;
   FormName:any;
   ngOnInit(): void {
@@ -19,5 +20,7 @@ export class AcceuilComponent implements OnInit {
   recieveMessage($event){
     this.signUpForm=$event;
   }
-
+  goTo(path:String){
+    this.router.navigate([path]);
+  }
 }
