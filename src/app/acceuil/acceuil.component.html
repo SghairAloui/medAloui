@@ -5,12 +5,12 @@
                 <div class="menuIcon">
                     <div class="homeIcon">
                         <div class="textHomeIcon" id="textHomeIcon">HOME</div>
-                        <button class="IconButton" (click)="goTo('/acceuil')">
+                        <button class="IconButton" (click)="body='acceuilBody'">
                             <i class="fas fa-home fa-2x"></i>
                         </button>
                     </div><br><br><br>
                     <div class="aboutIcon">
-                        <button class="IconButton" (click)="goTo('/about-us')">
+                        <button class="IconButton" (click)="body='openAboutUsBody'">
                             <i class="fas fa-address-card fa-2x"></i>
                         </button>
                         <div class="textAboutIcon" id="textAboutIcon">ABOUT US</div>
@@ -27,24 +27,9 @@
                 </div>
             </div>
             <div class="bodyBox" id="bodyBox">
-                <div class="bodyImage">
-                    <div class="bodyImageContainer">
-                        <img src="../../assets/Doctor.png" style="width: 100%;">
-                    </div>
-                </div>
-                <div class="bodyFormContainer">
-                    <div class="signInFormContainer">
-                        <div class="centerSingInForm">
-                            <div class="formContainer">
-                                <div class="formContainerfrom">
-                                    <div *ngIf="signUpForm; then showSignUp else showSignIn"></div>
-                                    <ng-template #showSignIn><app-sign-in-form (outPutOpenSignUp)="recieveMessage($event)"></app-sign-in-form></ng-template>
-                                    <ng-template #showSignUp><app-sign-up-form (outPutOpenSignIn)="recieveMessage($event)"></app-sign-up-form></ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div *ngIf="body=='acceuilBody'; then openAcceuilBody else openAboutUsBody"></div>
+                <ng-template #openAcceuilBody><app-acceuil-body></app-acceuil-body></ng-template>
+                <ng-template #openAboutUsBody><app-about-us-body></app-about-us-body></ng-template>
             </div>
         </div>
         <div *ngIf="FormName=='Client'">
@@ -59,7 +44,7 @@
                 As Client
             </div>
              <div class="popUpContainerWithCancel">
-                <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+                <button class="IconButton" (click)="FormName = false;"><i class="fas fa-times fa-2x"></i></button>
              </div>
            </div>
        </div>

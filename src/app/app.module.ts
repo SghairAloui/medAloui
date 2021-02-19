@@ -11,7 +11,8 @@ import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.comp
 import { AcceuilService } from './acceuil/acceuil.service';
 import { PharmacistSignUpComponent } from './form/pharmacist-sign-up/pharmacist-sign-up.component';
 import { DoctorSignUpComponent } from './form/doctor-sign-up/doctor-sign-up.component';
-import { AboutUsComponent } from './About Us/about-us/about-us.component';
+import { AcceuilBodyComponent } from './bodyContent/acceuil-body/acceuil-body.component';
+import { AboutUsBodyComponent } from './bodyContent/about-us-body/about-us-body.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AboutUsComponent } from './About Us/about-us/about-us.component';
     ClientSignUpComponent,
     PharmacistSignUpComponent,
     DoctorSignUpComponent,
-    AboutUsComponent
+    AcceuilBodyComponent,
+    AboutUsBodyComponent
   ],
   imports: [
     BrowserModule,

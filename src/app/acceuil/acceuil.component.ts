@@ -10,17 +10,11 @@ import { AcceuilService } from './acceuil.service';
 export class AcceuilComponent implements OnInit {
 
   constructor(private acceuilService: AcceuilService, private router:Router) { }
-  signUpForm: boolean = false;
+  body: String = 'acceuilBody';
   FormName:any;
   ngOnInit(): void {
     this.acceuilService.displayForm$.subscribe(data=>{
       this.FormName=data;
     })
-  }
-  recieveMessage($event){
-    this.signUpForm=$event;
-  }
-  goTo(path:String){
-    this.router.navigate([path]);
   }
 }
