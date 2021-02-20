@@ -70,6 +70,19 @@ html,body{
     transition: 1s ;
     color: #2c3038;
 }
+.logoContainer{
+    opacity: 0%;
+    width: 60%;
+    height: 10%;
+    top: 5%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    transition: 1s;
+}
+.menuBox:hover .logoContainer{
+    opacity: 100%;
+    transition: 2s;
+}
 .menuBox:hover{
     height: 100%;
     width: 18%;

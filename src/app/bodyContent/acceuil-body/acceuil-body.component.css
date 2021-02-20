@@ -6,9 +6,9 @@
 }
 .bodyImageContainer{
     position: absolute;
-    height: 50%;
+    height: 85%;
     width: 100%;
-    bottom: 4%;
+    bottom: 0%;
     animation: fadeUp 2s ease;
 }
 .bodyFormContainer{

@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./about-us-body.component.css']
 })
 export class AboutUsBodyComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {
@@ -14,5 +13,4 @@ export class AboutUsBodyComponent implements OnInit {
   toContactUsSection(){
     document.getElementById("contactUsSection").scrollIntoView({behavior:"smooth"});
   }
-
 }
