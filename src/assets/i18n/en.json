@@ -38,7 +38,11 @@
     "dec":"December",
     "year":"Year",
     "submit":"SUBMIT",
-    "as":"As"
+    "as":"As",
+    "hOME":"HOME",
+    "aboutUs":"ABOUT US",
+    "setting":"SETTINGS"
+
     
 
 }

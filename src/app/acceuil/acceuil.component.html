@@ -7,7 +7,7 @@
                 </div>
                 <div class="menuIcon">
                     <div class="homeIcon">
-                        <div class="textHomeIcon" id="textHomeIcon">HOME</div>
+                        <div class="textHomeIcon" id="textHomeIcon">{{'hOME' |translate}}</div>
                         <button class="IconButton" (click)="body='acceuilBody'">
                             <i class="fas fa-home fa-2x"></i>
                         </button>
@@ -16,7 +16,7 @@
                         <button class="IconButton" (click)="body='openAboutUsBody'">
                             <i class="fas fa-address-card fa-2x"></i>
                         </button>
-                        <div class="textAboutIcon" id="textAboutIcon">ABOUT US</div>
+                        <div class="textAboutIcon" id="textAboutIcon">{{'aboutUs'|translate}} </div>
                     </div>
                 </div>
                 <div class="arrowContainer">
@@ -26,7 +26,7 @@
                     <button class="IconButton" (click)="FormName='Settings'">
                         <i class="fas fa-cog fa-2x"></i>
                     </button>
-                    <div class="textSettingIcon" id="textSettingIcon">SETTING</div>
+                    <div class="textSettingIcon" id="textSettingIcon">{{'setting'|translate}}</div>
                 </div>
             </div>
             <div class="bodyBox" id="bodyBox">
@@ -97,7 +97,7 @@
                         <label class="btn btn-outline-primary" id="englishLang" for="englishLang" (click)="changeLangTo('en')">Englais</label>
                      
                         <input type="radio" class="frenchLangRadio" name="btnradio" id="frenchLang">
-                        <label class="btn btn-outline-primary" id="frenchLang" for="frenchLang" (click)="changeLangTo('fr')">Fraçais</label>
+                        <label class="btn btn-outline-primary" id="frenchLang" for="frenchLang" (click)="changeLangTo('fr')">Français</label>
 
                         <input type="radio" class="arabeLangRadio" name="btnradio" id="arabeLang">
                         <label class="btn btn-outline-primary" id="arabeLang" for="arabeLang">Arabe</label>
