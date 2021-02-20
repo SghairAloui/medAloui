@@ -1,10 +1,10 @@
 <div class="container">
- <div style="color: #202631;">Choose your account type :</div><br>
+ <div style="color: #202631;">{{'accountType'|translate}} :</div><br>
     <div class="buttons">
-        <button class="userTypeBtn" (click)="openClientFormFromSignUp()"> CLIENT </button><br>
-        <button class="userTypeBtn" (click)="openPharmacistFormFromSignUp()"> PHARMACIST </button><br>
-        <button class="userTypeBtn" (click)="openDoctorFormFromSignUp()"> DOCTOR </button>
+        <button class="userTypeBtn" (click)="openClientFormFromSignUp()"> {{ 'client' | translate}} </button><br>
+        <button class="userTypeBtn" (click)="openPharmacistFormFromSignUp()"> {{ 'pharmacist' | translate}} </button><br>
+        <button class="userTypeBtn" (click)="openDoctorFormFromSignUp()"> {{ 'doctor' | translate}} </button>
     </div>
-    <div class="strike"><span>Or</span></div>
-    <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480; " (click)="openSignIn()">Go back</button>
+    <div class="strike"><span>{{'or'|translate}}</span></div>
+    <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480; " (click)="openSignIn()">{{'goBack'|translate}}</button>
 </div>

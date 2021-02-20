@@ -23,7 +23,7 @@
                     <i class="fas fa-chevron-right fa-1x"></i>
                 </div>
                 <div class="settingIcon">
-                    <button class="IconButton">
+                    <button class="IconButton" (click)="FormName='Settings'">
                         <i class="fas fa-cog fa-2x"></i>
                     </button>
                     <div class="textSettingIcon" id="textSettingIcon">SETTING</div>
@@ -43,8 +43,8 @@
                 <app-client-sign-up></app-client-sign-up>  
              </div>
              <div class="formName">
-                <h3>Sign Up</h3>
-                As Client
+                <h3>{{'signUp'|translate}}</h3>
+                {{'as'|translate}} {{'client'|translate}}
             </div>
              <div class="popUpContainerWithCancel">
                 <button class="IconButton" (click)="FormName = false;"><i class="fas fa-times fa-2x"></i></button>
@@ -59,8 +59,8 @@
             <app-client-sign-up></app-client-sign-up>  
          </div>
          <div class="formName">
-            <h3>Sign Up</h3>
-            As Pharmacist
+            <h3>{{'signUp'|translate}}</h3>
+            {{'as'|translate}} {{'pharmacist'|translate}}
         </div>
          <div class="popUpContainerWithCancel">
             <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
@@ -68,20 +68,49 @@
        </div>
    </div>
    <div *ngIf="FormName=='Doctor'">
-    <div class="popUpContainer">
-     <div class="hr"></div>
-     <div class="popUpContainerWithoutCancel">
-        <app-sign-up-form style="display: none;"></app-sign-up-form>  
-        <app-doctor-sign-up></app-doctor-sign-up>  
-     </div>
-     <div class="formName">
-        <h3>Sign Up</h3>
-        As Doctor
-    </div>
-     <div class="popUpContainerWithCancel">
-        <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+     <div class="popUpContainer">
+         <div class="hr"></div>
+         <div class="popUpContainerWithoutCancel">
+             <app-sign-up-form style="display: none;"></app-sign-up-form>  
+             <app-doctor-sign-up></app-doctor-sign-up>  
+         </div>
+         <div class="formName">
+             <h3>{{'signUp'|translate}}</h3>
+             {{'as'|translate}} {{'doctor'|translate}}
+         </div>
+         <div class="popUpContainerWithCancel">
+             <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+         </div>
      </div>
    </div>
-</div>
+   <div *ngIf="FormName=='Settings'">
+    <div class="popUpContainer">
+        <div class="hr"></div>
+        <div class="popUpContainerWithoutCancel">
+            <div class="row" style=" position:relative;margin-top: 10%; left: 10%;">
+                <strong>{{'changeLang' | translate}}</strong>
+            </div>
+            <div  style="margin-top: 4%; margin-left: 50%; transform: translateX(-35%);">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                     
+                        <input type="radio" class="englishLangRadio" name="btnradio" id="englishLang">
+                        <label class="btn btn-outline-primary" id="englishLang" for="englishLang" (click)="changeLangTo('en')">Englais</label>
+                     
+                        <input type="radio" class="frenchLangRadio" name="btnradio" id="frenchLang">
+                        <label class="btn btn-outline-primary" id="frenchLang" for="frenchLang" (click)="changeLangTo('fr')">Fraçais</label>
+
+                        <input type="radio" class="arabeLangRadio" name="btnradio" id="arabeLang">
+                        <label class="btn btn-outline-primary" id="arabeLang" for="arabeLang">Arabe</label>
+                </div>
+            </div>
+        </div>
+        <div class="formName">
+            <h3>{{'settings' | translate}}</h3>
+        </div>
+        <div class="popUpContainerWithCancel">
+            <button class="IconButton" (click)="FormName=false"><i class="fas fa-times fa-2x"></i></button>
+        </div>
+    </div>
+  </div>
     </body>
 </html>

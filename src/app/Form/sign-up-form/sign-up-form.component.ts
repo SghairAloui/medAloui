@@ -10,7 +10,8 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private acceuilService: AcceuilService) { }
+  constructor(private acceuilService: AcceuilService) { 
+  }
  
 
   ngOnInit(): void {
@@ -27,6 +28,5 @@ export class SignUpFormComponent implements OnInit {
   openSignIn(){
     this.outPutOpenSignIn.emit(false);
   }
-  
 
 }

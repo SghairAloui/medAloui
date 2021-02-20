@@ -192,3 +192,46 @@ html,body{
     border: none;
     background: none;
 }
+.btn-check{
+    display: none;
+}
+.englishLangRadio:checked ~ #englishLang{
+    background-color: #D16572;
+    transition: 1s;
+    color: white;
+}
+.frenchLangRadio:checked ~ #frenchLang{
+    background-color: #D16572;
+    transition: 1s;
+    color: white;
+}
+.arabeLangRadio:checked ~ #arabeLang{
+    background-color: #D16572;
+    transition: 1s;
+    color: white;
+}
+.btn-outline-primary {
+    border:1px solid #D16572;
+    color: #D16572;
+}
+.btn-outline-primary:hover{
+    background-color: #D16572;
+    color: white;
+}
+.englishLangRadio{
+    display: none;
+}
+.frenchLangRadio{
+    display: none;
+}
+.arabeLangRadio{
+    display: none;
+}
+#englishLang{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#arabeLang{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

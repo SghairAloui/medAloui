@@ -2,29 +2,29 @@
     <div class="clientSignUpContainerCenter">
         <div class="row">
             <div class="col">
-              <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+              <input type="text" class="form-control" placeholder="{{'firstName'|translate}}" aria-label="First name">
             </div>
             <div class="col">
-              <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col">
-              <input type="number" class="form-control" placeholder="Phone Number" aria-label="Phone Number">
-            </div>
-            <div class="col">
-              <input type="password" class="form-control" placeholder="Password" aria-label="Password">
+              <input type="text" class="form-control" placeholder="{{'lastName'|translate}}" aria-label="Last name">
             </div>
           </div><br>
           <div class="row">
             <div class="col">
-              <input type="email" class="form-control" placeholder="Email" aria-label="Email">
+              <input type="number" class="form-control" placeholder="{{'phoneNumber'|translate}}" aria-label="Phone Number">
+            </div>
+            <div class="col">
+              <input type="password" class="form-control" placeholder="{{'password'|translate}}" aria-label="Password">
+            </div>
+          </div><br>
+          <div class="row">
+            <div class="col">
+              <input type="email" class="form-control" placeholder="{{'emailAddress'|translate}}" aria-label="Email">
             </div>
           </div><br>
           <div class="row">
             <div class="col">
               <select class="form-control" aria-label="Day">
-                <option selected style="text-align: center;">Day :</option>
+                <option selected style="text-align: center;">{{'day'|translate}} :</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -32,24 +32,24 @@
             </div>
             <div class="col">
               <select class="form-control" aria-label="Day">
-                <option selected style="text-align: center;">Month :</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="1">4</option>
-                <option value="2">5</option>
-                <option value="3">6</option>
-                <option value="1">7</option>
-                <option value="2">8</option>
-                <option value="3">9</option>
-                <option value="1">10</option>
-                <option value="2">11</option>
-                <option value="3">12</option>
+                <option selected style="text-align: center;">{{'month'|translate}} :</option>
+                <option value="1">{{'jan'|translate}}</option>
+                <option value="2">{{'feb'|translate}}</option>
+                <option value="3">{{'mar'|translate}}</option>
+                <option value="1">{{'apr'|translate}}</option>
+                <option value="2">{{'may'|translate}}</option>
+                <option value="3">{{'jun'|translate}}</option>
+                <option value="1">{{'jul'|translate}}</option>
+                <option value="2">{{'aug'|translate}}</option>
+                <option value="3">{{'sep'|translate}}</option>
+                <option value="1">{{'oct'|translate}}</option>
+                <option value="2">{{'nov'|translate}}</option>
+                <option value="3">{{'dec'|translate}}</option>
               </select>
             </div>
             <div class="col">
               <select class="form-control" aria-label="Day">
-                <option selected style="text-align: center;">Year :</option>
+                <option selected style="text-align: center;">{{'year'|translate}} :</option>
                 <option value="1">1999</option>
                 <option value="2">2000</option>
                 <option value="3">2001</option>
@@ -58,7 +58,7 @@
           </div><br>
           <div class="row">
             <div class="col">
-                <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480;">Submit</button>
+                <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480;">{{'submit'|translate}}</button>
             </div>
           </div><br>
     </div>
