@@ -1,4 +1,8 @@
 <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+    </head>
     <body>
         <div class="containerBox" >
             <div class="menuBox" id="menuBox">
@@ -7,7 +11,7 @@
                 </div>
                 <div class="menuIcon">
                     <div class="homeIcon">
-                        <div class="textHomeIcon" id="textHomeIcon">{{'hOME' |translate}}</div>
+                        <div class="textHomeIcon" id="textHomeIcon">{{'home' |translate}}</div>
                         <button class="IconButton" (click)="body='acceuilBody'">
                             <i class="fas fa-home fa-2x"></i>
                         </button>
@@ -34,13 +38,28 @@
                 <ng-template #openAcceuilBody><app-acceuil-body></app-acceuil-body></ng-template>
                 <ng-template #openAboutUsBody><app-about-us-body></app-about-us-body></ng-template>
             </div>
+            <div class="menuUnder1150">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                      <a class="nav-link active" (click)="body='acceuilBody'">{{'home'|translate}}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" (click)="body='openAboutUsBody'"> {{'aboutUs'|translate}}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" (click)="FormName='Settings'">{{'setting'|translate}}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div *ngIf="FormName=='Client'">
             <div class="popUpContainer">
              <div class="hr"></div>
              <div class="popUpContainerWithoutCancel">
-                <app-sign-up-form style="display: none;"></app-sign-up-form>  
-                <app-client-sign-up></app-client-sign-up>  
+                <div class="centerPopUpContainerWithoutCancel">
+                    <app-sign-up-form style="display: none;"></app-sign-up-form>  
+                    <app-client-sign-up></app-client-sign-up> 
+                </div> 
              </div>
              <div class="formName">
                 <h3>{{'signUp'|translate}}</h3>
@@ -92,15 +111,12 @@
             </div>
             <div  style="margin-top: 4%; margin-left: 50%; transform: translateX(-35%);">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                     
-                        <input type="radio" class="englishLangRadio" name="btnradio" id="englishLang">
-                        <label class="btn btn-outline-primary" id="englishLang" for="englishLang" (click)="changeLangTo('en')">Englais</label>
-                     
-                        <input type="radio" class="frenchLangRadio" name="btnradio" id="frenchLang">
-                        <label class="btn btn-outline-primary" id="frenchLang" for="frenchLang" (click)="changeLangTo('fr')">Français</label>
-
-                        <input type="radio" class="arabeLangRadio" name="btnradio" id="arabeLang">
-                        <label class="btn btn-outline-primary" id="arabeLang" for="arabeLang">Arabe</label>
+                    <input type="radio" class="englishLangRadio" name="btnradio" id="englishLang">
+                    <label class="btn btn-outline-primary" id="englishLang" for="englishLang" (click)="changeLangTo('en')">Englais</label>
+                    <input type="radio" class="frenchLangRadio" name="btnradio" id="frenchLang">
+                    <label class="btn btn-outline-primary" id="frenchLang" for="frenchLang" (click)="changeLangTo('fr')">Français</label>
+                    <input type="radio" class="arabeLangRadio" name="btnradio" id="arabeLang">
+                    <label class="btn btn-outline-primary" id="arabeLang" for="arabeLang">Arabe</label>
                 </div>
             </div>
         </div>

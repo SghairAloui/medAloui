@@ -1,4 +1,6 @@
 html,body{
+    width: 100%;
+    height: 100%;
     background-color: #202631;
     overflow-x: hidden;
 }
@@ -12,11 +14,12 @@ html,body{
     background-color: white;
     border-radius: 25px;
     box-shadow: 0px 0px 15px 2px #888888;
+    transition: 1s;
 }
 .popUpContainerWithoutCancel{
     position: absolute;
     width: 100%;
-    height: 85%;
+    height: 80%;
     bottom: 0%;
 }
 .popUpContainerWithCancel{
@@ -234,4 +237,87 @@ html,body{
 #arabeLang{
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+.menuUnder1150{
+    display: none;
+}
+
+@media screen and (max-width: 1150px){
+    
+    .nav-link{
+        color: white; 
+        transition: 1s;
+        cursor: pointer;
+    }
+    .nav-link:hover{
+        color: #D16572; 
+        transform: scale(1.1);
+        transition: 1s;
+    }
+    .menuUnder1150{
+        display: block;
+        background-color: #202631;
+        position: absolute;
+        top: 0%;
+        height: 10%;
+        width: 100%;
+        transition: 1s;
+    }
+    .popUpContainer{
+        position: absolute;
+        height: 80vh;
+        width: 50vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white;
+        border-radius: 25px;
+        box-shadow: 0px 0px 15px 2px #888888;
+        transition: 1s;
+    }
+    .containerBox{
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+    .bodyBox{
+        border-radius: 0px;
+        position: absolute;
+        height: 90%;
+        width: 100%;
+        background-color:#F0F2F5 ;
+        right: 0%;
+        top: 10%;
+        bottom: 0px;
+        transition: 1s;
+        overflow: auto;
+    }
+}
+@media screen and (max-width: 750px){
+    .popUpContainer{
+        position: absolute;
+        height: 500px;
+        width: 60vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white;
+        border-radius: 25px;
+        box-shadow: 0px 0px 15px 2px #888888;
+        transition: 1s;
+    }
+}
+@media screen and (max-width: 500px){
+    .popUpContainer{
+        position: absolute;
+        height: 500px;
+        width: 80vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white;
+        border-radius: 25px;
+        box-shadow: 0px 0px 15px 2px #888888;
+        transition: 1s;
+    }
 }

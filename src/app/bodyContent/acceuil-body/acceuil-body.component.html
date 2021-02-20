@@ -1,18 +1,27 @@
-<div class="bodyImage">
-    <div class="bodyImageContainer">
-        <img src="../../../assets/DoctorWithSignInText.png" style="width: 100%;">
-    </div>
-</div>
-<div class="bodyFormContainer">
-    <div class="signInFormContainer">
-        <div class="centerSingInForm">
-            <div class="formContainer">
-                <div class="formContainerfrom">
-                    <div *ngIf="signUpForm; then showSignUp else showSignIn"></div>
-                    <ng-template #showSignIn><app-sign-in-form (outPutOpenSignUp)="recieveMessage($event)"></app-sign-in-form></ng-template>
-                    <ng-template #showSignUp><app-sign-up-form (outPutOpenSignIn)="recieveMessage($event)"></app-sign-up-form></ng-template>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <div class="bodyImage">
+            <div class="bodyImageContainer">
+                <img src="../../../assets/DoctorWithSignInText.png" style="width: 100%;">
+            </div>
+        </div>
+        <div class="bodyFormContainer">
+            <div class="signInFormContainer">
+                <div class="centerSingInForm">
+                    <div class="formContainer">
+                        <div class="formContainerfrom">
+                            <div *ngIf="signUpForm; then showSignUp else showSignIn"></div>
+                            <ng-template #showSignIn><app-sign-in-form (outPutOpenSignUp)="recieveMessage($event)"></app-sign-in-form></ng-template>
+                            <ng-template #showSignUp><app-sign-up-form (outPutOpenSignIn)="recieveMessage($event)"></app-sign-up-form></ng-template>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </body>
+</html>
