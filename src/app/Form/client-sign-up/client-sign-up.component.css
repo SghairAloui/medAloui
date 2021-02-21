@@ -9,7 +9,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     height: 100%;
     width: 100%;
-    overflow: auto;
     grid-gap: 5%;
     left: 10%;
     top: 10%;

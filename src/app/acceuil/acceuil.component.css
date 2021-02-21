@@ -4,10 +4,26 @@ html,body{
     background-color: #202631;
     overflow-x: hidden;
 }
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #d1657241;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: #d16572e0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #d16572;
+}
 .popUpContainer{
     position: absolute;
-    height: 500px;
-    width: 600px;
+    height: 70vh;
+    width: 40vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -18,9 +34,12 @@ html,body{
 }
 .popUpContainerWithoutCancel{
     position: absolute;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
     width: 100%;
-    height: 80%;
-    bottom: 0%;
+    height: 75%;
+    bottom: 5%;
+    overflow: auto;
 }
 .popUpContainerWithCancel{
     position: absolute;
@@ -241,9 +260,11 @@ html,body{
 .menuUnder1150{
     display: none;
 }
+.formNameUnderTitle{
+    display: block;
+}
 
-@media screen and (max-width: 1150px){
-    
+@media screen and (max-width: 1150px), screen and (max-height: 570px){
     .nav-link{
         color: white; 
         transition: 1s;
@@ -259,7 +280,7 @@ html,body{
         background-color: #202631;
         position: absolute;
         top: 0%;
-        height: 10%;
+        height: auto;
         width: 100%;
         transition: 1s;
     }
@@ -275,19 +296,13 @@ html,body{
         box-shadow: 0px 0px 15px 2px #888888;
         transition: 1s;
     }
-    .containerBox{
-        height: 100%;
-        width: 100%;
-        position: relative;
-    }
     .bodyBox{
         border-radius: 0px;
         position: absolute;
-        height: 90%;
+        height: auto;
         width: 100%;
         background-color:#F0F2F5 ;
         right: 0%;
-        top: 10%;
         bottom: 0px;
         transition: 1s;
         overflow: auto;
@@ -296,7 +311,7 @@ html,body{
 @media screen and (max-width: 750px){
     .popUpContainer{
         position: absolute;
-        height: 500px;
+        height: 70vh;
         width: 60vw;
         top: 50%;
         left: 50%;
@@ -310,7 +325,7 @@ html,body{
 @media screen and (max-width: 500px){
     .popUpContainer{
         position: absolute;
-        height: 500px;
+        height: 60vh;
         width: 80vw;
         top: 50%;
         left: 50%;
@@ -319,5 +334,29 @@ html,body{
         border-radius: 25px;
         box-shadow: 0px 0px 15px 2px #888888;
         transition: 1s;
+    }
+}
+@media screen and (max-height: 550px){
+    .formNameUnderTitle{
+        display: none;
+    }
+}
+@media screen and (max-height: 290px){
+    .hr{
+        position: absolute;
+        width: 100%;
+        height: 30%;
+        top: 0%;
+        right: 0%;
+        background-color: #d165728a;
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;;
+    }
+    .popUpContainerWithoutCancel{
+        position: absolute;
+        width: 100%;
+        height: 73%;
+        bottom: 5%;
+        overflow: auto;
     }
 }

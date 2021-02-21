@@ -13,7 +13,7 @@ html,body{
     transform: translateX(-50%);
     text-transform: uppercase;
 }
-.firstHalfBody{
+.bodyContainer{
     position: relative;
     height: 100%;
     width: 100%;
@@ -63,7 +63,7 @@ html,body{
     transform: translate(-50%,-50%);
 }
 .containerContactBox{
-    height: 400px;
+    height: 100%;
     width: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -85,10 +85,11 @@ html,body{
     grid-area: adress;
     justify-self: center;
 }
-.firstHalfBody .contactUsSection{
+.bodyContainer .contactUsSection{
     margin-top: 15%;
+    animation: fadeUp 4s ease;
 }
-.firstHalfBody .aboutUsTitle{
+.bodyContainer .aboutUsTitle{
     height: auto;
     width: auto;
     margin-top: 100px;
@@ -102,10 +103,10 @@ html,body{
     font-family: 'Raleway', sans-serif;
     text-transform: uppercase;
 }
-.firstHalfBody .aboutUsTitle .div{
+.bodyContainer .aboutUsTitle .div{
     display: inline-block;
 }
-.firstHalfBody .row .col .aboutUsText{
+.bodyContainer .row .col .aboutUsText{
     width: 40%;
     font-size: 1.5vw;
     font-family: 'Raleway', sans-serif;
@@ -119,27 +120,27 @@ html,body{
     right: 0%;
     transition: 1s;
 }
-.firstHalfBody .readMoreBtn{
+.bodyContainer .readMoreBtn{
     margin-top: 90px;
     width: 150px;
     margin-left: 20%;
     animation: slide_Up 3s ease;
 }
-.firstHalfBody .contactUsBtn{
+.bodyContainer .contactUsBtn{
     margin-top: 90px;
     width: 150px;
     margin-left: 20%;
     animation: slide_Up 4s ease;
 }
-.firstHalfBody .contactUsBtn .btn-outline-danger{
+.bodyContainer .contactUsBtn .btn-outline-danger{
     border:1px solid #202631;
     color: #202631;
 }
-.firstHalfBody .contactUsBtn .btn-outline-danger:hover{
+.bodyContainer .contactUsBtn .btn-outline-danger:hover{
     background-color: #202631 ;
     color: white;
 }
-.firstHalfBody .contactUsBtn .btn-outline-danger:hover .fa-envelope{
+.bodyContainer .contactUsBtn .btn-outline-danger:hover .fa-envelope{
     color: white;
 }
 .btn-outline-danger:hover .fa-book {
@@ -190,11 +191,6 @@ html,body{
     }
 }
 @media screen and (max-width: 700px){
-    html,body{
-        width: 100%;
-        overflow-x: hidden;
-        background-color: #F0F2F5;
-    }
     .contactUsTitle{
         font-size: 5vw;
         font-family: 'Raleway', sans-serif;
@@ -203,7 +199,7 @@ html,body{
         transform: translateX(-50%);
         text-transform: uppercase;
     }
-    .firstHalfBody{
+    .bodyContainer{
         position: relative;
         height: 100%;
         width: 100%;
@@ -214,7 +210,7 @@ html,body{
         color: #202631;
         font-family: 'Raleway', sans-serif;
         border-radius: 20px;
-        margin: 50px;
+        margin: 10px;
         width: 70vw;
         height: 120px;
         background-color: white;
@@ -247,14 +243,8 @@ html,body{
         border-bottom-left-radius: 20px;
         border-top-left-radius: 20px;
     }
-    .contactBoxImgCentred{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-    }
     .containerContactBox{
-        height: 400px;
+        height: auto;
         width: 100%;
         display: grid;
         grid-template-rows: 1fr 1fr 1fr;
@@ -263,42 +253,22 @@ html,body{
         "phone"
         "mail"
         "adress";
-        
     }
-    .containerContactBox .phone{
-        grid-area: phone;
-        justify-self: center;
-    }
-    .containerContactBox .mail{
-        grid-area: mail;
-        justify-self: center;
-    }
-    .containerContactBox .adress{
-        grid-area: adress;
-        justify-self: center;
-    }
-    .firstHalfBody .contactUsSection{
+    .bodyContainer .contactUsSection{
         margin-top: 5%;
+        animation: fadeUp 2.5s ease;
     }
-    .firstHalfBody .aboutUsTitle{
+    .bodyContainer .aboutUsTitle{
         height: auto;
         width: auto;
-        margin-top: 30px;
+        margin-top: 50px;
         margin-left: 50%;
         transform: translateX(-50%);
         font-size: 5vw;
         font-family: 'Raleway', sans-serif;
         display: inline-block;
     }
-    .section-title{
-        font-size: 60px;
-        font-family: 'Raleway', sans-serif;
-        text-transform: uppercase;
-    }
-    .firstHalfBody .aboutUsTitle .div{
-        display: inline-block;
-    }
-    .firstHalfBody .row .col .aboutUsText{
+    .bodyContainer .row .col .aboutUsText{
         width: 90%;
         font-size: 2.5vw;
         font-family: 'Raleway', sans-serif;
@@ -313,74 +283,24 @@ html,body{
         transition: 1s;
         opacity: 0%;
     }
-    .firstHalfBody .readMoreBtn{
+    .bodyContainer .readMoreBtn{
         margin-top: 30px;
         width: 150px;
         margin-left: 50%;
         transform: translateX(-50%);
+        animation: fadeUp 1.5s ease;
     }
-    .firstHalfBody .contactUsBtn{
+    .bodyContainer .contactUsBtn{
         margin-top: 30px;
         width: 150px;
         margin-left: 50%;
         transform: translateX(-50%);
-    }
-    .firstHalfBody .contactUsBtn .btn-outline-danger{
-        border:1px solid #202631;
-        color: #202631;
-    }
-    .firstHalfBody .contactUsBtn .btn-outline-danger:hover{
-        background-color: #202631 ;
-        color: white;
-    }
-    .firstHalfBody .contactUsBtn .btn-outline-danger:hover .fa-envelope{
-        color: white;
-    }
-    .btn-outline-danger:hover .fa-book {
-        color:white;
-    }
-    .btn-outline-danger:hover{
-        transform: scale(1.1);
-        transition: 0.3s;
-    }
-    .btn-outline-danger{
-        text-transform: uppercase;
-        transition: 0.3s;
-    }
-    .imagecontainer{
-        position: absolute;
-        width: auto;
-        height: auto;
-        bottom: 0%;
         animation: fadeUp 2s ease;
     }
     .aboutUsTitle{
-        animation: slide_Up 1.4s ease;
+        animation: fadeUp 0.5s ease;
     }
     .aboutUsText{
-        animation: slide_Up 2.4s ease;
-    }
-    @keyframes slide_Up{
-        0%{ opacity: 0%;
-            transform: translateY(100px);
-        }
-        100%{
-            opacity: 100%;
-            transform: translateY(0%);
-        }
-    }
-    .fa-book{
-        color: #E8505B;
-    }
-    .fa-envelope{
-        color: #202631;
-    }
-    @keyframes fadeUp{
-        0%{
-            opacity: 0%;
-        }
-        100%{
-            opacity: 100%;
-        }
+        animation: fadeUp 1s ease;
     }
 }
