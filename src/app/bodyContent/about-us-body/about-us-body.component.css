@@ -190,6 +190,55 @@ html,body{
         opacity: 100%;
     }
 }
+@media screen and (max-width: 1000px){
+    .containerContactBox{
+        height: auto;
+        width: 100%;
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+        "phone"
+        "mail"
+        "adress";
+    }
+}
+@media screen and (max-width: 900px){
+    .bodyContainer .contactUsSection{
+        margin-top: 25%;
+    }
+    .bodyContainer .row .col .aboutUsText{
+        width: 50%;
+        font-size: 2vw;
+        font-family: 'Raleway', sans-serif;
+        margin-left: 10%;
+        margin-top: 30px;
+    }
+    .bodyContainer .readMoreBtn{
+        margin-top: 50px;
+    }
+    .bodyContainer .contactUsBtn{
+        margin-top: 50px;
+    }
+}
+@media screen and (max-width: 800px){
+    .bodyContainer .row .col .aboutUsText{
+        width: 60%;
+        font-size: 3vw;
+        font-family: 'Raleway', sans-serif;
+        margin-left: 10%;
+        margin-top: 30px;
+    }
+    .bodyContainer .readMoreBtn{
+        margin-top: 50px;
+    }
+    .bodyContainer .contactUsBtn{
+        margin-top: 50px;
+    }
+    .bodyContainer .contactUsSection{
+        margin-top: 26%;
+    }
+}
 @media screen and (max-width: 700px){
     .contactUsTitle{
         font-size: 5vw;
@@ -243,19 +292,8 @@ html,body{
         border-bottom-left-radius: 20px;
         border-top-left-radius: 20px;
     }
-    .containerContactBox{
-        height: auto;
-        width: 100%;
-        display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
-        grid-template-columns: 1fr;
-        grid-template-areas: 
-        "phone"
-        "mail"
-        "adress";
-    }
     .bodyContainer .contactUsSection{
-        margin-top: 5%;
+        margin-top: 10%;
         animation: fadeUp 2.5s ease;
     }
     .bodyContainer .aboutUsTitle{
