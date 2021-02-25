@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AcceuilService } from 'src/app/acceuil/acceuil.service';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -37,7 +38,7 @@ export class SignUpFormComponent implements OnInit {
   checkFirstName(){
     if(this.firstName.length==0){
       this.invalidFirstNameVariable=true;
-      this.firstNameInformation="Enter a name first";
+      this.firstNameInformation="Enter your name first";
     }else{
       if(this.re.test(this.firstName)){
         this.invalidFirstNameVariable=false;
@@ -52,7 +53,7 @@ export class SignUpFormComponent implements OnInit {
   checkLastName(){
     if(this.lastName.length==0){
       this.invalidLastNameVariable=true;
-      this.lastNameInformation="Enter a surname first";
+      this.lastNameInformation="Enter your surname first";
     }else{
       if(this.re.test(this.lastName)){
         this.invalidLastNameVariable=false;
@@ -69,7 +70,7 @@ export class SignUpFormComponent implements OnInit {
     let email = new RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/);
     if(this.mail.length==0){
         this.invalidMailVariable=true;
-        this.mailInformation="Enter a mail first";
+        this.mailInformation="Enter your mail first";
     }else{
       if(email.test(this.mail)){
         this.invalidMailVariable=false;
@@ -160,4 +161,7 @@ export class SignUpFormComponent implements OnInit {
     this.formInfo='GeneralInfo';
   }
 
+}
+export class NgbdDatepickerPopup {
+  model: NgbDateStruct;
 }

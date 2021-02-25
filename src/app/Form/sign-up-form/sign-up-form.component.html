@@ -35,85 +35,17 @@
         <div class="formInfoTitle">
              <i class="fas fa-birthday-cake"></i> Birthday
          </div>
-         <div class="formDiv">
-             <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day" [(ngModel)]="day" (keyup)="dayInformation='Day';invalidDayVariable=false" class="formInput" list="daylistOptions" placeholder=" ">
-             <label for="" class="formLabel">
-                {{dayInformation}}
-            </label>
-             <datalist id="daylistOptions">
-                <option value="1">
-                <option value="2">
-                <option value="3">
-                <option value="4">
-                <option value="5">
-                <option value="6">
-                <option value="7">
-                <option value="8">
-                <option value="9">
-                <option value="10">
-                <option value="11">
-                <option value="12">
-                <option value="13">
-                <option value="14">
-                <option value="15">
-                <option value="16">
-                <option value="17">
-                <option value="18">
-                <option value="19">
-                <option value="20">
-                <option value="21">
-                <option value="22">
-                <option value="23">
-                <option value="24">
-                <option value="25">
-                <option value="26">
-                <option value="27">
-                <option value="28">
-                <option value="29">
-                <option value="30">
-                <option value="31">
-              </datalist>
-         </div>
-         <div class="formDiv">
-             <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month" [(ngModel)]="month" (keyup)="monthInformation='Month';invalidMonthVariable=false" maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
-             <label for="" class="formLabel">
-                {{monthInformation}}
-             </label>
-             <datalist id="monthlistOptions">
-                <option value="1">
-                <option value="2">
-                <option value="3">
-                <option value="4">
-                <option value="5">
-                <option value="6">
-                <option value="7">
-                <option value="8">
-                <option value="9">
-                <option value="10">
-                <option value="11">
-                <option value="12">
-              </datalist>
-         </div>
-         <div class="formDiv">
-             <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year" [(ngModel)]="year" (keyup)="yearInformation='Year';invalidYearVariable=false" maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
-             <label for="" class="formLabel">
-                {{yearInformation}}
-             </label>
-             <datalist id="yearlistOptions">
-                <option value="1995">
-                <option value="1996">
-                <option value="1997">
-                <option value="1998">
-                <option value="1999">
-                <option value="2000">
-                <option value="2001">
-                <option value="2002">
-                <option value="2003">
-                <option value="2004">
-                <option value="2005">
-                <option value="2006">
-              </datalist>
-         </div>
+         <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                </div>
+              </div>
+            </div>
+          </form>
          <div class="formNavigateButtons">
              <div class="formNavigateNextButton">
                  <button (click)="checkBirthday()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">Next <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
