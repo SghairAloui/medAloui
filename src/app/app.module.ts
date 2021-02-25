@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
@@ -9,12 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 import { SignInFormComponent } from './Form/sign-in-form/sign-in-form.component';
 import { SignUpFormComponent } from './Form/sign-up-form/sign-up-form.component';
-import { ClientSignUpComponent } from './Form/client-sign-up/client-sign-up.component';
 import { AcceuilService } from './acceuil/acceuil.service';
-import { PharmacistSignUpComponent } from './form/pharmacist-sign-up/pharmacist-sign-up.component';
-import { DoctorSignUpComponent } from './form/doctor-sign-up/doctor-sign-up.component';
 import { AcceuilBodyComponent } from './bodyContent/acceuil-body/acceuil-body.component';
-import { AboutUsBodyComponent } from './bodyContent/about-us-body/about-us-body.component';
+import { HeaderComponent } from './Headers/header/header.component';
 
 @NgModule({
   declarations: [
@@ -22,17 +20,15 @@ import { AboutUsBodyComponent } from './bodyContent/about-us-body/about-us-body.
     AcceuilComponent,
     SignInFormComponent,
     SignUpFormComponent,
-    ClientSignUpComponent,
-    PharmacistSignUpComponent,
-    DoctorSignUpComponent,
     AcceuilBodyComponent,
-    AboutUsBodyComponent
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
     NgbModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {

@@ -9,7 +9,6 @@ import { AcceuilService } from './acceuil.service';
   styleUrls: ['./acceuil.component.css']
 })
 export class AcceuilComponent implements OnInit {
-
   constructor(private acceuilService: AcceuilService, private router:Router,private translate: TranslateService) {
     translate.addLangs(['en','fr']);
     translate.setDefaultLang('en');

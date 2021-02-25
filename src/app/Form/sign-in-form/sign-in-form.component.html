@@ -5,26 +5,23 @@
   </head>
   <body>
     <div class="container">
-      <div class="containerCenter">
-        <form >
-          <div class="form-group">
-            <label for="exampleInputEmail1">{{'emailAddress'|translate}}</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{'emailAddress'|translate}}">
-            <!--<small *ngIf="!checkEmail" id="emailHelp">Please enter a valid email</small>-->
+      <form >
+          <div class="signInText"><i class="fas fa-user-circle"></i> Sign In</div>
+          <div class="formDiv">
+            <input type="email" class="formInput" id="exampleInputEmail1" placeholder=" ">
+            <label for="exampleInputEmail1" class="formLabel">{{'emailAddress'|translate}}</label>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">{{'password'|translate}}</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="{{'password'|translate}}" >
-            <!--<small *ngIf="!checkPass" id="passwordHelp">Password must be more than 6 characters</small>-->
+          <div class="formDiv">
+            <input type="password" class="formInput" id="exampleInputEmail1" placeholder=" ">
+            <label for="exampleInputEmail1" class="formLabel">{{'password'|translate}}</label>
           </div>
-          <div class="centerButtons">
-            <button type="submit" class="btn btn-outline-light btn-lg btn-block" style="background-color: #E8505B; border-color: #E8505B;">{{'signIn'|translate}}</button>
-          <div class="strike"><span>{{'or'|translate}}</span></div>
-          <button type="submit" class="btn btn-outline-danger btn-block" style="border-color: #D67480;" (click)="openSignUp()">{{'signUp'|translate}}</button>
-          </div>
-          <!--<a href="forget yor paasword" style="text-align: left ;">Forget your paasword?</a>-->
-      </form>
-      </div>
+        <div class="centerButtons">
+          <button type="submit" class="btn btn-outline-light btn-lg btn-block" >{{'signIn'|translate}}</button>
+        <div class="strike"><span>{{'or'|translate}}</span></div>
+        <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignUp()">{{'signUp'|translate}}</button>
+        </div>
+        <!--<a href="forget yor paasword" style="text-align: left ;">Forget your paasword?</a>-->
+    </form>
     </div>
   </body>
 </html>

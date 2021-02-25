@@ -1,4 +1,388 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,500;1,600&display=swap');
 html,body{
+    background-color: #F0F2F5;
+    font-family: 'Raleway', sans-serif;
+}
+/*about Us*/
+.ContactUs{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+    "title title title"
+    "mail phone position";
+    background-color: #333333;
+    padding: 3% 5%;
+    color: white;
+}
+.ContactUs .ContactUsTitle{
+    grid-area: title;
+    text-align: center;
+    font-size: 2.5rem;
+    padding-bottom:3%;
+}
+.ContactUs .ContactUsMail{
+    position: relative;
+    grid-area: mail;
+    text-align: center;
+    border-right: 1px solid white;
+}
+.ContactUs .ContactUsPhone{
+    grid-area: phone;
+    text-align: center;
+    border-right: 1px solid white;
+}
+.ContactUs .ContactUsPosition{
+    grid-area: position;
+    text-align: center;
+}
+.ContactUsIcon{
+    height: auto;
+    width: auto;
+    position: relative;
+    padding-bottom: 5%;
+    color: white;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+}
+.aboutUstitle{
+    font-size: 4vw;
+    text-align: right;
+    text-align: center;
+    padding-top: 5%;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    padding-bottom: 3%;
+}
+.aboutUsText{
+    position: relative;
+    padding-left: 10%;
+    width: 80%;
+    font-size: 1rem;
+    padding-bottom: 3%;
+}
+
+
+/*Section Connexion*/
+.connexionContainer{
+    position: relative;
+    border-radius: 20px;
+    background-color: white;
+    width: 70%;
+    height: auto;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+}
+#connexionImg{
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    width: 40%;
+}
+.connexionForm{
+    padding: 0% 5%;
+    position: absolute;
+    height: auto;
+    width: 60%;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+
+/*section Doctor*/
+.searchText{
+    font-size: 20px;
+    padding-bottom: 10px;
+    font-weight: 600;
+    color: #4d4d4d;
+}
+.sectionTitle{
+    font-size: 5vw;
+    text-align: right;
+    margin-right: 10%;
+    padding-top: 5%;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    padding-bottom: 5%;
+}
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    width: 100%;
+    grid-template-areas: 
+    "gridFirstBox gridSecondBox"
+    "gridThirdBox gridFourthBox";
+}
+.grid .gridFirstBox{
+    margin-bottom: 50px;
+    max-width: 80%;
+    justify-self: center;
+    grid-area:gridFirstBox;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    transition: 1s;
+}
+.grid .gridSecondBox{
+    margin-bottom: 50px;
+    max-width: 80%;
+    justify-self: center;
+    grid-area: gridSecondBox;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    transition: 1s;
+}
+.grid .gridThirdBox{
+    margin-bottom: 0px;
+    max-width: 80%;
+    justify-self: center;
+    grid-area: gridThirdBox;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    transition: 1s;
+}
+.grid .gridFourthBox{
+    max-width: 80%;
+    justify-self: center;
+    grid-area: gridFourthBox;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    transition: 1s;
+}
+.findingDoctor{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    transition: 1s;
+}
+#findDoctorImg{
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    width: 40%;
+}
+.findingDoctorSearch{
+    right: 0;
+    position: absolute;
+    height: auto;
+    width: 60%;
+    padding: 5% 5%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.gidBoxNumber{
+    color: white;
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
+    padding-left: 15px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 50px;
+    background-color: #308a7b;
+}
+.gidBoxTitle{
+    font-size: 32px;
+    text-align: left;
+    margin-left: 10%;
+    margin-top: 1%;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+}
+.gidBoxText{
+    font-size: 16px;
+    text-align: left;
+    padding: 10%;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+}
+.form-control{
+    height: 48px;
+    border: 1px solid #308a7b;
+    box-shadow: none;
+}
+.form-control:focus{
+    border: 2px solid #308a7b;
+}
+
+
+/*Responsive*/
+@media screen and (max-width: 1000px){
+    .grid .gridFirstBox, .grid .gridSecondBox, .grid .gridThirdBox, .grid .gridFourthBox{
+        max-width: 90%;
+    }
+    .findingDoctor, .connexionContainer{
+        width: 75%;
+    }
+}
+@media screen and (max-width: 900px){
+    .grid{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+        "gridFirstBox"
+        "gridSecondBox"
+        "gridThirdBox"
+        "gridFourthBox";
+    }
+    .grid .gridFirstBox, .grid .gridSecondBox, .grid .gridThirdBox, .grid .gridFourthBox{
+        max-width: 60%;
+    }
+    .grid .gridThirdBox{
+        margin-bottom: 50px;
+    }
+    .findingDoctor, .connexionContainer{
+        width: 80%;
+    }
+    .ContactUs{
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas: 
+        "title title"
+        "mail phone"
+        "position position";
+    }
+    .ContactUs .ContactUsTitle{
+        font-size: 2rem;
+    }
+    .ContactUs .ContactUsPhone{
+        border-right: none;
+    }
+    .ContactUs .ContactUsPosition{
+        padding-top: 3%;
+    }
+
+}
+@media screen and (max-width: 800px){
+    .grid .gridFirstBox, .grid .gridSecondBox, .grid .gridThirdBox, .grid .gridFourthBox{
+        max-width: 70%;
+    }
+    .findingDoctor, .connexionContainer{
+        width: 85%;
+    }
+
+}
+@media screen and (max-width: 700px){
+    .grid .gridFirstBox, .grid .gridSecondBox, .grid .gridThirdBox, .grid .gridFourthBox{
+        max-width: 80%;
+    }
+    .findingDoctor, .connexionContainer{
+        width: 90%;
+    }
+    #findDoctorImg, #connexionImg{
+        width: 0%;
+    }
+    .findingDoctorSearch, .connexionForm{
+        padding-bottom: 5%;
+        position: relative;
+        top: 0;
+        transform: translateY(0%);
+        width: 100%;
+    }
+}
+@media screen and (max-width: 600px){
+    .ContactUs{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+        "title"
+        "mail"
+        "phone"
+        "position";
+    }
+    .ContactUs .ContactUsTitle{
+        font-size: 1.5rem;
+    }
+    .ContactUs .ContactUsMail{
+        border-bottom: 1px solid white;
+        border-right: none;
+        padding-bottom: 3%;
+    }
+    .ContactUs .ContactUsPhone{
+        padding-top: 3%;
+        border-bottom: 1px solid white;
+        padding-bottom: 3%;
+    }
+}
+
+
+/* Slider*/
+#slider{
+    overflow: hidden;
+}
+#slider figure{
+    top: 0%;
+    position: relative;
+    width: 500%;
+    margin: 0;
+    left: 0;
+    animation: 20s slider infinite;
+}
+#slider figure img{
+    width: 20%;
+    float: left;
+}
+@keyframes slider{
+    0%{
+        left: 0%;
+    }
+    20%{
+        left: 0%;
+    }
+    25%{
+        left: -100%;
+    }
+    45%{
+        left: -100%;
+    }
+    50%{
+        left: -200%;
+    }
+    70%{
+        left: -200%;
+    }
+    75%{
+        left: -300%;
+    }
+    95%{
+        left: -300%;
+    }
+    100%{
+        left: -400%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*html,body{
     width: 100%;
     height: 100%;
     background-color: #202631;
@@ -359,4 +743,4 @@ html,body{
         height: 73%;
         bottom: 5%;
     }
-}
+}*/

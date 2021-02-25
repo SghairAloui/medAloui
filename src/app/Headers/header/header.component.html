@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <label for="displayMenu" id="displayMenuLabel">
+            <i class="fas fa-bars" id="menuShow"></i>
+        </label>
+        <input type="checkbox" id="displayMenu" (change)="menuCheckBox=true" [checked]="menuCheckBox">
+        <header [class.headerOnScroll]="headerOnScrollVariable" id="header">
+            <label for="displayMenu">
+                <a><i class="fas fa-times" id="menuCancel"></i></a>
+            </label>
+            <a id="healthCareMenu"><strong>Health Care</strong></a>
+            <nav>
+                <ul class="navItem">
+                    <li (click)="toAcceuilSection()"><a class="menuHoverEffect" >Acceuil</a></li>
+                    <li (click)="toDoctocSection()"><a class="menuHoverEffect">doctor</a></li>
+                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect" >Maladies</a></li>
+                    <li (click)="toAboutSection()"><a class="menuHoverEffect">About us</a></li>
+                    <li><a class="menuHoverEffect">settings</a></li>
+                    <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">Connexion</a></li>
+                </ul>
+            </nav>
+            <a class="cta"><button (click)="toConnexionSection()">Connexion</button></a>
+        </header>
+    </body>
+</html>

@@ -1,3 +1,71 @@
+.btn-outline-primary:hover{
+    background-color: #308a7b;
+    color: white;
+}
+.btn-outline-primary{
+    background-color: white;
+    color: #308a7b;
+    border: 1px solid #308a7b;
+}
+#male:checked ~ #maleLabel{
+    color: white;
+    background-color: #308a7b;
+    box-shadow: 0px 0px 10px 2px #308a7b;
+}
+#female:checked ~ #femaleLabel{
+    color: white;
+    background-color: #308a7b;
+    box-shadow: 0px 0px 10px 2px #308a7b;
+}
+.checkBoxInvaledInfo{
+    border: 1px solid red;
+    color: red;
+}
+#maleLabel{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#femaleLabel{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+#male, #female{
+    display: none;
+}
+.formNavigateButtons{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+.formNavigateBackButton{
+    position: relative;
+    width: 40%;
+    left: 0%;
+}
+.formNavigateNextButton{
+    position: absolute;
+    width: 40%;
+    right: 0%;
+}
+.formInfoTitle{
+    font-size: 20px;
+    padding-bottom: 10px;
+    font-weight: 600;
+    color: #4d4d4d;
+}
+.labelInvalidInfo{
+    border: 1px solid red;
+}
+.labelInvalidInfo:focus{
+    border: 2px solid red;
+}
+.labelInvalidInfo + .formLabel{
+    color: red;
+}
 .userTypeBtn{
     width: 80%;
     height: 40px;
@@ -6,15 +74,15 @@
     align-items: center;
     justify-content: center;
     transition: 0.8s;
-    border-radius: 20px;
-    color: #D16572;
+    border-radius: .5rem;
+    color: #308a7b;
     font-weight: bold;
     background-position: 50px 0;
 }
 .userTypeBtn{
-    background: -webkit-linear-gradient(0deg,transparent 50%,#D16572 50%);
+    background: -webkit-linear-gradient(0deg,transparent 50%,#308a7b 50%);
     background-size: 200% 4px;
-    border: 1px solid #D16572;
+    border: 1px solid #308a7b;
 }
 .userTypeBtn:hover{
     background-position: 90% 0;
@@ -27,22 +95,6 @@
     height: auto;
     margin-left: 10%;
     margin-right: 10%;
-}
-.container{
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-.containerCenter{
-    position: absolute;
-    width: 100%;
-    height: auto;
-    left: -0.2%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.btn-outline-danger{
-    transition: 0.7s;
 }
 .strike {
     margin: 15px;
@@ -75,9 +127,4 @@
 .strike > span:after {
     left: 100%;
     margin-left: 15px;
-}
-@media screen and (max-width: 700px), screen and (max-height: 570px){
-    .containerCenter{
-        height: 100%;
-    }
 }

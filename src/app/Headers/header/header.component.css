@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+li, button{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+}
+a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer; 
+}
+#healthCareMenu{
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+header{
+    top: 0;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 50px;
+    font-weight: 500;
+    font-size: 16px;
+    color: white;
+    background-color: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 5%;
+    transition: 1s;
+}
+.headerOnScroll{
+    background-color: white;
+    color: #3f9788;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+}
+.headerOnScroll a button{
+    background-color: #3f9788;
+    border: 2px solid #3f978800;
+}
+.headerOnScroll button:hover{
+    transform: scale(1.02);
+    color: white;
+}
+.headerOnScroll a{
+    color: #3f9788;
+}
+.headerOnScroll a:hover{
+    color: #308a7b;
+}
+.headerOnScroll .menuHoverEffect::after{
+    background: #308a7b;
+}
+nav{
+    position: relative;
+    height: 40px;
+}
+.navItem{
+    line-height: 40px;
+    list-style: none;
+}
+li{
+    display: inline-block;
+    padding: 0px 20px;
+    transition: .3s;
+}
+li a{
+    transition: all 0.3s ease 0s;
+}
+button{
+    padding: 5px 25px;
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50px;
+    transition: all 0.3s ease 0s;
+}
+button:hover{
+    border: 2px solid #3f9788;
+    color: #3f9788;
+}
+.menuHoverEffect::after{
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    background: white;
+    transition: width .3s;
+}
+.menuHoverEffect:hover::after{
+    width: 100%;
+    transition: width .3s;
+}
+#menuConnexion{
+    display: none;
+}
+.fa-times, .fa-bars{
+    display: none;
+    color: white;
+}
+.fa-bars{
+    font-size: 30px;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-button {
+    height: 50px;
+  }
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #91bdb5;
+}
+#displayMenu, #displayMenuLabel{
+    display: none;
+}
+@media screen and (max-width: 1000px){
+    header{
+        font-size: 14px;
+        padding: 5px 2%;
+    }
+}
+@media screen and (max-width: 900px){
+    header{
+        font-size: 13px;
+    }
+    li{
+        padding: 0px 15px;
+    }
+}
+@media screen and (max-width: 800px){
+    header{
+        padding: 5px 2%;
+    }
+    li{
+        padding: 0px 10px;
+    }
+}
+@media screen and (max-width: 700px){
+    header{
+        border-bottom-right-radius: 20px;
+        border-top-right-radius: 20px;
+        left: 0;
+        text-align: center;
+        overflow: auto;
+        width: auto;
+        left: -100%;
+        height: 100%;
+        padding: 10px;
+        display: inline-block;
+        background-color: #3f9788;
+        transition: 0.7s;
+    }
+    .fa-times, #menuConnexion, .fa-bars, #displayMenuLabel{
+        display: block;
+    }
+    #menuCancel{
+        position: relative;
+        margin-top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 30px;
+    }
+    #displayMenu, #healthCareMenu, .cta{
+        display: none;
+    }
+    ul{
+        list-style: none;
+        text-decoration: none;
+        padding: 0;
+        margin: 0;
+    }
+    li{
+        display:block;
+        padding: 5px;
+    }
+    #displayMenu:checked ~ #header{
+        left: 0;
+    }
+    #displayMenuLabel{
+        opacity: 100%;
+        z-index: 1;
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        position: fixed;
+        background-color: #3f978859;
+        top: 5%;
+        left: 5%;
+        transition: 0.5s;
+    }
+    #displayMenuLabel:hover{
+        background-color: #3f9788;
+    }
+    .fa-bars{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    .headerOnScroll{
+        background-color: #3f9788;
+        color: white;
+    }
+    .headerOnScroll a, .navItem li a:hover {
+        color: white;
+    }
+    .menuHoverEffect::after{
+        background: white;
+    }
+}

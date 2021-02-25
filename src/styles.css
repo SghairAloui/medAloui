@@ -1,1 +1,69 @@
-html,body{height: 100%;}
+.formDiv{
+    position: relative;
+    height: 48px;
+    margin-bottom: 1.5rem;
+}
+.formInput{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: .75rem;
+    border: 1px solid #308a7b;
+    border-radius: .5rem;
+    outline: none;
+    padding: 1rem;
+    background: none;
+    z-index: 1;
+}
+.formLabel{
+    position: absolute;
+    left: 1rem;
+    top: .75rem;
+    padding: 0 .25rem;
+    background-color: white;
+    color: #888;
+    font-size: 1.rem;
+    transition: .3s;
+}
+.formInput:focus + .formLabel{
+    top: -.5rem;
+    left: .8rem;
+    color: #308a7b;
+    font-size: .75rem;
+    font-weight: 500;
+    z-index: 10;
+}
+.formInput:not(:placeholder-shown).formInput:not(:focus)+ .formLabel{
+    top: -.5rem;
+    left: .8rem;
+    font-size: .75rem;
+    font-weight: 500;
+    z-index: 10;
+}
+.formInput:focus{
+    border: 2px solid #308a7b;
+}
+.btn-outline-light{
+    border-radius: .5rem;
+    background-color: #308a7b;
+    color: white;
+    transition: 0.7s;
+}
+.btn-outline-light:hover{
+    background-color: #308a7b;
+    border: 1px solid #308a7b;
+    transition: 0.7s;
+}
+.btn-outline-danger{
+    border-radius: .5rem;
+    color: #308a7b;
+    border: 1px solid #308a7b;
+    transition: 0.7s;
+}
+.btn-outline-danger:hover{
+    border: 1px solid #308a7b;
+    background-color: #308a7b;
+    color: white;
+}
