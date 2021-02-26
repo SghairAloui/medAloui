@@ -15,15 +15,29 @@
             <a id="healthCareMenu"><strong>Health Care</strong></a>
             <nav>
                 <ul class="navItem">
-                    <li (click)="toAcceuilSection()"><a class="menuHoverEffect" >Acceuil</a></li>
-                    <li (click)="toDoctocSection()"><a class="menuHoverEffect">doctor</a></li>
-                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect" >Maladies</a></li>
-                    <li (click)="toAboutSection()"><a class="menuHoverEffect">About us</a></li>
-                    <li><a class="menuHoverEffect">settings</a></li>
-                    <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">Connexion</a></li>
+                    <li (click)="toAcceuilSection()"><a class="menuHoverEffect" >{{'home'|translate}}</a></li>
+                    <li (click)="toDoctocSection()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
+                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect" >{{'diseases'|translate}}</a></li>
+                    <li (click)="toAboutSection()"><a class="menuHoverEffect">{{'aboutUs'|translate}}</a></li>
+                    <li id="settignsLi">
+                        <label for="displaySettingsBox"><a class="menuHoverEffect" id="settignsLiA">{{'settings'|translate}}</a></label>
+                        <input type="checkbox" id="displaySettingsBox" (change)="displaySettingsBox=true" [checked]="displaySettingsBox">
+                        <ul id="settingsBox">
+                            <li>{{'ChooseLang'|translate}}</li>
+                            <li>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="padding-bottom: 5%;">
+                                    <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;displaySettingsBox=false;menuCheckBox=false;" [checked]="en" name="btnradio" id="en">
+                                    <label class="btn btn-outline-primary" id="enLabel" for="en">Anglais</label>
+                                    <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;displaySettingsBox=false;menuCheckBox=false;" [checked]="fr" name="btnradio" id="fr">
+                                    <label class="btn btn-outline-primary" id="frLabel" for="fr">Francais</label>
+                                 </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">{{'Connection'|translate}}</a></li>
                 </ul>
             </nav>
-            <a class="cta"><button (click)="toConnexionSection()">Connexion</button></a>
+            <a class="cta"><button (click)="toConnexionSection()">{{'Connection'|translate}}</button></a>
         </header>
     </body>
 </html>

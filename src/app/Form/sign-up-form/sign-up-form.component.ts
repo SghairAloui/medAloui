@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AcceuilService } from 'src/app/acceuil/acceuil.service';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -11,10 +11,10 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private acceuilService: AcceuilService) { 
+  constructor(private acceuilService: AcceuilService, private translate: TranslateService) { 
   }
   re = /^[A-Za-z]+$/;
-  firstName:string="";lastName:string="";mail:string="";day:string="";month:string="";year:string="";adress:String="";password:string="";passwordRepeat:string="";passwordInfromation:string="Password";passwordRepeatInfromation:string="Repeat password";firstNameInformation:string="First name";lastNameInformation:string="Last name";mailInformation:string="Mail";dayInformation:string="Day";monthInformation:string='Month';yearInformation:string="Year";adressInformation:string="City";
+  firstName:string="";lastName:string="";mail:string="";day:string="";month:string="";year:string="";adress:String="";password:string="";passwordRepeat:string="";passwordInfromation:string=this.translate.instant('password');passwordRepeatInfromation:string=this.translate.instant('repeatPassword');firstNameInformation:string=this.translate.instant('firstName');lastNameInformation:string=this.translate.instant('surname');mailInformation:string=this.translate.instant('mail');dayInformation:string=this.translate.instant('day');monthInformation:string=this.translate.instant('month');yearInformation:string=this.translate.instant('year');adressInformation:string=this.translate.instant('city');
   invalidFirstNameVariable:boolean;
   invalidLastNameVariable:boolean;
   invalidMailVariable:boolean;
@@ -38,31 +38,31 @@ export class SignUpFormComponent implements OnInit {
   checkFirstName(){
     if(this.firstName.length==0){
       this.invalidFirstNameVariable=true;
-      this.firstNameInformation="Enter your name first";
+      this.firstNameInformation= this.translate.instant('nameFirst');
     }else{
       if(this.re.test(this.firstName)){
         this.invalidFirstNameVariable=false;
-        this.firstNameInformation="First name";
+        this.firstNameInformation=this.translate.instant('firstName');
       }
       else{
         this.invalidFirstNameVariable=true;
-        this.firstNameInformation="Name must be alphabitic";
+        this.firstNameInformation=this.translate.instant('nameApha');
       }
     }
   }
   checkLastName(){
     if(this.lastName.length==0){
       this.invalidLastNameVariable=true;
-      this.lastNameInformation="Enter your surname first";
+      this.lastNameInformation=this.translate.instant('firstSurname');
     }else{
       if(this.re.test(this.lastName)){
         this.invalidLastNameVariable=false;
-        this.lastNameInformation="Last name";
+        this.lastNameInformation=this.translate.instant('surname');
       }
       else
         {
           this.invalidLastNameVariable=true;
-          this.lastNameInformation="Surname must be alphabitic";
+          this.lastNameInformation=this.translate.instant('surnameApha');
         }
     }
   }
@@ -70,15 +70,15 @@ export class SignUpFormComponent implements OnInit {
     let email = new RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/);
     if(this.mail.length==0){
         this.invalidMailVariable=true;
-        this.mailInformation="Enter your mail first";
+        this.mailInformation=this.translate.instant('mailApha');
     }else{
       if(email.test(this.mail)){
         this.invalidMailVariable=false;
-        this.mailInformation="Mail";
+        this.mailInformation=this.translate.instant('mail');
       }
       else{
         this.invalidMailVariable=true;
-        this.mailInformation="Please enter a valid mail";
+        this.mailInformation=this.translate.instant('enterValidMail');
       }
     }
   }
@@ -86,11 +86,11 @@ export class SignUpFormComponent implements OnInit {
     let upperCaseAdress:string = this.adress.toUpperCase();
     if(upperCaseAdress == "Ariana".toUpperCase() || upperCaseAdress == "Béja".toUpperCase()|| upperCaseAdress == "Ben Arous".toUpperCase() || upperCaseAdress =="Bizerte".toUpperCase()||upperCaseAdress =="Gabès".toUpperCase()||upperCaseAdress =="Gafsa".toUpperCase()||upperCaseAdress =="Jendouba".toUpperCase()||upperCaseAdress =="Kairouan".toUpperCase()||upperCaseAdress =="Kasserine".toUpperCase() ||upperCaseAdress == "Kébili".toUpperCase() ||upperCaseAdress =="Kef".toUpperCase()||upperCaseAdress =="Mahdia".toUpperCase()||upperCaseAdress == "Manouba" ||upperCaseAdress =="Médenine".toUpperCase()||upperCaseAdress =="Monastir".toUpperCase()||upperCaseAdress == "Nabeul".toUpperCase() ||upperCaseAdress =="Sfax".toUpperCase()||upperCaseAdress =="Sidi Bouzid".toUpperCase()||upperCaseAdress == "Siliana".toUpperCase() ||upperCaseAdress =="Sousse".toUpperCase()||upperCaseAdress =="Tataouine".toUpperCase()||upperCaseAdress == "Tozeur".toUpperCase() ||upperCaseAdress =="Tunis".toUpperCase()||upperCaseAdress =="Zaghouan".toUpperCase()){
       this.invalidAdressVariable=false;
-      this.adressInformation="City";
+      this.adressInformation=this.translate.instant('city');
     }
     else{
       this.invalidAdressVariable=true;
-      this.adressInformation="Please Enter a valid city name";
+      this.adressInformation=this.translate.instant('enterValidCity');
     }
     console.log(this.maleCheckBox);
     console.log(this.femaleCheckBox);
@@ -104,19 +104,19 @@ export class SignUpFormComponent implements OnInit {
   checkPassword(){
     if(this.password.length > 5){
       this.invalidPasswordVariable=false;
-      this.passwordInfromation='Password';
+      this.passwordInfromation=this.translate.instant('password');
     }
     else{
       this.invalidPasswordVariable=true; 
-      this.passwordInfromation='Password must be at least 6 character';
+      this.passwordInfromation=this.translate.instant('passwordUnder6');
     }
     if(this.passwordRepeat==this.password || this.password.length < 6){
       this.invalidPasswordRepeatVariable=false;
-      this.passwordRepeatInfromation='Repeat password';
+      this.passwordRepeatInfromation=this.translate.instant('repeatPassword');
     }
     else{
       this.invalidPasswordRepeatVariable=true;
-      this.passwordRepeatInfromation='Please check your password repeat';
+      this.passwordRepeatInfromation=this.translate.instant('repeatPasswordErr');
     }
   }
   checkEmailAndNameForm(){
@@ -132,27 +132,27 @@ export class SignUpFormComponent implements OnInit {
   checkBirthday(){
     if(parseInt(this.day) <= 31 && parseInt(this.day) > 0){
       this.invalidDayVariable=false;
-      this.dayInformation="Day";
+      this.dayInformation=this.translate.instant('day');
     }
     else{
       this.invalidDayVariable=true;
-      this.dayInformation="Please enter a valid day";
+      this.dayInformation=this.translate.instant('dayErr');
     }
     if(parseInt(this.month) <= 12 && parseInt(this.month) > 0){
       this.invalidMonthVariable=false;
-      this.monthInformation="Month";
+      this.monthInformation=this.translate.instant('month');
     }
     else{
       this.invalidMonthVariable=true;
-      this.monthInformation="Please enter a valid month";
+      this.monthInformation=this.translate.instant('monthErr');
     }
     if(parseInt(this.year) <= 2021 && parseInt(this.year) > 1900){
       this.invalidYearVariable=false;
-      this.yearInformation="Year";
+      this.yearInformation=this.translate.instant('year');
     }
     else{
       this.invalidYearVariable=true;
-      this.yearInformation="Please enter a valid year";
+      this.yearInformation=this.translate.instant('yearErr');
     }
     if(this.invalidDayVariable==true || this.invalidMonthVariable==true || this.invalidYearVariable==true)
     {
@@ -161,7 +161,4 @@ export class SignUpFormComponent implements OnInit {
     this.formInfo='GeneralInfo';
   }
 
-}
-export class NgbdDatepickerPopup {
-  model: NgbDateStruct;
 }

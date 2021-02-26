@@ -19,7 +19,7 @@
 
         <section id="connexionSection">
             <div class="sectionTitle">
-                Connectez vous
+                {{'connect'|translate}}
             </div>
             <div class="connexionContainer">
                 <img src="../../assets/img/connexion.jpg" id="connexionImg">
@@ -30,83 +30,121 @@
         </section>
         <section id="doctocSection">
             <div class="sectionTitle">
-                Comment fonctionne <br>notre application
+                {{'howItWokrs'|translate}} <br>{{'appWork'|translate}}
             </div>
             <div class="grid">
                 <div class="gridFirstBox">
                     <div class="gidBoxNumber">1</div>
                     <div class="gidBoxTitle">
-                        Prenez rendez-vous en ligne
+                        {{'makeAppointment'|translate}}
                     </div>
                     <div class="gidBoxText">
-                        Choisissez d'abord une spécialité afin que nous puissions afficher une liste de médecins de cette spécialité. après vous pouvez choisir votre médecin ou le rechercher par son nom. 
+                        {{'firstBoxText'|translate}} 
                     </div>
                 </div>
                 <div class="gridSecondBox">
                     <div class="gidBoxNumber">2</div>
                     <div class="gidBoxTitle">
-                        Effectuez votre rendez-vous
+                        {{'makeYourAppointment'|translate}}
                     </div>
                     <div class="gidBoxText">
-                        D'abord à tout moment vous pouvez annuler votre rendez-vous, sinon attendre la date pour consulter votre médecin.
+                        {{'secondBoxText'|translate}}
                     </div>
                 </div>
                 <div class="gridThirdBox">
                     <div class="gidBoxNumber">3</div>
                     <div class="gidBoxTitle">
-                        Bénéficiez d’un diagnostic
+                        {{'getDiagnosis'|translate}}
                     </div>
                     <div class="gidBoxText">
-                        Bénéficiez d’un diagnostic et si nécessaire d'une ordonnance valable en pharmacie, accessible en ligne depuis votre espace personnel. 
+                        {{'thirdBoxText'|translate}} 
                     </div>
                 </div>
                 <div class="gridFourthBox">
                     <div class="gidBoxNumber">4</div>
                     <div class="gidBoxTitle">
-                        Paiement et avis
+                        {{'paymentAndRates'|translate}}
                     </div>
                     <div class="gidBoxText">
-                        Une fois le rendez-vous terminé, vous devez donner au médecin ses cotisations financières et vous pouvez donner un avis à lui et à la secrétaire. 
+                        {{'fourthBoxText'|translate}} 
                     </div>
                 </div>
             </div>
             <div class="sectionTitle">
-                Alors commencez par<br> la recherche d'un médecin
+                {{'soStartWith'|translate}}<br>{{'aDoctor'|translate}}
             </div>
             <div class="findingDoctor">
                 <img src="../../assets/img/findDoctor.jpg" id="findDoctorImg">
                 <div class="findingDoctorSearch">
-                    <div class="searchText"><i class="fas fa-search"></i> Search</div>
+                    <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
                     <div class="formDiv">
                         <input type="text" class="formInput" list="datalistOptions" id="exampleInputEmail1" placeholder=" ">
-                        <label for="exampleInputEmail1" class="formLabel">Choose a speciality</label>
+                        <label for="exampleInputEmail1" class="formLabel">{{'chooseSpeciality'|translate}}</label>
                     </div>
                     <datalist id="datalistOptions">
-                      <option value="Médicin généraliste">
-                      <option value="Psychologue">
-                      <option value="Psychiatre">
-                      <option value="Dentiste">
-                      <option value="Médecin pédiatre">
+                      <option value="{{'generalPractitioner'|translate}}">
+                      <option value="{{'Psychologist'|translate}}">
+                      <option value="{{'Psychiatrist'|translate}}">
+                      <option value="{{'Dentist'|translate}}">
+                      <option value="{{'Pediatrician'|translate}}">
                     </datalist>
                     <div class="formDiv">
                         <input type="text" class="formInput" id="exampleInputEmail1" placeholder=" ">
-                        <label for="exampleInputEmail1" class="formLabel">Search doctor</label>
+                        <label for="exampleInputEmail1" class="formLabel">{{'searchDoctor'|translate}}</label>
                     </div>
-                    <button type="submit" class="btn btn-outline-light btn-block" style="height: 43px;">Search</button>
+                    <button type="submit" class="btn btn-outline-light btn-block" style="height: 43px;">{{'search'|translate}}</button>
                 </div>
             </div>
         </section>
         <section id="maladiesSection">
             <div class="sectionTitle">
-                Maladies
+                {{'diseases'|translate}}
+            </div>
+            <div class="maladiesContainer">
+                <div>
+                    {{'disease'|translate}} 1
+                </div>
+                <div>
+                    {{'disease'|translate}} 2
+                </div>
+                <div>
+                    {{'disease'|translate}} 3
+                </div>
+                <div>
+                    {{'disease'|translate}} 4
+                </div>
+                <div>
+                    {{'disease'|translate}} 5
+                </div>
+                <div>
+                    {{'disease'|translate}} 6
+                </div>
+                <div>
+                    {{'disease'|translate}} 7
+                </div>
+                <div>
+                    {{'disease'|translate}} 8
+                </div>
+                <div>
+                    {{'disease'|translate}} 9
+                </div>
+                <div>
+                    {{'disease'|translate}} 10
+                </div>
+                <div>
+                    {{'disease'|translate}} 11
+                </div>
+                <div>
+                    {{'disease'|translate}} 12
+                </div>
             </div>
         </section>
         <section id="aboutSection">
             <div class="aboutUstitle">
-                About <span style="color: #308a7b;">Us</span>
+                {{'about'|translate}} <span style="color: #308a7b;">{{'us'|translate}}</span>
             </div>
             <div class="aboutUsText">
-               <strong style="color: #308a7b; font-family: 'Dancing Script', cursive;font-size: 2rem;"> Health Care </strong> permet d’accéder aux agendas des médecins ainsi de prendre un rendez-vous avec eux, en tenant compte des disponibilités immédiates. Le médecin s’authentifie afin d’accepter les patients et d’envoyer les ordonnances après les consultations. En plus cette application donne la possibilité de trouver la pharmacie la plus adéquate (la pharmacie ouverte) et d’envoyer l’ordonnance à la pharmacie choisie. Après avoir envoyé l’ordonnance, le pharmacien peut accéder à son espace pour la trouver.
+               <strong style="color: #308a7b; font-family: 'Dancing Script', cursive;font-size: 2rem;"> Health Care </strong> {{'aboutUsText'|translate}}
             </div>
             <div class="ContactUs">
                 <div class="ContactUsTitle">Contact</div>

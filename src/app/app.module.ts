@@ -13,6 +13,8 @@ import { SignUpFormComponent } from './Form/sign-up-form/sign-up-form.component'
 import { AcceuilService } from './acceuil/acceuil.service';
 import { AcceuilBodyComponent } from './bodyContent/acceuil-body/acceuil-body.component';
 import { HeaderComponent } from './Headers/header/header.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { HeaderComponent } from './Headers/header/header.component';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
     }
-    })
+    }),
+    BrowserAnimationsModule
   ],
   providers: [AcceuilService],
   bootstrap: [AppComponent]

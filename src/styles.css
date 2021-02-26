@@ -46,6 +46,7 @@
     border: 2px solid #308a7b;
 }
 .btn-outline-light{
+    text-transform: uppercase;
     border-radius: .5rem;
     background-color: #308a7b;
     color: white;
@@ -57,6 +58,7 @@
     transition: 0.7s;
 }
 .btn-outline-danger{
+    text-transform: uppercase;
     border-radius: .5rem;
     color: #308a7b;
     border: 1px solid #308a7b;

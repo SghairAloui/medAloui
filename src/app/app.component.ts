@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'santeLib';
+  title = 'Health Care';
   constructor(translate: TranslateService) {
     translate.setDefaultLang('en');}
 }

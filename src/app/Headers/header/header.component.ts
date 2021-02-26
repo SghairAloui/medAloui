@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -7,10 +8,16 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private translate: TranslateService) { 
+    translate.addLangs(['en','fr']);
+    
+  }
 
   ngOnInit(): void {
   }
+  en:boolean=true;
+  fr:boolean=false;
+  displaySettingsBox:boolean=false;
 
   menuCheckBox:boolean;
   headerOnScrollVariable=false;
@@ -42,5 +49,8 @@ export class HeaderComponent implements OnInit {
   toAboutSection(){
     document.getElementById("aboutSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
+  }
+  changeLang(lang:string){
+    this.translate.use(lang);
   }
 }

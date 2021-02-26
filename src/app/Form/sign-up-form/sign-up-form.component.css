@@ -83,6 +83,7 @@
     background: -webkit-linear-gradient(0deg,transparent 50%,#308a7b 50%);
     background-size: 200% 4px;
     border: 1px solid #308a7b;
+    text-transform: uppercase;
 }
 .userTypeBtn:hover{
     background-position: 90% 0;
