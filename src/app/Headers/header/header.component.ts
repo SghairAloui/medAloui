@@ -10,16 +10,17 @@ export class HeaderComponent implements OnInit {
 
   constructor(private translate: TranslateService) { 
     translate.addLangs(['en','fr']);
-    
+    document.addEventListener('click', this.closeAllMenu.bind(this));
   }
 
   ngOnInit(): void {
   }
   en:boolean=true;
   fr:boolean=false;
+  settingsBoxUnder700:boolean=false;
   displaySettingsBox:boolean=false;
 
-  menuCheckBox:boolean;
+  menuCheckBox:boolean=false;
   headerOnScrollVariable=false;
 
   @HostListener("document:scroll")
@@ -52,5 +53,11 @@ export class HeaderComponent implements OnInit {
   }
   changeLang(lang:string){
     this.translate.use(lang);
+  }
+  closeAllMenu(event:any) {
+    if(this.menuCheckBox==true || this.displaySettingsBox==true){
+      this.menuCheckBox=false;
+      this.displaySettingsBox=false;
+    }
   }
 }
