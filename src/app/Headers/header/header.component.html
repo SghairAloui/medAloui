@@ -9,7 +9,7 @@
         </label>
         <input type="checkbox" id="displayMenu" (change)="menuCheckBox=true" [checked]="menuCheckBox">
         <header [class.headerOnScroll]="headerOnScrollVariable" id="header">
-            <a><i class="fas fa-times" id="menuCancel"></i></a>
+            <a (click)="menuCheckBox=false"><i class="fas fa-times" id="menuCancel"></i></a>
             <a id="healthCareMenu"><strong>Health Care</strong></a>
             <nav>
                 <ul class="navItem">
@@ -17,20 +17,29 @@
                     <li (click)="toDoctocSection()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
                     <li (click)="toMaladiesSection()"><a class="menuHoverEffect" >{{'diseases'|translate}}</a></li>
                     <li (click)="toAboutSection()"><a class="menuHoverEffect">{{'aboutUs'|translate}}</a></li>
-                    <li id="settignsLi" (click)="settingsBoxUnder700=true">
+                    <li id="settignsLi" (click)="settingsBoxUnder700=true;closeMenu()">
                         <label for="displaySettingsBox"><a class="menuHoverEffect" id="settignsLiA">{{'settings'|translate}}</a></label>
                         <input type="checkbox" id="displaySettingsBox" (change)="displaySettingsBox=true" [checked]="displaySettingsBox">
                         <ul id="settingsBox">
                             <li>{{'ChooseLang'|translate}}</li>
                             <li>
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="padding-bottom: 5%;">
-                                    <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;displaySettingsBox=false;menuCheckBox=false;" [checked]="en" name="btnradio" id="en">
+                                    <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradio" id="en">
                                     <label class="btn btn-outline-primary" id="enLabel" for="en">Anglais</label>
-                                    <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;displaySettingsBox=false;menuCheckBox=false;" [checked]="fr" name="btnradio" id="fr">
+                                    <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradio" id="fr">
                                     <label class="btn btn-outline-primary" id="frLabel" for="fr">Francais</label>
-                                 </div>
+                                 </div><hr>
                             </li>
-                            <li><i class="fas fa-times" id="settingsBoxCancel"></i></li>
+                            <li> {{'darkMode'|translate}} </li>
+                            <li>
+                                <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox" [checked]="darkMode" id="darkModeCheckBox">
+                                <label for="darkModeCheckBox" class="darkModeCheckBoxLabel">
+                                    <i class="fas fa-moon"></i>
+                                    <i class="fas fa-sun"></i>
+                                    <div class="ball"></div>
+                                </label><hr>
+                            </li>
+                            <li (click)="displaySettingsBox=false"><i class="fas fa-times" id="settingsBoxCancel"></i></li>
                         </ul>
                     </li>
                     <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">{{'Connection'|translate}}</a></li>
@@ -44,10 +53,19 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradioo" id="en">
-                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;settingsBoxUnder700=false;" id="enLabel" for="en">Anglais</label>
+                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;" id="enLabel" for="en">Anglais</label>
                         <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradioo" id="fr">
-                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;settingsBoxUnder700=false;" id="frLabel" for="fr">Francais</label>
-                     </div>
+                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;" id="frLabel" for="fr">Francais</label>
+                     </div><hr>
+                </li>
+                <li> {{'darkMode'|translate}} </li>
+                <li>
+                    <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBoxUnder700" [checked]="darkMode" id="darkModeCheckBoxUnder700">
+                    <label for="darkModeCheckBoxUnder700" class="darkModeCheckBoxLabelUnder700">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <div class="ball"></div>
+                    </label><hr>
                 </li>
                 <li (click)="settingsBoxUnder700=false;"><i class="fas fa-times" id="settingsBoxCancel"></i></li>
             </ul>

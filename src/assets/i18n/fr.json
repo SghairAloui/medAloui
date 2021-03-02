@@ -90,5 +90,6 @@
     "male":"Homme",
     "female":"Femme",
     "next":"Suivant",
-    "aboutUsText":"permet d’accéder aux agendas des médecins ainsi de prendre un rendez-vous avec eux, en tenant compte des disponibilités immédiates. Le médecin s’authentifie afin d’accepter les patients et d’envoyer les ordonnances après les consultations. En plus cette application donne la possibilité de trouver la pharmacie la plus adéquate (la pharmacie ouverte) et d’envoyer l’ordonnance à la pharmacie choisie. Après avoir envoyé l’ordonnance, le pharmacien peut accéder à son espace pour la trouver."
+    "aboutUsText":"permet d’accéder aux agendas des médecins ainsi de prendre un rendez-vous avec eux, en tenant compte des disponibilités immédiates. Le médecin s’authentifie afin d’accepter les patients et d’envoyer les ordonnances après les consultations. En plus cette application donne la possibilité de trouver la pharmacie la plus adéquate (la pharmacie ouverte) et d’envoyer l’ordonnance à la pharmacie choisie. Après avoir envoyé l’ordonnance, le pharmacien peut accéder à son espace pour la trouver.",
+    "darkMode":"Mode sambre"
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { AppComponent } from '../../app.component'
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private translate: TranslateService) { 
+  constructor(private translate: TranslateService,private appComp:AppComponent) { 
     translate.addLangs(['en','fr']);
-    document.addEventListener('click', this.closeAllMenu.bind(this));
+    /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
+
 
   ngOnInit(): void {
   }
@@ -19,6 +21,7 @@ export class HeaderComponent implements OnInit {
   fr:boolean=false;
   settingsBoxUnder700:boolean=false;
   displaySettingsBox:boolean=false;
+  darkMode:boolean=false;
 
   menuCheckBox:boolean=false;
   headerOnScrollVariable=false;
@@ -54,10 +57,21 @@ export class HeaderComponent implements OnInit {
   changeLang(lang:string){
     this.translate.use(lang);
   }
-  closeAllMenu(event:any) {
+  /*closeAllMenu(event:any) {
     if(this.menuCheckBox==true || this.displaySettingsBox==true){
       this.menuCheckBox=false;
       this.displaySettingsBox=false;
     }
+  }*/
+
+  closeMenu(){
+    this.menuCheckBox=false;
+  }
+  switchTheme(){
+    this.appComp.switchTheme();
+    if(this.darkMode==false)
+     this.darkMode=true;
+    else
+     this.darkMode=false;
   }
 }

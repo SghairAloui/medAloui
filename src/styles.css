@@ -1,3 +1,26 @@
+.light-theme{
+    --background-color: #F0F2F5;
+    --text-color: #000;
+    --box-color: #fff;
+    --box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
+    --Black-text:#000;
+    --gray-text:#4d4d4d;
+    --hr:gray;
+    --input-text-color:black;
+    --gender-box-shadow:0px 0px 10px 2px #308a7b;
+}
+.dark-theme{
+    --background-color: #18191a;
+    --text-color: #fff;
+    --box-color: #242526;
+    --box-shadow: none;
+    --Black-text:#fff;
+    --gray-text:rgb(228, 228, 228);
+    --hr:rgb(226, 226, 226);
+    --input-text-color:white;
+    --gender-box-shadow:none;
+}
+
 .formDiv{
     position: relative;
     height: 48px;
@@ -16,16 +39,18 @@
     padding: 1rem;
     background: none;
     z-index: 1;
+    color: var(--input-text-color);
+    transition: all .3s ease-in-out;
 }
 .formLabel{
     position: absolute;
     left: 1rem;
     top: .75rem;
     padding: 0 .25rem;
-    background-color: white;
+    background-color: var(--box-color);
+    transition: all .3s ease-in-out;
     color: #888;
     font-size: 1.rem;
-    transition: .3s;
 }
 .formInput:focus + .formLabel{
     top: -.5rem;
@@ -51,10 +76,10 @@
     background-color: #308a7b;
     color: white;
     transition: 0.7s;
+    border: none;
 }
 .btn-outline-light:hover{
     background-color: #308a7b;
-    border: 1px solid #308a7b;
     transition: 0.7s;
 }
 .btn-outline-danger{

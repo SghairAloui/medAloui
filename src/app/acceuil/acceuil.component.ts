@@ -15,6 +15,7 @@ export class AcceuilComponent implements OnInit {
    }
   body: String = 'acceuilBody';
   FormName:any;
+  
   ngOnInit(): void {
     this.acceuilService.displayForm$.subscribe(data=>{
       this.FormName=data;

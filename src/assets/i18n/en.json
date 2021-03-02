@@ -90,5 +90,6 @@
     "male":"Male",
     "female":"Female",
     "next":"Next",
-    "aboutUsText":"allows you to access doctors' agendas and make an appointment with them, taking into account immediate availability. The doctor authenticates himself in order to accept patients and send prescriptions after consultations. In addition, this application allows you to find the most suitable pharmacy (the open pharmacy) and send the prescription to the chosen pharmacy. After sending the prescription, the pharmacist can access their space to find it."
+    "aboutUsText":"allows you to access doctors' agendas and make an appointment with them, taking into account immediate availability. The doctor authenticates himself in order to accept patients and send prescriptions after consultations. In addition, this application allows you to find the most suitable pharmacy (the open pharmacy) and send the prescription to the chosen pharmacy. After sending the prescription, the pharmacist can access their space to find it.",
+    "darkMode":"Dark mode"
 }
