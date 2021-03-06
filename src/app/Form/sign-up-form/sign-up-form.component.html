@@ -1,6 +1,63 @@
 <div class="container">
     <div *ngIf="showForm; then showSignUpForm else showSignUp"></div>
 <ng-template #showSignUpForm>
+    <div *ngIf="formInfo=='pharmacy'">
+        <div class="formInfoTitle">
+            <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
+          </div>
+        <div class="formNavigateButtons">
+            <div class="formDiv">
+                <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable" name="pharmacyName" [(ngModel)]="pharmacyName" (keyup)="pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false" class="formInput"  placeholder=" ">
+                <label for="" class="formLabel">
+                   {{pharmacyNameInformation}}
+                </label>
+            </div>
+            <div class="formDiv">
+                <input type="text" [class.labelInvalidInfo]="invalidUserNameVariable" name="userName" [(ngModel)]="userName" (keyup)="userNameNameInformation=translate.instant('pharmacyUserName');invalidUserNameVariable=false" class="formInput" placeholder=" ">
+                <label for="" class="formLabel">
+                    {{userNameNameInformation}}
+                </label>
+            </div>
+            <div class="formDiv">
+                <input type="text" list="governoratelistOptions" [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress" (keyup)="adressInformation=translate.instant('city');invalidAdressVariable=false" class="formInput" placeholder=" ">
+                <label for="" class="formLabel">
+                   {{adressInformation}}
+                   <datalist id="governoratelistOptions">
+                       <option value="Ariana">
+                       <option value="Béja">
+                       <option value="Ben Arous">
+                       <option value="Bizerte">
+                       <option value="Gabès">
+                       <option value="Gafsa">
+                       <option value="Jendouba">
+                       <option value="Kairouan">
+                       <option value="Kasserine">
+                       <option value="Kébili">
+                       <option value="Kef">
+                       <option value="Mahdia">
+                       <option value="Manouba">
+                       <option value="Médenine">
+                       <option value="Monastir">
+                       <option value="Nabeul">
+                       <option value="Sfax">
+                       <option value="Sidi Bouzid">
+                       <option value="Siliana">
+                       <option value="Sousse">
+                       <option value="Tataouine">
+                       <option value="Tozeur">
+                       <option value="Tunis">
+                       <option value="Zaghouan">
+                     </datalist>
+                </label>
+            </div>
+            <div class="formNavigateNextButton">
+                <button (click)="checkPharmacyNameAndUserName()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+            </div>
+            <div class="formNavigateBackButton">
+                <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+            </div>
+        </div>
+    </div>
     <div *ngIf="formInfo=='emailAndName'">
        <div class="formInfoTitle">
           <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
@@ -201,13 +258,38 @@
              </div>
          </div>  
      </div>
+     <div *ngIf="formInfo=='pharmacyPassword'">
+        <div class="formInfoTitle">
+             <i class="fas fa-unlock"></i> {{'password'|translate}}
+         </div>
+         <div class="formDiv">
+            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password" [(ngModel)]="password" (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')" class="formInput" placeholder=" ">
+            <label for="" class="formLabel">
+                {{passwordInfromation}}
+            </label>
+        </div>
+        <div class="formDiv">
+            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable" name="passwordRepeat" [(ngModel)]="passwordRepeat" (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false" class="formInput" placeholder=" ">
+            <label for="" class="formLabel">
+                {{passwordRepeatInfromation}}
+            </label>
+        </div>
+         <div class="formNavigateButtons">
+             <div class="formNavigateNextButton">
+                 <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+             </div>
+             <div class="formNavigateBackButton">
+                 <button (click)="formInfo='pharmacy'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+             </div>
+         </div>  
+     </div>
 </ng-template>
 <ng-template #showSignUp>
     <div class="formInfoTitle"><i class="fas fa-user"></i> {{'accountType'|translate}} :</div>
 <div class="buttons">
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName'"> {{ 'client' | translate}} </button><br>
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName'"> {{ 'pharmacist' | translate}} </button><br>
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName'"> {{ 'doctor' | translate}} </button>
+    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='client'"> {{ 'client' | translate}} </button><br>
+    <button class="userTypeBtn" (click)="showForm=true; formInfo='pharmacy';userType='pharmacy'"> {{ 'pharmacist' | translate}} </button><br>
+    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='doctor'"> {{ 'doctor' | translate}} </button>
 </div>
 <div class="strike"><span>{{'or'|translate}}</span></div>
 <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'goBack'|translate}}</button>

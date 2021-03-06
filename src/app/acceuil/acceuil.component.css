@@ -260,7 +260,7 @@ html,body{
         max-width: 90%;
     }
     .findingDoctor, .connexionContainer{
-        width: 75%;
+        width: 85%;
     }
     .maladiesContainer{
         width: 75%;
@@ -286,7 +286,7 @@ html,body{
         margin-bottom: 50px;
     }
     .findingDoctor, .connexionContainer{
-        width: 80%;
+        width: 95%;
     }
     .maladiesContainer{
         width: 80%;
@@ -315,7 +315,7 @@ html,body{
         max-width: 70%;
     }
     .findingDoctor, .connexionContainer{
-        width: 85%;
+        width: 98%;
     }
     .maladiesContainer{
         width: 85%;

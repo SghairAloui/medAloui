@@ -14,6 +14,7 @@ import { AcceuilService } from './acceuil/acceuil.service';
 import { AcceuilBodyComponent } from './bodyContent/acceuil-body/acceuil-body.component';
 import { HeaderComponent } from './Headers/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SaveNewUserService } from './Form/sign-up-form/save-new-user.service';
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     }),
     BrowserAnimationsModule
   ],
-  providers: [AcceuilService,AppComponent],
+  providers: [AcceuilService,AppComponent,SaveNewUserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

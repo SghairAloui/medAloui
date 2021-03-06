@@ -89,10 +89,14 @@
                       <option value="{{'Pediatrician'|translate}}">
                     </datalist>
                     <div class="formDiv">
-                        <input type="text" class="formInput" id="exampleInputEmail1" placeholder=" ">
+                        <input type="text" name="doctorName" [(ngModel)]="doctorName"  class="formInput" list="doctorsList" id="exampleInputEmail1" placeholder=" ">
                         <label for="exampleInputEmail1" class="formLabel">{{'searchDoctor'|translate}}</label>
                     </div>
-                    <button type="submit" class="btn btn-outline-light btn-block" style="height: 43px;">{{'search'|translate}}</button>
+                    <datalist id="doctorsList">
+                        <option *ngFor="let doc of doctors" [value]="doc.doctorFirstName +' '+ doc.doctorLastName">
+                            rate: {{doc.doctorRate}}/5</option>
+                    </datalist>
+                    <button type="submit" (click)="showSearchValue()" class="btn btn-outline-light btn-block" style="height: 43px;">{{'search'|translate}}</button>
                 </div>
             </div>
         </section>
