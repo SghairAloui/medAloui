@@ -8,6 +8,7 @@
     --hr:gray;
     --input-text-color:black;
     --gender-box-shadow:0px 0px 10px 2px #308a7b;
+    --maleFemaleCheckBoxBackgroundColor:#308a7b;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -19,8 +20,8 @@
     --hr:rgb(226, 226, 226);
     --input-text-color:white;
     --gender-box-shadow:none;
+    --maleFemaleCheckBoxBackgroundColor:none;
 }
-
 .formDiv{
     position: relative;
     height: 48px;

@@ -46,8 +46,13 @@
     left: 100%;
     margin-left: 15px;
 }
-small{
-    color: red; margin: 5px;
-    font-size: x-small;
-  }
+.labelInvalidInfo{
+    border: 1px solid red;
+}
+.labelInvalidInfo:focus{
+    border: 2px solid red;
+}
+.labelInvalidInfo + .formLabel{
+    color: red;
+}
   

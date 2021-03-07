@@ -98,5 +98,12 @@
     "pharmacyUserName":"Username",
     "userNameNameUnder3":"Username must be at least 6 character",
     "userNameNoSpace":"Username must not contain space",
-    "mailExist":"Username already exist"
+    "mailExist":"Username already exist",
+
+    "accountCreated":"Account created",
+    "checkCnx":"Please check your Internet connextion !",
+    "userNameOrPasswordIncorrect":"Incorrect username or password",
+    "username":"Username",
+    "checkUsername":"Please check your username",
+    "checkPassword":"Please check your password"
 }

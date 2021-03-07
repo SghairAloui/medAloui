@@ -12,12 +12,12 @@ export class SaveNewUserService {
   constructor(private http:HttpClient) { }
 
   public savePatient(patient:PatientPost){
-    return this.http.post("http://localhost:8080/patient/add",patient,{responseType:'text' as 'json'});
+    return this.http.post<string>("http://localhost:8080/patient/add",patient,{responseType:'text' as 'json'});
   }
   public savePharmacy(pharmacy:PharmacyPost){
-    return this.http.post("http://localhost:8080/pharmacy/add",pharmacy,{responseType:'text' as 'json'});
+    return this.http.post<string>("http://localhost:8080/pharmacy/add",pharmacy,{responseType:'text' as 'json'});
   }
   public saveDoctor(doctor:DoctorPost){
-    return this.http.post("http://localhost:8080/doctor/add",doctor,{responseType:'text' as 'json'});
+    return this.http.post<string>("http://localhost:8080/doctor/add",doctor,{responseType:'text' as 'json'});
   }
 }

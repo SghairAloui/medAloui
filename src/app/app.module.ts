@@ -15,6 +15,7 @@ import { AcceuilBodyComponent } from './bodyContent/acceuil-body/acceuil-body.co
 import { HeaderComponent } from './Headers/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SaveNewUserService } from './Form/sign-up-form/save-new-user.service';
+import { PatientComponent } from './users/patient/patient/patient.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { SaveNewUserService } from './Form/sign-up-form/save-new-user.service';
     SignUpFormComponent,
     AcceuilBodyComponent,
     HeaderComponent,
+    PatientComponent,
   ],
   imports: [
     BrowserModule,

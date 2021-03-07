@@ -57,12 +57,6 @@ export class HeaderComponent implements OnInit {
   changeLang(lang:string){
     this.translate.use(lang);
   }
-  /*closeAllMenu(event:any) {
-    if(this.menuCheckBox==true || this.displaySettingsBox==true){
-      this.menuCheckBox=false;
-      this.displaySettingsBox=false;
-    }
-  }*/
 
   closeMenu(){
     this.menuCheckBox=false;

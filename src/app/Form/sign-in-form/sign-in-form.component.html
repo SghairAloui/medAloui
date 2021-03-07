@@ -8,15 +8,15 @@
       <form >
           <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
           <div class="formDiv">
-            <input type="email" class="formInput" id="exampleInputEmail1" placeholder=" ">
-            <label for="exampleInputEmail1" class="formLabel">{{'emailAddress'|translate}}</label>
+            <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+            <label for="username" class="formLabel">{{emailAddressInfo}}</label>
           </div>
           <div class="formDiv">
-            <input type="password" class="formInput" id="exampleInputEmail1" placeholder=" ">
-            <label for="exampleInputEmail1" class="formLabel">{{'password'|translate}}</label>
+            <input type="password" [class.labelInvalidInfo]="InvalidInfo" name="password" [(ngModel)]="password" id="password" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+            <label for="password" class="formLabel">{{passwordInfo}}</label>
           </div>
         <div class="centerButtons">
-          <button type="submit" class="btn btn-outline-light btn-lg btn-block" >{{'signIn'|translate}}</button>
+          <button type="submit" class="btn btn-outline-light btn-lg btn-block" (click)="openAccount()" >{{'signIn'|translate}}</button>
         <div class="strike"><span>{{'or'|translate}}</span></div>
         <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignUp()">{{'signUp'|translate}}</button>
         </div>

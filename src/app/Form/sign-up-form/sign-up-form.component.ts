@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AcceuilService } from 'src/app/acceuil/acceuil.service';
 import { DoctorPost } from 'src/model/DoctorPost';
 import { PatientPost } from 'src/model/PatientPost';
 import { PharmacyPost } from 'src/model/PharmacyPost';
@@ -16,7 +15,7 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private acceuilService: AcceuilService, private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient) { 
+  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient) { 
   }
   saveUserResponse:any;
   private patientPost:PatientPost;
@@ -40,7 +39,7 @@ export class SignUpFormComponent implements OnInit {
   femaleCheckBox:boolean;
   usernameExist:string="null";
   showForm:boolean=false;
-  formInfo:String='false';
+  formInfo:string='false';
 
   ngOnInit(): void {
   }
@@ -207,8 +206,14 @@ export class SignUpFormComponent implements OnInit {
     
     if(this.userType=='pharmacy'){
       this.pharmacyPost =new PharmacyPost(this.userName,this.pharmacyName,this.adress,this.password);
-        let resp = this.saveUser.savePharmacy(this.pharmacyPost);
-        resp.subscribe((data)=>console.log(data));
+        this.saveUser.savePharmacy(this.pharmacyPost).subscribe(
+          res => {
+            this.formInfo=res;
+          },
+          err => {
+            alert(this.translate.instant('checkCnx'));
+          }
+        );
     }else{
       let gender:string;
       if(this.maleCheckBox==true)
@@ -218,12 +223,24 @@ export class SignUpFormComponent implements OnInit {
       let birthday:string=this.day+"/"+this.month+"/"+this.year;
       if(this.userType=='doctor'){
         this.doctorPost =new DoctorPost(this.mail,this.firstName,this.lastName,this.adress,birthday,this.password,gender);
-        let resp = this.saveUser.saveDoctor(this.doctorPost);
-        resp.subscribe((data)=>console.log(data));
+        let resp = this.saveUser.saveDoctor(this.doctorPost).subscribe(
+          res => {
+            this.formInfo=res;
+          },
+          err => {
+            alert(this.translate.instant('checkCnx'))
+          }
+        );
       }else{
         this.patientPost =new PatientPost(this.mail,this.firstName,this.lastName,this.adress,this.password,birthday,gender);
-        let resp = this.saveUser.savePatient(this.patientPost);
-        resp.subscribe((data)=>console.log(data));
+        let resp = this.saveUser.savePatient(this.patientPost).subscribe(
+          res => {
+            this.formInfo=res;
+          },
+          err => {
+            alert(this.translate.instant('checkCnx'))
+          }
+        );
       }
     }
   }

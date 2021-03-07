@@ -78,8 +78,8 @@
                 <div class="findingDoctorSearch">
                     <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
                     <div class="formDiv">
-                        <input type="text" class="formInput" list="datalistOptions" id="exampleInputEmail1" placeholder=" ">
-                        <label for="exampleInputEmail1" class="formLabel">{{'chooseSpeciality'|translate}}</label>
+                        <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
+                        <label for="chooseSpeciality" class="formLabel">{{'chooseSpeciality'|translate}}</label>
                     </div>
                     <datalist id="datalistOptions">
                       <option value="{{'generalPractitioner'|translate}}">
@@ -89,8 +89,8 @@
                       <option value="{{'Pediatrician'|translate}}">
                     </datalist>
                     <div class="formDiv">
-                        <input type="text" name="doctorName" [(ngModel)]="doctorName"  class="formInput" list="doctorsList" id="exampleInputEmail1" placeholder=" ">
-                        <label for="exampleInputEmail1" class="formLabel">{{'searchDoctor'|translate}}</label>
+                        <input type="text" name="doctorName" [(ngModel)]="doctorName"  class="formInput" list="doctorsList" id="searchDoctor" placeholder=" ">
+                        <label for="searchDoctor" class="formLabel">{{'searchDoctor'|translate}}</label>
                     </div>
                     <datalist id="doctorsList">
                         <option *ngFor="let doc of doctors" [value]="doc.doctorFirstName +' '+ doc.doctorLastName">

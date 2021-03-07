@@ -2,6 +2,24 @@
     background-color: var(--box-color);
     transition: all .3s ease-in-out;
 }
+.userCreated{
+    position: relative;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: var(--gray-text);
+    transition: all .3s ease-in-out;
+}
+.fa-check-circle{
+    position: absolute;
+    color: #308a7b;
+    font-size: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 30px;
+}
 .btn-outline-primary:hover{
     background-color: #308a7b;
     color: white;
@@ -55,11 +73,13 @@
     position: relative;
     width: 40%;
     left: 0%;
+    transition: 1s;
 }
 .formNavigateNextButton{
     position: absolute;
     width: 40%;
     right: 0%;
+    transition: 1s;
 }
 .formInfoTitle{
     font-size: 20px;
@@ -95,6 +115,10 @@
     background-size: 200% 4px;
     border: 1px solid #308a7b;
     text-transform: uppercase;
+}
+#maleLabel:hover,#femaleLabel:hover{
+    color: white;
+    background-color: var(--maleFemaleCheckBoxBackgroundColor);
 }
 .userTypeBtn:hover{
     background-position: 90% 0;
@@ -142,4 +166,14 @@
 .strike > span:after {
     left: 100%;
     margin-left: 15px;
+}
+@media screen and (max-width: 800px){
+    .formNavigateBackButton,.formNavigateNextButton{
+        width: 45%;
+    }
+}
+@media screen and (max-width: 700px){
+    .formNavigateBackButton,.formNavigateNextButton{
+        width: 40%;
+    }
 }

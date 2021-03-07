@@ -1,297 +1,310 @@
-<div class="container">
-    <div *ngIf="showForm; then showSignUpForm else showSignUp"></div>
-<ng-template #showSignUpForm>
-    <div *ngIf="formInfo=='pharmacy'">
-        <div class="formInfoTitle">
-            <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
-          </div>
-        <div class="formNavigateButtons">
-            <div class="formDiv">
-                <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable" name="pharmacyName" [(ngModel)]="pharmacyName" (keyup)="pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false" class="formInput"  placeholder=" ">
-                <label for="" class="formLabel">
-                   {{pharmacyNameInformation}}
-                </label>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="container">
+            <div *ngIf="showForm; then showSignUpForm else showSignUp"></div>
+        <ng-template #showSignUpForm>
+            <div *ngIf="formInfo=='userCreated'" class="userCreated">
+                <i class="fas fa-check-circle"></i><br>
+                {{'accountCreated'|translate}}
+                <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'signIn'|translate}}</button>
             </div>
-            <div class="formDiv">
-                <input type="text" [class.labelInvalidInfo]="invalidUserNameVariable" name="userName" [(ngModel)]="userName" (keyup)="userNameNameInformation=translate.instant('pharmacyUserName');invalidUserNameVariable=false" class="formInput" placeholder=" ">
-                <label for="" class="formLabel">
-                    {{userNameNameInformation}}
-                </label>
+            <div *ngIf="formInfo=='pharmacy'">
+                <div class="formInfoTitle">
+                    <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
+                  </div>
+                <div class="formNavigateButtons">
+                    <div class="formDiv">
+                        <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable" name="pharmacyName" [(ngModel)]="pharmacyName" (keyup)="pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false" class="formInput"  placeholder=" ">
+                        <label for="" class="formLabel">
+                           {{pharmacyNameInformation}}
+                        </label>
+                    </div>
+                    <div class="formDiv">
+                        <input type="text" [class.labelInvalidInfo]="invalidUserNameVariable" name="userName" [(ngModel)]="userName" (keyup)="userNameNameInformation=translate.instant('pharmacyUserName');invalidUserNameVariable=false" class="formInput" placeholder=" ">
+                        <label for="" class="formLabel">
+                            {{userNameNameInformation}}
+                        </label>
+                    </div>
+                    <div class="formDiv">
+                        <input type="text" list="governoratelistOptions" [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress" (keyup)="adressInformation=translate.instant('city');invalidAdressVariable=false" class="formInput" placeholder=" ">
+                        <label for="" class="formLabel">
+                           {{adressInformation}}
+                           <datalist id="governoratelistOptions">
+                               <option value="Ariana">
+                               <option value="Béja">
+                               <option value="Ben Arous">
+                               <option value="Bizerte">
+                               <option value="Gabès">
+                               <option value="Gafsa">
+                               <option value="Jendouba">
+                               <option value="Kairouan">
+                               <option value="Kasserine">
+                               <option value="Kébili">
+                               <option value="Kef">
+                               <option value="Mahdia">
+                               <option value="Manouba">
+                               <option value="Médenine">
+                               <option value="Monastir">
+                               <option value="Nabeul">
+                               <option value="Sfax">
+                               <option value="Sidi Bouzid">
+                               <option value="Siliana">
+                               <option value="Sousse">
+                               <option value="Tataouine">
+                               <option value="Tozeur">
+                               <option value="Tunis">
+                               <option value="Zaghouan">
+                             </datalist>
+                        </label>
+                    </div>
+                    <div class="formNavigateNextButton">
+                        <button (click)="checkPharmacyNameAndUserName()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                    </div>
+                    <div class="formNavigateBackButton">
+                        <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                    </div>
+                </div>
             </div>
-            <div class="formDiv">
-                <input type="text" list="governoratelistOptions" [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress" (keyup)="adressInformation=translate.instant('city');invalidAdressVariable=false" class="formInput" placeholder=" ">
-                <label for="" class="formLabel">
-                   {{adressInformation}}
-                   <datalist id="governoratelistOptions">
-                       <option value="Ariana">
-                       <option value="Béja">
-                       <option value="Ben Arous">
-                       <option value="Bizerte">
-                       <option value="Gabès">
-                       <option value="Gafsa">
-                       <option value="Jendouba">
-                       <option value="Kairouan">
-                       <option value="Kasserine">
-                       <option value="Kébili">
-                       <option value="Kef">
-                       <option value="Mahdia">
-                       <option value="Manouba">
-                       <option value="Médenine">
-                       <option value="Monastir">
-                       <option value="Nabeul">
-                       <option value="Sfax">
-                       <option value="Sidi Bouzid">
-                       <option value="Siliana">
-                       <option value="Sousse">
-                       <option value="Tataouine">
-                       <option value="Tozeur">
-                       <option value="Tunis">
-                       <option value="Zaghouan">
+            <div *ngIf="formInfo=='emailAndName'">
+               <div class="formInfoTitle">
+                  <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
+                </div>
+                <div class="formDiv">
+                    <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName" [(ngModel)]="firstName" (keyup)="firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false" class="formInput"  placeholder=" ">
+                    <label for="" class="formLabel">
+                       {{firstNameInformation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName" [(ngModel)]="lastName" (keyup)="lastNameInformation=translate.instant('surname');invalidLastNameVariable=false" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{lastNameInformation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail" [(ngModel)]="mail" (keyup)="mailInformation=translate.instant('mail');invalidMailVariable=false" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{mailInformation}}
+                    </label>
+                </div>
+                <div class="formNavigateButtons">
+                    <div class="formNavigateNextButton">
+                        <button (click)="checkEmailAndNameForm()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                    </div>
+                    <div class="formNavigateBackButton">
+                        <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="formInfo=='birthday'">
+                <div class="formInfoTitle">
+                     <i class="fas fa-birthday-cake"></i> {{'birthday'|translate}}
+                 </div>
+                 <div class="formDiv">
+                    <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day" [(ngModel)]="day" (keyup)="dayInformation=translate.instant('day');invalidDayVariable=false" class="formInput" list="daylistOptions" placeholder=" ">
+                    <label for="" class="formLabel">
+                       {{dayInformation}}
+                   </label>
+                    <datalist id="daylistOptions">
+                       <option value="1">
+                       <option value="2">
+                       <option value="3">
+                       <option value="4">
+                       <option value="5">
+                       <option value="6">
+                       <option value="7">
+                       <option value="8">
+                       <option value="9">
+                       <option value="10">
+                       <option value="11">
+                       <option value="12">
+                       <option value="13">
+                       <option value="14">
+                       <option value="15">
+                       <option value="16">
+                       <option value="17">
+                       <option value="18">
+                       <option value="19">
+                       <option value="20">
+                       <option value="21">
+                       <option value="22">
+                       <option value="23">
+                       <option value="24">
+                       <option value="25">
+                       <option value="26">
+                       <option value="27">
+                       <option value="28">
+                       <option value="29">
+                       <option value="30">
+                       <option value="31">
                      </datalist>
-                </label>
-            </div>
-            <div class="formNavigateNextButton">
-                <button (click)="checkPharmacyNameAndUserName()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-            </div>
-            <div class="formNavigateBackButton">
-                <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="formInfo=='emailAndName'">
-       <div class="formInfoTitle">
-          <i class="fas fa-info-circle"></i> {{'accountInfo'|translate}}
-        </div>
-        <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName" [(ngModel)]="firstName" (keyup)="firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false" class="formInput"  placeholder=" ">
-            <label for="" class="formLabel">
-               {{firstNameInformation}}
-            </label>
-        </div>
-        <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName" [(ngModel)]="lastName" (keyup)="lastNameInformation=translate.instant('surname');invalidLastNameVariable=false" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{lastNameInformation}}
-            </label>
-        </div>
-        <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail" [(ngModel)]="mail" (keyup)="mailInformation=translate.instant('mail');invalidMailVariable=false" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{mailInformation}}
-            </label>
-        </div>
-        <div class="formNavigateButtons">
-            <div class="formNavigateNextButton">
-                <button (click)="checkEmailAndNameForm()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-            </div>
-            <div class="formNavigateBackButton">
-                <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="formInfo=='birthday'">
-        <div class="formInfoTitle">
-             <i class="fas fa-birthday-cake"></i> {{'birthday'|translate}}
-         </div>
-         <div class="formDiv">
-            <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day" [(ngModel)]="day" (keyup)="dayInformation=translate.instant('day');invalidDayVariable=false" class="formInput" list="daylistOptions" placeholder=" ">
-            <label for="" class="formLabel">
-               {{dayInformation}}
-           </label>
-            <datalist id="daylistOptions">
-               <option value="1">
-               <option value="2">
-               <option value="3">
-               <option value="4">
-               <option value="5">
-               <option value="6">
-               <option value="7">
-               <option value="8">
-               <option value="9">
-               <option value="10">
-               <option value="11">
-               <option value="12">
-               <option value="13">
-               <option value="14">
-               <option value="15">
-               <option value="16">
-               <option value="17">
-               <option value="18">
-               <option value="19">
-               <option value="20">
-               <option value="21">
-               <option value="22">
-               <option value="23">
-               <option value="24">
-               <option value="25">
-               <option value="26">
-               <option value="27">
-               <option value="28">
-               <option value="29">
-               <option value="30">
-               <option value="31">
-             </datalist>
-        </div>
-        <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month" [(ngModel)]="month" (keyup)="monthInformation=translate.instant('month');invalidMonthVariable=false" maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-               {{monthInformation}}
-            </label>
-            <datalist id="monthlistOptions">
-               <option value="1">
-               <option value="2">
-               <option value="3">
-               <option value="4">
-               <option value="5">
-               <option value="6">
-               <option value="7">
-               <option value="8">
-               <option value="9">
-               <option value="10">
-               <option value="11">
-               <option value="12">
-             </datalist>
-        </div>
-        <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year" [(ngModel)]="year" (keyup)="yearInformation=translate.instant('year');invalidYearVariable=false" maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-               {{yearInformation}}
-            </label>
-            <datalist id="yearlistOptions">
-               <option value="1995">
-               <option value="1996">
-               <option value="1997">
-               <option value="1998">
-               <option value="1999">
-               <option value="2000">
-               <option value="2001">
-               <option value="2002">
-               <option value="2003">
-               <option value="2004">
-               <option value="2005">
-               <option value="2006">
-             </datalist>
-        </div>
-         <div class="formNavigateButtons">
-             <div class="formNavigateNextButton">
-                 <button (click)="checkBirthday()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                </div>
+                <div class="formDiv">
+                    <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month" [(ngModel)]="month" (keyup)="monthInformation=translate.instant('month');invalidMonthVariable=false" maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                       {{monthInformation}}
+                    </label>
+                    <datalist id="monthlistOptions">
+                       <option value="1">
+                       <option value="2">
+                       <option value="3">
+                       <option value="4">
+                       <option value="5">
+                       <option value="6">
+                       <option value="7">
+                       <option value="8">
+                       <option value="9">
+                       <option value="10">
+                       <option value="11">
+                       <option value="12">
+                     </datalist>
+                </div>
+                <div class="formDiv">
+                    <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year" [(ngModel)]="year" (keyup)="yearInformation=translate.instant('year');invalidYearVariable=false" maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                       {{yearInformation}}
+                    </label>
+                    <datalist id="yearlistOptions">
+                       <option value="1995">
+                       <option value="1996">
+                       <option value="1997">
+                       <option value="1998">
+                       <option value="1999">
+                       <option value="2000">
+                       <option value="2001">
+                       <option value="2002">
+                       <option value="2003">
+                       <option value="2004">
+                       <option value="2005">
+                       <option value="2006">
+                     </datalist>
+                </div>
+                 <div class="formNavigateButtons">
+                     <div class="formNavigateNextButton">
+                         <button (click)="checkBirthday()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                     </div>
+                     <div class="formNavigateBackButton">
+                         <button (click)="formInfo='emailAndName'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                     </div>
+                 </div>  
              </div>
-             <div class="formNavigateBackButton">
-                 <button (click)="formInfo='emailAndName'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+             <div *ngIf="formInfo=='GeneralInfo'">
+                <div class="formInfoTitle">
+                     <i class="fas fa-info-circle"></i> {{'generalInfo'|translate}}
+                 </div>
+                 <div class="formDiv">
+                     <input type="text" list="governoratelistOptions" [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress" (keyup)="adressInformation=translate.instant('city');invalidAdressVariable=false" class="formInput" placeholder=" ">
+                     <label for="" class="formLabel">
+                        {{adressInformation}}
+                        <datalist id="governoratelistOptions">
+                            <option value="Ariana">
+                            <option value="Béja">
+                            <option value="Ben Arous">
+                            <option value="Bizerte">
+                            <option value="Gabès">
+                            <option value="Gafsa">
+                            <option value="Jendouba">
+                            <option value="Kairouan">
+                            <option value="Kasserine">
+                            <option value="Kébili">
+                            <option value="Kef">
+                            <option value="Mahdia">
+                            <option value="Manouba">
+                            <option value="Médenine">
+                            <option value="Monastir">
+                            <option value="Nabeul">
+                            <option value="Sfax">
+                            <option value="Sidi Bouzid">
+                            <option value="Siliana">
+                            <option value="Sousse">
+                            <option value="Tataouine">
+                            <option value="Tozeur">
+                            <option value="Tunis">
+                            <option value="Zaghouan">
+                          </datalist>
+                     </label>
+                 </div>
+                 <div class="formInfoTitle"><i class="fas fa-venus-mars"></i> {{'gender'|translate}} <div *ngIf="checkBoxInvaledInfoVriable" style="font-size: .80rem; color: red;">{{'selectGender'|translate}}</div></div>
+                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="left: 50%; transform: translateX(-50%); padding-bottom: 5%;">
+                    <input type="radio" class="maleRadio" (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals" [checked]="maleCheckBox" name="btnradio" id="male">
+                    <label [class.checkBoxInvaledInfo]="checkBoxInvaledInfoVriable" class="btn btn-outline-primary" id="maleLabel" for="male">{{'male'|translate}}</label>
+                    <input type="radio" class="femaleRadio" (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false" [checked]="femaleCheckBox" name="btnradio" id="female">
+                    <label [class.checkBoxInvaledInfo]="checkBoxInvaledInfoVriable" class="btn btn-outline-primary" id="femaleLabel" for="female">{{'female'|translate}}</label>
+                 </div>
+                 <div class="formNavigateButtons">
+                     <div class="formNavigateNextButton">
+                         <button (click)="checkGenderAndAdress()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                     </div>
+                     <div class="formNavigateBackButton">
+                         <button (click)="formInfo='birthday'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                     </div>
+                 </div>  
              </div>
-         </div>  
-     </div>
-     <div *ngIf="formInfo=='GeneralInfo'">
-        <div class="formInfoTitle">
-             <i class="fas fa-info-circle"></i> {{'generalInfo'|translate}}
-         </div>
-         <div class="formDiv">
-             <input type="text" list="governoratelistOptions" [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress" (keyup)="adressInformation=translate.instant('city');invalidAdressVariable=false" class="formInput" placeholder=" ">
-             <label for="" class="formLabel">
-                {{adressInformation}}
-                <datalist id="governoratelistOptions">
-                    <option value="Ariana">
-                    <option value="Béja">
-                    <option value="Ben Arous">
-                    <option value="Bizerte">
-                    <option value="Gabès">
-                    <option value="Gafsa">
-                    <option value="Jendouba">
-                    <option value="Kairouan">
-                    <option value="Kasserine">
-                    <option value="Kébili">
-                    <option value="Kef">
-                    <option value="Mahdia">
-                    <option value="Manouba">
-                    <option value="Médenine">
-                    <option value="Monastir">
-                    <option value="Nabeul">
-                    <option value="Sfax">
-                    <option value="Sidi Bouzid">
-                    <option value="Siliana">
-                    <option value="Sousse">
-                    <option value="Tataouine">
-                    <option value="Tozeur">
-                    <option value="Tunis">
-                    <option value="Zaghouan">
-                  </datalist>
-             </label>
-         </div>
-         <div class="formInfoTitle"><i class="fas fa-venus-mars"></i> {{'gender'|translate}} <div *ngIf="checkBoxInvaledInfoVriable" style="font-size: .80rem; color: red;">{{'selectGender'|translate}}</div></div>
-         <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="left: 50%; transform: translateX(-50%); padding-bottom: 5%;">
-            <input type="radio" class="maleRadio" (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals" [checked]="maleCheckBox" name="btnradio" id="male">
-            <label [class.checkBoxInvaledInfo]="checkBoxInvaledInfoVriable" class="btn btn-outline-primary" id="maleLabel" for="male">{{'male'|translate}}</label>
-            <input type="radio" class="femaleRadio" (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false" [checked]="femaleCheckBox" name="btnradio" id="female">
-            <label [class.checkBoxInvaledInfo]="checkBoxInvaledInfoVriable" class="btn btn-outline-primary" id="femaleLabel" for="female">{{'female'|translate}}</label>
-         </div>
-         <div class="formNavigateButtons">
-             <div class="formNavigateNextButton">
-                 <button (click)="checkGenderAndAdress()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+             <div *ngIf="formInfo=='password'">
+                <div class="formInfoTitle">
+                     <i class="fas fa-unlock"></i> {{'password'|translate}}
+                 </div>
+                 <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password" [(ngModel)]="password" (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordInfromation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable" name="passwordRepeat" [(ngModel)]="passwordRepeat" (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordRepeatInfromation}}
+                    </label>
+                </div>
+                 <div class="formNavigateButtons">
+                     <div class="formNavigateNextButton">
+                         <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                     </div>
+                     <div class="formNavigateBackButton">
+                         <button (click)="formInfo='GeneralInfo'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                     </div>
+                 </div>  
              </div>
-             <div class="formNavigateBackButton">
-                 <button (click)="formInfo='birthday'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+             <div *ngIf="formInfo=='pharmacyPassword'">
+                <div class="formInfoTitle">
+                     <i class="fas fa-unlock"></i> {{'password'|translate}}
+                 </div>
+                 <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password" [(ngModel)]="password" (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordInfromation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable" name="passwordRepeat" [(ngModel)]="passwordRepeat" (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false" class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordRepeatInfromation}}
+                    </label>
+                </div>
+                 <div class="formNavigateButtons">
+                     <div class="formNavigateNextButton">
+                         <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                     </div>
+                     <div class="formNavigateBackButton">
+                         <button (click)="formInfo='pharmacy'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                     </div>
+                 </div>  
              </div>
-         </div>  
-     </div>
-     <div *ngIf="formInfo=='password'">
-        <div class="formInfoTitle">
-             <i class="fas fa-unlock"></i> {{'password'|translate}}
-         </div>
-         <div class="formDiv">
-            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password" [(ngModel)]="password" (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{passwordInfromation}}
-            </label>
+        </ng-template>
+        <ng-template #showSignUp>
+            <div class="formInfoTitle"><i class="fas fa-user"></i> {{'accountType'|translate}} :</div>
+        <div class="buttons">
+            <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='client'"> {{ 'client' | translate}} </button><br>
+            <button class="userTypeBtn" (click)="showForm=true; formInfo='pharmacy';userType='pharmacy'"> {{ 'pharmacist' | translate}} </button><br>
+            <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='doctor'"> {{ 'doctor' | translate}} </button>
         </div>
-        <div class="formDiv">
-            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable" name="passwordRepeat" [(ngModel)]="passwordRepeat" (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{passwordRepeatInfromation}}
-            </label>
+        <div class="strike"><span>{{'or'|translate}}</span></div>
+        <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'goBack'|translate}}</button>
+        </ng-template>
         </div>
-         <div class="formNavigateButtons">
-             <div class="formNavigateNextButton">
-                 <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-             </div>
-             <div class="formNavigateBackButton">
-                 <button (click)="formInfo='GeneralInfo'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
-             </div>
-         </div>  
-     </div>
-     <div *ngIf="formInfo=='pharmacyPassword'">
-        <div class="formInfoTitle">
-             <i class="fas fa-unlock"></i> {{'password'|translate}}
-         </div>
-         <div class="formDiv">
-            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password" [(ngModel)]="password" (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{passwordInfromation}}
-            </label>
-        </div>
-        <div class="formDiv">
-            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable" name="passwordRepeat" [(ngModel)]="passwordRepeat" (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false" class="formInput" placeholder=" ">
-            <label for="" class="formLabel">
-                {{passwordRepeatInfromation}}
-            </label>
-        </div>
-         <div class="formNavigateButtons">
-             <div class="formNavigateNextButton">
-                 <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-             </div>
-             <div class="formNavigateBackButton">
-                 <button (click)="formInfo='pharmacy'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
-             </div>
-         </div>  
-     </div>
-</ng-template>
-<ng-template #showSignUp>
-    <div class="formInfoTitle"><i class="fas fa-user"></i> {{'accountType'|translate}} :</div>
-<div class="buttons">
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='client'"> {{ 'client' | translate}} </button><br>
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='pharmacy';userType='pharmacy'"> {{ 'pharmacist' | translate}} </button><br>
-    <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='doctor'"> {{ 'doctor' | translate}} </button>
-</div>
-<div class="strike"><span>{{'or'|translate}}</span></div>
-<button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'goBack'|translate}}</button>
-</ng-template>
-</div>
+    </body>
+</html>
