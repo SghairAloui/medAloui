@@ -48,7 +48,7 @@ export class SignInFormComponent implements OnInit {
                     }
                   },
                   err=>{
-                    this.toastr.warning(this.translate.instant('checkCnx'),'',{
+                    this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
                       timeOut: 5000,
                       positionClass: 'toast-bottom-left'
                     });
@@ -57,7 +57,7 @@ export class SignInFormComponent implements OnInit {
               }
             },
             err=>{
-              this.toastr.warning(this.translate.instant('checkCnx'),'',{
+              this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
                 timeOut: 5000,
                 positionClass: 'toast-bottom-left'
               });
@@ -66,7 +66,7 @@ export class SignInFormComponent implements OnInit {
         }
       },
       err=>{
-        this.toastr.warning(this.translate.instant('checkCnx'),'',{
+        this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });

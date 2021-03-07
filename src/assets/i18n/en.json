@@ -101,13 +101,16 @@
     "mailExist":"Username already exist",
 
     "accountCreated":"Account created",
-    "checkCnx":"Please check your Internet connextion !",
+    "checkCnx":"You are currently offline",
     "userNameOrPasswordIncorrect":"Incorrect username or password",
     "username":"Username",
     "checkUsername":"Please check your username",
     "checkPassword":"Please check your password",
-    "langToEn":"Default language changed to English",
-    "langToFr":"Default language changed to French",
+    "langToEn":"English is the default language",
+    "langToFr":"French is the default language",
     "darkModeOn":"Dark mode is the default mode",
-    "darkModeOf":"Light mode is the default mode"
+    "darkModeOf":"Light mode is the default mode",
+    "Language":"Language",
+    "theme":"Theme",
+    "cnx":"Connectio"
 }

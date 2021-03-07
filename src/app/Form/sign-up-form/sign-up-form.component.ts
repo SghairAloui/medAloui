@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { DoctorPost } from 'src/model/DoctorPost';
 import { PatientPost } from 'src/model/PatientPost';
 import { PharmacyPost } from 'src/model/PharmacyPost';
@@ -15,7 +16,7 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient) { 
+  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient,private toastr:ToastrService) { 
   }
   saveUserResponse:any;
   private patientPost:PatientPost;
@@ -211,7 +212,10 @@ export class SignUpFormComponent implements OnInit {
             this.formInfo=res;
           },
           err => {
-            alert(this.translate.instant('checkCnx'));
+            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
         );
     }else{
@@ -228,7 +232,10 @@ export class SignUpFormComponent implements OnInit {
             this.formInfo=res;
           },
           err => {
-            alert(this.translate.instant('checkCnx'))
+            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
         );
       }else{
@@ -238,7 +245,10 @@ export class SignUpFormComponent implements OnInit {
             this.formInfo=res;
           },
           err => {
-            alert(this.translate.instant('checkCnx'))
+            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
         );
       }
@@ -258,7 +268,10 @@ export class SignUpFormComponent implements OnInit {
         }
       },
       err => {
-        alert("Error")
+        this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
       }
     );
   }
@@ -275,7 +288,10 @@ export class SignUpFormComponent implements OnInit {
         }
       },
       err => {
-        alert("Error")
+        this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
       }
     );
   }

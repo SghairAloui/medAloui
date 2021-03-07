@@ -38,7 +38,7 @@ export class AcceuilComponent implements OnInit {
         this.doctors=res;
       },
       err => {
-        this.toastr.info(this.translate.instant('checkCnx'),'',{
+        this.toastr.info(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });

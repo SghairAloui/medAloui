@@ -71,13 +71,13 @@ export class HeaderComponent implements OnInit {
     this.translate.use(lang);
     localStorage.setItem("lang",lang);
     if(localStorage.getItem("lang")=='en')
-    this.toastr.info(this.translate.instant('langToEn'),'',{
+    this.toastr.info(this.translate.instant('langToEn'),this.translate.instant('Language'),{
       timeOut: 2500,
       positionClass: 'toast-bottom-left',
       
     });
     else if (localStorage.getItem("lang")=='fr')
-    this.toastr.info(this.translate.instant('langToFr'),'',{
+    this.toastr.info(this.translate.instant('langToFr'),this.translate.instant('Language'),{
       timeOut: 2500,
       positionClass: 'toast-bottom-left'
     });
@@ -97,7 +97,7 @@ export class HeaderComponent implements OnInit {
     if(this.darkMode==false){
       this.darkMode=true;
       localStorage.setItem("darkMode","true");
-      this.toastr.info(this.translate.instant('darkModeOn'),'',{
+      this.toastr.info(this.translate.instant('darkModeOn'),this.translate.instant('theme'),{
         timeOut: 2500,
         positionClass: 'toast-bottom-left'
       });
@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
     else{
       this.darkMode=false;
       localStorage.setItem("darkMode","false");
-      this.toastr.info(this.translate.instant('darkModeOf'),'',{
+      this.toastr.info(this.translate.instant('darkModeOf'),this.translate.instant('theme'),{
         timeOut: 2500,
         positionClass: 'toast-bottom-left'
       });
