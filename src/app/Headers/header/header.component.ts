@@ -16,6 +16,18 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(localStorage.getItem("darkMode")=='true'){
+      this.appComp.switchTheme();
+      this.darkMode=true;
+    }
+    this.translate.use(localStorage.getItem("lang"));
+    if(localStorage.getItem("lang")=='en'){
+      this.en=true;
+      this.fr=false;
+    }else if (localStorage.getItem("lang")=='fr'){
+      this.en=false;
+      this.fr=true;
+    }
   }
   en:boolean=true;
   fr:boolean=false;
@@ -56,16 +68,27 @@ export class HeaderComponent implements OnInit {
   }
   changeLang(lang:string){
     this.translate.use(lang);
+    localStorage.setItem("lang",lang);
   }
+  /*closeAllMenu(event:any) {
+    if(this.menuCheckBox==true || this.displaySettingsBox==true){
+      this.menuCheckBox=false;
+      this.displaySettingsBox=false;
+    }
+  }*/
 
   closeMenu(){
     this.menuCheckBox=false;
   }
   switchTheme(){
     this.appComp.switchTheme();
-    if(this.darkMode==false)
-     this.darkMode=true;
-    else
-     this.darkMode=false;
+    if(this.darkMode==false){
+      this.darkMode=true;
+      localStorage.setItem("darkMode","true");
+    }
+    else{
+      this.darkMode=false;
+      localStorage.setItem("darkMode","false");
+    }
   }
 }
