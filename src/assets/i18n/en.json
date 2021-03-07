@@ -105,5 +105,9 @@
     "userNameOrPasswordIncorrect":"Incorrect username or password",
     "username":"Username",
     "checkUsername":"Please check your username",
-    "checkPassword":"Please check your password"
+    "checkPassword":"Please check your password",
+    "langToEn":"Default language changed to English",
+    "langToFr":"Default language changed to French",
+    "darkModeOn":"Dark mode is the default mode",
+    "darkModeOf":"Light mode is the default mode"
 }

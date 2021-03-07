@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { AppComponent } from '../../app.component'
 
 @Component({
@@ -9,7 +10,7 @@ import { AppComponent } from '../../app.component'
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private translate: TranslateService,private appComp:AppComponent) { 
+  constructor(private translate: TranslateService,private appComp:AppComponent,private toastr:ToastrService) { 
     translate.addLangs(['en','fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -69,6 +70,17 @@ export class HeaderComponent implements OnInit {
   changeLang(lang:string){
     this.translate.use(lang);
     localStorage.setItem("lang",lang);
+    if(localStorage.getItem("lang")=='en')
+    this.toastr.info(this.translate.instant('langToEn'),'',{
+      timeOut: 2500,
+      positionClass: 'toast-bottom-left',
+      
+    });
+    else if (localStorage.getItem("lang")=='fr')
+    this.toastr.info(this.translate.instant('langToFr'),'',{
+      timeOut: 2500,
+      positionClass: 'toast-bottom-left'
+    });
   }
   /*closeAllMenu(event:any) {
     if(this.menuCheckBox==true || this.displaySettingsBox==true){
@@ -85,10 +97,18 @@ export class HeaderComponent implements OnInit {
     if(this.darkMode==false){
       this.darkMode=true;
       localStorage.setItem("darkMode","true");
+      this.toastr.info(this.translate.instant('darkModeOn'),'',{
+        timeOut: 2500,
+        positionClass: 'toast-bottom-left'
+      });
     }
     else{
       this.darkMode=false;
       localStorage.setItem("darkMode","false");
+      this.toastr.info(this.translate.instant('darkModeOf'),'',{
+        timeOut: 2500,
+        positionClass: 'toast-bottom-left'
+      });
     }
   }
 }

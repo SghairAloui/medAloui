@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { doctor } from 'src/model/Doctor';
 import { AcceuilService } from './acceuil.service';
 
@@ -11,7 +12,7 @@ import { AcceuilService } from './acceuil.service';
   styleUrls: ['./acceuil.component.css']
 })
 export class AcceuilComponent implements OnInit {
-  constructor(private acceuilService: AcceuilService, private router:Router,private translate: TranslateService, private http:HttpClient) {
+  constructor(private acceuilService: AcceuilService, private router:Router,private translate: TranslateService, private http:HttpClient,private toastr:ToastrService) {
     translate.addLangs(['en','fr']);
     translate.setDefaultLang('en');
    }
@@ -37,7 +38,10 @@ export class AcceuilComponent implements OnInit {
         this.doctors=res;
       },
       err => {
-        alert("Error")
+        this.toastr.info(this.translate.instant('checkCnx'),'',{
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
       }
     );
   }

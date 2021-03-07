@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Component, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -9,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SignInFormComponent implements OnInit {
 
-  constructor(private http:HttpClient,private translate: TranslateService) { }
+  constructor(private http:HttpClient,private translate: TranslateService,private toastr:ToastrService) { }
   @Output() outPutOpenSignUp = new EventEmitter<boolean>();
   ngOnInit(): void {
   }
@@ -47,19 +48,28 @@ export class SignInFormComponent implements OnInit {
                     }
                   },
                   err=>{
-                    alert(this.translate.instant('checkCnx'));
+                    this.toastr.warning(this.translate.instant('checkCnx'),'',{
+                      timeOut: 5000,
+                      positionClass: 'toast-bottom-left'
+                    });
                   }
                 );
               }
             },
             err=>{
-              alert(this.translate.instant('checkCnx'));
+              this.toastr.warning(this.translate.instant('checkCnx'),'',{
+                timeOut: 5000,
+                positionClass: 'toast-bottom-left'
+              });
             }
           );
         }
       },
       err=>{
-        alert(this.translate.instant('checkCnx'));
+        this.toastr.warning(this.translate.instant('checkCnx'),'',{
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
       }
     );
   }

@@ -16,6 +16,7 @@ import { HeaderComponent } from './Headers/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SaveNewUserService } from './Form/sign-up-form/save-new-user.service';
 import { PatientComponent } from './users/patient/patient/patient.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { PatientComponent } from './users/patient/patient/patient.component';
         deps: [HttpClient]
     }
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [AcceuilService,AppComponent,SaveNewUserService],
   bootstrap: [AppComponent]

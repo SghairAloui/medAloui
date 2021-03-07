@@ -22,6 +22,17 @@
     --gender-box-shadow:none;
     --maleFemaleCheckBoxBackgroundColor:none;
 }
+@import '~ngx-toastr/toastr';
+@import '~ngx-toastr/toastr-bs4-alert';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~ngx-toastr/toastr-bs4-alert';
+.toast-container>div{
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
 .formDiv{
     position: relative;
     height: 48px;
