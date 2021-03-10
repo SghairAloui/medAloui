@@ -23,6 +23,7 @@ export class SignUpFormComponent implements OnInit {
   private pharmacyPost:PharmacyPost;
   private doctorPost:DoctorPost;
   re = /^[A-Za-z]+$/;
+  nb = /^\d+$/;
   userType:string="";userName:string="";pharmacyName:string="";firstName:string="";lastName:string="";mail:string="";day:string="";month:string="";year:string="";adress:string="";password:string="";passwordRepeat:string="";userNameNameInformation:string=this.translate.instant('pharmacyUserName');pharmacyNameInformation:string=this.translate.instant('pharmacyName');passwordInfromation:string=this.translate.instant('password');passwordRepeatInfromation:string=this.translate.instant('repeatPassword');firstNameInformation:string=this.translate.instant('firstName');lastNameInformation:string=this.translate.instant('surname');mailInformation:string=this.translate.instant('mail');dayInformation:string=this.translate.instant('day');monthInformation:string=this.translate.instant('month');yearInformation:string=this.translate.instant('year');adressInformation:string=this.translate.instant('city');
   invalidFirstNameVariable:boolean;
   invalidLastNameVariable:boolean;
@@ -172,7 +173,7 @@ export class SignUpFormComponent implements OnInit {
     this.checkIfUserNameExist(this.mail);
   }
   checkBirthday(){
-    if(parseInt(this.day) <= 31 && parseInt(this.day) > 0){
+    if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && this.nb.test(this.day)){
       this.invalidDayVariable=false;
       this.dayInformation=this.translate.instant('day');
     }
@@ -180,7 +181,7 @@ export class SignUpFormComponent implements OnInit {
       this.invalidDayVariable=true;
       this.dayInformation=this.translate.instant('dayErr');
     }
-    if(parseInt(this.month) <= 12 && parseInt(this.month) > 0){
+    if((parseInt(this.month) <= 12 && parseInt(this.month) > 0) && this.nb.test(this.month)){
       this.invalidMonthVariable=false;
       this.monthInformation=this.translate.instant('month');
     }
@@ -188,7 +189,7 @@ export class SignUpFormComponent implements OnInit {
       this.invalidMonthVariable=true;
       this.monthInformation=this.translate.instant('monthErr');
     }
-    if(parseInt(this.year) <= 2021 && parseInt(this.year) > 1900){
+    if((parseInt(this.year) <= 2021 && parseInt(this.year) > 1900) && this.nb.test(this.year)){
       this.invalidYearVariable=false;
       this.yearInformation=this.translate.instant('year');
     }
@@ -206,7 +207,7 @@ export class SignUpFormComponent implements OnInit {
   public saveUserNow(){
     
     if(this.userType=='pharmacy'){
-      this.pharmacyPost =new PharmacyPost(this.userName,this.pharmacyName,this.adress,this.password);
+      this.pharmacyPost =new PharmacyPost(this.userName.toLowerCase(),this.pharmacyName.toLowerCase(),this.adress.toLowerCase(),this.password);
         this.saveUser.savePharmacy(this.pharmacyPost).subscribe(
           res => {
             this.formInfo=res;
@@ -226,7 +227,7 @@ export class SignUpFormComponent implements OnInit {
       gender="female";  
       let birthday:string=this.day+"/"+this.month+"/"+this.year;
       if(this.userType=='doctor'){
-        this.doctorPost =new DoctorPost(this.mail,this.firstName,this.lastName,this.adress,birthday,this.password,gender);
+        this.doctorPost =new DoctorPost(this.mail.toLowerCase(),this.firstName.toLowerCase(),this.lastName.toLowerCase(),this.adress.toLowerCase(),birthday.toLowerCase(),this.password,gender.toLowerCase());
         let resp = this.saveUser.saveDoctor(this.doctorPost).subscribe(
           res => {
             this.formInfo=res;
@@ -239,7 +240,7 @@ export class SignUpFormComponent implements OnInit {
           }
         );
       }else{
-        this.patientPost =new PatientPost(this.mail,this.firstName,this.lastName,this.adress,this.password,birthday,gender);
+        this.patientPost =new PatientPost(this.mail.toLowerCase(),this.firstName.toLowerCase(),this.lastName.toLowerCase(),this.adress.toLowerCase(),this.password,birthday.toLowerCase(),gender.toLowerCase());
         let resp = this.saveUser.savePatient(this.patientPost).subscribe(
           res => {
             this.formInfo=res;
@@ -276,7 +277,7 @@ export class SignUpFormComponent implements OnInit {
     );
   }
   checkIfPharmacyUserNameExist(username:string){
-    let url="http://localhost:8080/resource/ExistsByUsername/"+username;
+    let url="http://localhost:8080/resource/ExistsByUsername/"+username.toLowerCase();
     this.http.get<boolean>(url).subscribe(
       res => {
         if(res==true){

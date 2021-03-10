@@ -17,6 +17,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SaveNewUserService } from './Form/sign-up-form/save-new-user.service';
 import { PatientComponent } from './users/patient/patient/patient.component';
 import { ToastrModule } from 'ngx-toastr';
+import { SignInService } from './Form/sign-in-form/sign-in.service';
+import { DoctorComponent } from './users/doctor/doctor/doctor.component';
+import { PharmacyComponent } from './users/pharmacy/pharmacy/pharmacy.component';
+import { PatientHeaderComponent } from './Headers/patient-header/patient-header.component';
+import { PatientService } from './users/patient/patient/patient.service';
 
 
 @NgModule({
@@ -28,6 +33,9 @@ import { ToastrModule } from 'ngx-toastr';
     AcceuilBodyComponent,
     HeaderComponent,
     PatientComponent,
+    DoctorComponent,
+    PharmacyComponent,
+    PatientHeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +54,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AcceuilService,AppComponent,SaveNewUserService],
+  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

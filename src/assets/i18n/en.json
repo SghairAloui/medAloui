@@ -99,7 +99,6 @@
     "userNameNameUnder3":"Username must be at least 6 character",
     "userNameNoSpace":"Username must not contain space",
     "mailExist":"Username already exist",
-
     "accountCreated":"Account created",
     "checkCnx":"You are currently offline",
     "userNameOrPasswordIncorrect":"Incorrect username or password",
@@ -112,5 +111,18 @@
     "darkModeOf":"Light mode is the default mode",
     "Language":"Language",
     "theme":"Theme",
-    "cnx":"Connectio"
+    "cnx":"Connection",
+    "update":"Update",
+    "infoUpdated":"Information updated successfully",
+    "edit":"Edit",
+    "medicalProfile":"Medical profile",
+    "findDoctor":"Find doctor",
+    "topRated":"Top rated",
+    "ourMethodology":"Our methodology",
+    "whyHealthCare":"Why Health Care",
+    "prescription":"Prescription",
+    "myDoctors":"My doctors",
+    "myPharmacies":"My pharmacies",
+    "anglais":"English",
+    "francais":"French"
 }

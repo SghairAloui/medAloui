@@ -18,8 +18,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if(localStorage.getItem("darkMode")=='true'){
-      this.appComp.switchTheme();
+      this.appComp.switchTheme('dark');
       this.darkMode=true;
+    }else{
+      this.appComp.switchTheme('light');
+      this.darkMode=false;
     }
     this.translate.use(localStorage.getItem("lang"));
     if(localStorage.getItem("lang")=='en'){
@@ -93,8 +96,8 @@ export class HeaderComponent implements OnInit {
     this.menuCheckBox=false;
   }
   switchTheme(){
-    this.appComp.switchTheme();
     if(this.darkMode==false){
+      this.appComp.switchTheme('dark');
       this.darkMode=true;
       localStorage.setItem("darkMode","true");
       this.toastr.info(this.translate.instant('darkModeOn'),this.translate.instant('theme'),{
@@ -103,6 +106,7 @@ export class HeaderComponent implements OnInit {
       });
     }
     else{
+      this.appComp.switchTheme('light');
       this.darkMode=false;
       localStorage.setItem("darkMode","false");
       this.toastr.info(this.translate.instant('darkModeOf'),this.translate.instant('theme'),{

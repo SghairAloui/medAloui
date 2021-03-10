@@ -9,6 +9,8 @@
     --input-text-color:black;
     --gender-box-shadow:0px 0px 10px 2px #308a7b;
     --maleFemaleCheckBoxBackgroundColor:#308a7b;
+    --headerText:#308a7b;
+    --infoBox:0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 .dark-theme{
     --background-color: #18191a;
@@ -21,6 +23,8 @@
     --input-text-color:white;
     --gender-box-shadow:none;
     --maleFemaleCheckBoxBackgroundColor:none;
+    --headerText:white;
+    --infoBox:none;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -82,27 +86,51 @@
 .formInput:focus{
     border: 2px solid #308a7b;
 }
-.btn-outline-light{
+.btn-block:focus,.btn-block:active{
+    background-color: #308a7b;
+}
+.fullyBtn,.fullyBtnSmall{
     text-transform: uppercase;
     border-radius: .5rem;
     background-color: #308a7b;
     color: white;
     transition: 0.7s;
-    border: none;
+    border: 1px solid var(--box-color);
+    width: 100%;
+    font-size: 18px;
+    transition: linear 0.2s;
 }
-.btn-outline-light:hover{
-    background-color: #308a7b;
-    transition: 0.7s;
+.fullyBtn{
+    height: 40px;
 }
-.btn-outline-danger{
+.fullyBtnSmall{
+    height: 33px;
+}
+.fullyBtn:hover,.fullyBtnSmall:hover{
+    border: 1px solid #308a7b;
+}
+.emptyBtn{
+    font-size: 18px;
+    height: 40px;
+    width: 100%;
     text-transform: uppercase;
     border-radius: .5rem;
     color: #308a7b;
+    background: none;
     border: 1px solid #308a7b;
-    transition: 0.7s;
+    transition: 0.3s;
 }
-.btn-outline-danger:hover{
-    border: 1px solid #308a7b;
+.emptyBtn:hover{
     background-color: #308a7b;
     color: white;
+}
+button:disabled,
+button[disabled]{
+  border: none;
+  background-color: #c5cac5;
+  color: #666666;
+}
+button:disabled:hover,
+button[disabled]:hover{
+    border: none;
 }

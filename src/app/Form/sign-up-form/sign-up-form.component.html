@@ -10,7 +10,7 @@
             <div *ngIf="formInfo=='userCreated'" class="userCreated">
                 <i class="fas fa-check-circle"></i><br>
                 {{'accountCreated'|translate}}
-                <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'signIn'|translate}}</button>
+                <button type="submit" class="fullyBtnSmall" (click)="openSignIn()">{{'signIn'|translate}}</button>
             </div>
             <div *ngIf="formInfo=='pharmacy'">
                 <div class="formInfoTitle">
@@ -62,10 +62,10 @@
                         </label>
                     </div>
                     <div class="formNavigateNextButton">
-                        <button (click)="checkPharmacyNameAndUserName()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                        <button (click)="checkPharmacyNameAndUserName()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                     </div>
                     <div class="formNavigateBackButton">
-                        <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                        <button (click)="showForm=false" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                     </div>
                 </div>
             </div>
@@ -93,10 +93,10 @@
                 </div>
                 <div class="formNavigateButtons">
                     <div class="formNavigateNextButton">
-                        <button (click)="checkEmailAndNameForm()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                        <button (click)="checkEmailAndNameForm()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                     </div>
                     <div class="formNavigateBackButton">
-                        <button (click)="showForm=false" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                        <button (click)="showForm=false" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                     </div>
                 </div>
             </div>
@@ -110,15 +110,15 @@
                        {{dayInformation}}
                    </label>
                     <datalist id="daylistOptions">
-                       <option value="1">
-                       <option value="2">
-                       <option value="3">
-                       <option value="4">
-                       <option value="5">
-                       <option value="6">
-                       <option value="7">
-                       <option value="8">
-                       <option value="9">
+                       <option value="01">
+                       <option value="02">
+                       <option value="03">
+                       <option value="04">
+                       <option value="05">
+                       <option value="06">
+                       <option value="07">
+                       <option value="08">
+                       <option value="09">
                        <option value="10">
                        <option value="11">
                        <option value="12">
@@ -149,15 +149,15 @@
                        {{monthInformation}}
                     </label>
                     <datalist id="monthlistOptions">
-                       <option value="1">
-                       <option value="2">
-                       <option value="3">
-                       <option value="4">
-                       <option value="5">
-                       <option value="6">
-                       <option value="7">
-                       <option value="8">
-                       <option value="9">
+                       <option value="01">
+                       <option value="02">
+                       <option value="03">
+                       <option value="04">
+                       <option value="05">
+                       <option value="06">
+                       <option value="07">
+                       <option value="08">
+                       <option value="09">
                        <option value="10">
                        <option value="11">
                        <option value="12">
@@ -185,10 +185,10 @@
                 </div>
                  <div class="formNavigateButtons">
                      <div class="formNavigateNextButton">
-                         <button (click)="checkBirthday()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                         <button (click)="checkBirthday()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                      </div>
                      <div class="formNavigateBackButton">
-                         <button (click)="formInfo='emailAndName'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                         <button (click)="formInfo='emailAndName'" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                      </div>
                  </div>  
              </div>
@@ -237,10 +237,10 @@
                  </div>
                  <div class="formNavigateButtons">
                      <div class="formNavigateNextButton">
-                         <button (click)="checkGenderAndAdress()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                         <button (click)="checkGenderAndAdress()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'next'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                      </div>
                      <div class="formNavigateBackButton">
-                         <button (click)="formInfo='birthday'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                         <button (click)="formInfo='birthday'" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                      </div>
                  </div>  
              </div>
@@ -262,10 +262,10 @@
                 </div>
                  <div class="formNavigateButtons">
                      <div class="formNavigateNextButton">
-                         <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                         <button (click)="checkPassword()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                      </div>
                      <div class="formNavigateBackButton">
-                         <button (click)="formInfo='GeneralInfo'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                         <button (click)="formInfo='GeneralInfo'" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                      </div>
                  </div>  
              </div>
@@ -287,10 +287,10 @@
                 </div>
                  <div class="formNavigateButtons">
                      <div class="formNavigateNextButton">
-                         <button (click)="checkPassword()" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
+                         <button (click)="checkPassword()" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
                      </div>
                      <div class="formNavigateBackButton">
-                         <button (click)="formInfo='pharmacy'" type="submit" class="btn btn-outline-light btn-block" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
+                         <button (click)="formInfo='pharmacy'" type="submit" class="fullyBtnSmall" style="display: flex; justify-content: space-between; "><i class="fas fa-chevron-circle-left " style="margin: 4px;"></i> {{'goBack'|translate}}</button>
                      </div>
                  </div>  
              </div>
@@ -303,7 +303,7 @@
             <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='doctor'"> {{ 'doctor' | translate}} </button>
         </div>
         <div class="strike"><span>{{'or'|translate}}</span></div>
-        <button type="submit" class="btn btn-outline-danger btn-block" (click)="openSignIn()">{{'goBack'|translate}}</button>
+        <button type="submit" class="emptyBtn" (click)="openSignIn()">{{'goBack'|translate}}</button>
         </ng-template>
         </div>
     </body>

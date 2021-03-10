@@ -25,9 +25,9 @@
                             <li>
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="padding-bottom: 5%;">
                                     <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradio" id="en">
-                                    <label class="btn btn-outline-primary" id="enLabel" for="en">Anglais</label>
+                                    <label class="btn btn-outline-primary" id="enLabel" for="en">{{'anglais'|translate}}</label>
                                     <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradio" id="fr">
-                                    <label class="btn btn-outline-primary" id="frLabel" for="fr">Francais</label>
+                                    <label class="btn btn-outline-primary" id="frLabel" for="fr">{{'francais'|translate}}</label>
                                  </div><hr>
                             </li>
                             <li> {{'darkMode'|translate}} </li>
@@ -53,9 +53,9 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradioo" id="en">
-                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;" id="enLabel" for="en">Anglais</label>
+                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;" id="enLabel" for="en">{{'anglais'|translate}}</label>
                         <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradioo" id="fr">
-                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;" id="frLabel" for="fr">Francais</label>
+                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;" id="frLabel" for="fr">{{'francais'|translate}}</label>
                      </div><hr>
                 </li>
                 <li> {{'darkMode'|translate}} </li>
