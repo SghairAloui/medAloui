@@ -173,7 +173,7 @@ export class SignUpFormComponent implements OnInit {
     this.checkIfUserNameExist(this.mail);
   }
   checkBirthday(){
-    if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && this.nb.test(this.day)){
+    if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2) ){
       this.invalidDayVariable=false;
       this.dayInformation=this.translate.instant('day');
     }
@@ -181,7 +181,7 @@ export class SignUpFormComponent implements OnInit {
       this.invalidDayVariable=true;
       this.dayInformation=this.translate.instant('dayErr');
     }
-    if((parseInt(this.month) <= 12 && parseInt(this.month) > 0) && this.nb.test(this.month)){
+    if((parseInt(this.month) <= 12 && parseInt(this.month) > 0) && (this.nb.test(this.month) && this.month.length == 2)){
       this.invalidMonthVariable=false;
       this.monthInformation=this.translate.instant('month');
     }
@@ -189,7 +189,7 @@ export class SignUpFormComponent implements OnInit {
       this.invalidMonthVariable=true;
       this.monthInformation=this.translate.instant('monthErr');
     }
-    if((parseInt(this.year) <= 2021 && parseInt(this.year) > 1900) && this.nb.test(this.year)){
+    if((parseInt(this.year) <= 2021 && parseInt(this.year) > 1900) && (this.nb.test(this.year) && this.year.length == 4)){
       this.invalidYearVariable=false;
       this.yearInformation=this.translate.instant('year');
     }

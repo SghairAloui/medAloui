@@ -124,5 +124,21 @@
     "myDoctors":"My doctors",
     "myPharmacies":"My pharmacies",
     "anglais":"English",
-    "francais":"French"
+    "francais":"French",
+
+    "editMedicalProfileInfoToShow":"Please first set your medical informations so you can display them",
+    "setInfo":"Set informations ?",
+    "noPrescription":"It seems like you don't have any prescription yet",
+    "noDoctors":"You need first to take an appointment to save a doctor",
+    "noPharmacies":"You need first to use a prescription to save a pharmacy",
+    "height":"Height",
+    "weight":"Weight",
+    "metre":"metre",
+    "kilogram":"kilogram",
+    "invalidHeight":"Please enter a valid height",
+    "invalidWeight":"Please enter a valid weight",
+    "heightMax5":"Height must be at most 5 character",
+    "weightMax6":"Weight must be at most 6 character",
+    "heightDot":"Height must contain at most 1 dot or comma",
+    "weightDot":"Weight must contain at most 1 dot or comma"
 }

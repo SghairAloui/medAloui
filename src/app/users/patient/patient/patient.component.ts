@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
+import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
 import { PatientService } from './patient.service';
 
 @Component({
@@ -16,23 +17,21 @@ export class PatientComponent implements OnInit {
 
   constructor(private patientService:PatientService, private translate:TranslateService,private http:HttpClient, private toastr:ToastrService) { }
   patientPostWithSecureLogin:PatientPostWithSecureLogin;
+  stringAndTwoDoublePost:StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
   nb = /^\d+$/;
+  er = new RegExp('^[0-9]+(\.[0-9]+)*$');
   secureLoginString:SecureLoginString;
   patientGet:PatientGet;
   generalInfo:string='show';
   maleCheckBox:boolean;femaleCheckBox:boolean;
-  firstName:string;lastName:string;mail:string;day:string;month:string;year:string;adress:string;password:string;passwordRepeat:string;passwordRepeatInfromation:string;passwordInfromation:string;firstNameInformation:string;lastNameInformation:string;mailInformation:string;dayInformation:string;monthInformation:string;yearInformation:string;adressInformation:string;
-  invalidFirstNameVariable:boolean;
-  invalidLastNameVariable:boolean;
-  invalidMailVariable:boolean;
-  invalidDayVariable:boolean;
-  invalidMonthVariable:boolean;
-  invalidYearVariable:boolean;
-  invalidAdressVariable:boolean;
-  invalidPasswordVariable:boolean;
-  invalidPasswordRepeatVariable:boolean;
+  medicalProfileInfo:string='noData';
+  medicalProfile:string='showData';
+  height:string;weight:string;firstName:string;lastName:string;mail:string;day:string;month:string;year:string;adress:string;password:string;passwordRepeat:string;
+  heightInformation:string;weightInformation:string;passwordRepeatInfromation:string;passwordInfromation:string;firstNameInformation:string;lastNameInformation:string;mailInformation:string;dayInformation:string;monthInformation:string;yearInformation:string;adressInformation:string;
+  invalidFirstNameVariable:boolean;invalidLastNameVariable:boolean;invalidMailVariable:boolean;invalidDayVariable:boolean;invalidMonthVariable:boolean;invalidYearVariable:boolean;invalidAdressVariable:boolean;invalidPasswordVariable:boolean;invalidPasswordRepeatVariable:boolean;invalidHeightVariable:boolean=false;invalidWeightVariable:boolean=false;
   disableSaveBtn:boolean=true;
+  disableSaveMedicalProfileBtn:boolean=true;
 
   ngOnInit(): void {
     this.getUserInfo();
@@ -195,7 +194,7 @@ export class PatientComponent implements OnInit {
     }
   }
   checkBirthday(){
-    if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && this.nb.test(this.day)){
+    if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2)){
       this.invalidDayVariable=false;
       this.dayInformation=this.translate.instant('day');
     }
@@ -203,7 +202,7 @@ export class PatientComponent implements OnInit {
       this.invalidDayVariable=true;
       this.dayInformation=this.translate.instant('dayErr');
     }
-    if((parseInt(this.month) <= 12 && parseInt(this.month) > 0) && this.nb.test(this.month)){
+    if((parseInt(this.month) <= 12 && parseInt(this.month) > 0) && (this.nb.test(this.month) && this.month.length == 2)){
       this.invalidMonthVariable=false;
       this.monthInformation=this.translate.instant('month');
     }
@@ -211,7 +210,7 @@ export class PatientComponent implements OnInit {
       this.invalidMonthVariable=true;
       this.monthInformation=this.translate.instant('monthErr');
     }
-    if((parseInt(this.year) <= 2021 && parseInt(this.year) > 1900) && this.nb.test(this.year)){
+    if((parseInt(this.year) <= 2021 && parseInt(this.year) > 1900) && (this.nb.test(this.year) && this.year.length == 4)){
       this.invalidYearVariable=false;
       this.yearInformation=this.translate.instant('year');
     }
@@ -267,5 +266,82 @@ export class PatientComponent implements OnInit {
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;  
+  }
+  compareHeight(){
+    if(parseFloat(this.height) == this.patientGet.medicalProfile.height || this.height=="")
+      this.disableSaveMedicalProfileBtn = true;
+    else
+      this.disableSaveMedicalProfileBtn = false; 
+  this.height = this.height.replace(',','.');
+    
+  }
+  compareWeight(){
+    if(parseFloat(this.weight) == this.patientGet.medicalProfile.weight || this.weight=="")
+      this.disableSaveMedicalProfileBtn = true;
+    else
+      this.disableSaveMedicalProfileBtn = false;
+    this.weight = this.weight.replace(',','.');
+  }
+  initializeMedicalProfileLabel(){
+    this.heightInformation=this.translate.instant('height');
+    this.weightInformation=this.translate.instant('weight');
+  }
+  checkMedicalProfileForm(){
+    if(parseFloat(this.height)>0 && parseFloat(this.height)<3 && this.er.test(this.height)){
+      if(this.height.length<5){
+        this.invalidHeightVariable=false;
+      }else{
+        this.invalidHeightVariable=true;
+        this.heightInformation=this.translate.instant('heightMax5');
+      }
+    }else{
+     this.invalidHeightVariable=true;
+     this.heightInformation=this.translate.instant('invalidHeight');
+    }
+    if(parseFloat(this.weight)>0 && parseFloat(this.weight)<500 && this.er.test(this.weight)){
+      if (this.weight.length<6){
+        this.invalidWeightVariable=false;
+      }else{
+        this.invalidWeightVariable=true;
+        this.weightInformation=this.translate.instant('weightMax6');
+      }
+    }else{
+      this.invalidWeightVariable=true;
+      this.weightInformation=this.translate.instant('invalidWeight');
+    }
+    this.weight=this.weight+'.';
+    if(this.weight.match(/[.]/g).length > 2){
+      this.invalidWeightVariable=true;
+      this.weightInformation=this.translate.instant('weightDot');
+    }
+    this.weight=this.weight.slice(0, -1);
+    if(this.invalidWeightVariable==false && this.invalidHeightVariable==false)
+      this.updateMedicalProfileData();
+  }
+  updateMedicalProfileData(){
+    this.stringAndTwoDoublePost = new StringAndTwoDoublePost(localStorage.getItem('secureLogin'),parseFloat(this.height),parseFloat(this.weight));
+    this.patientService.updateMedicalProfileBySecureLogin(this.stringAndTwoDoublePost).subscribe(
+      res=>{
+        if (res=='updated'){
+          this.medicalProfile='showData';
+          this.toastr.success(this.translate.instant('infoUpdated'),this.translate.instant('update'),{
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.getUserInfo();
+          this.medicalProfileInfo='showData';
+        }
+      },
+      err=>{
+        this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+  initilizeMedicalProfile(){
+    this.height=this.patientGet.medicalProfile.height.toString();
+    this.weight=this.patientGet.medicalProfile.weight.toString();
   }
 }

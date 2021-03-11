@@ -68,4 +68,22 @@ export class PatientHeaderComponent implements OnInit {
       positionClass: 'toast-bottom-right'
     });
   }
+  toSection(sectionName:string){
+    document.getElementById(sectionName).scrollIntoView({behavior:"smooth"});
+  }
+  toMedicalProfileSection(){
+    document.getElementById("medicalProfileSection").scrollIntoView({behavior:"smooth"});
+  }
+  toGeneralInfoSection(){
+    document.getElementById("generalInfoSection").scrollIntoView({behavior:"smooth"});
+  }
+  toPrescriptionSection(){
+    document.getElementById("prescriptionSection").scrollIntoView({behavior:"smooth"});
+  }
+  toMyDoctorsSection(){
+    document.getElementById("myDoctorsSection").scrollIntoView({behavior:"smooth"});
+  }
+  toMyPharmaciesSection(){
+    document.getElementById("myPharmaciesSection").scrollIntoView({behavior:"smooth"});
+  }
 }

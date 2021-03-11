@@ -27,10 +27,11 @@
                 </div>
                 <div *ngIf="parentHeader=='profile'">
                     <ul>
-                        <li><a>{{'medicalProfile'|translate}}</a></li>
-                        <li><a>{{'prescription'|translate}}</a></li>
-                        <li><a>{{'myDoctors'|translate}}</a></li>
-                        <li><a>{{'myPharmacies'|translate}}</a></li>
+                        <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
+                        <li (click)="toMedicalProfileSection()"><a>{{'medicalProfile'|translate}}</a></li>
+                        <li (click)="toPrescriptionSection()"><a>{{'prescription'|translate}}</a></li>
+                        <li (click)="toMyDoctorsSection()"><a>{{'myDoctors'|translate}}</a></li>
+                        <li (click)="toMyPharmaciesSection()"><a>{{'myPharmacies'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='settings'" class="settingItems">

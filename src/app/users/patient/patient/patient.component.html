@@ -5,11 +5,12 @@
     </head>
     <body>
         <app-patient-header></app-patient-header>
-        <div class="medicalPrifile">
-           <section id="generalInfo">
+        <div class="medicalProfile">
+           <section id="generalInfoSection">
             <div class="sectionTitle">{{'generalInfo'|translate}}</div>
             <div class="sectionContainer" *ngIf="generalInfo=='show'">
                 <div class="patientName">{{patientGet.patientFirstName}} <span class="last">{{patientGet.patientLastName}}</span></div>
+                <i class="fas fa-user"></i> {{patientGet.patientUserName}}
                 <div class="infoGrid">
                     <div class="infoContainer">
                         <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
@@ -196,10 +197,111 @@
                 </div>
             </div>
            </section>
-           <section id="medicalProfile">
+           <section id="medicalProfileSection">
             <div class="sectionTitle">{{'medicalProfile'|translate}}</div>
             <div class="sectionContainer">
-                
+                <div *ngIf="patientGet.medicalProfile.weight == 0 && patientGet.medicalProfile.height == 0 ; then nullTemplate else showTemplate"></div>
+                <ng-template #nullTemplate>
+                    <div *ngIf="medicalProfileInfo=='noData'" class="noData">
+                        {{'editMedicalProfileInfoToShow'|translate}}, <span class="setInfo" (click)="initializeMedicalProfileLabel();medicalProfileInfo='setMedicalProfileInfo'">{{'setInfo'|translate}}</span>
+                    </div>
+                    <div *ngIf="medicalProfileInfo=='setMedicalProfileInfo'">
+                        <div class="infoEdit">
+                            <div class="formDiv">
+                                <span class="mesure">{{'metre'|translate}}</span>
+                                <input type="text" [class.labelInvalidInfo]="invalidHeightVariable" name="height" [(ngModel)]="height" (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false" class="formInput textLeft" placeholder=" ">
+                                <label for="" class="formLabel">
+                                   {{heightInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <span class="mesure">{{'kilogram'|translate}}</span>
+                                <input type="text" [class.labelInvalidInfo]="invalidWeightVariable" name="weight" [(ngModel)]="weight" (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false" class="formInput textLeft" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{weightInformation}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="fullyBtn" (click)="medicalProfileInfo='noData';">{{'goBack'|translate}}</button>
+                            <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn" (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #showTemplate>
+                    <div *ngIf="medicalProfile=='showData'">
+                        <div class="infoGridTowColumn">
+                            <div class="infoContainer">
+                                <div class="infoIcon">
+                                    <div *ngIf="patientGet.patientGender=='male'">
+                                        <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
+                                    </div>
+                                    <div *ngIf="patientGet.patientGender=='female'">
+                                        <i class="fas fa-female"></i><i class="fas fa-arrows-alt-v"></i>
+                                    </div>
+                                </div>
+                                <div class="info">
+                                    {{patientGet.medicalProfile.height}} {{'metre'|translate}}
+                                </div>
+                                <div class="infoTitle">{{'height'|translate}}</div>
+                            </div>
+                            <div class="infoContainer">
+                                <div class="infoIcon"><i class="fas fa-weight"></i></div>
+                                <div class="info">
+                                    {{patientGet.medicalProfile.weight}} {{'kilogram'|translate}}
+                                </div>
+                                <div class="infoTitle">{{'weight'|translate}}</div>
+                            </div>
+                        </div>
+                        <button class="emptyBtn" (click)="medicalProfile='editData';initilizeMedicalProfile();">{{'edit'|translate}}</button>
+                    </div>
+                    <div *ngIf="medicalProfile=='editData'">
+                        <div class="infoEdit">
+                            <div class="formDiv">
+                                <span class="mesure">{{'metre'|translate}}</span>
+                                <input type="text" [class.labelInvalidInfo]="invalidHeightVariable" name="height" [(ngModel)]="height" (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false" class="formInput textLeft" placeholder=" ">
+                                <label for="" class="formLabel">
+                                   {{heightInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <span class="mesure">{{'kilogram'|translate}}</span>
+                                <input type="text" [class.labelInvalidInfo]="invalidWeightVariable" name="weight" [(ngModel)]="weight" (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false" class="formInput textLeft" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{weightInformation}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="fullyBtn" (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
+                            <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn" (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+           </section>
+           <section id="prescriptionSection">
+            <div class="sectionTitle">{{'prescription'|translate}}</div>
+            <div class="sectionContainer">
+                <div class="noData">
+                    {{'noPrescription'|translate}}
+                </div>
+            </div>
+           </section>
+           <section id="myDoctorsSection">
+            <div class="sectionTitle">{{'myDoctors'|translate}}</div>
+            <div class="sectionContainer">
+                <div class="noData">
+                    {{'noDoctors'|translate}}
+                </div>
+            </div>
+           </section>
+           <section id="myPharmaciesSection">
+            <div class="sectionTitle">{{'myPharmacies'|translate}}</div>
+            <div class="sectionContainer">
+                <div class="noData">
+                    {{'noPharmacies'|translate}}
+                </div>
             </div>
            </section>
         </div>

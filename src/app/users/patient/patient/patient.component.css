@@ -4,7 +4,7 @@ html,body{
     background-color: var(--background-color);
     transition: all .3s ease-in-out;
 }
-.medicalPrifile{
+.medicalProfile{
     position: absolute;
     top: 50px;
     left: 20%;
@@ -65,7 +65,9 @@ html,body{
     font-weight: 900;
     transition: all .3s ease-in-out;
 }
-.infoGrid .infoContainer{
+.infoGrid .infoContainer , .infoGridTowColumn .infoContainer{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
     text-align: center;
     border-radius: 10px;
     background-color: var(--background-color);
@@ -73,24 +75,24 @@ html,body{
     border: none;
     box-shadow: var(--infoBox);
 }
-.infoGrid .infoContainer:hover{
+.infoGrid .infoContainer:hover, .infoGridTowColumn .infoContainer:hover{
     cursor: pointer;
     border-radius: 10px;
     transform: scale(1.02);
 }
 
-.infoGrid .infoContainer .infoIcon{
+.infoGrid .infoContainer .infoIcon, .infoGridTowColumn .infoContainer .infoIcon{
     position: relative;
     font-size: 23px;
     padding: 5px;
 }
-.infoGrid .infoContainer .infoTitle{
+.infoGrid .infoContainer .infoTitle,.infoGridTowColumn .infoContainer .infoTitle{
     font-size: 20px;
     font-weight: 300;
     background-color: #308a7b;
     margin-top: 10px;
 }
-.infoGrid .infoContainer .info{
+.infoGrid .infoContainer .info, .infoGridTowColumn .infoContainer .info{
     text-transform: capitalize;
     padding: 5px;
     text-align: center;
@@ -160,4 +162,48 @@ html,body{
 }
 .btn-group{
     height: 56px;
+}
+.noData{
+    margin: 20px;
+    text-align: center;
+}
+.noData .setInfo{
+    text-decoration: underline;
+}
+.noData .setInfo:hover{
+    cursor: pointer;
+}
+.fa-user{
+    padding: 2px;
+    margin: 0px 5px;
+}
+.formDiv .mesure{
+    position: absolute;
+    right: 0%;
+    padding: 12px;
+    height: 48px;
+    background-color: #308a7b;
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    text-transform: capitalize;
+}
+.textLeft{
+    text-align: left;
+}
+.infoGridTowColumn{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px;
+    width: 90%;
+    padding: 5% 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-color);
+    font-size: 1.15rem;
+    font-weight: 900;
+    transition: all .3s ease-in-out;
+}
+.formInput{
+    font-family: Arial, Helvetica, sans-serif;
 }
