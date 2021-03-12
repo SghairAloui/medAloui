@@ -22,6 +22,7 @@ import { DoctorComponent } from './users/doctor/doctor/doctor.component';
 import { PharmacyComponent } from './users/pharmacy/pharmacy/pharmacy.component';
 import { PatientHeaderComponent } from './Headers/patient-header/patient-header.component';
 import { PatientService } from './users/patient/patient/patient.service';
+import { PatientDoctorComponent } from './users/patient/patient-doctor/patient-doctor.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { PatientService } from './users/patient/patient/patient.service';
     DoctorComponent,
     PharmacyComponent,
     PatientHeaderComponent,
+    PatientDoctorComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,7 @@ import { PatientService } from './users/patient/patient/patient.service';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService],
+  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

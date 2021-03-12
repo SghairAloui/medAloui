@@ -13,5 +13,5 @@ export interface PatientGet{
     patientCreationDate:string;
     patientSecureLogin:string;
     medicalProfile:medicalProfileGet;
-    prescription:prescriptionGet[];
+    prescription:prescriptionGet [];
 }

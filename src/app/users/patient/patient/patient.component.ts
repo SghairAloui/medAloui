@@ -25,8 +25,7 @@ export class PatientComponent implements OnInit {
   patientGet:PatientGet;
   generalInfo:string='show';
   maleCheckBox:boolean;femaleCheckBox:boolean;
-  medicalProfileInfo:string='noData';
-  medicalProfile:string='showData';
+  container:string='profile';medicalProfileInfo:string='noData';medicalProfile:string='showData';medicalProfileDiseaseInfo:string='info';prescriptionInfo:string='info';
   height:string;weight:string;firstName:string;lastName:string;mail:string;day:string;month:string;year:string;adress:string;password:string;passwordRepeat:string;
   heightInformation:string;weightInformation:string;passwordRepeatInfromation:string;passwordInfromation:string;firstNameInformation:string;lastNameInformation:string;mailInformation:string;dayInformation:string;monthInformation:string;yearInformation:string;adressInformation:string;
   invalidFirstNameVariable:boolean;invalidLastNameVariable:boolean;invalidMailVariable:boolean;invalidDayVariable:boolean;invalidMonthVariable:boolean;invalidYearVariable:boolean;invalidAdressVariable:boolean;invalidPasswordVariable:boolean;invalidPasswordRepeatVariable:boolean;invalidHeightVariable:boolean=false;invalidWeightVariable:boolean=false;
@@ -192,6 +191,18 @@ export class PatientComponent implements OnInit {
       this.invalidPasswordRepeatVariable=true;
       this.passwordRepeatInfromation=this.translate.instant('repeatPasswordErr');
     }
+  }
+  checkDisabledBtnFromMale(){
+    if(this.patientGet.patientGender=='female')
+    this.disableSaveBtn=false;
+    else
+    this.disableSaveBtn=true;
+  }
+  checkDisabledBtnFromFemale(){
+    if(this.patientGet.patientGender=='male')
+    this.disableSaveBtn=false;
+    else
+    this.disableSaveBtn=true;
   }
   checkBirthday(){
     if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2)){

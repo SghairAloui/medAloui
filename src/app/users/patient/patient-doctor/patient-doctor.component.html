@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <section id="patientFindDoctorSection">
+        <div class="sectionTitle">{{'findDoctor'|translate}}</div>
+        <div class="findingDoctorSearch">
+            <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
+            <div class="formDiv">
+                <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
+                <label for="chooseSpeciality" class="formLabel">{{'chooseSpeciality'|translate}}</label>
+            </div>
+            <datalist id="datalistOptions">
+                <option value="{{'generalPractitioner'|translate}}">
+                <option value="{{'Psychologist'|translate}}">
+                <option value="{{'Psychiatrist'|translate}}">
+                <option value="{{'Dentist'|translate}}">
+                <option value="{{'Pediatrician'|translate}}">
+            </datalist>
+            <div class="formDiv">
+                <input type="text" name="doctorName" [(ngModel)]="doctorName" class="formInput" list="doctorsList"
+                    id="searchDoctor" placeholder=" ">
+                <label for="searchDoctor" class="formLabel">{{'searchDoctor'|translate}}</label>
+            </div>
+            <datalist id="doctorsList">
+
+            </datalist>
+            <button type="submit" class="emptyBtn" style="height: 43px;">{{'search'|translate}}</button>
+        </div>
+    </section>
+    <section id="patientTopRatedDoctorSection">
+        <div class="sectionTitle">{{'topRated'|translate}}</div>
+        <div class="sectionContainer">
+        </div>
+    </section>
+    <section id="patientOurMethodologySection">
+        <div class="sectionTitle">{{'ourMethodology'|translate}}</div>
+        <div class="ourMethodologySection">
+            <div class="grid">
+                <div class="gridFirstBox">
+                    <div class="gidBoxNumber">1</div>
+                    <div class="gidBoxTitle">
+                        {{'makeAppointment'|translate}}
+                    </div>
+                    <div class="gidBoxText">
+                        {{'firstBoxText'|translate}}
+                    </div>
+                </div>
+                <div class="gridSecondBox">
+                    <div class="gidBoxNumber">2</div>
+                    <div class="gidBoxTitle">
+                        {{'makeYourAppointment'|translate}}
+                    </div>
+                    <div class="gidBoxText">
+                        {{'secondBoxText'|translate}}
+                    </div>
+                </div>
+                <div class="gridThirdBox">
+                    <div class="gidBoxNumber">3</div>
+                    <div class="gidBoxTitle">
+                        {{'getDiagnosis'|translate}}
+                    </div>
+                    <div class="gidBoxText">
+                        {{'thirdBoxText'|translate}}
+                    </div>
+                </div>
+                <div class="gridFourthBox">
+                    <div class="gidBoxNumber">4</div>
+                    <div class="gidBoxTitle">
+                        {{'paymentAndRates'|translate}}
+                    </div>
+                    <div class="gidBoxText">
+                        {{'fourthBoxText'|translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="patientWhyHealthCareSection">
+        <div class="sectionTitle">{{'whyHealthCare'|translate}}</div>
+        <div class="sectionContainer">
+            <span style="font-size: 1.1rem;font-weight: 500;">{{'helthCareHelpYouTo'|translate}}</span>
+            <div class="grid">
+                <div class="gridInfo">
+                    <div class="gridinfoCenter">
+                        <div
+                            *ngIf="medicalFilePapers=='info'; then showMedicalFilePapersInfo else showMedicalFilePapersHow">
+                        </div>
+                        <ng-template #showMedicalFilePapersInfo>{{'reduceMedicalFilePapers'|translate}}, <span
+                                class="textLien" (click)="medicalFilePapers='how'">{{'how'|translate}}</span>
+                        </ng-template>
+                        <ng-template #showMedicalFilePapersHow>{{'reduceMedicalFilePapersHow'|translate}} <span
+                                class="textLien" (click)="medicalFilePapers='info'">{{'okay'|translate}}</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="gridInfo">
+                    <div class="gridinfoCenter">
+                        <div *ngIf="losingTime=='info'; then losingTimeInfo else losingTimeHow">
+                        </div>
+                        <ng-template #losingTimeInfo>{{'losingTime'|translate}}, <span class="textLien"
+                                (click)="losingTime='how'">{{'how'|translate}}</span></ng-template>
+                        <ng-template #losingTimeHow>{{'losingTimeHow'|translate}}, <span class="textLien"
+                                (click)="losingTime='info'">{{'okay'|translate}}</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="gridInfo">
+                    <div class="gridinfoCenter">
+                        <div *ngIf="appOrganize=='info'; then appOrganizeInfo else appOrganizeHow">
+                        </div>
+                        <ng-template #appOrganizeInfo>{{'appOrganize'|translate}}, <span class="textLien"
+                                (click)="appOrganize='how'">{{'how'|translate}}</span></ng-template>
+                        <ng-template #appOrganizeHow>{{'appOrganizeHow'|translate}}, <span class="textLien"
+                                (click)="appOrganize='info'">{{'okay'|translate}}</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="gridInfo">
+                    <div class="gridinfoCenter">
+                        {{'appGuide'|translate}}, <span class="textLien" (click)="toOurMethodologySection()">{{'appGuideSeeGuide'|translate}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

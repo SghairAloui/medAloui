@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppComponent } from 'src/app/app.component';
+import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 
 @Component({
   selector: 'app-patient-header',
@@ -10,7 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class PatientHeaderComponent implements OnInit {
 
-  constructor(private translate: TranslateService,private appComp:AppComponent,private toastr:ToastrService) { }
+  constructor(private translate: TranslateService,private appComp:AppComponent,private toastr:ToastrService,private router: Router,private patientComp:PatientComponent) { }
 
   parentHeader:string='profile';
   darkMode:boolean=false;
@@ -68,8 +70,10 @@ export class PatientHeaderComponent implements OnInit {
       positionClass: 'toast-bottom-right'
     });
   }
-  toSection(sectionName:string){
-    document.getElementById(sectionName).scrollIntoView({behavior:"smooth"});
+  logOut(){
+    localStorage.setItem("secureLogin","");
+    localStorage.setItem("secureLoginType","");
+    this.router.navigate(['/acceuil']);
   }
   toMedicalProfileSection(){
     document.getElementById("medicalProfileSection").scrollIntoView({behavior:"smooth"});
@@ -85,5 +89,25 @@ export class PatientHeaderComponent implements OnInit {
   }
   toMyPharmaciesSection(){
     document.getElementById("myPharmaciesSection").scrollIntoView({behavior:"smooth"});
+  }
+  doctorClick(){
+    this.patientComp.container='patientDoctor';
+    this.parentHeader='doctor';
+  }
+  profileCLick(){
+    this.patientComp.container='profile';
+    this.parentHeader='profile';
+  }
+  toFindDoctorSection(){
+    document.getElementById("patientFindDoctorSection").scrollIntoView({behavior:"smooth"});
+  }
+  toTopRatedSection(){
+    document.getElementById("patientTopRatedDoctorSection").scrollIntoView({behavior:"smooth"});
+  }
+  toOurMethodologySection(){
+    document.getElementById("patientOurMethodologySection").scrollIntoView({behavior:"smooth"});
+  }
+  toWhyHealthCareSection(){
+    document.getElementById("patientWhyHealthCareSection").scrollIntoView({behavior:"smooth"});
   }
 }
