@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <app-admin-header></app-admin-header>
+    <div class="adminContainer">
+        <div *ngIf="container=='profile'">
+            <div *ngIf="container=='profile'">
+                <section id="generalInfoSection">
+                    <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                    <div class="sectionContainer">
+                        <div class="patientName">{{adminGet.adminFullName}}</div>
+                        <i class="fas fa-user"></i> {{adminGet.adminUserName}}
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div *ngIf="container=='doctor'">
+            <section id="generalInfoSection">
+                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                <app-admin-doctor></app-admin-doctor>
+            </section>
+        </div>
+        <div *ngIf="container=='pharmacy'">
+            <section id="generalInfoSection">
+                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                <app-admin-pharmacy></app-admin-pharmacy>
+            </section>
+        </div>
+        <div *ngIf="container=='disease'">
+            <section id="generalInfoSection">
+                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                <app-admin-disease></app-admin-disease>
+            </section>
+        </div>
+        <div *ngIf="container=='patient'">
+            <section id="generalInfoSection">
+                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                <app-admin-patient></app-admin-patient>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>

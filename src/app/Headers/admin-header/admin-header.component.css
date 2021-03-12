@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+.parentHeader{
+    top: 0;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    height: 50px;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--headerText);
+    background-color: var(--box-color);
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 5%;
+    transition: all .3s ease-in-out;
+}
+.headerTitle{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+    cursor: pointer;
+}
+.parentHeader nav{
+    position: relative;
+    height: 40px;
+}
+.parentHeader .navItem{
+    line-height: 40px;
+    list-style: none;
+    text-transform: capitalize;
+}
+.parentHeader li{
+    display: inline-block;
+    padding: 0px 20px;
+    transition: .3s;
+    cursor: pointer;
+}
+.parentHeader .fa-user-circle{
+    position: absolute;
+    font-size: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.parentHeader li a{
+    color: var(--headerText);
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+.menuHoverEffect::after{
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    background: var(--headerText);
+    transition: width .3s;
+}
+.menuHoverEffect:hover::after{
+    width: 100%;
+    transition: width .3s;
+}
+.headerChild{
+    position: fixed;
+    height: 100%;
+    width: 20%;
+    z-index: 1;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+}
+.headerChild nav{
+    margin-top: 100px;
+}
+.headerChild .navItem{
+    line-height: 40px;
+}
+.headerChild .navItem ul{
+    list-style: none;
+    font-weight: 600;
+    color: var(--gray-text);
+    padding-left: 0px;
+    transition: all .3s ease-in-out;
+}
+.headerChild .navItem ul li,.headerChild .navItem .settingItems li:hover{
+    cursor: pointer;
+    padding-left: 0px;
+    transition: linear 0.3s;
+    background: none;
+}
+.headerChild .navItem ul li a{
+    padding-left: 20px;
+}
+.headerChild .navItem ul li:hover{
+    background-color: #a4cac460;
+    padding-left: 30px;
+}
+#en,#fr,#darkModeCheckBox{
+    display: none;
+}
+#enLabel, #frLabel{
+    color: #308a7b;
+    border: 1px solid #308a7b;
+}
+#enLabel:hover, #frLabel:hover{
+    color: white;
+    background-color: #308a7b;
+}
+#frLabel{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#enLabel{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+#fr:checked ~ #frLabel, #en:checked ~ #enLabel{
+    color: white;
+    background-color: #308a7b;
+    box-shadow: var(--gender-box-shadow);
+    transition: all .3s ease-in-out;
+}
+.btn-group{
+    margin: 5% 0px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.darkModeCheckBoxLabel{
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    height: 26px;
+    width: 70px;
+    border-radius: 50px;
+    padding: 5px;
+    margin: 5% 0px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    justify-content: space-between;
+    border: 1px solid #308a7b;
+}
+.ball{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #308a7b;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    transition: all .3s ease-in-out;
+}
+.darkModeCheckBox:checked + .darkModeCheckBoxLabel .ball{
+    transform: translateX(44px);
+}
+.fa-moon{
+    color: white;
+}
+.fa-sun{
+    color: #f39c12;
+}

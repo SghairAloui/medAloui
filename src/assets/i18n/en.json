@@ -155,5 +155,13 @@
     "appOrganize":"The application is well organized",
     "appOrganizeHow":"Health Care is too easy to use with a creative design, two language and a dark mode to protect your eyes",
     "appGuide":"Health care give you a full usage guide",
-    "appGuideSeeGuide":"See the guide ?"
+    "appGuideSeeGuide":"See the guide ?",
+    "pharmacies":"pharmacies",
+    "doctors":"doctors",
+    "patients":"patients",
+    "findPatient":"Find patient",
+    "findPharmacy":"Find pharmacy",
+    "addSpeciality":"Add speciality",
+    "notApproved":"Not approved",
+    "addDisease":"Add disease"
 }

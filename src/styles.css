@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,500;1,600&display=swap');
+html,body{
+    font-family: 'Raleway', sans-serif;
+    height: 100%;
+    background-color: var(--background-color);
+    transition: all .3s ease-in-out;
+}
 .light-theme{
     --background-color: #F0F2F5;
     --text-color: #000;

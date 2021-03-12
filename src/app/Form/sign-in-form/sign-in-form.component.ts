@@ -38,9 +38,25 @@ export class SignInFormComponent implements OnInit {
                 this.signInService.openPharmacyAccount(this.usernameAndPassPost).subscribe(
                   res=>{
                     if(res=='invalidInfo'){
-                      this.emailAddressInfo=this.translate.instant('checkUsername');
-                      this.passwordInfo=this.translate.instant('checkPassword');
-                      this.InvalidInfo=true;
+                      this.signInService.openAdminAccount(this.usernameAndPassPost).subscribe(
+                        res=>{
+                          if(res=='invalidInfo'){
+                            this.emailAddressInfo=this.translate.instant('checkUsername');
+                            this.passwordInfo=this.translate.instant('checkPassword');
+                            this.InvalidInfo=true;
+                          }else{
+                            localStorage.setItem("secureLogin",res);
+                            localStorage.setItem("secureLoginType","admin");
+                            this.router.navigate(['/admin']);
+                          }
+                        },
+                        err=>{
+                          this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+                            timeOut: 5000,
+                            positionClass: 'toast-bottom-left'
+                          });
+                        }
+                      );
                     }else{
                       localStorage.setItem("secureLogin",res);
                       localStorage.setItem("secureLoginType","pharmacy");

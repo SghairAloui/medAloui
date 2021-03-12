@@ -23,6 +23,13 @@ import { PharmacyComponent } from './users/pharmacy/pharmacy/pharmacy.component'
 import { PatientHeaderComponent } from './Headers/patient-header/patient-header.component';
 import { PatientService } from './users/patient/patient/patient.service';
 import { PatientDoctorComponent } from './users/patient/patient-doctor/patient-doctor.component';
+import { AdminComponent } from './users/admin/admin/admin.component';
+import { AdminHeaderComponent } from './Headers/admin-header/admin-header.component';
+import { AdminService } from './users/admin/admin/admin.service';
+import { AdminDoctorComponent } from './users/admin/admin-doctor/admin-doctor.component';
+import { AdminPatientComponent } from './users/admin/admin-patient/admin-patient.component';
+import { AdminPharmacyComponent } from './users/admin/admin-pharmacy/admin-pharmacy.component';
+import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease.component';
 
 
 @NgModule({
@@ -38,6 +45,12 @@ import { PatientDoctorComponent } from './users/patient/patient-doctor/patient-d
     PharmacyComponent,
     PatientHeaderComponent,
     PatientDoctorComponent,
+    AdminComponent,
+    AdminHeaderComponent,
+    AdminDoctorComponent,
+    AdminPatientComponent,
+    AdminPharmacyComponent,
+    AdminDiseaseComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +69,7 @@ import { PatientDoctorComponent } from './users/patient/patient-doctor/patient-d
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent],
+  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent,AdminService,AdminComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

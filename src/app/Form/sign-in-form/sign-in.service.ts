@@ -18,4 +18,7 @@ export class SignInService {
   public openPharmacyAccount(usernameAndPassPost:UsernameAndPassPost){
     return this.http.post<string>("http://localhost:8080/pharmacy/getPharmacySecureLoginFromUsernameAndPass",usernameAndPassPost,{responseType:'text' as 'json'});
   }
+  public openAdminAccount(usernameAndPassPost:UsernameAndPassPost){
+    return this.http.post<string>("http://localhost:8080/admin/getAdminSecureLoginFromUsernameAndPass",usernameAndPassPost,{responseType:'text' as 'json'});
+  }
 }
