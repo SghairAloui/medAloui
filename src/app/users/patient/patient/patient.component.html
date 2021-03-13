@@ -17,10 +17,12 @@
                     <i class="fas fa-user"></i> {{patientGet.patientUserName}}
                     <div class="imgContainer">
                         <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
-                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                         <div class="editImage">
+                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
+                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                             <div class="center">{{'changeImage'|translate}}</div>
+                        </div>
+                        <div class="strok">
                             <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
                         </div>
                     </div>

@@ -1,0 +1,74 @@
+html,body{
+    width: 100%;
+    height: auto;
+}
+.doctorContainer{
+    position: relative;
+    margin-top: 20px;
+    left: 20%;
+    width: 80%;
+    overflow-x: hidden;
+    background-color: var(--background-color);
+    padding: 20px 30px;
+    color: var(--text-color);
+    transition: all .3s ease-in-out;
+}
+.sectionContainer{
+    padding: 15px 25px;
+    border-radius: 20px;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+}
+.doctorName{
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.doctorName span{
+    text-transform: uppercase;
+}
+.formInput{
+    text-align: center;
+}
+.formDiv{
+    margin-bottom: 5px;
+}
+.fullyBtn{
+    width: 30%;
+}
+.emptyBtn{
+    position: relative;
+    width: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.notApproved{
+    position: fixed;
+    color: white;
+    font-size: 1.1rem;
+    background-color: #ff9100;
+    top: 50px;
+    left: 20%;
+    width: 80%;
+    text-align: center;
+}
+.notApproved .center{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.white{
+    color: white;
+    border: 1px solid white;
+    left: 0%;
+    transform: translateX(0%);
+    margin: 2%;
+}
+.white:hover{
+    background-color: white;
+    color: #ff9100;
+    left: 0%;
+    transform: translateX(0%);
+    margin: 2%;
+}

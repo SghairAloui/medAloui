@@ -30,6 +30,7 @@ import { AdminDoctorComponent } from './users/admin/admin-doctor/admin-doctor.co
 import { AdminPatientComponent } from './users/admin/admin-patient/admin-patient.component';
 import { AdminPharmacyComponent } from './users/admin/admin-pharmacy/admin-pharmacy.component';
 import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease.component';
+import { DoctorHeaderComponent } from './Headers/doctor-header/doctor-header.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease
     AdminPatientComponent,
     AdminPharmacyComponent,
     AdminDiseaseComponent,
+    DoctorHeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent,AdminService,AdminComponent],
+  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent,AdminService,AdminComponent,DoctorComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,1 +1,276 @@
-<p>doctor works!</p>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <app-doctor-header></app-doctor-header>
+    <div class="doctorContainer">
+        <div *ngIf="container=='profile'">
+            <section id="generalInfoSection">
+                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                <div class="sectionContainer" *ngIf="generalInfo=='show'">
+                    <div class="doctorName">{{doctorGet.doctorFirstName}} <span
+                            class="last">{{doctorGet.doctorLastName}}</span></div>
+                    <i class="fas fa-user"></i> {{doctorGet.doctorUserName}}
+                    <div class="imgContainer">
+                        <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                        <div class="editImage">
+                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
+                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                            <div class="center">{{'changeImage'|translate}}</div>
+                        </div>
+                        <div class="strok">
+                            <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                        </div>
+                    </div>
+                    <div class="infoGrid">
+                        <div class="infoContainer">
+                            <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
+                            <div class="info">
+                                <div *ngIf="doctorGet.doctorGender=='male'">
+                                    {{'male'|translate}}
+                                </div>
+                                <div *ngIf="doctorGet.doctorGender=='female'">
+                                    {{'female'|translate}}
+                                </div>
+                            </div>
+                            <div class="infoTitle">{{'gender'|translate}}</div>
+                        </div>
+                        <div class="infoContainer">
+                            <div class="infoIcon"><i class="fas fa-birthday-cake"></i></div>
+                            <div class="info">
+                                {{doctorGet.doctorBirthDay}}
+                            </div>
+                            <div class="infoTitle">{{'birthday'|translate}}</div>
+                        </div>
+                        <div class="infoContainer">
+                            <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
+                            <div class="info">
+                                {{doctorGet.doctorCity}}
+                            </div>
+                            <div class="infoTitle">{{'city'|translate}}</div>
+                        </div>
+                    </div>
+                    <button class="emptyBtn"
+                        (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
+                </div>
+                <div class="sectionContainer" *ngIf="generalInfo=='edit'">
+                    <div class="infoEdit">
+                        <div class="formDiv">
+                            <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName"
+                                [(ngModel)]="firstName"
+                                (keyup)="compareFirstName();firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{firstNameInformation}}
+                            </label>
+                        </div>
+                        <div class="formDiv">
+                            <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName"
+                                [(ngModel)]="lastName"
+                                (keyup)="compareLastName();lastNameInformation=translate.instant('surname');invalidLastNameVariable=false"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{lastNameInformation}}
+                            </label>
+                        </div>
+                        <div class="formDiv">
+                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                [(ngModel)]="mail"
+                                (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{mailInformation}}
+                            </label>
+                        </div>
+                        <div class="formDiv">
+                            <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day"
+                                [(ngModel)]="day"
+                                (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
+                                class="formInput" list="daylistOptions" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{dayInformation}}
+                            </label>
+                            <datalist id="daylistOptions">
+                                <option value="01">
+                                <option value="02">
+                                <option value="03">
+                                <option value="04">
+                                <option value="05">
+                                <option value="06">
+                                <option value="07">
+                                <option value="08">
+                                <option value="09">
+                                <option value="10">
+                                <option value="11">
+                                <option value="12">
+                                <option value="13">
+                                <option value="14">
+                                <option value="15">
+                                <option value="16">
+                                <option value="17">
+                                <option value="18">
+                                <option value="19">
+                                <option value="20">
+                                <option value="21">
+                                <option value="22">
+                                <option value="23">
+                                <option value="24">
+                                <option value="25">
+                                <option value="26">
+                                <option value="27">
+                                <option value="28">
+                                <option value="29">
+                                <option value="30">
+                                <option value="31">
+                            </datalist>
+                        </div>
+                        <div class="formDiv">
+                            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
+                                [(ngModel)]="month"
+                                (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
+                                maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{monthInformation}}
+                            </label>
+                            <datalist id="monthlistOptions">
+                                <option value="01">
+                                <option value="02">
+                                <option value="03">
+                                <option value="04">
+                                <option value="05">
+                                <option value="06">
+                                <option value="07">
+                                <option value="08">
+                                <option value="09">
+                                <option value="10">
+                                <option value="11">
+                                <option value="12">
+                            </datalist>
+                        </div>
+                        <div class="formDiv">
+                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
+                                [(ngModel)]="year"
+                                (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
+                                maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{yearInformation}}
+                            </label>
+                            <datalist id="yearlistOptions">
+                                <option value="1995">
+                                <option value="1996">
+                                <option value="1997">
+                                <option value="1998">
+                                <option value="1999">
+                                <option value="2000">
+                                <option value="2001">
+                                <option value="2002">
+                                <option value="2003">
+                                <option value="2004">
+                                <option value="2005">
+                                <option value="2006">
+                            </datalist>
+                        </div>
+                        <div class="formDiv">
+                            <input type="text" list="governoratelistOptions"
+                                [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
+                                (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{adressInformation}}
+                                <datalist id="governoratelistOptions">
+                                    <option value="Ariana">
+                                    <option value="Béja">
+                                    <option value="Ben Arous">
+                                    <option value="Bizerte">
+                                    <option value="Gabès">
+                                    <option value="Gafsa">
+                                    <option value="Jendouba">
+                                    <option value="Kairouan">
+                                    <option value="Kasserine">
+                                    <option value="Kébili">
+                                    <option value="Kef">
+                                    <option value="Mahdia">
+                                    <option value="Manouba">
+                                    <option value="Médenine">
+                                    <option value="Monastir">
+                                    <option value="Nabeul">
+                                    <option value="Sfax">
+                                    <option value="Sidi Bouzid">
+                                    <option value="Siliana">
+                                    <option value="Sousse">
+                                    <option value="Tataouine">
+                                    <option value="Tozeur">
+                                    <option value="Tunis">
+                                    <option value="Zaghouan">
+                                </datalist>
+                            </label>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="maleRadio"
+                                (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
+                                [checked]="maleCheckBox" name="btnradio" id="male">
+                            <label class="btn btn-outline-primary" id="maleLabel" for="male"
+                                (click)="checkDisabledBtnFromMale()">{{'male'|translate}}</label>
+                            <input type="radio" class="femaleRadio"
+                                (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false"
+                                [checked]="femaleCheckBox" name="btnradio" id="female">
+                            <label class="btn btn-outline-primary" id="femaleLabel" for="female"
+                                (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
+                        </div>
+                        <div class="formDiv">
+                            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
+                                [(ngModel)]="password"
+                                (keyup)="comparePassword();invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{passwordInfromation}}
+                            </label>
+                        </div>
+                        <div class="formDiv">
+                            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                                name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                                (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
+                                class="formInput" placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{passwordRepeatInfromation}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
+                        <button class="fullyBtn" (click)="checkForm()"
+                            [disabled]="disableSaveBtn">{{'update'|translate}}</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div *ngIf="doctorGet.doctorStatus=='notApproved'">
+            <section id="notApprovedSection">
+                <div class="sectionTitle">{{'notApproved'|translate}}</div>
+                <div class="sectionContainer">
+                    {{'notApprovedTextSection'|translate}}
+                </div>
+            </section>
+        </div>
+    </div>
+    <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
+        <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
+        <ng-template #showNotApprovedInfo>
+            {{'notApprovedText'|translate}}, <span class="textLien"
+                (click)="notApproved='why'">{{'why'|translate}}</span>
+        </ng-template>
+        <ng-template #showNotApprovedWhy>
+            {{'notApprovedWhy'|translate}} <br>
+            <div class="center">
+                <button class="emptyBtn white"> {{'approveAccount'|translate}} </button><br>
+                <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+            </div>
+        </ng-template>
+    </div>
+</body>
+
+</html>

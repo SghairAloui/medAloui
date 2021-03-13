@@ -36,7 +36,6 @@ export class PatientComponent implements OnInit {
   base64Data: any;
   retrieveResonse: any;
   message: string;
-  imageName: any;
 
   ngOnInit(): void {
     this.getUserInfo();
@@ -364,25 +363,24 @@ export class PatientComponent implements OnInit {
   }
   public onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    console.log('changed');
     this.onUpload();
     this.getImage();
   }
   onUpload() {
     const uploadImageData = new FormData();
     uploadImageData.append('imageFile', this.selectedFile, localStorage.getItem('id')+"patientProfilePic");
-    this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe((response) => {
-        if (response.status === 200) {
-          
-        } else {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
+    this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
+      res=>{
+        if(res=='imageUpdated')
+          this.getImage();
+      },
+      err=>{
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
       }
       );
-    this.getImage();
   }
   getImage() {
     this.patientService.getPatientPofilePhoto().subscribe(

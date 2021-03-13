@@ -166,5 +166,11 @@
     "addDisease":"Add disease",
     "speciality":"Speciality",
     "allDoctorsApproved":"All doctors approved",
-    "changeImage":"Change"
+    "changeImage":"Change",
+    "myPatients":"My pateints",
+    "notApprovedText":"Your account will dont appear in search, your not approved yet",
+    "notApprovedWhy":"To proof your account you need to send us the documents that prove your speciality and the existence of your apartment",
+    "approveAccount":"Approve my account now",
+    "approveAccountLater":"No thanks I'll approve it later",
+    "notApprovedTextSection":"Your account not approved yet"
 }
