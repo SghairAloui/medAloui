@@ -1,1 +1,63 @@
-<p>admin-doctor works!</p>
+<html>
+
+<head></head>
+
+<body>
+    <section id="adminFindDoctor">
+        <div class="sectionTitle">{{'findDoctor'|translate}}</div>
+        <div class="findingDoctorSearch">
+            <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
+            <div class="formDiv">
+                <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
+                <label for="chooseSpeciality" class="formLabel">{{'chooseSpeciality'|translate}}</label>
+            </div>
+            <datalist id="datalistOptions">
+                <option value="{{'generalPractitioner'|translate}}">
+                <option value="{{'Psychologist'|translate}}">
+                <option value="{{'Psychiatrist'|translate}}">
+                <option value="{{'Dentist'|translate}}">
+                <option value="{{'Pediatrician'|translate}}">
+            </datalist>
+            <div class="formDiv">
+                <input type="text" name="doctorName" [(ngModel)]="doctorName" class="formInput" list="doctorsList"
+                    id="searchDoctor" placeholder=" ">
+                <label for="searchDoctor" class="formLabel">{{'searchDoctor'|translate}}</label>
+            </div>
+            <datalist id="doctorsList">
+
+            </datalist>
+            <button type="submit" class="emptyBtn" style="height: 43px;">{{'search'|translate}}</button>
+        </div>
+    </section>
+    <section id="adminAddSpeciality">
+        <div class="sectionTitle">{{'addSpeciality'|translate}}</div>
+        <div class="findingDoctorSearch">
+            <div class="searchText"><i class="fas fa-search"></i> {{'addSpeciality'|translate}}</div>
+            <div class="formDiv">
+                <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
+                <label for="chooseSpeciality" class="formLabel">{{'speciality'|translate}}</label>
+            </div>
+            <button type="submit" class="emptyBtn" style="height: 43px;">{{'addSpeciality'|translate}}</button>
+        </div>
+    </section>
+    <section id="adminAddSpeciality">
+        <div class="sectionTitle">{{'notApproved'|translate}}</div>
+        <div class="sectionContainer">
+            <div *ngIf="notApprovedDoctors.length==0; then showAllDocApp else showNotAppDoc"
+                style="text-align: center;"></div>
+            <ng-template #showAllDocApp>{{'allDoctorsApproved'|translate}}</ng-template>
+            <ng-template #showNotAppDoc>
+                <div class="gridTowCol">
+                    <div *ngFor="let doc of notApprovedDoctors">
+                        <div class="col">
+                            <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
+                            <i class="fas fa-user"></i> {{doc.doctorUserName}}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </section>
+</body>
+
+</html>

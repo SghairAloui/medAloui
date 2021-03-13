@@ -163,5 +163,8 @@
     "findPharmacy":"Find pharmacy",
     "addSpeciality":"Add speciality",
     "notApproved":"Not approved",
-    "addDisease":"Add disease"
+    "addDisease":"Add disease",
+    "speciality":"Speciality",
+    "allDoctorsApproved":"All doctors approved",
+    "changeImage":"Change"
 }

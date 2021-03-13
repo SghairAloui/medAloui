@@ -15,6 +15,15 @@
                     <div class="patientName">{{patientGet.patientFirstName}} <span
                             class="last">{{patientGet.patientLastName}}</span></div>
                     <i class="fas fa-user"></i> {{patientGet.patientUserName}}
+                    <div class="imgContainer">
+                        <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
+                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                        <div class="editImage">
+                            <div class="center">{{'changeImage'|translate}}</div>
+                            <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                        </div>
+                    </div>
                     <div class="infoGrid">
                         <div class="infoContainer">
                             <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
@@ -67,7 +76,8 @@
                             </label>
                         </div>
                         <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail" [(ngModel)]="mail"
+                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                [(ngModel)]="mail"
                                 (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
                                 class="formInput" placeholder=" ">
                             <label for="" class="formLabel">
@@ -140,7 +150,8 @@
                             </datalist>
                         </div>
                         <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year" [(ngModel)]="year"
+                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
+                                [(ngModel)]="year"
                                 (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
                                 maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
                             <label for="" class="formLabel">
@@ -307,7 +318,8 @@
                                 <div class="title"> {{'diseases'|translate}} </div>
                                 <div class="content">
                                     <div *ngIf="patientGet.medicalProfile.medicalProfileDisease.length == 0">
-                                        <div *ngIf="medicalProfileDiseaseInfo=='info'; then showInfo else showWhy"></div>
+                                        <div *ngIf="medicalProfileDiseaseInfo=='info'; then showInfo else showWhy">
+                                        </div>
                                         <ng-template #showInfo>{{'noDiseaseYet'|translate}}, <span class="textLien"
                                                 (click)="medicalProfileDiseaseInfo='why'">{{'why'|translate}}</span>
                                         </ng-template>
@@ -342,7 +354,8 @@
                                 </div>
                             </div>
                             <div class="buttons">
-                                <button class="fullyBtn" (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn"
+                                    (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
                                 <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
                                     (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
                             </div>
@@ -353,10 +366,12 @@
             <section id="prescriptionSection">
                 <div class="sectionTitle">{{'prescription'|translate}}</div>
                 <div class="sectionContainer">
-                    <div *ngIf="patientGet.prescription.length == 0; then showPrescriptionNull else showPrescription"></div>
+                    <div *ngIf="patientGet.prescription.length == 0; then showPrescriptionNull else showPrescription">
+                    </div>
                     <ng-template #showPrescriptionNull>
                         <div class="noData">
-                            <div *ngIf="prescriptionInfo=='info'; then showPrescriptionInfo else showPrescriptionWhy"></div>
+                            <div *ngIf="prescriptionInfo=='info'; then showPrescriptionInfo else showPrescriptionWhy">
+                            </div>
                             <ng-template #showPrescriptionInfo>{{'noPrescription'|translate}}, <span class="textLien"
                                     (click)="prescriptionInfo='why'">{{'why'|translate}}</span></ng-template>
                             <ng-template #showPrescriptionWhy>{{'whyNoPrescription'|translate}}, <span class="textLien"

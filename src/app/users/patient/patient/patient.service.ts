@@ -21,4 +21,10 @@ export class PatientService {
   public updateMedicalProfileBySecureLogin(stringAndTwoDoublePost:StringAndTwoDoublePost){
     return this.http.post<string>("http://localhost:8080/patient/updateMedicalProfileBySecureLogin",stringAndTwoDoublePost,{responseType:'text' as 'json'})
   }
+  public updatePatientProfilePhoto(uploadImageData:FormData){
+    return this.http.post('http://localhost:8080/image/upload', uploadImageData, { observe: 'response' });
+  }
+  public getPatientPofilePhoto(){
+    return this.http.get('http://localhost:8080/image/get/' + localStorage.getItem('id')+"patientProfilePic")
+  }
 }

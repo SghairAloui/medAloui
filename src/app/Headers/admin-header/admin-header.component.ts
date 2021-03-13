@@ -19,6 +19,21 @@ export class AdminHeaderComponent implements OnInit {
   constructor( private appComp:AppComponent, private toastr:ToastrService, private translate:TranslateService,private router:Router,private adminComp:AdminComponent) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("darkMode")=='true'){
+      this.appComp.switchTheme('dark');
+      this.darkMode=true;
+    }else if (localStorage.getItem("darkMode")=='false'){
+      this.appComp.switchTheme('light');
+      this.darkMode=false;
+    }
+    this.translate.use(localStorage.getItem("lang"));
+    if(localStorage.getItem("lang")=='en'){
+      this.en=true;
+      this.fr=false;
+    }else if (localStorage.getItem("lang")=='fr'){
+      this.en=false;
+      this.fr=true;
+    }
   }
   switchTheme(){
     if(this.darkMode==false){
