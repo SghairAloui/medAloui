@@ -247,14 +247,111 @@
                     </div>
                 </div>
             </section>
-        </div>
-        <div *ngIf="doctorGet.doctorStatus=='notApproved'">
-            <section id="notApprovedSection">
-                <div class="sectionTitle">{{'notApproved'|translate}}</div>
-                <div class="sectionContainer">
-                    {{'notApprovedTextSection'|translate}}
-                </div>
-            </section>
+            <div *ngIf="doctorGet.doctorStatus=='notApproved'">
+                <section id="notApprovedSection">
+                    <div class="sectionTitle">{{'notApproved'|translate}}</div>
+                    <div class="sectionContainer">
+                        {{'toProveYourAccount'|translate}}
+                        <div class="infoGrid">
+                            <div class="infoContainer proveContainer">
+                                <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
+                                <ng-template #cinUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadCin>
+                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'nationalIdentityCard'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                            <div class="infoContainer proveContainer">
+                                <div
+                                    *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
+                                </div>
+                                <ng-template #medicalClinicUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                        class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadMedicalClinic>
+                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                        class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file"
+                                            (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'ownershipOfMedicalClinic'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                            <div class="infoContainer proveContainer">
+                                <div
+                                    *ngIf="medicalSpecialtyPic; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
+                                </div>
+                                <ng-template #medicalSpecialtyUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                        class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadMedicalSpecialty>
+                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                        class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file"
+                                            (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'PictureProvingMedicalSpecialty'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div *ngIf="cinPic && medicalSpecialtyPic && medicalClinicPic">
+                            <button class="emptyBtn"
+                                (click)="submitDoctorDocuments();">{{'submitDocuments'|translate}}</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div *ngIf="doctorGet.doctorStatus=='pending'">
+                <section id="pendingSection">
+                    <div class="sectionTitle">{{'pending'|translate}}</div>
+                    <div class="sectionContainer pending">
+                        {{'pendingForConfirmation'|translate}}<br>
+                        <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
     <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
@@ -264,12 +361,15 @@
                 (click)="notApproved='why'">{{'why'|translate}}</span>
         </ng-template>
         <ng-template #showNotApprovedWhy>
-            {{'notApprovedWhy'|translate}} <br>
+            {{'notApprovedWhy'|translate}}
             <div class="center">
-                <button class="emptyBtn white"> {{'approveAccount'|translate}} </button><br>
+                <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}} </button><br>
                 <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
             </div>
         </ng-template>
+    </div>
+    <div *ngIf="doctorGet.doctorStatus=='pending'" class="notApproved">
+            {{'pendingInfo'|translate}}<br>
     </div>
 </body>
 

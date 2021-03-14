@@ -127,6 +127,7 @@ body{
     border-radius: 10px;
     background-color: var(--background-color);
     box-shadow: var(--infoBox);
+    transition: all .3s ease-in-out;
 }
 .gridinfoCenter{
     position: relative;

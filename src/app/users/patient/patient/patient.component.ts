@@ -88,7 +88,7 @@ export class PatientComponent implements OnInit {
         this.patientGet = res;
         this.intializeEdit();
         this.getImage();
-        localStorage.setItem('id',this.patientGet.patientId+'')
+        localStorage.setItem('id', this.patientGet.patientId + '')
       },
       err => {
         this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -367,30 +367,38 @@ export class PatientComponent implements OnInit {
     this.getImage();
   }
   onUpload() {
-    const uploadImageData = new FormData();
-    uploadImageData.append('imageFile', this.selectedFile, localStorage.getItem('id')+"patientProfilePic");
-    this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
-      res=>{
-        if(res=='imageUpdated')
-          this.getImage();
-      },
-      err=>{
-        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
-      }
+    if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
+      const uploadImageData = new FormData();
+      uploadImageData.append('imageFile', this.selectedFile, localStorage.getItem('id') + "patientProfilePic");
+      this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
+        res => {
+          if (res == 'imageUpdated')
+            this.getImage();
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
       );
+    } else {
+      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
   }
   getImage() {
-    this.patientService.getPatientPofilePhoto().subscribe(
+    if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
+      this.patientService.getPatientPofilePhoto().subscribe(
         res => {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
         },
-        err=>{
-          if(this.retrievedImage){
+        err => {
+          if (this.retrievedImage) {
             this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
@@ -398,5 +406,11 @@ export class PatientComponent implements OnInit {
           }
         }
       );
+    } else {
+      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
   }
 }

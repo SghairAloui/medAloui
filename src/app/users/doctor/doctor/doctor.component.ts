@@ -3,7 +3,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
+import { OneStringPost } from 'src/model/OneStringPost';
 import { SecureLoginString } from 'src/model/SecureLoginString';
+import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { DoctorService } from './doctor.service';
 
 @Component({
@@ -13,6 +15,8 @@ import { DoctorService } from './doctor.service';
 })
 export class DoctorComponent implements OnInit {
 
+  oneStringPost: OneStringPost;
+  twoStringsPost: TwoStringsPost;
   selectedFile: File;
   retrievedImage: any;
   base64Data: any;
@@ -21,30 +25,34 @@ export class DoctorComponent implements OnInit {
   re = /^[A-Za-z]+$/;
   nb = /^\d+$/;
   er = new RegExp('^[0-9]+(\.[0-9]+)*$');
-  doctorGet:DoctorGet;
-  notApproved:string='info';container:string='profile';generalInfo:string='show';
+  cinPic: boolean = false; medicalSpecialtyPic : boolean = false; medicalClinicPic: boolean = false;
+  doctorGet: DoctorGet;
+  notApproved: string = 'info'; container: string = 'profile'; generalInfo: string = 'show';
   disableSaveBtn: boolean = true;
   maleCheckBox: boolean; femaleCheckBox: boolean;
-  doctorPostWithSecureLogin:DoctorPostWithSecureLogin;
-  secureLogin:SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
-  constructor( private doctorService:DoctorService, private toastr: ToastrService, private translate: TranslateService) { }
+  doctorPostWithSecureLogin: DoctorPostWithSecureLogin;
+  secureLogin: SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
+  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService) { }
   invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
 
   ngOnInit(): void {
     this.getDoctorInfo();
+    this.checkDocDocument(localStorage.getItem('id') + "doctorCinPic");
+    this.checkDocDocument(localStorage.getItem('id') + "doctorMedicalClinicPic");
+    this.checkDocDocument(localStorage.getItem('id') + "doctorMedicalSpecialty");
   }
 
-  getDoctorInfo(){
+  getDoctorInfo() {
     this.doctorService.getDoctorInfo(this.secureLogin).subscribe(
-      res=>{
-        this.doctorGet=res;
-        this.getImage();
-        localStorage.setItem('id',this.doctorGet.doctorId+'');
+      res => {
+        this.doctorGet = res;
+        this.getImage(localStorage.getItem('id') + "doctorProfilePic");
+        localStorage.setItem('id', this.doctorGet.doctorId + '');
         this.intializeEdit();
       },
-      err=>{
+      err => {
         this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
@@ -280,39 +288,106 @@ export class DoctorComponent implements OnInit {
   }
   public onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload();
+    this.onUpload(localStorage.getItem('id') + "doctorProfilePic");
   }
-  onUpload() {
-    const uploadImageData = new FormData();
-    uploadImageData.append('imageFile', this.selectedFile, localStorage.getItem('id')+"doctorProfilePic");
-    this.doctorService.updateDoctorProfilePhoto(uploadImageData).subscribe(
-      res=>{
-        if(res=='imageUpdated')
-          this.getImage();
+  onUpload(imageName: string) {
+    if (this.doctorGet.doctorId == parseInt(localStorage.getItem('id'))) {
+      const uploadImageData = new FormData();
+      uploadImageData.append('imageFile', this.selectedFile, imageName);
+      this.doctorService.updateDoctorProfilePhoto(uploadImageData).subscribe(
+        res => {
+          if (res == 'imageUpdated')
+            this.getImage(imageName);
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
+  }
+  getImage(imageName: string) {
+    if (this.doctorGet.doctorId == parseInt(localStorage.getItem('id'))) {
+      if (imageName == localStorage.getItem('id') + "doctorProfilePic") {
+        this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
+          res => {
+            this.retrieveResonse = res;
+            this.base64Data = this.retrieveResonse.picByte;
+            this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+          },
+          err => {
+            if (this.retrievedImage) {
+              this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+                timeOut: 5000,
+                positionClass: 'toast-bottom-left'
+              });
+            }
+          }
+        );
+      } else if (imageName == localStorage.getItem('id') + "doctorCinPic")
+        this.cinPic = true;
+      else if (imageName == localStorage.getItem('id') + "doctorMedicalClinicPic")
+        this.medicalClinicPic = true;
+      else if (imageName == localStorage.getItem('id') + "doctorMedicalSpecialty")
+        this.medicalSpecialtyPic = true;
+    } else {
+      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
+  }
+  public onFileChangedCin(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(localStorage.getItem('id') + "doctorCinPic");
+  }
+  public onFileChangedMedicalClinic(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(localStorage.getItem('id') + "doctorMedicalClinicPic");
+  }
+  public onFileChangedMedicalSpecialty(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(localStorage.getItem('id') + "doctorMedicalSpecialty");
+  }
+  submitDoctorDocuments() {
+    this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'pending');
+    this.doctorService.changeDoctorStatusBySecureId(this.twoStringsPost).subscribe(
+      res => {
+        if (res == 'doctorStatusUpdated') {
+          this.getDoctorInfo();
+        }
       },
-      err=>{
+      err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });
       }
-      );
+    );
   }
-  getImage() {
-    this.doctorService.getDoctorPofilePhoto().subscribe(
-        res => {
-          this.retrieveResonse = res;
-          this.base64Data = this.retrieveResonse.picByte;
-          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-        },
-        err=>{
-          if(this.retrievedImage){
-            this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-          }
+  checkDocDocument(imageName: string) {
+    this.oneStringPost = new OneStringPost(imageName);
+    this.doctorService.checkIfDocumentExist(this.oneStringPost).subscribe(
+      res => {
+        if (res == true) {
+          if (imageName == localStorage.getItem('id') + "doctorCinPic")
+            this.cinPic = true;
+          else if (imageName == localStorage.getItem('id') + "doctorMedicalClinicPic")
+            this.medicalClinicPic = true;
+          else if (imageName == localStorage.getItem('id') + "doctorMedicalSpecialty")
+            this.medicalSpecialtyPic = true;
         }
-      );
+      }
+    );
+  }
+  toNotApprovedSection(){
+    document.getElementById("notApprovedSection").scrollIntoView({behavior:"smooth"});
   }
 }

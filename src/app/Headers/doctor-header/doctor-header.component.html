@@ -29,7 +29,7 @@
             </div>
             <div *ngIf="parentHeader=='profile'">
                 <ul>
-                    <li><a>{{'generalInfo'|translate}}</a></li>
+                    <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
                 </ul>
             </div>
             <div *ngIf="parentHeader=='disease'">

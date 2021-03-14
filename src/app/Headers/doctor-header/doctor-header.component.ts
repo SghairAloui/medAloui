@@ -78,5 +78,8 @@ export class DoctorHeaderComponent implements OnInit {
   openContainer(containerName:string){
     this.doctorComp.container=containerName;
   }
+  toGeneralInfoSection(){
+    document.getElementById("generalInfoSection").scrollIntoView({behavior:"smooth"});
+  }
 
 }

@@ -119,6 +119,7 @@
 #maleLabel:hover,#femaleLabel:hover{
     color: white;
     background-color: var(--maleFemaleCheckBoxBackgroundColor);
+    transition: all .3s ease-in-out;
 }
 .userTypeBtn:hover{
     background-position: 90% 0;
