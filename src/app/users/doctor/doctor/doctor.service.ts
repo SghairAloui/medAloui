@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
+import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -34,5 +35,21 @@ export class DoctorService {
 
   public checkIfDocumentExist(oneStringPost:OneStringPost){
     return this.http.post<boolean>('http://localhost:8080/image/checkIfDocumentExist', oneStringPost)
+  }
+
+  public changeDoctorStatusById(twoStringsPost:TwoStringsPost){
+    return this.http.post<string>('http://localhost:8080/doctor/changeDoctorStatusById', twoStringsPost, {responseType: 'text' as 'json'})
+  }
+
+  public updateDoctorSettingsBySecurelogin(fiveStringsPost:FiveStringsPost){
+    return this.http.post<string>('http://localhost:8080/doctor/updateDoctorSettingsBySecurelogin', fiveStringsPost, {responseType: 'text' as 'json'})
+  }
+
+  public deleteByImageName(imageName:string){
+    return this.http.delete<number>('http://localhost:8080/image/deleteByImageName/'+imageName);
+  }
+
+  public deteleDoctorById(id:number){
+    return this.http.delete<number>('http://localhost:8080/doctor/deteleDoctorById/'+id);
   }
 }

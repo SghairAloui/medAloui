@@ -51,20 +51,6 @@ html,body{
 .textLeft{
     text-align: left;
 }
-.infoGridTowColumn{
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 25px;
-    width: 90%;
-    padding: 5% 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--text-color);
-    font-size: 1.15rem;
-    font-weight: 900;
-    transition: all .3s ease-in-out;
-}
 .diseasesContainer{
     margin-top: 5%;
     position: relative;

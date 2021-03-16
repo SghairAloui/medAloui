@@ -32,18 +32,15 @@
     grid-gap: 5%;
 }
 .gridTowCol .col{
-    text-align: left;
-    padding: 5% 5%;
+    text-align: center;
+    padding: 5% 0%;
     border-radius: 10px;
     background-color: var(--background-color);
     box-shadow: var(--infoBox);
     transition: all .3s ease-in-out;
 }
-.gridTowCol .col:hover{
-    transform: scale(1.01);
-    cursor: pointer;
-}
 .docNotAppName{
+    padding-top: 10px;
     font-size: 1.2rem;
 }
 .patientName{
@@ -54,4 +51,100 @@
 .fa-user{
     padding: 2px;
     margin: 0px 5px;
+}
+.pendingDocImg{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border: 3px solid #308a7b;
+    overflow: hidden;
+}
+.fa-user-tie{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0px;
+    font-size: 40px;
+}
+.profileImg{
+    height: 100%;
+    width: auto;
+}
+.strok{
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    border:1px solid var(--box-color);
+    transition: all .3s ease-in-out;
+}
+.documentImgContainer{
+    position: relative;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.documentImgContainer .img90{
+    width: 80%;
+    left: 10%;
+}
+.rightArrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2%;
+    font-size: 30px;
+    color: white;
+}
+.leftArrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 2%;
+    font-size: 30px;
+    color: white;
+}
+.fullyBtn{
+    width: 35%;
+}
+.showHideDocuments{
+    padding: 4% 0%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.showHideDocuments:hover, .leftArrow:hover, .rightArrow:hover{
+    cursor: pointer;
+}
+.fa-angle-double-down, .fa-angle-double-up{
+    transition: .3s;
+}
+.showHideDocuments:hover .fa-angle-double-down{
+    margin-top: 10px;
+}
+.showHideDocuments:hover .fa-angle-double-up{
+    margin-bottom: 10px;
+}
+.pendingStatus{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #308a7b;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: auto;
+}
+.reVerifyStatus{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ff9100;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: auto;
 }

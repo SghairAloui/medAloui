@@ -178,6 +178,20 @@ button[disabled]:hover{
     font-weight: 900;
     transition: all .3s ease-in-out;
 }
+.infoGridTowColumn{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px;
+    width: 90%;
+    padding: 5% 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-color);
+    font-size: 1.15rem;
+    font-weight: 900;
+    transition: all .3s ease-in-out;
+}
 .infoGrid .infoContainer , .infoGridTowColumn .infoContainer{
     position: relative;
     font-family: Arial, Helvetica, sans-serif;

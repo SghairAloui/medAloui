@@ -129,6 +129,7 @@
     transition: all .3s ease-in-out;
 }
 .btn-group{
+    height: auto;
     margin: 5% 0px;
     position: relative;
     left: 50%;

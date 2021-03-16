@@ -53,6 +53,16 @@ html,body{
     width: 80%;
     text-align: center;
 }
+.disapprovedByAdmin{
+    position: fixed;
+    color: white;
+    font-size: 1.1rem;
+    background-color: #ff0000;
+    top: 50px;
+    left: 20%;
+    width: 80%;
+    text-align: center;
+}
 .notApproved .center{
     position: relative;
     left: 50%;
@@ -123,4 +133,64 @@ html,body{
     font-weight: 200;
     font-size: 15px;
     padding: 2% 0px;
+}
+.weekDays{
+    padding: 5% 0px;
+}
+.weekDays .day{
+    border: 1px solid #308a7b;
+    padding: 5px 10px;
+    color: #308a7b;
+}
+.weekDays .day:hover{
+    border: 1px solid var(--headerText);
+    color: var(--headerText);
+    cursor: pointer;
+}
+#Mon:checked ~ #MonLab, #Tue:checked ~ #TueLab, #Wed:checked ~ #WedLab, #Thu:checked ~ #ThuLab, #Fri:checked ~ #FriLab, #Sat:checked ~ #SatLab, #Sun:checked ~ #SunLab{
+    background-color: #308a7b;
+    color: #308a7b;
+    color: white;
+}
+#Mon, #Tue, #Wed, #Thu, #Fri, #Sat, #Sun{
+    display: none;
+}
+#MonLab{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+#SunLab{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.infoGridTowColumn{
+    grid-template-rows: auto auto;
+}
+.infoGridTowColumn .infoContainer{
+    height: 100%;
+    background-color: var(--box-color);
+}
+.infoGridTowColumn .backgroundColor{
+    background-color: var(--background-color);
+}
+.info span{
+    display: inline-block;
+}
+.width90{
+    width:80%;
+    left: 10%;
+}
+.workDays{
+    padding-left: 10%;
+    text-align: left;
+}
+.sectionContainer .centerBtn{
+    left: 0%;
+    transform: translateX(0%);
+}
+.dayContainer{
+    background-color: #308a7b;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 10px;
 }

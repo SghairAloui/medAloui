@@ -14,7 +14,7 @@ export class AdminService {
   public getAdminInfoFromSecureLogin(secureLogin:SecureLoginString){
     return this.http.post<AdminGet>("http://localhost:8080/admin/getAdminInfoFromSecureLogin",secureLogin);
   }
-  public getNotApprovedDoctors(){
-    return this.http.get<doctor[]>("http://localhost:8080/doctor/getNotApprovedDoctors");
+  public getPendingDoctors(){
+    return this.http.get<doctor[]>("http://localhost:8080/doctor/getPendingDoctors");
   }
 }

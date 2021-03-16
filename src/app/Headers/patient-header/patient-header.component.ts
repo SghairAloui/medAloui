@@ -72,6 +72,7 @@ export class PatientHeaderComponent implements OnInit {
   }
   logOut(){
     localStorage.setItem("secureLogin","");
+    localStorage.setItem("id","");
     localStorage.setItem("secureLoginType","");
     this.router.navigate(['/acceuil']);
   }

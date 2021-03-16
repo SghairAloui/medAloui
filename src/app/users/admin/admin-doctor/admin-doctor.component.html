@@ -40,19 +40,89 @@
             <button type="submit" class="emptyBtn" style="height: 43px;">{{'addSpeciality'|translate}}</button>
         </div>
     </section>
-    <section id="adminAddSpeciality">
+    <section id="pendingDoctor">
         <div class="sectionTitle">{{'notApproved'|translate}}</div>
         <div class="sectionContainer">
-            <div *ngIf="notApprovedDoctors.length==0; then showAllDocApp else showNotAppDoc"
-                style="text-align: center;"></div>
+            <div *ngIf="pendingDoctors.length==0; then showAllDocApp else showNotAppDoc" style="text-align: center;">
+            </div>
             <ng-template #showAllDocApp>{{'allDoctorsApproved'|translate}}</ng-template>
             <ng-template #showNotAppDoc>
                 <div class="gridTowCol">
-                    <div *ngFor="let doc of notApprovedDoctors">
-                        <div class="col">
-                            <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
-                            <i class="fas fa-user"></i> {{doc.doctorUserName}}
-                        </div>
+                    <div *ngFor="let doc of pendingDoctors">
+                        <div *ngIf="docDocuments[doc.doctorId]; then showDocDocuments else hideDocDocuments"></div>
+                        <ng-template #hideDocDocuments >
+                            <div class="col">
+                                <div *ngIf="doc.doctorStatus == 'pending'" class="pendingStatus"> {{'pending'|translate}} </div>
+                                <div *ngIf="doc.doctorStatus == 'reVerify'" class="reVerifyStatus"> {{'reVerify'|translate}} </div>
+                                <div class="pendingDocImg">
+                                    <div class="strok"></div>
+                                    <div
+                                        *ngIf="profileImagesRes[doc.doctorId]; then showDocProfileImg else showDocDefaultImg">
+                                    </div>
+                                    <ng-template #showDocProfileImg><img [src]="profileImages[doc.doctorId]"
+                                            class="profileImg"></ng-template>
+                                    <ng-template #showDocDefaultImg>
+                                        <i class="fas fa-user-tie"></i>
+                                    </ng-template>
+                                </div>
+                                <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
+                                <i class="fas fa-user"></i> {{doc.doctorUserName}}
+                                <div class="showHideDocuments">
+                                    <div (click)="docDocuments[doc.doctorId]=true">
+                                        {{'showDoc'|translate}}<br>
+                                        <i class="fas fa-angle-double-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #showDocDocuments class="col">
+                            <div class="col" >
+                                <div *ngIf="doc.doctorStatus == 'pending'" class="pendingStatus"> {{'pending'|translate}} </div>
+                                <div *ngIf="doc.doctorStatus == 'reVerify'" class="reVerifyStatus"> {{'reVerify'|translate}} </div>
+                                <div class="pendingDocImg">
+                                    <div class="strok"></div>
+                                    <div
+                                        *ngIf="profileImagesRes[doc.doctorId]; then showDocProfileImg else showDocDefaultImg">
+                                    </div>
+                                    <ng-template #showDocProfileImg><img [src]="profileImages[doc.doctorId]"
+                                            class="profileImg"></ng-template>
+                                    <ng-template #showDocDefaultImg>
+                                        <i class="fas fa-user-tie"></i>
+                                    </ng-template>
+                                </div>
+                                <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
+                                <i class="fas fa-user"></i> {{doc.doctorUserName}}
+                                <div *ngIf="documentPic[doc.doctorId]=='cin'">
+                                    <div class="documentImgContainer" >
+                                        <span (click)="documentPic[doc.doctorId]='speciality'"><i class="fas fa-chevron-right rightArrow"></i></span>
+                                        <img [src]="cinImages[doc.doctorId]" class="img90">
+                                    </div>
+                                </div>
+                                <div *ngIf="documentPic[doc.doctorId]=='speciality'">
+                                    <div class="documentImgContainer">
+                                        <span (click)="documentPic[doc.doctorId]='cin'"><i class="fas fa-chevron-left leftArrow"></i></span>
+                                        <span (click)="documentPic[doc.doctorId]='clinic'"><i class="fas fa-chevron-right rightArrow"></i></span>
+                                        <img [src]="specialityImages[doc.doctorId]" class="img90">
+                                    </div>
+                                </div>
+                                <div *ngIf="documentPic[doc.doctorId]=='clinic'">
+                                    <div class="documentImgContainer">
+                                        <span (click)="documentPic[doc.doctorId]='speciality'"><i class="fas fa-chevron-left leftArrow"></i></span>
+                                        <img [src]="clinicImages[doc.doctorId]" class="img90">
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <button class="fullyBtn" (click)="approveDoc(doc.doctorId);"> {{'approve'|translate}} </button>
+                                    <button class="fullyBtn" (click)="disapproveDoc(doc.doctorId,doc.doctorStatus);"> {{'disapprove'|translate}} </button>
+                                </div>
+                                <div class="showHideDocuments">
+                                    <div (click)="docDocuments[doc.doctorId]=false">
+                                        <i class="fas fa-angle-double-up"></i><br>
+                                        {{'hideDoc'|translate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </ng-template>

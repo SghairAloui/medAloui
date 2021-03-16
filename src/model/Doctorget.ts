@@ -12,4 +12,8 @@ export interface DoctorGet{
     doctorPassword:string;
     doctorRate:number;
     speciality: SpecialityGet [];
+    maxPatientPerDay:string;
+    startTime:string;
+    exactAdress:string;
+    workDays:string;
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PatientGet } from 'src/model/PatientGet';
@@ -15,7 +16,7 @@ import { PatientService } from './patient.service';
 })
 export class PatientComponent implements OnInit {
 
-  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService) { }
+  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router:Router) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -85,10 +86,13 @@ export class PatientComponent implements OnInit {
     this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.patientService.getPatientInfo(this.secureLoginString).subscribe(
       res => {
-        this.patientGet = res;
-        this.intializeEdit();
-        this.getImage();
-        localStorage.setItem('id', this.patientGet.patientId + '')
+        if (res) {
+          this.patientGet = res;
+          this.intializeEdit();
+          this.getImage();
+          localStorage.setItem('id', this.patientGet.patientId + '')
+        } else
+          this.router.navigate(['/acceuil']);
       },
       err => {
         this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {

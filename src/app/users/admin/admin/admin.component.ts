@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AdminGet } from 'src/model/adminGet';
@@ -12,24 +13,28 @@ import { AdminService } from './admin.service';
 })
 export class AdminComponent implements OnInit {
 
-  adminGet:AdminGet;
-  secureLogin:SecureLoginString;
-  container:string='profile';
-  constructor(private adminService:AdminService,private toastr:ToastrService,private translate:TranslateService) { }
+  adminGet: AdminGet;
+  secureLogin: SecureLoginString;
+  container: string = 'profile';
+  constructor(private adminService: AdminService, private toastr: ToastrService, private translate: TranslateService, private router: Router) { }
 
   ngOnInit(): void {
     this.secureLogin = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.getAdminInfoFromSecureLogin(this.secureLogin);
   }
 
-  getAdminInfoFromSecureLogin(secureLogin:SecureLoginString){
+  getAdminInfoFromSecureLogin(secureLogin: SecureLoginString) {
     this.adminService.getAdminInfoFromSecureLogin(secureLogin).subscribe(
-      res=>{
-        console.log(res);
-        this.adminGet=res;
+      res => {
+        if (res) {
+          console.log(res);
+          this.adminGet = res;
+          localStorage.setItem('id', this.adminGet.adminId.toString());
+        } else
+          this.router.navigate(['/acceuil']);
       },
-      err=>{
-        this.toastr.info(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
+      err => {
+        this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });
