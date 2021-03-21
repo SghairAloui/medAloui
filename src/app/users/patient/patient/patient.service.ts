@@ -27,4 +27,7 @@ export class PatientService {
   public getPatientPofilePhoto(){
     return this.http.get<string>('http://localhost:8080/image/get/' + localStorage.getItem('id')+"patientProfilePic")
   }
+  public getDoctorPofilePhoto(imageName:string){
+    return this.http.get<string>('http://localhost:8080/image/get/' + imageName)
+  }
 }

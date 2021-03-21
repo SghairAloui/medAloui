@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
+import { doctor } from 'src/model/Doctor';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
 import { FiveStringsPost } from 'src/model/FiveStringsPost';
+import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -52,4 +55,16 @@ export class DoctorService {
   public deteleDoctorById(id:number){
     return this.http.delete<number>('http://localhost:8080/doctor/deteleDoctorById/'+id);
   }
+
+  public addspecialityTodoctor(integerAndStringPost:IntegerAndStringPost){
+    return this.http.post<string>('http://localhost:8080/doctor/addspeciality', integerAndStringPost, {responseType: 'text' as 'json'})
+  }
+
+  public getApprovedDoctorsBySpecialityId (specialityId:number){
+    return this.http.get<doctor []>('http://localhost:8080/doctor/getApprovedDoctorsBySpecialityId/'+specialityId);
+  } 
+
+  public getDoctorAppointmentInfoByDoctorId (docId:number){
+    return this.http.get<AppointmentDocInfoGet>('http://localhost:8080/doctor/getDoctorAppointmentInfoByDoctorId/'+docId);
+  } 
 }

@@ -8,15 +8,17 @@
 <body>
     <app-admin-header></app-admin-header>
     <div class="adminContainer">
-        <div *ngIf="container=='profile'">
+        <div *ngIf="adminInfo">
             <div *ngIf="container=='profile'">
-                <section id="generalInfoSection">
-                    <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                    <div class="sectionContainer">
-                        <div class="patientName">{{adminGet.adminFullName}}</div>
-                        <i class="fas fa-user"></i> {{adminGet.adminUserName}}
-                    </div>
-                </section>
+                <div *ngIf="container=='profile'">
+                    <section id="generalInfoSection">
+                        <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                        <div class="sectionContainer">
+                            <div class="patientName">{{adminGet.adminFullName}}</div>
+                            <i class="fas fa-user"></i> {{adminGet.adminUserName}}
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
         <div *ngIf="container=='doctor'">

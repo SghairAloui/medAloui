@@ -31,6 +31,10 @@ export class HeaderComponent implements OnInit {
     }else if (localStorage.getItem("lang")=='fr'){
       this.en=false;
       this.fr=true;
+    }else{
+      localStorage.setItem("lang","en");
+      this.en=true;
+      this.fr=false;
     }
   }
   en:boolean=true;

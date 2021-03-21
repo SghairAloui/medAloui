@@ -141,3 +141,69 @@ body{
 .textLien:hover{
     cursor: pointer;
 }
+.sectionContainer{
+    position: relative;
+    width: 99%;
+    margin-left: 0.5%;
+    padding: 5% 0%;
+}
+.confirmText{
+    margin-top: 3%;
+    text-align: center;
+    font-size: 1.2rem;
+}
+.confirmButtons{
+    display: flex;
+    margin-top: 3%;
+    margin-left: 20%;
+    justify-content: space-between;
+    width: 55%;
+    color: white;
+}
+.confirmButtons .green{
+    background-color: #308a7b;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.55rem;
+}
+.confirmButtons .red{
+    background-color: red;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.55rem;
+}
+.confirmButtons .green:hover{
+    border: 2px solid #308a7b;
+}
+.confirmButtons .red:hover{
+    border: 2px solid red;
+}
+.fa-trash-alt,.fa-check{
+    margin: 5px 5px;
+}
+.confirmNote{
+    margin-top: 3%;
+    margin-left: 3%;
+    width: 75%;
+}
+.yourTurn{
+    display: inline-block;
+    background-color:white ;
+    padding-left: 10px;
+    color: #308a7b;
+    border-radius: 5px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+.patientTurn{
+    display: inline-block;
+    background-color: #308a7b;
+    padding: 0px 10px;
+    color: white;
+    border-radius: 5px;
+}
+.doctorAppointmentContainer .center .emptyBtn{
+    width: 80%;
+}

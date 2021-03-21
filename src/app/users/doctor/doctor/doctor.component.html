@@ -7,697 +7,735 @@
 
 <body>
     <app-doctor-header></app-doctor-header>
-    <div class="doctorContainer">
-        <div *ngIf="container=='profile'">
-            <section id="generalInfoSection">
-                <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                <div class="sectionContainer" *ngIf="generalInfo=='show'">
-                    <div class="doctorName">{{doctorGet.doctorFirstName}} <span
-                            class="last">{{doctorGet.doctorLastName}}</span></div>
-                    <i class="fas fa-user"></i> {{doctorGet.doctorUserName}}
-                    <div class="imgContainer">
-                        <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                        <div class="editImage">
-                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
-                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                            <div class="center">{{'changeImage'|translate}}</div>
-                        </div>
-                        <div class="strok">
-                            <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
-                        </div>
-                    </div>
-                    <div class="infoGrid">
-                        <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
-                            <div class="info">
-                                <div *ngIf="doctorGet.doctorGender=='male'">
-                                    {{'male'|translate}}
-                                </div>
-                                <div *ngIf="doctorGet.doctorGender=='female'">
-                                    {{'female'|translate}}
-                                </div>
+    <div *ngIf="docInfo">
+        <div class="doctorContainer">
+            <div *ngIf="container=='profile'">
+                <section id="generalInfoSection">
+                    <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                    <div class="sectionContainer" *ngIf="generalInfo=='show'">
+                        <div class="doctorName">Dr.{{doctorGet.doctorFirstName}} <span
+                                class="last">{{doctorGet.doctorLastName}}</span></div>
+                        <i class="fas fa-user"></i> {{doctorGet.doctorUserName}}
+                        <div class="imgContainer">
+                            <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                            <div class="editImage">
+                                <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                </ng-template>
+                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                <div class="centerChangeText">{{'changeImage'|translate}}</div>
                             </div>
-                            <div class="infoTitle">{{'gender'|translate}}</div>
-                        </div>
-                        <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-birthday-cake"></i></div>
-                            <div class="info">
-                                {{doctorGet.doctorBirthDay}}
+                            <div class="strok">
+                                <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
                             </div>
-                            <div class="infoTitle">{{'birthday'|translate}}</div>
                         </div>
-                        <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
-                            <div class="info">
-                                {{doctorGet.doctorCity}}
-                            </div>
-                            <div class="infoTitle">{{'city'|translate}}</div>
-                        </div>
-                    </div>
-                    <button class="emptyBtn"
-                        (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
-                </div>
-                <div class="sectionContainer" *ngIf="generalInfo=='edit'">
-                    <div class="infoEdit">
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName"
-                                [(ngModel)]="firstName"
-                                (keyup)="compareFirstName();firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{firstNameInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName"
-                                [(ngModel)]="lastName"
-                                (keyup)="compareLastName();lastNameInformation=translate.instant('surname');invalidLastNameVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{lastNameInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
-                                [(ngModel)]="mail"
-                                (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{mailInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day"
-                                [(ngModel)]="day"
-                                (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
-                                class="formInput" list="daylistOptions" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{dayInformation}}
-                            </label>
-                            <datalist id="daylistOptions">
-                                <option value="01">
-                                <option value="02">
-                                <option value="03">
-                                <option value="04">
-                                <option value="05">
-                                <option value="06">
-                                <option value="07">
-                                <option value="08">
-                                <option value="09">
-                                <option value="10">
-                                <option value="11">
-                                <option value="12">
-                                <option value="13">
-                                <option value="14">
-                                <option value="15">
-                                <option value="16">
-                                <option value="17">
-                                <option value="18">
-                                <option value="19">
-                                <option value="20">
-                                <option value="21">
-                                <option value="22">
-                                <option value="23">
-                                <option value="24">
-                                <option value="25">
-                                <option value="26">
-                                <option value="27">
-                                <option value="28">
-                                <option value="29">
-                                <option value="30">
-                                <option value="31">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
-                                [(ngModel)]="month"
-                                (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
-                                maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{monthInformation}}
-                            </label>
-                            <datalist id="monthlistOptions">
-                                <option value="01">
-                                <option value="02">
-                                <option value="03">
-                                <option value="04">
-                                <option value="05">
-                                <option value="06">
-                                <option value="07">
-                                <option value="08">
-                                <option value="09">
-                                <option value="10">
-                                <option value="11">
-                                <option value="12">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
-                                [(ngModel)]="year"
-                                (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
-                                maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{yearInformation}}
-                            </label>
-                            <datalist id="yearlistOptions">
-                                <option value="1995">
-                                <option value="1996">
-                                <option value="1997">
-                                <option value="1998">
-                                <option value="1999">
-                                <option value="2000">
-                                <option value="2001">
-                                <option value="2002">
-                                <option value="2003">
-                                <option value="2004">
-                                <option value="2005">
-                                <option value="2006">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" list="governoratelistOptions"
-                                [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
-                                (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{adressInformation}}
-                                <datalist id="governoratelistOptions">
-                                    <option value="Ariana">
-                                    <option value="Béja">
-                                    <option value="Ben Arous">
-                                    <option value="Bizerte">
-                                    <option value="Gabès">
-                                    <option value="Gafsa">
-                                    <option value="Jendouba">
-                                    <option value="Kairouan">
-                                    <option value="Kasserine">
-                                    <option value="Kébili">
-                                    <option value="Kef">
-                                    <option value="Mahdia">
-                                    <option value="Manouba">
-                                    <option value="Médenine">
-                                    <option value="Monastir">
-                                    <option value="Nabeul">
-                                    <option value="Sfax">
-                                    <option value="Sidi Bouzid">
-                                    <option value="Siliana">
-                                    <option value="Sousse">
-                                    <option value="Tataouine">
-                                    <option value="Tozeur">
-                                    <option value="Tunis">
-                                    <option value="Zaghouan">
-                                </datalist>
-                            </label>
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="maleRadio"
-                                (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
-                                [checked]="maleCheckBox" name="btnradio" id="male">
-                            <label class="btn btn-outline-primary" id="maleLabel" for="male"
-                                (click)="checkDisabledBtnFromMale()">{{'male'|translate}}</label>
-                            <input type="radio" class="femaleRadio"
-                                (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false"
-                                [checked]="femaleCheckBox" name="btnradio" id="female">
-                            <label class="btn btn-outline-primary" id="femaleLabel" for="female"
-                                (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
-                                [(ngModel)]="password"
-                                (keyup)="comparePassword();invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordInfromation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                                name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                                (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordRepeatInfromation}}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="buttons">
-                        <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
-                        <button class="fullyBtn" (click)="checkForm()"
-                            [disabled]="disableSaveBtn">{{'update'|translate}}</button>
-                    </div>
-                </div>
-            </section>
-            <div *ngIf="doctorGet.doctorStatus=='notApproved'">
-                <section id="notApprovedSection">
-                    <div class="sectionTitle">{{'notApproved'|translate}}</div>
-                    <div class="sectionContainer">
-                        {{'toProveYourAccount'|translate}}
                         <div class="infoGrid">
-                            <div class="infoContainer proveContainer">
-                                <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
-                                <ng-template #cinUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadCin>
-                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'nationalIdentityCard'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                            <div class="infoContainer proveContainer">
-                                <div
-                                    *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
-                                </div>
-                                <ng-template #medicalClinicUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                        class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadMedicalClinic>
-                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                        class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file"
-                                            (change)="onFileChangedMedicalClinic($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'ownershipOfMedicalClinic'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                            <div class="infoContainer proveContainer">
-                                <div
-                                    *ngIf="medicalSpecialtyPic; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
-                                </div>
-                                <ng-template #medicalSpecialtyUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                        class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadMedicalSpecialty>
-                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                        class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file"
-                                            (change)="onFileChangedMedicalSpecialty($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'PictureProvingMedicalSpecialty'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </div>
-                        <div *ngIf="cinPic && medicalSpecialtyPic && medicalClinicPic">
-                            <button class="emptyBtn"
-                                (click)="submitDoctorDocuments();">{{'submitDocuments'|translate}}</button>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'">
-                <section id="pendingSection">
-                    <div class="sectionTitle">{{'pending'|translate}}</div>
-                    <div class="sectionContainer pending">
-                        {{'pendingForConfirmation'|translate}}<br>
-                        <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
-                    </div>
-                </section>
-            </div>
-            <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'">
-                <section id="approvedByAdminSection">
-                    <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
-                    <div class="sectionContainer pending">
-                        <div class="infoGridTowColumn">
                             <div class="infoContainer">
-                                <div class="formDiv">
-                                    <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                        name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                        (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{maxPatientPerDayInformation}}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="infoContainer">
-                                <div class="formDiv">
-                                    <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
-                                        name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
-                                        (keyup)="startTimeInformation=translate.instant('startTime');invalidStartTime=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{startTimeInformation}}
-                                    </label>
-                                    <datalist id="startTimeOptions">
-                                        <option value="7:00">
-                                        <option value="7:15">
-                                        <option value="7:30">
-                                        <option value="7:45">
-                                        <option value="8:00">
-                                        <option value="8:15">
-                                        <option value="8:30">
-                                        <option value="8:45">
-                                        <option value="9:00">
-                                        <option value="9:15">
-                                        <option value="9:30">
-                                        <option value="9:45">
-                                        <option value="10:00">
-                                        <option value="10:15">
-                                        <option value="10:30">
-                                        <option value="10:45">
-                                        <option value="11:00">
-                                        <option value="11:15">
-                                        <option value="11:30">
-                                        <option value="11:45">
-                                        <option value="12:00">
-                                        <option value="12:15">
-                                        <option value="12:30">
-                                        <option value="12:45">
-                                    </datalist>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="formDiv width90">
-                            <input type="text" maxlength="50" [class.labelInvalidInfo]="invalidExactAdress"
-                                name="exactAdress" [(ngModel)]="exactAdress"
-                                (keyup)="startTimeInformation=translate.instant('exactAdress');invalidExactAdress=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{exactAdressInformation}}
-                            </label>
-                        </div>
-                        <div class="weekDays">
-                            <div class="workDays">{{'workDays'|translate}}</div><br>
-                            <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;"> {{'selectDay'|translate}}
-                            </div>
-                            <input type="checkbox" id="Mon" (change)="Mon==true? Mon=false : Mon=true" [checked]="Mon">
-                            <label for="Mon" id="MonLab" class="day"> {{'Mon'|translate}} </label>
-                            <input type="checkbox" id="Tue" (change)="Tue==true? Tue=false : Tue=true" [checked]="Tue">
-                            <label for="Tue" id="TueLab" class="day"> {{'Tue'|translate}} </label>
-                            <input type="checkbox" id="Wed" (change)="Wed==true? Wed=false : Wed=true" [checked]="Wed">
-                            <label for="Wed" id="WedLab" class="day"> {{'Wed'|translate}} </label>
-                            <input type="checkbox" id="Thu" (change)="Thu==true? Thu=false : Thu=true" [checked]="Thu">
-                            <label for="Thu" id="ThuLab" class="day"> {{'Thu'|translate}} </label>
-                            <input type="checkbox" id="Fri" (change)="Fri==true? Fri=false : Fri=true" [checked]="Fri">
-                            <label for="Fri" id="FriLab" class="day"> {{'Fri'|translate}} </label>
-                            <input type="checkbox" id="Sat" (change)="Sat==true? Sat=false : Sat=true" [checked]="Sat">
-                            <label for="Sat" id="SatLab" class="day"> {{'Sat'|translate}} </label>
-                            <input type="checkbox" id="Sun" (change)="Sun==true? Sun=false : Sun=true" [checked]="Sun">
-                            <label for="Sun" id="SunLab" class="day"> {{'Sun'|translate}}</label>
-                        </div>
-                        <button class="emptyBtn centerBtn" (click)="ckeckForm()"> {{'save'|translate}} </button>
-                    </div>
-                </section>
-            </div>
-            <div *ngIf="doctorGet.doctorStatus=='approved'">
-                <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
-                <div class="sectionContainer pending">
-                    <div *ngIf="doctorSettings; then showDoctorSettings else editDoctorSettings"></div>
-                    <ng-template #showDoctorSettings>
-                        <div class="infoGridTowColumn">
-                            <div class="infoContainer backgroundColor">
-                                <div class="infoTitle">{{'maxPatientPerDay'|translate}}</div>
+                                <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
                                 <div class="info">
-                                    {{doctorGet.maxPatientPerDay}}
-                                </div>
-                            </div>
-                            <div class="infoContainer">
-                                <div class="infoContainer backgroundColor">
-                                    <div class="infoTitle">{{'startTime'|translate}}</div>
-                                    <div class="info">
-                                        {{doctorGet.startTime}}
+                                    <div *ngIf="doctorGet.doctorGender=='male'">
+                                        {{'male'|translate}}
+                                    </div>
+                                    <div *ngIf="doctorGet.doctorGender=='female'">
+                                        {{'female'|translate}}
                                     </div>
                                 </div>
+                                <div class="infoTitle">{{'gender'|translate}}</div>
                             </div>
                             <div class="infoContainer">
-                                <div class="infoContainer backgroundColor">
-                                    <div class="infoTitle">{{'exactAdress'|translate}}</div>
-                                    <div class="info">
-                                        {{doctorGet.exactAdress}}
-                                    </div>
+                                <div class="infoIcon"><i class="fas fa-birthday-cake"></i></div>
+                                <div class="info">
+                                    {{doctorGet.doctorBirthDay}}
                                 </div>
+                                <div class="infoTitle">{{'birthday'|translate}}</div>
                             </div>
                             <div class="infoContainer">
-                                <div class="infoContainer backgroundColor">
-                                    <div class="infoTitle">{{'workDaysShow'|translate}}</div>
-                                    <div class="info">
-                                        <span *ngIf="Mon" class="dayContainer">{{'Mon'|translate}}</span>
-                                        <span *ngIf="Tue" class="dayContainer">{{'Tue'|translate}}</span>
-                                        <span *ngIf="Wed" class="dayContainer">{{'Wed'|translate}}</span>
-                                        <span *ngIf="Thu" class="dayContainer">{{'Thu'|translate}}</span>
-                                        <span *ngIf="Fri" class="dayContainer">{{'Fri'|translate}}</span>
-                                        <span *ngIf="Sat" class="dayContainer">{{'Sat'|translate}}</span>
-                                        <span *ngIf="Sun" class="dayContainer">{{'Sun'|translate}}</span>
-                                    </div>
+                                <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
+                                <div class="info">
+                                    {{doctorGet.doctorCity}}
                                 </div>
+                                <div class="infoTitle">{{'city'|translate}}</div>
                             </div>
                         </div>
-                        <button class="emptyBtn centerBtn" (click)="doctorSettings=false;"> {{'edit'|translate}}
-                        </button>
-                    </ng-template>
-                    <ng-template #editDoctorSettings>
-                        <div class="infoGridTowColumn">
-                            <div class="infoContainer">
-                                <div class="formDiv">
-                                    <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                        name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                        (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{maxPatientPerDayInformation}}
-                                    </label>
-                                </div>
+                        <button class="emptyBtn"
+                            (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
+                    </div>
+                    <div class="sectionContainer" *ngIf="generalInfo=='edit'">
+                        <div class="infoEdit">
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName"
+                                    [(ngModel)]="firstName"
+                                    (keyup)="compareFirstName();firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{firstNameInformation}}
+                                </label>
                             </div>
-                            <div class="infoContainer">
-                                <div class="formDiv">
-                                    <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
-                                        name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
-                                        (keyup)="compareStartTime();startTimeInformation=translate.instant('startTime');invalidStartTime=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{startTimeInformation}}
-                                    </label>
-                                    <datalist id="startTimeOptions">
-                                        <option value="7:00">
-                                        <option value="7:15">
-                                        <option value="7:30">
-                                        <option value="7:45">
-                                        <option value="8:00">
-                                        <option value="8:15">
-                                        <option value="8:30">
-                                        <option value="8:45">
-                                        <option value="9:00">
-                                        <option value="9:15">
-                                        <option value="9:30">
-                                        <option value="9:45">
-                                        <option value="10:00">
-                                        <option value="10:15">
-                                        <option value="10:30">
-                                        <option value="10:45">
-                                        <option value="11:00">
-                                        <option value="11:15">
-                                        <option value="11:30">
-                                        <option value="11:45">
-                                        <option value="12:00">
-                                        <option value="12:15">
-                                        <option value="12:30">
-                                        <option value="12:45">
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName"
+                                    [(ngModel)]="lastName"
+                                    (keyup)="compareLastName();lastNameInformation=translate.instant('surname');invalidLastNameVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{lastNameInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                    [(ngModel)]="mail"
+                                    (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{mailInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day"
+                                    [(ngModel)]="day"
+                                    (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
+                                    class="formInput" list="daylistOptions" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{dayInformation}}
+                                </label>
+                                <datalist id="daylistOptions">
+                                    <option value="01">
+                                    <option value="02">
+                                    <option value="03">
+                                    <option value="04">
+                                    <option value="05">
+                                    <option value="06">
+                                    <option value="07">
+                                    <option value="08">
+                                    <option value="09">
+                                    <option value="10">
+                                    <option value="11">
+                                    <option value="12">
+                                    <option value="13">
+                                    <option value="14">
+                                    <option value="15">
+                                    <option value="16">
+                                    <option value="17">
+                                    <option value="18">
+                                    <option value="19">
+                                    <option value="20">
+                                    <option value="21">
+                                    <option value="22">
+                                    <option value="23">
+                                    <option value="24">
+                                    <option value="25">
+                                    <option value="26">
+                                    <option value="27">
+                                    <option value="28">
+                                    <option value="29">
+                                    <option value="30">
+                                    <option value="31">
+                                </datalist>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
+                                    [(ngModel)]="month"
+                                    (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
+                                    maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{monthInformation}}
+                                </label>
+                                <datalist id="monthlistOptions">
+                                    <option value="01">
+                                    <option value="02">
+                                    <option value="03">
+                                    <option value="04">
+                                    <option value="05">
+                                    <option value="06">
+                                    <option value="07">
+                                    <option value="08">
+                                    <option value="09">
+                                    <option value="10">
+                                    <option value="11">
+                                    <option value="12">
+                                </datalist>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
+                                    [(ngModel)]="year"
+                                    (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
+                                    maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{yearInformation}}
+                                </label>
+                                <datalist id="yearlistOptions">
+                                    <option value="1995">
+                                    <option value="1996">
+                                    <option value="1997">
+                                    <option value="1998">
+                                    <option value="1999">
+                                    <option value="2000">
+                                    <option value="2001">
+                                    <option value="2002">
+                                    <option value="2003">
+                                    <option value="2004">
+                                    <option value="2005">
+                                    <option value="2006">
+                                </datalist>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" list="governoratelistOptions"
+                                    [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
+                                    (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{adressInformation}}
+                                    <datalist id="governoratelistOptions">
+                                        <option value="Ariana">
+                                        <option value="Béja">
+                                        <option value="Ben Arous">
+                                        <option value="Bizerte">
+                                        <option value="Gabès">
+                                        <option value="Gafsa">
+                                        <option value="Jendouba">
+                                        <option value="Kairouan">
+                                        <option value="Kasserine">
+                                        <option value="Kébili">
+                                        <option value="Kef">
+                                        <option value="Mahdia">
+                                        <option value="Manouba">
+                                        <option value="Médenine">
+                                        <option value="Monastir">
+                                        <option value="Nabeul">
+                                        <option value="Sfax">
+                                        <option value="Sidi Bouzid">
+                                        <option value="Siliana">
+                                        <option value="Sousse">
+                                        <option value="Tataouine">
+                                        <option value="Tozeur">
+                                        <option value="Tunis">
+                                        <option value="Zaghouan">
                                     </datalist>
-                                </div>
+                                </label>
                             </div>
-                        </div>
-                        <div class="formDiv width90">
-                            <input type="text" maxlength="50" [class.labelInvalidInfo]="invalidExactAdress"
-                                name="exactAdress" [(ngModel)]="exactAdress"
-                                (keyup)="compareExactAdress();exactAdressInformation=translate.instant('exactAdress');invalidExactAdress=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{exactAdressInformation}}
-                            </label>
-                        </div>
-                        <div class="weekDays">
-                            <div class="workDays">{{'workDays'|translate}}</div><br>
-                            <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;"> {{'selectDay'|translate}}
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="maleRadio"
+                                    (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
+                                    [checked]="maleCheckBox" name="btnradio" id="male">
+                                <label class="btn btn-outline-primary" id="maleLabel" for="male"
+                                    (click)="checkDisabledBtnFromMale()">{{'male'|translate}}</label>
+                                <input type="radio" class="femaleRadio"
+                                    (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false"
+                                    [checked]="femaleCheckBox" name="btnradio" id="female">
+                                <label class="btn btn-outline-primary" id="femaleLabel" for="female"
+                                    (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
                             </div>
-                            <input type="checkbox" id="Mon" (change)="Mon==true? Mon=false : Mon=true;compareMon();" [checked]="Mon">
-                            <label for="Mon" id="MonLab" class="day"> {{'Mon'|translate}} </label>
-                            <input type="checkbox" id="Tue" (change)="Tue==true? Tue=false : Tue=true; compareTue();" [checked]="Tue">
-                            <label for="Tue" id="TueLab" class="day"> {{'Tue'|translate}} </label>
-                            <input type="checkbox" id="Wed" (change)="Wed==true? Wed=false : Wed=true; compareWed();" [checked]="Wed">
-                            <label for="Wed" id="WedLab" class="day"> {{'Wed'|translate}} </label>
-                            <input type="checkbox" id="Thu" (change)="Thu==true? Thu=false : Thu=true; compareThu();" [checked]="Thu">
-                            <label for="Thu" id="ThuLab" class="day"> {{'Thu'|translate}} </label>
-                            <input type="checkbox" id="Fri" (change)="Fri==true? Fri=false : Fri=true; compareFri();" [checked]="Fri">
-                            <label for="Fri" id="FriLab" class="day"> {{'Fri'|translate}} </label>
-                            <input type="checkbox" id="Sat" (change)="Sat==true? Sat=false : Sat=true; compareSat();" [checked]="Sat">
-                            <label for="Sat" id="SatLab" class="day"> {{'Sat'|translate}} </label>
-                            <input type="checkbox" id="Sun" (change)="Sun==true? Sun=false : Sun=true; compareSun();" [checked]="Sun">
-                            <label for="Sun" id="SunLab" class="day"> {{'Sun'|translate}}</label>
+                            <div class="formDiv">
+                                <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
+                                    name="password" [(ngModel)]="password"
+                                    (keyup)="comparePassword();invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{passwordInfromation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                                    name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                                    (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{passwordRepeatInfromation}}
+                                </label>
+                            </div>
                         </div>
                         <div class="buttons">
-                            <button class="fullyBtn" (click)="doctorSettings=true">{{'goBack'|translate}}</button>
-                            <button class="fullyBtn" (click)="ckeckForm();doctorSettings=true;disabledUpdateBtn=true"
-                                [disabled]="disabledUpdateBtn">{{'update'|translate}}</button>
-                        </div>
-                    </ng-template>
-                </div>
-            </div>
-            <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'">
-                <section id="reVerifySection">
-                    <div class="sectionTitle">{{'reVerify'|translate}}</div>
-                    <div class="sectionContainer">
-                        {{'toProveYourAccount'|translate}}
-                        <div class="infoGrid">
-                            <div class="infoContainer proveContainer">
-                                <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
-                                <ng-template #cinUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadCin>
-                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'nationalIdentityCard'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                            <div class="infoContainer proveContainer">
-                                <div
-                                    *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
-                                </div>
-                                <ng-template #medicalClinicUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                        class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadMedicalClinic>
-                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                        class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file"
-                                            (change)="onFileChangedMedicalClinic($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'ownershipOfMedicalClinic'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                            <div class="infoContainer proveContainer">
-                                <div
-                                    *ngIf="medicalSpecialtyPic; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
-                                </div>
-                                <ng-template #medicalSpecialtyUploadedSuccessfully>
-                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                        class="uploadImgBtn">
-                                    <div class="editPic">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                        </ng-template>
-                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                        <div class="center">{{'changeImage'|translate}}</div>
-                                    </div>
-                                    <div class="photoUploaded">
-                                        <i class="fas fa-check-circle"></i><br>
-                                        {{'PhotoUploadedSucc'|translate}}
-                                    </div>
-                                </ng-template>
-                                <ng-template #uploadMedicalSpecialty>
-                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                        class="uploadImgBtn">
-                                    <div class="infoTitle"><input type="file"
-                                            (change)="onFileChangedMedicalSpecialty($event)"
-                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                    <div class="info">
-                                        {{'PictureProvingMedicalSpecialty'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </div>
-                        <div *ngIf="cinPic && medicalSpecialtyPic && medicalClinicPic">
-                            <button class="emptyBtn"
-                                (click)="reVerifyDoctorDocuments();">{{'submitDocuments'|translate}}</button>
+                            <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
+                            <button class="fullyBtn" (click)="checkForm()"
+                                [disabled]="disableSaveBtn">{{'update'|translate}}</button>
                         </div>
                     </div>
                 </section>
+                <div *ngIf="doctorGet.doctorStatus=='notApproved'">
+                    <section id="notApprovedSection">
+                        <div class="sectionTitle">{{'notApproved'|translate}}</div>
+                        <div class="sectionContainer">
+                            {{'toProveYourAccount'|translate}}
+                            <div class="specialtyInput">
+                                <div class="formDiv">
+                                    <input type="text" [class.labelInvalidInfo]="invalidSpecialityVariable"
+                                        name="specialityName" [(ngModel)]="specialityName" list="specialtyOptions"
+                                        (keyup)="specialityInformation=translate.instant('speciality');invalidSpecialityVariable=false"
+                                        class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{specialityInformation}}
+                                    </label>
+                                    <datalist id="specialtyOptions">
+                                        <option *ngFor="let spec of specialityGet"
+                                            value="{{spec.specialityCode|translate}}">
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="infoGrid">
+                                <div class="infoContainer proveContainer">
+                                    <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
+                                    <ng-template #cinUploadedSuccessfully>
+                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadCin>
+                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'nationalIdentityCard'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                                <div class="infoContainer proveContainer">
+                                    <div
+                                        *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
+                                    </div>
+                                    <ng-template #medicalClinicUploadedSuccessfully>
+
+                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadMedicalClinic>
+                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file"
+                                                (change)="onFileChangedMedicalClinic($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'ownershipOfMedicalClinic'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                                <div class="infoContainer proveContainer">
+                                    <div
+                                        *ngIf="medicalSpecialtyPic; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
+                                    </div>
+                                    <ng-template #medicalSpecialtyUploadedSuccessfully>
+                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadMedicalSpecialty>
+                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file"
+                                                (change)="onFileChangedMedicalSpecialty($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'PictureProvingMedicalSpecialty'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div *ngIf="cinPic && medicalSpecialtyPic && medicalClinicPic">
+                                <button class="emptyBtn"
+                                    (click)="submitDoctorDocuments();">{{'submitDocuments'|translate}}</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'">
+                    <section id="pendingSection">
+                        <div class="sectionTitle">{{'pending'|translate}}</div>
+                        <div class="sectionContainer pending">
+                            {{'pendingForConfirmation'|translate}}<br>
+                            <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
+                        </div>
+                    </section>
+                </div>
+                <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'">
+                    <section id="approvedByAdminSection">
+                        <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
+                        <div class="sectionContainer pending">
+                            <div class="infoGridTowColumn">
+                                <div class="infoContainer">
+                                    <div class="formDiv">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="infoContainer">
+                                    <div class="formDiv">
+                                        <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
+                                            name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
+                                            (keyup)="startTimeInformation=translate.instant('startTime');invalidStartTime=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{startTimeInformation}}
+                                        </label>
+                                        <datalist id="startTimeOptions">
+                                            <option value="7:00">
+                                            <option value="7:15">
+                                            <option value="7:30">
+                                            <option value="7:45">
+                                            <option value="8:00">
+                                            <option value="8:15">
+                                            <option value="8:30">
+                                            <option value="8:45">
+                                            <option value="9:00">
+                                            <option value="9:15">
+                                            <option value="9:30">
+                                            <option value="9:45">
+                                            <option value="10:00">
+                                            <option value="10:15">
+                                            <option value="10:30">
+                                            <option value="10:45">
+                                            <option value="11:00">
+                                            <option value="11:15">
+                                            <option value="11:30">
+                                            <option value="11:45">
+                                            <option value="12:00">
+                                            <option value="12:15">
+                                            <option value="12:30">
+                                            <option value="12:45">
+                                        </datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formDiv width90">
+                                <input type="text" maxlength="50" [class.labelInvalidInfo]="invalidExactAdress"
+                                    name="exactAdress" [(ngModel)]="exactAdress"
+                                    (keyup)="startTimeInformation=translate.instant('exactAdress');invalidExactAdress=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{exactAdressInformation}}
+                                </label>
+                            </div>
+                            <div class="weekDays">
+                                <div class="workDays">{{'workDays'|translate}}</div><br>
+                                <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
+                                    {{'selectDay'|translate}}
+                                </div>
+                                <input type="checkbox" id="Mon" (change)="Mon==true? Mon=false : Mon=true"
+                                    [checked]="Mon">
+                                <label for="Mon" id="MonLab" class="day"> {{'Mon'|translate}} </label>
+                                <input type="checkbox" id="Tue" (change)="Tue==true? Tue=false : Tue=true"
+                                    [checked]="Tue">
+                                <label for="Tue" id="TueLab" class="day"> {{'Tue'|translate}} </label>
+                                <input type="checkbox" id="Wed" (change)="Wed==true? Wed=false : Wed=true"
+                                    [checked]="Wed">
+                                <label for="Wed" id="WedLab" class="day"> {{'Wed'|translate}} </label>
+                                <input type="checkbox" id="Thu" (change)="Thu==true? Thu=false : Thu=true"
+                                    [checked]="Thu">
+                                <label for="Thu" id="ThuLab" class="day"> {{'Thu'|translate}} </label>
+                                <input type="checkbox" id="Fri" (change)="Fri==true? Fri=false : Fri=true"
+                                    [checked]="Fri">
+                                <label for="Fri" id="FriLab" class="day"> {{'Fri'|translate}} </label>
+                                <input type="checkbox" id="Sat" (change)="Sat==true? Sat=false : Sat=true"
+                                    [checked]="Sat">
+                                <label for="Sat" id="SatLab" class="day"> {{'Sat'|translate}} </label>
+                                <input type="checkbox" id="Sun" (change)="Sun==true? Sun=false : Sun=true"
+                                    [checked]="Sun">
+                                <label for="Sun" id="SunLab" class="day"> {{'Sun'|translate}}</label>
+                            </div>
+                            <button class="emptyBtn centerBtn" (click)="ckeckForm()"> {{'save'|translate}} </button>
+                        </div>
+                    </section>
+                </div>
+                <div *ngIf="doctorGet.doctorStatus=='approved'">
+                    <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
+                    <div class="sectionContainer pending">
+                        <div *ngIf="doctorSettings; then showDoctorSettings else editDoctorSettings"></div>
+                        <ng-template #showDoctorSettings>
+                            <div class="infoGridTowColumn">
+                                <div class="infoContainer backgroundColor">
+                                    <div class="infoTitle">{{'maxPatientPerDay'|translate}}</div>
+                                    <div class="info">
+                                        {{doctorGet.maxPatientPerDay}}
+                                    </div>
+                                </div>
+                                <div class="infoContainer">
+                                    <div class="infoContainer backgroundColor">
+                                        <div class="infoTitle">{{'startTime'|translate}}</div>
+                                        <div class="info">
+                                            {{doctorGet.startTime}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="infoContainer">
+                                    <div class="infoContainer backgroundColor">
+                                        <div class="infoTitle">{{'exactAdress'|translate}}</div>
+                                        <div class="info">
+                                            <div class="verticalCenter">
+                                                <div class="center">{{doctorGet.exactAdress}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="infoContainer">
+                                    <div class="infoContainer backgroundColor">
+                                        <div class="infoTitle">{{'workDaysShow'|translate}}</div>
+                                        <div class="info">
+                                            <span *ngIf="Mon" class="dayContainer">{{'Mon'|translate}}</span>
+                                            <span *ngIf="Tue" class="dayContainer">{{'Tue'|translate}}</span>
+                                            <span *ngIf="Wed" class="dayContainer">{{'Wed'|translate}}</span>
+                                            <span *ngIf="Thu" class="dayContainer">{{'Thu'|translate}}</span>
+                                            <span *ngIf="Fri" class="dayContainer">{{'Fri'|translate}}</span>
+                                            <span *ngIf="Sat" class="dayContainer">{{'Sat'|translate}}</span>
+                                            <span *ngIf="Sun" class="dayContainer">{{'Sun'|translate}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="emptyBtn centerBtn" (click)="doctorSettings=false;"> {{'edit'|translate}}
+                            </button>
+                        </ng-template>
+                        <ng-template #editDoctorSettings>
+                            <div class="infoGridTowColumn">
+                                <div class="infoContainer">
+                                    <div class="formDiv">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="infoContainer">
+                                    <div class="formDiv">
+                                        <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
+                                            name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
+                                            (keyup)="compareStartTime();startTimeInformation=translate.instant('startTime');invalidStartTime=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{startTimeInformation}}
+                                        </label>
+                                        <datalist id="startTimeOptions">
+                                            <option value="7:00">
+                                            <option value="7:15">
+                                            <option value="7:30">
+                                            <option value="7:45">
+                                            <option value="8:00">
+                                            <option value="8:15">
+                                            <option value="8:30">
+                                            <option value="8:45">
+                                            <option value="9:00">
+                                            <option value="9:15">
+                                            <option value="9:30">
+                                            <option value="9:45">
+                                            <option value="10:00">
+                                            <option value="10:15">
+                                            <option value="10:30">
+                                            <option value="10:45">
+                                            <option value="11:00">
+                                            <option value="11:15">
+                                            <option value="11:30">
+                                            <option value="11:45">
+                                            <option value="12:00">
+                                            <option value="12:15">
+                                            <option value="12:30">
+                                            <option value="12:45">
+                                        </datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formDiv width90">
+                                <input type="text" maxlength="50" [class.labelInvalidInfo]="invalidExactAdress"
+                                    name="exactAdress" [(ngModel)]="exactAdress"
+                                    (keyup)="compareExactAdress();exactAdressInformation=translate.instant('exactAdress');invalidExactAdress=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{exactAdressInformation}}
+                                </label>
+                            </div>
+                            <div class="weekDays">
+                                <div class="workDays">{{'workDays'|translate}}</div><br>
+                                <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
+                                    {{'selectDay'|translate}}
+                                </div>
+                                <input type="checkbox" id="Mon" (change)="Mon==true? Mon=false : Mon=true;compareMon();"
+                                    [checked]="Mon">
+                                <label for="Mon" id="MonLab" class="day"> {{'Mon'|translate}} </label>
+                                <input type="checkbox" id="Tue"
+                                    (change)="Tue==true? Tue=false : Tue=true; compareTue();" [checked]="Tue">
+                                <label for="Tue" id="TueLab" class="day"> {{'Tue'|translate}} </label>
+                                <input type="checkbox" id="Wed"
+                                    (change)="Wed==true? Wed=false : Wed=true; compareWed();" [checked]="Wed">
+                                <label for="Wed" id="WedLab" class="day"> {{'Wed'|translate}} </label>
+                                <input type="checkbox" id="Thu"
+                                    (change)="Thu==true? Thu=false : Thu=true; compareThu();" [checked]="Thu">
+                                <label for="Thu" id="ThuLab" class="day"> {{'Thu'|translate}} </label>
+                                <input type="checkbox" id="Fri"
+                                    (change)="Fri==true? Fri=false : Fri=true; compareFri();" [checked]="Fri">
+                                <label for="Fri" id="FriLab" class="day"> {{'Fri'|translate}} </label>
+                                <input type="checkbox" id="Sat"
+                                    (change)="Sat==true? Sat=false : Sat=true; compareSat();" [checked]="Sat">
+                                <label for="Sat" id="SatLab" class="day"> {{'Sat'|translate}} </label>
+                                <input type="checkbox" id="Sun"
+                                    (change)="Sun==true? Sun=false : Sun=true; compareSun();" [checked]="Sun">
+                                <label for="Sun" id="SunLab" class="day"> {{'Sun'|translate}}</label>
+                            </div>
+                            <div class="buttons">
+                                <button class="fullyBtn" (click)="doctorSettings=true">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn"
+                                    (click)="ckeckFormAndUpdate();doctorSettings=true;disabledUpdateBtn=true"
+                                    [disabled]="disabledUpdateBtn">{{'update'|translate}}</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+                <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'">
+                    <section id="reVerifySection">
+                        <div class="sectionTitle">{{'reVerify'|translate}}</div>
+                        <div class="sectionContainer">
+                            {{'toProveYourAccount'|translate}}
+                            <div class="infoGrid">
+                                <div class="infoContainer proveContainer">
+                                    <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
+                                    <ng-template #cinUploadedSuccessfully>
+                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadCin>
+                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'nationalIdentityCard'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                                <div class="infoContainer proveContainer">
+                                    <div
+                                        *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
+                                    </div>
+                                    <ng-template #medicalClinicUploadedSuccessfully>
+                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadMedicalClinic>
+                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file"
+                                                (change)="onFileChangedMedicalClinic($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'ownershipOfMedicalClinic'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                                <div class="infoContainer proveContainer">
+                                    <div
+                                        *ngIf="medicalSpecialtyPic; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
+                                    </div>
+                                    <ng-template #medicalSpecialtyUploadedSuccessfully>
+                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">
+                                        <div class="editPic">
+                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            </ng-template>
+                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                            <div class="center">{{'changeImage'|translate}}</div>
+                                        </div>
+                                        <div class="photoUploaded">
+                                            <i class="fas fa-check-circle"></i><br>
+                                            {{'PhotoUploadedSucc'|translate}}
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #uploadMedicalSpecialty>
+                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">
+                                        <div class="infoTitle"><input type="file"
+                                                (change)="onFileChangedMedicalSpecialty($event)"
+                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                        <div class="info">
+                                            {{'PictureProvingMedicalSpecialty'|translate}}
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div *ngIf="cinPic && medicalSpecialtyPic && medicalClinicPic">
+                                <button class="emptyBtn"
+                                    (click)="reVerifyDoctorDocuments();">{{'submitDocuments'|translate}}</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
-    </div>
-    <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
-        <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
-        <ng-template #showNotApprovedInfo>
-            {{'notApprovedText'|translate}}, <span class="textLien"
-                (click)="notApproved='why'">{{'why'|translate}}</span>
-        </ng-template>
-        <ng-template #showNotApprovedWhy>
-            {{'notApprovedWhy'|translate}}
-            <div class="center">
-                <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}}
-                </button><br>
-                <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
-            </div>
-        </ng-template>
-    </div>
-    <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'" class="notApproved">
-        {{'pendingInfo'|translate}}<br>
-    </div>
-    <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'" class="notApproved">
-        {{'approvedByAdmin'|translate}}, <span class="textLien"
-            (click)="toapprovedByAdminSection()">{{'setUpNow'|translate}}</span>
-    </div>
-    <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'" class="disapprovedByAdmin">
-        {{'disapprovedText'|translate}}<br><span class="textLien"
-        (click)="toreVerifySection()">{{'disapprovedReVerify'|translate}}</span> 
-    </div>
-    <div *ngIf="doctorGet.doctorStatus=='disapprovedPermanently'" class="disapprovedByAdmin">
-        {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
-        {{deleteAccount()}}
+        <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
+            <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
+            <ng-template #showNotApprovedInfo>
+                {{'notApprovedText'|translate}}, <span class="textLien"
+                    (click)="notApproved='why'">{{'why'|translate}}</span>
+            </ng-template>
+            <ng-template #showNotApprovedWhy>
+                {{'notApprovedWhy'|translate}}
+                <div class="center">
+                    <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}}
+                    </button><br>
+                    <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'" class="notApproved">
+            {{'pendingInfo'|translate}}<br>
+        </div>
+        <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'" class="notApproved">
+            {{'approvedByAdmin'|translate}}, <span class="textLien"
+                (click)="toapprovedByAdminSection()">{{'setUpNow'|translate}}</span>
+        </div>
+        <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'" class="disapprovedByAdmin">
+            {{'disapprovedText'|translate}}<br><span class="textLien"
+                (click)="toreVerifySection()">{{'disapprovedReVerify'|translate}}</span>
+        </div>
+        <div *ngIf="doctorGet.doctorStatus=='disapprovedPermanently'" class="disapprovedByAdmin">
+            {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
+            {{deleteAccount()}}
+        </div>
     </div>
 </body>
 

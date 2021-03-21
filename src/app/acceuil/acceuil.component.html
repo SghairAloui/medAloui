@@ -1,173 +1,313 @@
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body >
-        <app-header></app-header>
-        <section id="acceuilSection">
-            <div id="slider">
-                <figure>
-                    <img src="../../assets/slider img/slider1.jpg">
-                    <img src="../../assets/slider img/slider2.jpg">
-                    <img src="../../assets/slider img/slider3.jpg">
-                    <img src="../../assets/slider img/slider4.jpg">
-                    <img src="../../assets/slider img/slider1.jpg">
-                </figure>
-            </div>
-        </section>
 
-        <section id="connexionSection">
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <app-header></app-header>
+    <section id="acceuilSection">
+        <div id="slider">
+            <figure>
+                <img src="../../assets/slider img/slider1.jpg">
+                <img src="../../assets/slider img/slider2.jpg">
+                <img src="../../assets/slider img/slider3.jpg">
+                <img src="../../assets/slider img/slider4.jpg">
+                <img src="../../assets/slider img/slider1.jpg">
+            </figure>
+        </div>
+    </section>
+
+    <section id="connexionSection">
+        <div class="sectionTitle">
+            {{'connect'|translate}}
+        </div>
+        <div class="connexionContainer">
+            <img src="../../assets/img/connexion.jpg" id="connexionImg">
+            <div class="connexionForm">
+                <app-acceuil-body></app-acceuil-body>
+            </div>
+        </div>
+    </section>
+    <section id="doctocSection">
+        <div class="sectionTitle">
+            {{'howItWokrs'|translate}} <br>{{'appWork'|translate}}
+        </div>
+        <div class="grid">
+            <div class="gridFirstBox">
+                <div class="gidBoxNumber">1</div>
+                <div class="gidBoxTitle">
+                    {{'makeAppointment'|translate}}
+                </div>
+                <div class="gidBoxText">
+                    {{'firstBoxText'|translate}}
+                </div>
+            </div>
+            <div class="gridSecondBox">
+                <div class="gidBoxNumber">2</div>
+                <div class="gidBoxTitle">
+                    {{'makeYourAppointment'|translate}}
+                </div>
+                <div class="gidBoxText">
+                    {{'secondBoxText'|translate}}
+                </div>
+            </div>
+            <div class="gridThirdBox">
+                <div class="gidBoxNumber">3</div>
+                <div class="gidBoxTitle">
+                    {{'getDiagnosis'|translate}}
+                </div>
+                <div class="gidBoxText">
+                    {{'thirdBoxText'|translate}}
+                </div>
+            </div>
+            <div class="gridFourthBox">
+                <div class="gidBoxNumber">4</div>
+                <div class="gidBoxTitle">
+                    {{'paymentAndRates'|translate}}
+                </div>
+                <div class="gidBoxText">
+                    {{'fourthBoxText'|translate}}
+                </div>
+            </div>
+        </div>
+        <div class="sectionTitle">
+            {{'soStartWith'|translate}}<br>{{'aDoctor'|translate}}
+        </div>
+        <div class="findingDoctor">
+            <img src="../../assets/img/findDoctor.jpg" id="findDoctorImg">
+            <div class="findingDoctorSearch">
+                <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
+                <div class="formDiv">
+                    <input type="text" class="formInput" name="specialityName"
+                        [class.labelInvalidInfo]="chooseSpeciality" [(ngModel)]="specialityName"
+                        list="specialitiesOptions" id="chooseSpeciality" placeholder=" "
+                        (keyup)="checkDisabledSearchDoc();chooseSpeciality=false;">
+                    <label for="chooseSpeciality" class="formLabel">{{'chooseSpeciality'|translate}}</label>
+                </div>
+                <datalist id="specialitiesOptions">
+                    <option *ngFor="let spec of specialityGet" value="{{spec.specialityCode|translate}}">
+                </datalist>
+                <div class="formDiv">
+                    <div *ngIf="disabledSearchDoc; then disabledBtn else notDisabledBtn"></div>
+                    <ng-template #disabledBtn>
+                        <div class="formInputDiv" (click)="showDoctorNameInfo()"><input type="text" class="formInput"
+                                list="doctorsList" id="searchDoctor" placeholder=" " disabled></div>
+                    </ng-template>
+                    <ng-template #notDisabledBtn><input type="text" name="doctorName" [(ngModel)]="doctorName"
+                            class="formInput" list="doctorsList" id="searchDoctor" placeholder=" "></ng-template>
+                    <label for="searchDoctor" class="formLabel">{{'searchDoctor'|translate}}</label>
+                </div>
+                <datalist id="doctorsList">
+                    <option *ngFor="let doc of doctors" [value]="'dr. '+doc.doctorFirstName +' '+ doc.doctorLastName">
+                        <div *ngIf="doc.doctorRate == 0; then notRated else rated"></div>
+                        <ng-template #notRated>{{'notRated'|translate}}</ng-template>
+                        <ng-template #rated>{{'rate'|translate}}: {{doc.doctorRate}}/5</ng-template>
+                    </option>
+                </datalist>
+                <button type="submit" (click)="searchDoctor()" class="emptyBtn"
+                    style="height: 43px;">{{'search'|translate}}</button>
+            </div>
+        </div>
+    </section>
+    <section id="searchedDoctorSection">
+        <div *ngIf="searchedDoctorContainer">
             <div class="sectionTitle">
-                {{'connect'|translate}}
+                Dr. <span style="text-transform: capitalize;">{{searchedDoctor.doctorFirstName}}</span> <span
+                    style="text-transform: uppercase;"> {{searchedDoctor.doctorLastName}}</span>
             </div>
-            <div class="connexionContainer">
-                <img src="../../assets/img/connexion.jpg" id="connexionImg">
-                <div class="connexionForm">
-                    <app-acceuil-body></app-acceuil-body>
-                </div>
-            </div>
-        </section>
-        <section id="doctocSection">
-            <div class="sectionTitle">
-                {{'howItWokrs'|translate}} <br>{{'appWork'|translate}}
-            </div>
-            <div class="grid">
-                <div class="gridFirstBox">
-                    <div class="gidBoxNumber">1</div>
-                    <div class="gidBoxTitle">
-                        {{'makeAppointment'|translate}}
+            <div class="sectionContainer">
+                <div class="doctorInfoContainer">
+                    <div class="profileImgContainer">
+                        <div *ngIf="retrieveResonse"><img [src]="retrievedImage" class="profileImg"></div>
+                        <div *ngIf="!retrieveResonse"><i class="fas fa-user-tie"></i></div>
                     </div>
-                    <div class="gidBoxText">
-                        {{'firstBoxText'|translate}} 
+                    <div class="horizentalCenter">Dr. <span
+                            style="text-transform: capitalize;">{{searchedDoctor.doctorFirstName}}</span> <span
+                            style="text-transform: uppercase;"> {{searchedDoctor.doctorLastName}}</span></div>
+                    <div *ngIf="searchedDoctor.doctorRate != 0" class="centerRate">
+                        <div *ngIf="searchedDoctor.doctorRate == 0.5">
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 1">
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 1.5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 2.5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 3.5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 4.5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div *ngIf="searchedDoctor.doctorRate == 5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <span class="searchedDocSpeciality"><span class="spec">{{'speciality'|translate}}</span> <span
+                            class="specName">{{specialityCode|translate}}</span></span>
+                    <div *ngIf="specialityDes; then showSpecialityDes else hideSpecialityDes"></div>
+                    <ng-template #showSpecialityDes>
+                        <div class="specialityDes" style="margin-left: 2%;">{{specialityCode+'Des'|translate}} <span
+                                (click)="specialityDes=false" class="textLien">{{'okay'|translate}} </span></div>
+                    </ng-template>
+                    <ng-template #hideSpecialityDes>
+                        <div class="specialityDes textLien" style="margin-left: 2%;" (click)="specialityDes=true">
+                            {{'whatIs'|translate}}
+                            {{specialityName}}?</div>
+                    </ng-template>
+                    <div class="infoGridTowColumn">
+                        <div class="infoContainer">
+                            <div class="infoTitle">{{'gender'|translate}}</div>
+                            <div class="info"> {{searchedDoctor.doctorGender}} </div>
+                        </div>
+                        <div class="infoContainer">
+                            <div class="infoTitle">{{'Adress'|translate}}</div>
+                            <div class="info">{{searchedDoctor.doctorCity}} - {{searchedDoctor.exactAdress}}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="gridSecondBox">
-                    <div class="gidBoxNumber">2</div>
-                    <div class="gidBoxTitle">
-                        {{'makeYourAppointment'|translate}}
-                    </div>
-                    <div class="gidBoxText">
-                        {{'secondBoxText'|translate}}
-                    </div>
-                </div>
-                <div class="gridThirdBox">
-                    <div class="gidBoxNumber">3</div>
-                    <div class="gidBoxTitle">
-                        {{'getDiagnosis'|translate}}
-                    </div>
-                    <div class="gidBoxText">
-                        {{'thirdBoxText'|translate}} 
-                    </div>
-                </div>
-                <div class="gridFourthBox">
-                    <div class="gidBoxNumber">4</div>
-                    <div class="gidBoxTitle">
-                        {{'paymentAndRates'|translate}}
-                    </div>
-                    <div class="gidBoxText">
-                        {{'fourthBoxText'|translate}} 
+                <div class="doctorAppointmentContainer">
+                    <div class="appointmentTitle">{{'appointment'|translate}}</div>
+                    <div class="center">
+                        <span style="margin-left: 4%;">{{'selectAppointmentDay'|translate}}</span>
+                        <div class="calendarGrid">
+                            <div class="day dayNumber" *ngFor="let day of monthDays">
+                                <input type="radio" id="day{{day}}" name="dayName" (click)="daySelected(day)" [disabled]="monthDaysDis[day]">
+                                <label for="day{{day}}" id="day{{day}}Lab" class="fillAllDay"
+                                    [disabled]="monthDaysDis[day]">{{day}}</label>
+                            </div>
+                        </div>
+                        <button class="emptyBtn white" (click)="checkDaySelected()"> {{'takeAppointment'|translate}} </button>
                     </div>
                 </div>
             </div>
-            <div class="sectionTitle">
-                {{'soStartWith'|translate}}<br>{{'aDoctor'|translate}}
+        </div>
+    </section>
+    <section id="maladiesSection">
+        <div class="sectionTitle">
+            {{'diseases'|translate}}
+        </div>
+        <div class="maladiesContainer">
+            <div>
+                {{'disease'|translate}} 1
             </div>
-            <div class="findingDoctor">
-                <img src="../../assets/img/findDoctor.jpg" id="findDoctorImg">
-                <div class="findingDoctorSearch">
-                    <div class="searchText"><i class="fas fa-search"></i> {{'search'|translate}}</div>
-                    <div class="formDiv">
-                        <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
-                        <label for="chooseSpeciality" class="formLabel">{{'chooseSpeciality'|translate}}</label>
-                    </div>
-                    <datalist id="datalistOptions">
-                      <option value="{{'generalPractitioner'|translate}}">
-                      <option value="{{'Psychologist'|translate}}">
-                      <option value="{{'Psychiatrist'|translate}}">
-                      <option value="{{'Dentist'|translate}}">
-                      <option value="{{'Pediatrician'|translate}}">
-                    </datalist>
-                    <div class="formDiv">
-                        <input type="text" name="doctorName" [(ngModel)]="doctorName"  class="formInput" list="doctorsList" id="searchDoctor" placeholder=" ">
-                        <label for="searchDoctor" class="formLabel">{{'searchDoctor'|translate}}</label>
-                    </div>
-                    <datalist id="doctorsList">
-                        <option *ngFor="let doc of doctors" [value]="doc.doctorFirstName +' '+ doc.doctorLastName">
-                            rate: {{doc.doctorRate}}/5</option>
-                    </datalist>
-                    <button type="submit" (click)="showSearchValue()" class="emptyBtn" style="height: 43px;">{{'search'|translate}}</button>
-                </div>
+            <div>
+                {{'disease'|translate}} 2
             </div>
-        </section>
-        <section id="maladiesSection">
-            <div class="sectionTitle">
-                {{'diseases'|translate}}
+            <div>
+                {{'disease'|translate}} 3
             </div>
-            <div class="maladiesContainer">
-                <div>
-                    {{'disease'|translate}} 1
-                </div>
-                <div>
-                    {{'disease'|translate}} 2
-                </div>
-                <div>
-                    {{'disease'|translate}} 3
-                </div>
-                <div>
-                    {{'disease'|translate}} 4
-                </div>
-                <div>
-                    {{'disease'|translate}} 5
-                </div>
-                <div>
-                    {{'disease'|translate}} 6
-                </div>
-                <div>
-                    {{'disease'|translate}} 7
-                </div>
-                <div>
-                    {{'disease'|translate}} 8
-                </div>
-                <div>
-                    {{'disease'|translate}} 9
-                </div>
-                <div>
-                    {{'disease'|translate}} 10
-                </div>
-                <div>
-                    {{'disease'|translate}} 11
-                </div>
-                <div>
-                    {{'disease'|translate}} 12
-                </div>
+            <div>
+                {{'disease'|translate}} 4
             </div>
-        </section>
-        <section id="aboutSection">
-            <div class="aboutUstitle">
-                {{'about'|translate}} <span style="color: #308a7b;">{{'us'|translate}}</span>
+            <div>
+                {{'disease'|translate}} 5
             </div>
-            <div class="aboutUsText">
-               <strong style="color: #308a7b; font-family: 'Dancing Script', cursive;font-size: 2rem;"> Health Care </strong> {{'aboutUsText'|translate}}
+            <div>
+                {{'disease'|translate}} 6
             </div>
-            <div class="ContactUs">
-                <div class="ContactUsTitle">Contact</div>
-                <div class="ContactUsMail">
-                    <div class="ContactUsIcon"><i class="fas fa-envelope"></i></div>
-                    alii.messaadi@gmail.com<br>
-                    aloui.sghair@gmail.com
-                </div>
-                <div class="ContactUsPhone">
-                    <div class="ContactUsIcon"><i class="fas fa-phone"></i></div>
-                    +216 26 53 64 62<br>
-                    +216 50 30 32 24
-                </div>
-                <div class="ContactUsPosition">
-                    <div class="ContactUsIcon"><i class="fas fa-map-marked-alt"></i></div>
-                    ISI,<br>
-                    Mahdia
-                </div>
+            <div>
+                {{'disease'|translate}} 7
             </div>
-        </section>
-    </body>
+            <div>
+                {{'disease'|translate}} 8
+            </div>
+            <div>
+                {{'disease'|translate}} 9
+            </div>
+            <div>
+                {{'disease'|translate}} 10
+            </div>
+            <div>
+                {{'disease'|translate}} 11
+            </div>
+            <div>
+                {{'disease'|translate}} 12
+            </div>
+        </div>
+    </section>
+    <section id="aboutSection">
+        <div class="aboutUstitle">
+            {{'about'|translate}} <span style="color: #308a7b;">{{'us'|translate}}</span>
+        </div>
+        <div class="aboutUsText">
+            <strong style="color: #308a7b; font-family: 'Dancing Script', cursive;font-size: 2rem;"> Health Care
+            </strong> {{'aboutUsText'|translate}}
+        </div>
+        <div class="ContactUs">
+            <div class="ContactUsTitle">Contact</div>
+            <div class="ContactUsMail">
+                <div class="ContactUsIcon"><i class="fas fa-envelope"></i></div>
+                alii.messaadi@gmail.com<br>
+                aloui.sghair@gmail.com
+            </div>
+            <div class="ContactUsPhone">
+                <div class="ContactUsIcon"><i class="fas fa-phone"></i></div>
+                +216 26 53 64 62<br>
+                +216 50 30 32 24
+            </div>
+            <div class="ContactUsPosition">
+                <div class="ContactUsIcon"><i class="fas fa-map-marked-alt"></i></div>
+                ISI,<br>
+                Mahdia
+            </div>
+        </div>
+    </section>
+</body>
+
 </html>

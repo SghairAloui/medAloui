@@ -34,10 +34,14 @@
         <div class="findingDoctorSearch">
             <div class="searchText"><i class="fas fa-search"></i> {{'addSpeciality'|translate}}</div>
             <div class="formDiv">
-                <input type="text" class="formInput" list="datalistOptions" id="chooseSpeciality" placeholder=" ">
-                <label for="chooseSpeciality" class="formLabel">{{'speciality'|translate}}</label>
+                <input type="text" class="formInput" name="specialityCode" [(ngModel)]="specialityCode" id="chooseSpeciality" placeholder=" ">
+                <label for="chooseSpeciality" class="formLabel">{{'specialityCode'|translate}}</label>
             </div>
-            <button type="submit" class="emptyBtn" style="height: 43px;">{{'addSpeciality'|translate}}</button>
+            <div class="formDiv">
+                <input type="text" class="formInput" name="specialityName" [(ngModel)]="specialityName" id="chooseSpeciality" placeholder=" ">
+                <label for="chooseSpeciality" class="formLabel">{{'specialityName'|translate}}</label>
+            </div>
+            <button type="submit" class="emptyBtn" style="height: 43px;" (click)="addSpeciality()">{{'addSpeciality'|translate}}</button>
         </div>
     </section>
     <section id="pendingDoctor">
@@ -65,8 +69,11 @@
                                         <i class="fas fa-user-tie"></i>
                                     </ng-template>
                                 </div>
-                                <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
-                                <i class="fas fa-user"></i> {{doc.doctorUserName}}
+                                <div class="docNotAppName">Dr.{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
+                                <i class="fas fa-user"></i> {{doc.doctorUserName}}<br>
+                                <div *ngFor="let spec of doc.speciality">
+                                    <div class="specialityContainer">{{spec.specialityName}}</div>
+                                </div>
                                 <div class="showHideDocuments">
                                     <div (click)="docDocuments[doc.doctorId]=true">
                                         {{'showDoc'|translate}}<br>
@@ -90,8 +97,11 @@
                                         <i class="fas fa-user-tie"></i>
                                     </ng-template>
                                 </div>
-                                <div class="docNotAppName">{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
-                                <i class="fas fa-user"></i> {{doc.doctorUserName}}
+                                <div class="docNotAppName">Dr.{{doc.doctorFirstName}} {{doc.doctorLastName}}</div>
+                                <i class="fas fa-user"></i> {{doc.doctorUserName}}<br>
+                                <div *ngFor="let spec of doc.speciality">
+                                    <div class="specialityContainer">{{spec.specialityName}}</div>
+                                </div>
                                 <div *ngIf="documentPic[doc.doctorId]=='cin'">
                                     <div class="documentImgContainer" >
                                         <span (click)="documentPic[doc.doctorId]='speciality'"><i class="fas fa-chevron-right rightArrow"></i></span>

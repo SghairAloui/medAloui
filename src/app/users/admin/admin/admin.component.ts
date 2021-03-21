@@ -13,12 +13,15 @@ import { AdminService } from './admin.service';
 })
 export class AdminComponent implements OnInit {
 
+  constructor(private adminService: AdminService, private toastr: ToastrService, private translate: TranslateService, private router: Router) { }
+
   adminGet: AdminGet;
   secureLogin: SecureLoginString;
   container: string = 'profile';
-  constructor(private adminService: AdminService, private toastr: ToastrService, private translate: TranslateService, private router: Router) { }
+  adminInfo:boolean;
 
   ngOnInit(): void {
+    this.adminInfo=false;
     this.secureLogin = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.getAdminInfoFromSecureLogin(this.secureLogin);
   }
@@ -29,6 +32,7 @@ export class AdminComponent implements OnInit {
         if (res) {
           console.log(res);
           this.adminGet = res;
+          this.adminInfo=true;
           localStorage.setItem('id', this.adminGet.adminId.toString());
         } else
           this.router.navigate(['/acceuil']);

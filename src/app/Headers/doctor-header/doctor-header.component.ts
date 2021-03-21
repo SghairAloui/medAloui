@@ -26,14 +26,17 @@ export class DoctorHeaderComponent implements OnInit {
       this.appComp.switchTheme('light');
       this.darkMode=false;
     }
-    this.translate.use(localStorage.getItem("lang"));
-    if(localStorage.getItem("lang")=='en'){
-      this.en=true;
-      this.fr=false;
-    }else if (localStorage.getItem("lang")=='fr'){
-      this.en=false;
-      this.fr=true;
+    if( localStorage.getItem("lang") != null ){
+      this.translate.use(localStorage.getItem("lang"));
+      if(localStorage.getItem("lang")=='en'){
+        this.en=true;
+        this.fr=false;
+      }else if (localStorage.getItem("lang")=='fr'){
+        this.en=false;
+        this.fr=true;
+      }
     }
+    
   }
   switchTheme(){
     if(this.darkMode==false){

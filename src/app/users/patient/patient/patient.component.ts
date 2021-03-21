@@ -3,10 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
+import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
+import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PatientService } from './patient.service';
 
 @Component({
@@ -16,7 +20,26 @@ import { PatientService } from './patient.service';
 })
 export class PatientComponent implements OnInit {
 
-  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router:Router) { }
+  slectedDay: boolean = true;
+  monthDays: any[] = [];
+  monthDaysDis: boolean[] = [];
+  daysNameEn: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  daysName: string[] = [];
+  daysNameDouble: string[] = [];
+  date: Date = new Date();
+  today: number = /*28;*/this.date.getUTCDate();
+  todayName: string;
+  todayNumber: number;
+  utcYear: number = this.date.getUTCFullYear();
+  utcMonth: number = this.date.getUTCMonth() + 1;
+  lastMonthDay: number;
+  integerAndStringPost: IntegerAndStringPost;
+  appointmentMonth: number;
+  appointmentYear: number;
+  appointmentDay: number;
+  appointmentDate: string;
+
+  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -37,8 +60,15 @@ export class PatientComponent implements OnInit {
   base64Data: any;
   retrieveResonse: any;
   message: string;
+  doctorProfileImgRes: any[] = [];
+  doctorProfileImg: any[] = [];
+  appointmentDocInfoGet: AppointmentDocInfoGet[] = [];
+  patientInfo: boolean;
+  showUpdateCalendar: boolean;
 
   ngOnInit(): void {
+    this.showUpdateCalendar = false;
+    this.patientInfo = false;
     this.getUserInfo();
   }
 
@@ -88,9 +118,14 @@ export class PatientComponent implements OnInit {
       res => {
         if (res) {
           this.patientGet = res;
+          this.patientInfo = true;
           this.intializeEdit();
-          this.getImage();
           localStorage.setItem('id', this.patientGet.patientId + '')
+          this.getImage();
+          for (let app of this.patientGet.appointment) {
+            this.getDocProfileImg(app.doctorId);
+            this.getDoctorAppointmentInfoByDoctorId(app.doctorId);
+          }
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -397,9 +432,12 @@ export class PatientComponent implements OnInit {
     if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
       this.patientService.getPatientPofilePhoto().subscribe(
         res => {
-          this.retrieveResonse = res;
-          this.base64Data = this.retrieveResonse.picByte;
-          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+          if (res != null) {
+            this.retrieveResonse = res;
+            this.base64Data = this.retrieveResonse.picByte;
+            this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+          } else
+            this.retrieveResonse = null;
         },
         err => {
           if (this.retrievedImage) {
@@ -412,6 +450,218 @@ export class PatientComponent implements OnInit {
       );
     } else {
       this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
+  }
+  getDocProfileImg(id: number) {
+    let retrieveResonse: any;
+    let base64Data: any;
+    let retrievedImage: any;
+    this.patientService.getDoctorPofilePhoto(id + 'doctorProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          this.doctorProfileImgRes[id] = retrieveResonse;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.doctorProfileImg[id] = retrievedImage;
+        } else
+          this.doctorProfileImgRes[id] = null;
+      }
+    );
+  }
+  getDoctorAppointmentInfoByDoctorId(id: number) {
+    this.doctorService.getDoctorAppointmentInfoByDoctorId(id).subscribe(
+      res => {
+        if (res) {
+          this.appointmentDocInfoGet[id] = res;
+        }
+      }
+    );
+  }
+  deleteAppById(id: number) {
+    this.appointmentService.deleteAppointmentById(id).subscribe(
+      res => {
+        if (res = "deleted") {
+          this.toastr.success(this.translate.instant('appointmentDeleted'), this.translate.instant('appointment'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.getUserInfo();
+        }
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+  changeAppDate(docId: number, appDate: string) {
+    this.generateMonthDay(docId, appDate);
+    this.showUpdateCalendar = true;
+    document.getElementById("calendarGridSection").scrollIntoView({ behavior: "smooth" });
+  }
+  getMonthLastDay() {
+    if (this.utcMonth == 1)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 2) {
+      if ((this.utcYear % 4) == 0)
+        this.lastMonthDay = 29;
+      else
+        this.lastMonthDay = 28;
+    } else if (this.utcMonth == 3)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 4)
+      this.lastMonthDay = 30;
+    else if (this.utcMonth == 5)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 6)
+      this.lastMonthDay = 30;
+    else if (this.utcMonth == 7)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 8)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 9)
+      this.lastMonthDay = 30;
+    else if (this.utcMonth == 10)
+      this.lastMonthDay = 31;
+    else if (this.utcMonth == 11)
+      this.lastMonthDay = 30;
+    else if (this.utcMonth == 12)
+      this.lastMonthDay = 31;
+  }
+  generateMonthDay(docId: number, appDate: string) {
+    this.daysName = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat')];
+    this.daysNameDouble = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sat')];
+    this.getMonthLastDay();
+    let day: number = 0;
+    let todayNumber: number;
+    this.todayName = /*'Sun';*/this.date.toString().slice(0, 3);
+    let checkAppointmentMonth: number;
+    let checkAppointmentYear: number;
+    let appointmentDate: string;
+    let integerAndStringPost: IntegerAndStringPost;
+    let j1: number;
+    for (let c = 0; c < 7; c++) {
+      if (this.daysNameEn[c] == this.todayName) {
+        todayNumber = c;
+        this.todayNumber = c;
+      }
+    }
+    for (let c = 1; c <= 7; c++) {
+      this.monthDays[day] = this.daysNameDouble[todayNumber];
+      todayNumber++;
+      day++;
+    }
+    for (var i = this.today; i <= this.lastMonthDay; i++) {
+      this.monthDays[day] = i;
+      if (this.appointmentDocInfoGet[docId].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+        this.monthDaysDis[i] = true;
+      else {
+        if (i == this.today)
+          this.monthDaysDis[this.today] = true;
+        else {
+          checkAppointmentMonth = this.utcMonth;
+          checkAppointmentYear = this.utcYear;
+          if (checkAppointmentMonth <= 9)
+            appointmentDate = checkAppointmentYear + '/0' + checkAppointmentMonth + '/' + i;
+          else
+            appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + i;
+          integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
+          this.checkIfDayAppFull(i, integerAndStringPost, docId, appDate);
+        }
+      }
+      day++;
+    }
+    for (var j = 0; j <= (this.today - this.lastMonthDay) + 26; j++) {
+      this.monthDays[day + j] = j + 1;
+      j1 = j + 1;
+      if (this.appointmentDocInfoGet[docId].workDays.indexOf(this.daysNameEn[(this.todayNumber + day + j) % 7]) == -1)
+        this.monthDaysDis[j1] = true;
+      else {
+        checkAppointmentMonth = this.utcMonth + 1;
+        checkAppointmentYear = this.utcYear;
+        if (checkAppointmentMonth <= 9)
+          appointmentDate = checkAppointmentYear + '/0' + checkAppointmentMonth + '/' + j1;
+        else {
+          if (checkAppointmentMonth == 13) {
+            checkAppointmentMonth = 1;
+            checkAppointmentYear = checkAppointmentYear + 1;
+          }
+          appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + j1;
+        }
+        integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
+        this.checkIfDayAppFull(j1, integerAndStringPost, docId, appDate);
+      }
+    }
+  }
+  checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string) {
+    if (i == parseInt(appDate.slice(8, 10)))
+      this.monthDaysDis[i] = true;
+    else {
+      this.appointmentService.appointmentsCountByDoctorIdAndDate(integerAndStringPost).subscribe(
+        res => {
+          if (res >= this.appointmentDocInfoGet[docId].maxPatientPerDay)
+            this.monthDaysDis[i] = true;
+          else
+            this.monthDaysDis[i] = false;
+        }
+      );
+    }
+  }
+  daySelected(day: number) {
+    this.appointmentDay = day;
+    if (day > 0 && day <= 31) {
+      this.slectedDay = false;
+      if (day >= this.today) {
+        this.appointmentMonth = this.utcMonth;
+        this.appointmentYear = this.utcYear;
+      } else {
+        if (this.utcMonth + 1 == 13) {
+          this.appointmentMonth = 1;
+          this.appointmentYear = this.utcYear + 1;
+        } else {
+          this.appointmentMonth = this.utcMonth + 1;
+          this.appointmentYear = this.utcYear;
+        }
+      }
+    }
+    else
+      this.slectedDay = true;
+  }
+  updateAppById(appId: number) {
+    if (this.slectedDay == false) {
+      if (this.utcMonth <= 9)
+        this.appointmentDate = this.appointmentYear + '/0' + this.appointmentMonth + '/' + this.appointmentDay;
+      else
+        this.appointmentDate = this.appointmentYear + '/' + this.appointmentMonth + '/' + this.appointmentDay;
+      this.integerAndStringPost=new IntegerAndStringPost(appId,this.appointmentDate);
+      this.appointmentService.updateAppointmentDateById(this.integerAndStringPost).subscribe(
+        res => {
+          if (res == 'updated') {
+            this.toastr.success(this.translate.instant('appontmentDateUpdated'), this.translate.instant('appointment'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.showUpdateCalendar=false;
+            document.getElementById("myAppointmentsSection").scrollIntoView({ behavior: "smooth" });
+            this.slectedDay=true;
+            this.getUserInfo();
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.toastr.warning(this.translate.instant('selectDayFirst'), this.translate.instant('appointment'), {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
       });

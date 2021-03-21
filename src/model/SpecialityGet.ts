@@ -1,5 +1,5 @@
 export interface SpecialityGet{
     specialityId:number;
-    specialityName:String;
-    specialityDescription:String;
+    specialityName:string;
+    specialityCode:string;
 }

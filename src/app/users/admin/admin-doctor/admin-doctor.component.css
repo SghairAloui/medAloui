@@ -148,3 +148,10 @@
     margin-bottom: 10px;
     width: auto;
 }
+.specialityContainer{
+    display: inline-block;
+    background-color: #308a7b;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-top: 10px;
+}

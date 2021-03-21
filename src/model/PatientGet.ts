@@ -1,3 +1,4 @@
+import { AppointmentGet } from "./AppointmentGet";
 import { medicalProfileGet } from "./medicalProfileGet";
 import { prescriptionGet } from "./prescriptionGet";
 
@@ -14,4 +15,5 @@ export interface PatientGet{
     patientSecureLogin:string;
     medicalProfile:medicalProfileGet;
     prescription:prescriptionGet [];
+    appointment:AppointmentGet[];
 }

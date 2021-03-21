@@ -26,13 +26,15 @@ export class PatientHeaderComponent implements OnInit {
       this.appComp.switchTheme('light');
       this.darkMode=false;
     }
-    this.translate.use(localStorage.getItem("lang"));
-    if(localStorage.getItem("lang")=='en'){
-      this.en=true;
-      this.fr=false;
-    }else if (localStorage.getItem("lang")=='fr'){
-      this.en=false;
-      this.fr=true;
+    if( localStorage.getItem("lang") != null ){
+      this.translate.use(localStorage.getItem("lang"));
+      if(localStorage.getItem("lang")=='en'){
+        this.en=true;
+        this.fr=false;
+      }else if (localStorage.getItem("lang")=='fr'){
+        this.en=false;
+        this.fr=true;
+      }
     }
   }
   switchTheme(){
@@ -97,6 +99,7 @@ export class PatientHeaderComponent implements OnInit {
   }
   profileCLick(){
     this.patientComp.container='profile';
+    this.patientComp.ngOnInit();
     this.parentHeader='profile';
   }
   toFindDoctorSection(){
@@ -110,5 +113,8 @@ export class PatientHeaderComponent implements OnInit {
   }
   toWhyHealthCareSection(){
     document.getElementById("patientWhyHealthCareSection").scrollIntoView({behavior:"smooth"});
+  }
+  toMyAppointmentsSection(){
+    document.getElementById("myAppointmentsSection").scrollIntoView({behavior:"smooth"});
   }
 }
