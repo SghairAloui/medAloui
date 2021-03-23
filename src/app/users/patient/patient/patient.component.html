@@ -383,129 +383,140 @@
                             </div>
                             <div class="div" style="text-transform: capitalize;"> {{'modify'|translate}} </div>
                         </div>
-                        <div *ngFor="let app of patientGet.appointment">
-                            <div *ngIf="appointmentDocInfoGet[app.doctorId]" class="appointmentsGrid">
-                                <div class="div">
-                                    <div class="centerInDivGrid">
-                                        <div class="profileImgCon">
-                                            <div
-                                                *ngIf="doctorProfileImgRes[app.doctorId]; then showDocProfileImg else showDocDefaultImg">
+                        <div *ngFor="let app of patientGet.appointment | keyvalue">
+                            <section id="{{app.key}}">
+                                <div *ngIf="appointmentDocInfoGet[app.key]">
+                                    <div *ngIf="app.value.appointmentStatus=='pending'"  class="appointmentsGrid">
+                                        <div class="div">
+                                            <div class="centerInDivGrid">
+                                                <div class="profileImgCon">
+                                                    <div
+                                                        *ngIf="doctorProfileImgRes[app.key]; then showDocProfileImg else showDocDefaultImg">
+                                                    </div>
+                                                    <ng-template #showDocProfileImg><img
+                                                            [src]="doctorProfileImg[app.key]" class="profileImg">
+                                                    </ng-template>
+                                                    <ng-template #showDocDefaultImg><i
+                                                            class="fas fa-user-tie userTie50"></i>
+                                                    </ng-template>
+                                                </div>
+                                                <div class="appDocName">
+                                                    Dr. <span
+                                                        style="text-transform: capitalize;">{{appointmentDocInfoGet[app.key].doctorFirstName}}</span>
+                                                    <span style="text-transform: uppercase;">
+                                                        {{appointmentDocInfoGet[app.key].doctorLastName}}</span>
+                                                </div>
+                                                <div *ngIf="appointmentDocInfoGet[app.key].doctorRate != 0"
+                                                    class="centerRate">
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 0.5">
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 1">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 1.5">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 2">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 2.5">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 3">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 3.5">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 4">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 4.5">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    </div>
+                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 5">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    </div>
+                                                </div>
+                                                <span
+                                                    class="appInfoTitleCon paddingRight">{{appointmentDocInfoGet[app.key].specialityCode.toString()|translate}}</span>
                                             </div>
-                                            <ng-template #showDocProfileImg><img [src]="doctorProfileImg[app.doctorId]"
-                                                    class="profileImg">
-                                            </ng-template>
-                                            <ng-template #showDocDefaultImg><i class="fas fa-user-tie userTie50"></i>
-                                            </ng-template>
                                         </div>
-                                        <div class="appDocName">
-                                            Dr. <span
-                                                style="text-transform: capitalize;">{{appointmentDocInfoGet[app.doctorId].doctorFirstName}}</span>
-                                            <span style="text-transform: uppercase;">
-                                                {{appointmentDocInfoGet[app.doctorId].doctorLastName}}</span>
-                                        </div>
-                                        <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate != 0"
-                                            class="centerRate">
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 0.5">
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 1">
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 1.5">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 2">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 2.5">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 3">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 3.5">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 4">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 4.5">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star-half-alt"></i>
-                                            </div>
-                                            <div *ngIf="appointmentDocInfoGet[app.doctorId].doctorRate == 5">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
+                                        <div class="div">
+                                            <div class="centerInDivGrid">
+                                                <div class="appInfoTitleCon"> {{'date'|translate}} <span
+                                                        class="appInfo">{{app.value.appointmentDate}}</span> </div>
+                                                <div class="appInfoTitleCon"> {{'city'|translate}} <span
+                                                        class="appInfo">{{appointmentDocInfoGet[app.key].doctorCity}}</span>
+                                                </div>
+                                                <div class="appInfoTitleCon"> {{'exactAdress'|translate}} <span
+                                                        class="appInfo">{{appointmentDocInfoGet[app.key].exactAdress}}</span>
+                                                </div>
+                                                <div class="appInfoTitleCon"> {{'youTurn'|translate}} <span
+                                                        class="appInfo">{{app.value.patientTurn}}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <span
-                                            class="appInfoTitleCon paddingRight">{{appointmentDocInfoGet[app.doctorId].specialityCode.toString()|translate}}</span>
+                                        <div class="div">
+                                            <div class="centerInDivGrid">
+                                                <button class="fullyBtn fullyBtnRed"
+                                                    (click)="deleteAppById(app.value.appointmentId)">
+                                                    {{'delete'|translate}} <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                                <button class="fullyBtn fullyBtnGreen"
+                                                    (click)="changeAppDate(app.value.doctorId,app.value.appointmentDate,app.key)">
+                                                    {{'changeDate'|translate}} <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="div">
-                                    <div class="centerInDivGrid">
-                                        <div class="appInfoTitleCon"> {{'date'|translate}} <span
-                                                class="appInfo">{{app.appointmentDate}}</span> </div>
-                                        <div class="appInfoTitleCon"> {{'city'|translate}} <span
-                                                class="appInfo">{{appointmentDocInfoGet[app.doctorId].doctorCity}}</span>
-                                        </div>
-                                        <div class="appInfoTitleCon"> {{'exactAdress'|translate}} <span
-                                                class="appInfo">{{appointmentDocInfoGet[app.doctorId].exactAdress}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="div">
-                                    <div class="centerInDivGrid">
-                                        <button class="fullyBtn fullyBtnRed" (click)="deleteAppById(app.appointmentId)">
-                                            {{'delete'|translate}} <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="fullyBtn fullyBtnGreen" (click)="changeAppDate(app.doctorId,app.appointmentDate)">
-                                            {{'changeDate'|translate}} <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            </section>
                             <section id="calendarGridSection">
-                                <div *ngIf="showUpdateCalendar">
-                                    <div style="margin-left: 4%; padding-top: 4%;">{{'selectAppointmentDay'|translate}}</div>
+                                <div *ngIf="showUpdateCalendar[app.key]">
+                                    <div style="margin-left: 4%; padding-top: 4%;">{{'selectAppointmentDay'|translate}}
+                                    </div>
                                     <div class="calendarGrid">
                                         <div class="day dayNumber" *ngFor="let day of monthDays">
                                             <input type="radio" id="day{{day}}" name="dayName"
@@ -514,7 +525,7 @@
                                                 [disabled]="monthDaysDis[day]">{{day}}</label>
                                         </div>
                                     </div>
-                                    <button class="emptyBtn white" (click)="updateAppById(app.appointmentId)">
+                                    <button class="emptyBtn white" (click)="updateAppById(app.value.appointmentId,app.key)">
                                         {{'update'|translate}} </button>
                                 </div>
                             </section>

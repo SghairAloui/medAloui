@@ -1,3 +1,4 @@
+import { AppointmentGet } from "./AppointmentGet";
 import { SpecialityGet } from "./SpecialityGet";
 
 export interface DoctorGet{
@@ -16,4 +17,5 @@ export interface DoctorGet{
     startTime:string;
     exactAdress:string;
     workDays:string;
+    appointment:AppointmentGet [];
 }

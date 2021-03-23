@@ -1,16 +1,21 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { MedicalProfileService } from 'src/app/medical profile/medical-profile.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
+import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
 import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { SpecialityGet } from 'src/model/SpecialityGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
+import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
 
 @Component({
@@ -20,6 +25,7 @@ import { DoctorService } from './doctor.service';
 })
 export class DoctorComponent implements OnInit {
 
+  currentDate: string;
   specialityCode: string;
   testSpeciality: boolean;
   specialityName: string;
@@ -42,14 +48,32 @@ export class DoctorComponent implements OnInit {
   doctorPostWithSecureLogin: DoctorPostWithSecureLogin;
   secureLogin: SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
   Mon: boolean; Tue: boolean; Wed: boolean; Thu: boolean; Fri: boolean; Sat: boolean; Sun: boolean; selectDay: boolean = false;
-  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService) { }
+
+  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private medicalProfileService: MedicalProfileService) { }
   invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
-  docInfo:boolean;
+  docInfo: boolean;
+  toadyAppointmentPatientInfo: AppointmentPatientInfo[];
+  tomorrowAppointmentPatientInfo: AppointmentPatientInfo[];
+  completedAppointmentPatientInfo: AppointmentPatientInfo[];
+  nextAppointmentPatientInfo: AppointmentPatientInfo[];
+  patientTodayProfilePicRes: any[];patientTomorrowProfilePicRes: any[];
+  patientTodayProfilePic: any[];patientTomorrowProfilePic: any[];
+  patientStart: number = 0;patientTomorrowStart:number=0;
+  patientFinish: number = 6;patientTomorrowFinish:number=6;
+  showpatientNavigationRight: boolean;showTomorrowpatientNavigationRight:boolean;
+  showpatientNavigationLeft: boolean;showTomorrowpatientNavigationLeft:boolean;
+  lengthTested: boolean;tommorowLengthTested:boolean;
+  patientInfo: boolean = false;tomorrowPatientInfo:boolean = false;
+  patientKey: number;tomorrowPatientKey:number;
+  todayPatientMedicalProfileGet: medicalProfileGet[] = [];tomorrowPatientMedicalProfileGet: medicalProfileGet[] = [];
 
   ngOnInit(): void {
-    this.docInfo=false;
+    this.lengthTested = false;this.tommorowLengthTested=false;
+    this.toadyAppointmentPatientInfo = []; this.tomorrowAppointmentPatientInfo = []; this.completedAppointmentPatientInfo = []; this.nextAppointmentPatientInfo = []; this.patientTodayProfilePicRes = []; this.patientTodayProfilePic = [];this.patientTomorrowProfilePicRes=[];this.patientTomorrowProfilePic=[];
+    this.currentDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    this.docInfo = false;
     this.getDoctorInfo();
     this.getAllSpecialities();
   }
@@ -58,14 +82,15 @@ export class DoctorComponent implements OnInit {
       res => {
         if (res) {
           this.doctorGet = res;
-          this.docInfo=true;
+          this.getAppPatientInfo();
+          this.docInfo = true;
           localStorage.setItem('id', this.doctorGet.doctorId.toString());
           if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
-            this.checkDocDocument(localStorage.getItem('id') + "doctorCinPic");
-            this.checkDocDocument(localStorage.getItem('id') + "doctorMedicalClinicPic");
-            this.checkDocDocument(localStorage.getItem('id') + "doctorMedicalSpecialty");
+            this.checkDocDocument(this.doctorGet.doctorId + "doctorCinPic");
+            this.checkDocDocument(this.doctorGet.doctorId + "doctorMedicalClinicPic");
+            this.checkDocDocument(this.doctorGet.doctorId + "doctorMedicalSpecialty");
           }
-          this.getImage(localStorage.getItem('id') + "doctorProfilePic");
+          this.getImage(this.doctorGet.doctorId + "doctorProfilePic");
           this.intializeEdit();
           this.initializeAccountSettings();
           this.initializeEditAccountSettigns();
@@ -97,7 +122,6 @@ export class DoctorComponent implements OnInit {
       this.doctorPostWithSecureLogin = new DoctorPostWithSecureLogin(this.mail.toLowerCase(), this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), this.passwordRepeat, birthday, gender.toLowerCase(), localStorage.getItem("secureLogin"));
       this.doctorService.updateDoctorInfoBySecureLogin(this.doctorPostWithSecureLogin).subscribe(
         res => {
-          console.log(res);
           if (res == 'usernameExist') {
             this.invalidMailVariable = true;
             this.mailInformation = this.translate.instant('mailExist');
@@ -393,7 +417,7 @@ export class DoctorComponent implements OnInit {
   }
   public onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(localStorage.getItem('id') + "doctorProfilePic");
+    this.onUpload(this.doctorGet.doctorId + "doctorProfilePic");
   }
   onUpload(imageName: string) {
     if (this.doctorGet.doctorId == parseInt(localStorage.getItem('id'))) {
@@ -420,7 +444,7 @@ export class DoctorComponent implements OnInit {
   }
   getImage(imageName: string) {
     if (this.doctorGet.doctorId == parseInt(localStorage.getItem('id'))) {
-      if (imageName == localStorage.getItem('id') + "doctorProfilePic") {
+      if (imageName == this.doctorGet.doctorId + "doctorProfilePic") {
         this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
           res => {
             if (res != null) {
@@ -429,7 +453,6 @@ export class DoctorComponent implements OnInit {
               this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
             } else
               this.retrieveResonse = null;
-
           },
           err => {
             if (this.retrievedImage) {
@@ -440,11 +463,11 @@ export class DoctorComponent implements OnInit {
             }
           }
         );
-      } else if (imageName == localStorage.getItem('id') + "doctorCinPic")
+      } else if (imageName == this.doctorGet.doctorId + "doctorCinPic")
         this.cinPic = true;
-      else if (imageName == localStorage.getItem('id') + "doctorMedicalClinicPic")
+      else if (imageName == this.doctorGet.doctorId + "doctorMedicalClinicPic")
         this.medicalClinicPic = true;
-      else if (imageName == localStorage.getItem('id') + "doctorMedicalSpecialty")
+      else if (imageName == this.doctorGet.doctorId + "doctorMedicalSpecialty")
         this.medicalSpecialtyPic = true;
     } else {
       this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
@@ -455,20 +478,20 @@ export class DoctorComponent implements OnInit {
   }
   public onFileChangedCin(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(localStorage.getItem('id') + "doctorCinPic");
+    this.onUpload(this.doctorGet.doctorId + "doctorCinPic");
   }
   public onFileChangedMedicalClinic(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(localStorage.getItem('id') + "doctorMedicalClinicPic");
+    this.onUpload(this.doctorGet.doctorId + "doctorMedicalClinicPic");
   }
   public onFileChangedMedicalSpecialty(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(localStorage.getItem('id') + "doctorMedicalSpecialty");
+    this.onUpload(this.doctorGet.doctorId + "doctorMedicalSpecialty");
   }
   submitDoctorDocuments() {
     this.testSpeciality = true;
     for (let spec of this.specialityGet) {
-      if ( this.translate.instant(spec.specialityCode).toLowerCase() == this.specialityName.toLowerCase() && this.specialityName != null) {
+      if (this.translate.instant(spec.specialityCode).toLowerCase() == this.specialityName.toLowerCase() && this.specialityName != null) {
         this.testSpeciality = false;
         this.specialityCode = spec.specialityCode;
         break;
@@ -514,11 +537,11 @@ export class DoctorComponent implements OnInit {
     this.doctorService.checkIfDocumentExist(this.oneStringPost).subscribe(
       res => {
         if (res == true) {
-          if (imageName == localStorage.getItem('id') + "doctorCinPic")
+          if (imageName == this.doctorGet.doctorId + "doctorCinPic")
             this.cinPic = true;
-          else if (imageName == localStorage.getItem('id') + "doctorMedicalClinicPic")
+          else if (imageName == this.doctorGet.doctorId + "doctorMedicalClinicPic")
             this.medicalClinicPic = true;
-          else if (imageName == localStorage.getItem('id') + "doctorMedicalSpecialty")
+          else if (imageName == this.doctorGet.doctorId + "doctorMedicalSpecialty")
             this.medicalSpecialtyPic = true;
         }
       }
@@ -794,5 +817,193 @@ export class DoctorComponent implements OnInit {
         });
       }
     );
+  }
+  getAppPatientInfo() {
+    let today = new Date();
+    let tomorrow = formatDate(new Date(today.setDate(today.getDate() + 1)), 'yyyy/MM/dd', 'en');
+    for (let app of this.doctorGet.appointment) {
+      if (app.appointmentDate == this.currentDate) {
+        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
+          res => {
+            if (res) {
+              this.toadyAppointmentPatientInfo[app.patientTurn - 1] = res;
+              this.getPatientTodayProfileImage(app.patientId, app.patientTurn);
+              if (this.toadyAppointmentPatientInfo.length <= 6 && !this.lengthTested) {
+                this.showpatientNavigationRight = false;
+                this.showpatientNavigationLeft = false;
+              } else if (this.toadyAppointmentPatientInfo.length > 6 && !this.lengthTested) {
+                this.showpatientNavigationRight = true;
+                this.showpatientNavigationLeft = false;
+                this.lengthTested = true;
+              }
+            }
+          }
+        );
+      } else if (app.appointmentDate == tomorrow) {
+        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
+          res => {
+            if (res) {
+              this.tomorrowAppointmentPatientInfo[app.patientTurn - 1]=res;
+              this.getPatientTomorrowProfileImage(app.patientId, app.patientTurn);
+              if (this.tomorrowAppointmentPatientInfo.length <= 6 && !this.tommorowLengthTested) {
+                this.showTomorrowpatientNavigationRight = false;
+                this.showTomorrowpatientNavigationLeft = false;
+              } else if (this.tomorrowAppointmentPatientInfo.length > 6 && !this.tommorowLengthTested) {
+                this.showTomorrowpatientNavigationRight = true;
+                this.showTomorrowpatientNavigationLeft = false;
+                this.tommorowLengthTested = true;
+              }
+            }
+          }
+        );
+      } else if (app.appointmentStatus == 'completed') {
+        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
+          res => {
+            if (res) {
+              this.completedAppointmentPatientInfo.push(res);
+            }
+          }
+        );
+      } else {
+        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
+          res => {
+            if (res) {
+              this.nextAppointmentPatientInfo.push(res);
+            }
+          }
+        );
+      }
+    }
+  }
+  getPatientTodayProfileImage(id: number, turn: number) {
+    let retrieveResonse: any;
+    let base64Data: any;
+    let retrievedImage: any;
+    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          this.patientTodayProfilePicRes[turn - 1] = retrieveResonse;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.patientTodayProfilePic[turn - 1] = retrievedImage;
+        } else {
+          this.patientTodayProfilePicRes[turn - 1] = null;
+          this.patientTodayProfilePic[turn - 1] = null;
+        }
+      }
+    );
+  }
+  getPatientTomorrowProfileImage(id: number, turn: number) {
+    let retrieveResonse: any;
+    let base64Data: any;
+    let retrievedImage: any;
+    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          this.patientTomorrowProfilePicRes[turn - 1] = retrieveResonse;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.patientTomorrowProfilePic[turn - 1] = retrievedImage;
+        } else {
+          this.patientTomorrowProfilePicRes[turn - 1] = null;
+          this.patientTomorrowProfilePic[turn - 1] = null;
+        }
+      }
+    );
+  }
+  patientNavigationRightClick() {
+    if (this.toadyAppointmentPatientInfo.length >= (this.patientFinish + 3)) {
+      this.patientStart += 3;
+      this.patientFinish += 3;
+      this.showpatientNavigationLeft = true;
+      this.showpatientNavigationRight = true;
+    } else {
+      this.patientStart += (this.toadyAppointmentPatientInfo.length % 3);
+      this.patientFinish += (this.toadyAppointmentPatientInfo.length % 3);
+      this.showpatientNavigationRight = false;
+      this.showpatientNavigationLeft = true;
+    }
+  }
+  patientNavigationLeftClick() {
+    if (this.toadyAppointmentPatientInfo.length >= (this.patientFinish + 3)) {
+      this.patientStart -= 3;
+      this.patientFinish -= 3;
+      this.showpatientNavigationLeft = true;
+      this.showpatientNavigationRight = true;
+    } else {
+      this.patientStart -= (this.toadyAppointmentPatientInfo.length % 3);
+      this.patientFinish -= (this.toadyAppointmentPatientInfo.length % 3);
+      this.showpatientNavigationRight = true;
+      this.showpatientNavigationLeft = false;
+    }
+  }
+  patientTomorrowNavigationRightClick() {
+    if (this.tomorrowAppointmentPatientInfo.length >= (this.patientTomorrowFinish + 3)) {
+      this.patientTomorrowStart += 3;
+      this.patientTomorrowFinish += 3;
+      this.showTomorrowpatientNavigationLeft = true;
+      this.showTomorrowpatientNavigationRight = true;
+    } else {
+      this.patientTomorrowStart += (this.tomorrowAppointmentPatientInfo.length % 3);
+      this.patientTomorrowFinish += (this.tomorrowAppointmentPatientInfo.length % 3);
+      this.showTomorrowpatientNavigationRight = false;
+      this.showTomorrowpatientNavigationLeft = true;
+    }
+  }
+  patientTomorrowNavigationLeftClick() {
+    if (this.tomorrowAppointmentPatientInfo.length >= (this.patientTomorrowFinish + 3)) {
+      this.patientTomorrowStart -= 3;
+      this.patientTomorrowFinish -= 3;
+      this.showTomorrowpatientNavigationLeft = true;
+      this.showTomorrowpatientNavigationRight = true;
+    } else {
+      this.patientTomorrowStart -= (this.tomorrowAppointmentPatientInfo.length % 3);
+      this.patientTomorrowFinish -= (this.tomorrowAppointmentPatientInfo.length % 3);
+      this.showTomorrowpatientNavigationRight = true;
+      this.showTomorrowpatientNavigationLeft = false;
+    }
+  }
+  showFullPatientInfo(medicalProfileId: number, patientKey: number) {
+    this.patientKey = patientKey;
+    if (this.todayPatientMedicalProfileGet[patientKey] == null) {
+      this.medicalProfileService.getMedicalProfileByPatientId(medicalProfileId).subscribe(
+        res => {
+          if (res) {
+            this.todayPatientMedicalProfileGet[patientKey] = res;
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
+    this.patientInfo = true;
+  }
+  icreasePatientTurn(key:string):string{
+    return parseInt(key)+1+'';
+  }
+  showFullPatientTomorrowInfo(medicalProfileId: number, patientKey: number){
+    this.tomorrowPatientKey = patientKey;
+    if (this.tomorrowPatientMedicalProfileGet[patientKey] == null) {
+      this.medicalProfileService.getMedicalProfileByPatientId(medicalProfileId).subscribe(
+        res => {
+          if (res) {
+            this.tomorrowPatientMedicalProfileGet[patientKey] = res;
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
+    this.tomorrowPatientInfo = true;
   }
 }

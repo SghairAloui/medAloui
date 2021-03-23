@@ -207,3 +207,27 @@ body{
 .doctorAppointmentContainer .center .emptyBtn{
     width: 80%;
 }
+.white:hover{
+    cursor: pointer;
+    color:#308a7b;
+    background-color: white;
+}
+#day1Lab:hover,#day2Lab:hover,#day3Lab:hover,#day4Lab:hover,#day5Lab:hover,#day6Lab:hover,#day7Lab:hover,#day8Lab:hover,#day9Lab:hover,#day10Lab:hover,#day11Lab:hover,#day12Lab:hover,#day13Lab:hover,#day14Lab:hover,#day15Lab:hover,#day16Lab:hover,#day17Lab:hover,#day18Lab:hover,#day19Lab:hover,#day20Lab:hover,#day21Lab:hover,#day22Lab:hover,#day23Lab:hover,#day24Lab:hover,#day25Lab:hover,#day26Lab:hover,#day27Lab:hover,#day28Lab:hover,#day29Lab:hover,#day30Lab:hover,#day31Lab:hover{
+    cursor: pointer;
+    background-color: white;
+    color: #308a7b;
+    transition: all .3s ease-in-out;
+}
+#day1:checked + #day1Lab,#day2:checked + #day2Lab,#day3:checked + #day3Lab,#day4:checked + #day4Lab,#day5:checked + #day5Lab,#day6:checked + #day6Lab,#day7:checked + #day7Lab,#day8:checked + #day8Lab,#day9:checked + #day9Lab,#day10:checked + #day10Lab,#day11:checked + #day11Lab,#day12:checked + #day12Lab,#day13:checked + #day13Lab,#day14:checked + #day14Lab,#day15:checked + #day15Lab,#day16:checked + #day16Lab,#day17:checked + #day17Lab,#day18:checked + #day18Lab,#day19:checked + #day19Lab,#day20:checked + #day20Lab,#day21:checked + #day21Lab,#day22:checked + #day22Lab,#day23:checked + #day23Lab,#day24:checked + #day24Lab,#day25:checked + #day25Lab,#day26:checked + #day26Lab,#day27:checked + #day27Lab,#day28:checked + #day28Lab,#day29:checked + #day29Lab,#day30:checked + #day30Lab,#day31:checked + #day31Lab{
+    background-color: white;
+    color: #308a7b;
+    font-weight: 700;
+    transition: all .3s ease-in-out;
+}
+.doctorAppointmentContainer,.fillAllDay{
+    color: white;
+}
+.white{
+    border: 1px solid white;
+    color:white;
+}

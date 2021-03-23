@@ -101,7 +101,8 @@
     transform: translateY(-50%);
     right: 2%;
     font-size: 30px;
-    color: white;
+    color: var(--text-color);
+    transition: all .3s ease-in-out;
 }
 .leftArrow{
     position: absolute;
@@ -109,7 +110,8 @@
     transform: translateY(-50%);
     left: 2%;
     font-size: 30px;
-    color: white;
+    color: var(--text-color);
+    transition: all .3s ease-in-out;
 }
 .fullyBtn{
     width: 35%;

@@ -60,14 +60,17 @@ export class PatientComponent implements OnInit {
   base64Data: any;
   retrieveResonse: any;
   message: string;
-  doctorProfileImgRes: any[] = [];
-  doctorProfileImg: any[] = [];
-  appointmentDocInfoGet: AppointmentDocInfoGet[] = [];
+  doctorProfileImgRes: any[];
+  doctorProfileImg: any[];
+  appointmentDocInfoGet: AppointmentDocInfoGet[];
   patientInfo: boolean;
-  showUpdateCalendar: boolean;
+  showUpdateCalendar: boolean [];
 
   ngOnInit(): void {
-    this.showUpdateCalendar = false;
+    this.doctorProfileImgRes = [];
+    this.doctorProfileImg = [];
+    this.appointmentDocInfoGet = [];
+    this.showUpdateCalendar = [false];
     this.patientInfo = false;
     this.getUserInfo();
   }
@@ -125,6 +128,9 @@ export class PatientComponent implements OnInit {
           for (let app of this.patientGet.appointment) {
             this.getDocProfileImg(app.doctorId);
             this.getDoctorAppointmentInfoByDoctorId(app.doctorId);
+          }
+          for (let app of this.appointmentDocInfoGet){
+            console.log(app + 'jj');
           }
         } else
           this.router.navigate(['/acceuil']);
@@ -408,7 +414,7 @@ export class PatientComponent implements OnInit {
   onUpload() {
     if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
       const uploadImageData = new FormData();
-      uploadImageData.append('imageFile', this.selectedFile, localStorage.getItem('id') + "patientProfilePic");
+      uploadImageData.append('imageFile', this.selectedFile, this.patientGet.patientId + "patientProfilePic");
       this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
         res => {
           if (res == 'imageUpdated')
@@ -463,12 +469,12 @@ export class PatientComponent implements OnInit {
       res => {
         if (res != null) {
           retrieveResonse = res;
-          this.doctorProfileImgRes[id] = retrieveResonse;
+          this.doctorProfileImgRes.push(retrieveResonse);
           base64Data = retrieveResonse.picByte;
           retrievedImage = 'data:image/jpeg;base64,' + base64Data;
-          this.doctorProfileImg[id] = retrievedImage;
+          this.doctorProfileImg.push(retrievedImage);
         } else
-          this.doctorProfileImgRes[id] = null;
+          this.doctorProfileImgRes.push(null);
       }
     );
   }
@@ -476,7 +482,7 @@ export class PatientComponent implements OnInit {
     this.doctorService.getDoctorAppointmentInfoByDoctorId(id).subscribe(
       res => {
         if (res) {
-          this.appointmentDocInfoGet[id] = res;
+          this.appointmentDocInfoGet.push(res);
         }
       }
     );
@@ -500,9 +506,9 @@ export class PatientComponent implements OnInit {
       }
     );
   }
-  changeAppDate(docId: number, appDate: string) {
-    this.generateMonthDay(docId, appDate);
-    this.showUpdateCalendar = true;
+  changeAppDate(docId: number, appDate: string, key:number) {
+    this.generateMonthDay(docId, appDate, key);
+    this.showUpdateCalendar [key] = true;
     document.getElementById("calendarGridSection").scrollIntoView({ behavior: "smooth" });
   }
   getMonthLastDay() {
@@ -534,7 +540,7 @@ export class PatientComponent implements OnInit {
     else if (this.utcMonth == 12)
       this.lastMonthDay = 31;
   }
-  generateMonthDay(docId: number, appDate: string) {
+  generateMonthDay(docId: number, appDate: string, key:number) {
     this.daysName = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat')];
     this.daysNameDouble = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sat')];
     this.getMonthLastDay();
@@ -559,7 +565,7 @@ export class PatientComponent implements OnInit {
     }
     for (var i = this.today; i <= this.lastMonthDay; i++) {
       this.monthDays[day] = i;
-      if (this.appointmentDocInfoGet[docId].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+      if (this.appointmentDocInfoGet[key].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)
@@ -572,7 +578,7 @@ export class PatientComponent implements OnInit {
           else
             appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + i;
           integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
-          this.checkIfDayAppFull(i, integerAndStringPost, docId, appDate);
+          this.checkIfDayAppFull(i, integerAndStringPost, docId, appDate,key);
         }
       }
       day++;
@@ -580,7 +586,7 @@ export class PatientComponent implements OnInit {
     for (var j = 0; j <= (this.today - this.lastMonthDay) + 26; j++) {
       this.monthDays[day + j] = j + 1;
       j1 = j + 1;
-      if (this.appointmentDocInfoGet[docId].workDays.indexOf(this.daysNameEn[(this.todayNumber + day + j) % 7]) == -1)
+      if (this.appointmentDocInfoGet[key].workDays.indexOf(this.daysNameEn[(this.todayNumber + day + j) % 7]) == -1)
         this.monthDaysDis[j1] = true;
       else {
         checkAppointmentMonth = this.utcMonth + 1;
@@ -595,17 +601,17 @@ export class PatientComponent implements OnInit {
           appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + j1;
         }
         integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
-        this.checkIfDayAppFull(j1, integerAndStringPost, docId, appDate);
+        this.checkIfDayAppFull(j1, integerAndStringPost, docId, appDate,key);
       }
     }
   }
-  checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string) {
+  checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string,key:number) {
     if (i == parseInt(appDate.slice(8, 10)))
       this.monthDaysDis[i] = true;
     else {
       this.appointmentService.appointmentsCountByDoctorIdAndDate(integerAndStringPost).subscribe(
         res => {
-          if (res >= this.appointmentDocInfoGet[docId].maxPatientPerDay)
+          if (res >= this.appointmentDocInfoGet[key].maxPatientPerDay)
             this.monthDaysDis[i] = true;
           else
             this.monthDaysDis[i] = false;
@@ -633,7 +639,7 @@ export class PatientComponent implements OnInit {
     else
       this.slectedDay = true;
   }
-  updateAppById(appId: number) {
+  updateAppById(appId: number,key:number) {
     if (this.slectedDay == false) {
       if (this.utcMonth <= 9)
         this.appointmentDate = this.appointmentYear + '/0' + this.appointmentMonth + '/' + this.appointmentDay;
@@ -647,8 +653,8 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.showUpdateCalendar=false;
-            document.getElementById("myAppointmentsSection").scrollIntoView({ behavior: "smooth" });
+            this.showUpdateCalendar[key]=false;
+            document.getElementById(key.toString()).scrollIntoView({ behavior: "smooth" });
             this.slectedDay=true;
             this.getUserInfo();
           }

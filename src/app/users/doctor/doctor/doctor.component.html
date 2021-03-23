@@ -705,6 +705,242 @@
                     </section>
                 </div>
             </div>
+            <div *ngIf="container=='patient'">
+                <section id="todayPatientSection">
+                    <div class="sectionTitle">{{'todayPatient'|translate}}</div>
+                    <div class="sectionContainer">
+                        <div *ngIf="toadyAppointmentPatientInfo.length == 0">
+                            <div style="text-align: center;padding: 20px;">{{'noPatientToday'|translate}}</div>
+                        </div>
+                        <div *ngIf="toadyAppointmentPatientInfo.length != 0">
+                            <div *ngIf="patientInfo; then showPatientinfo else showPatientSmallInfo "></div>
+                            <ng-template #showPatientinfo>
+                                <div class="patientProfilePicBigContainer">
+                                    <div
+                                        *ngIf="patientTodayProfilePicRes[patientKey]; then showPatientProfileImg else showPatientDefaultImg">
+                                    </div>
+                                    <ng-template #showPatientProfileImg><img [src]="patientTodayProfilePic[patientKey]"
+                                            class="profileImg">
+                                    </ng-template>
+                                    <ng-template #showPatientDefaultImg><i
+                                            class="fas fa-user-tie patientBigUserTie"></i>
+                                    </ng-template>
+                                </div>
+                                <div class="horizentalCenter">
+                                    <span
+                                        style="text-transform: capitalize;">{{toadyAppointmentPatientInfo[patientKey].patientFirstName}}</span>
+                                    <span style="text-transform: uppercase; padding-left: 4px;">
+                                        {{toadyAppointmentPatientInfo[patientKey].patientLastName}}</span>
+                                </div>
+                                <div class="patientInfoContainer">
+                                    <span class="info"><i class="fas fa-map-marker-alt"></i>
+                                        {{toadyAppointmentPatientInfo[patientKey].patientCity}}</span>
+                                    <span class="info"><i class="fas fa-venus-mars"></i>
+                                        {{toadyAppointmentPatientInfo[patientKey].patientGender}}</span>
+                                    <span class="info"><i class="fas fa-birthday-cake"></i>
+                                        {{toadyAppointmentPatientInfo[patientKey].patientBirthDay}}</span>
+                                </div>
+                                <div class="patientMedicalProfile">
+                                    <div class="tilte"> {{'medicalProfile'|translate}} </div>
+                                    <div class="medicalProfileinfo">
+                                        <div *ngIf="todayPatientMedicalProfileGet[patientKey]">
+                                            <div class="infoGridTowColumn newPadding">
+                                                <div class="infoContainer">
+                                                    <div class="infoIcon">
+                                                        <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
+                                                    </div>
+                                                    <div class="info">
+                                                        {{todayPatientMedicalProfileGet[patientKey].height}}
+                                                        {{'metre'|translate}}
+                                                    </div>
+                                                    <div class="infoTitle">{{'height'|translate}}</div>
+                                                </div>
+                                                <div class="infoContainer">
+                                                    <div class="infoIcon"><i class="fas fa-weight"></i></div>
+                                                    <div class="info">
+                                                        {{todayPatientMedicalProfileGet[patientKey].weight}}
+                                                        {{'kilogram'|translate}}
+                                                    </div>
+                                                    <div class="infoTitle">{{'weight'|translate}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="diseasesContainer">
+                                                <div class="title"> {{'diseases'|translate}} </div>
+                                                <div class="content">
+                                                    <div *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length == 0">
+                                                        {{'notDiagnosedYet'|translate}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="emptyBtn" (click)="patientInfo=false" style="margin-top: 10px;">{{'goBack'|translate}}</button>
+                            </ng-template>
+                            <ng-template #showPatientSmallInfo>
+                                <div class="patientNumber">{{'youHave'|translate}}
+                                    {{toadyAppointmentPatientInfo.length}}
+                                    {{'patientToday'|translate}}</div>
+                                <div class="todayPatientCon">
+                                    <div class="patientNavigationRight" (click)="patientNavigationRightClick()"
+                                        *ngIf="showpatientNavigationRight"><i class="fas fa-chevron-right"></i></div>
+                                    <div class="patientNavigationLeft" (click)="patientNavigationLeftClick()"
+                                        *ngIf="showpatientNavigationLeft"><i class="fas fa-chevron-left"></i></div>
+                                    <div class="patientSmallInfoGrid">
+                                        <div *ngFor="let patient of toadyAppointmentPatientInfo | keyvalue | slice:patientStart:patientFinish"
+                                            class="patient"
+                                            (click)="showFullPatientInfo(patient.value.medicalProfileId, patient.key)">
+                                            
+                                            <span class="patientTurnIndex">{{icreasePatientTurn(patient.key)}}</span>
+                                            <div class="patientProfilePicContainer">
+                                                <div
+                                                    *ngIf="patientTodayProfilePicRes[patient.key]; then showPatientProfileImg else showPatientDefaultImg">
+                                                </div>
+                                                <ng-template #showPatientProfileImg><img
+                                                        [src]="patientTodayProfilePic[patient.key]" class="profileImg">
+                                                </ng-template>
+                                                <ng-template #showPatientDefaultImg><i
+                                                        class="fas fa-user-tie patientUserTie"></i></ng-template>
+                                            </div>
+                                            <div class="patientSmallInfo">
+                                                <span class="info">
+                                                    <span
+                                                        style="text-transform: capitalize;">{{patient.value.patientFirstName}}</span>
+                                                    <span style="text-transform: uppercase; padding-left: 4px;">
+                                                        {{patient.value.patientLastName}}</span>
+                                                </span>
+                                                <span class="info"><i class="fas fa-map-marker-alt"></i>
+                                                    {{patient.value.patientCity}}</span>
+                                                <span class="info"><i class="fas fa-venus-mars"></i>
+                                                    {{patient.value.patientGender}}</span>
+                                                <span class="info"><i class="fas fa-birthday-cake"></i>
+                                                    {{patient.value.patientBirthDay}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="emptyBtn"> {{'getMyFirstPatient'|translate}} </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </section>
+                <section id="tomorrowPatientSection">
+                    <div class="sectionTitle">{{'tomorrowPatient'|translate}}</div>
+                    <div class="sectionContainer">
+                        <div *ngIf="tomorrowAppointmentPatientInfo.length == 0">
+                            <div style="text-align: center;padding: 20px;">{{'notomorrowPatient'|translate}}</div>
+                        </div>
+                        <div *ngIf="tomorrowAppointmentPatientInfo.length != 0">
+                            <div *ngIf="tomorrowPatientInfo; then showTomorrowPatientinfo else showTomorrowPatientSmallInfo "></div>
+                            <ng-template #showTomorrowPatientinfo>
+                                <div class="patientProfilePicBigContainer">
+                                    <div
+                                        *ngIf="patientTomorrowProfilePicRes[tomorrowPatientKey]; then showTomorrowPatientProfileImg else showTomorrowPatientDefaultImg">
+                                    </div>
+                                    <ng-template #showTomorrowPatientProfileImg><img [src]="patientTomorrowProfilePic[tomorrowPatientKey]"
+                                            class="profileImg">
+                                    </ng-template>
+                                    <ng-template #showTomorrowPatientDefaultImg><i
+                                            class="fas fa-user-tie patientBigUserTie"></i>
+                                    </ng-template>
+                                </div>
+                                <div class="horizentalCenter">
+                                    <span
+                                        style="text-transform: capitalize;">{{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientFirstName}}</span>
+                                    <span style="text-transform: uppercase; padding-left: 4px;">
+                                        {{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientLastName}}</span>
+                                </div>
+                                <div class="patientInfoContainer">
+                                    <span class="info"><i class="fas fa-map-marker-alt"></i>
+                                        {{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientCity}}</span>
+                                    <span class="info"><i class="fas fa-venus-mars"></i>
+                                        {{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientGender}}</span>
+                                    <span class="info"><i class="fas fa-birthday-cake"></i>
+                                        {{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientBirthDay}}</span>
+                                </div>
+                                <div class="patientMedicalProfile">
+                                    <div class="tilte"> {{'medicalProfile'|translate}} </div>
+                                    <div class="medicalProfileinfo">
+                                        <div *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey]">
+                                            <div class="infoGridTowColumn newPadding">
+                                                <div class="infoContainer">
+                                                    <div class="infoIcon">
+                                                        <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
+                                                    </div>
+                                                    <div class="info">
+                                                        {{tomorrowPatientMedicalProfileGet[tomorrowPatientKey].height}}
+                                                        {{'metre'|translate}}
+                                                    </div>
+                                                    <div class="infoTitle">{{'height'|translate}}</div>
+                                                </div>
+                                                <div class="infoContainer">
+                                                    <div class="infoIcon"><i class="fas fa-weight"></i></div>
+                                                    <div class="info">
+                                                        {{tomorrowPatientMedicalProfileGet[tomorrowPatientKey].weight}}
+                                                        {{'kilogram'|translate}}
+                                                    </div>
+                                                    <div class="infoTitle">{{'weight'|translate}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="diseasesContainer">
+                                                <div class="title"> {{'diseases'|translate}} </div>
+                                                <div class="content">
+                                                    <div *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length == 0">
+                                                        {{'notDiagnosedYet'|translate}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="emptyBtn" (click)="tomorrowPatientInfo=false" style="margin-top: 10px;">{{'goBack'|translate}}</button>
+                            </ng-template>
+                            <ng-template #showTomorrowPatientSmallInfo>
+                                <div class="patientNumber">{{'youHave'|translate}}
+                                    {{tomorrowAppointmentPatientInfo.length}}
+                                    {{'patientTommorow'|translate}}</div>
+                                <div class="todayPatientCon">
+                                    <div class="patientNavigationRight" (click)="patientTomorrowNavigationRightClick()"
+                                        *ngIf="showTomorrowpatientNavigationRight"><i class="fas fa-chevron-right"></i></div>
+                                    <div class="patientNavigationLeft" (click)="patientTomorrowNavigationLeftClick()"
+                                        *ngIf="showTomorrowpatientNavigationLeft"><i class="fas fa-chevron-left"></i></div>
+                                    <div class="patientSmallInfoGrid">
+                                        <div *ngFor="let patient of tomorrowAppointmentPatientInfo | keyvalue | slice:patientTomorrowStart:patientTomorrowFinish"
+                                            class="patient"
+                                            (click)="showFullPatientTomorrowInfo(patient.value.medicalProfileId, patient.key)">
+                                            <span class="patientTurnIndex">{{icreasePatientTurn(patient.key)}}</span>
+                                            <div class="patientProfilePicContainer">
+                                                <div
+                                                    *ngIf="patientTomorrowProfilePicRes[patient.key]; then showTomorrowPatientProfileImg else showTomorrowPPatientDefaultImg">
+                                                </div>
+                                                <ng-template #showTomorrowPatientProfileImg><img
+                                                        [src]="patientTomorrowProfilePic[patient.key]" class="profileImg">
+                                                </ng-template>
+                                                <ng-template #showTomorrowPPatientDefaultImg><i
+                                                        class="fas fa-user-tie patientUserTie"></i></ng-template>
+                                            </div>
+                                            <div class="patientSmallInfo">
+                                                <span class="info">
+                                                    <span
+                                                        style="text-transform: capitalize;">{{patient.value.patientFirstName}}</span>
+                                                    <span style="text-transform: uppercase; padding-left: 4px;">
+                                                        {{patient.value.patientLastName}}</span>
+                                                </span>
+                                                <span class="info"><i class="fas fa-map-marker-alt"></i>
+                                                    {{patient.value.patientCity}}</span>
+                                                <span class="info"><i class="fas fa-venus-mars"></i>
+                                                    {{patient.value.patientGender}}</span>
+                                                <span class="info"><i class="fas fa-birthday-cake"></i>
+                                                    {{patient.value.patientBirthDay}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
         <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
             <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
