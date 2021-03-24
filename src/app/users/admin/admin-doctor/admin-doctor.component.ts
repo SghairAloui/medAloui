@@ -21,19 +21,20 @@ export class AdminDoctorComponent implements OnInit {
   specialityCode: string; specialityName: string;
   validationPost: ValidationPost;
   twoStringsPost: TwoStringsPost;
-  docDocuments: boolean[] = [];
+  docDocuments: boolean[];
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
-  profileImagesRes: any[] = [];
-  profileImages: any[] = [];
-  documentPic: string[] = [];
-  cinImages: any[] = []; specialityImages: any[] = []; clinicImages: any[] = [];
-  pendingDoctors: DoctorGet[] = [];
+  profileImagesRes: any[];
+  profileImages: any[];
+  documentPic: string[];
+  cinImages: any[]; specialityImages: any[]; clinicImages: any[];
+  pendingDoctors: DoctorGet[];
   doctorName: string;
   constructor(private adminService: AdminService, private toastr: ToastrService, private translate: TranslateService, private doctorService: DoctorService, private validationService: ValidationService, private specialityService: SpecialityService) { }
 
   ngOnInit(): void {
+    this.docDocuments = [];this.profileImagesRes = [];this.profileImages = [];this.documentPic = [];this.cinImages = [];this.specialityImages = [];this.clinicImages = [];this.pendingDoctors = [];
     this.getPendingDoctors();
   }
   getPendingDoctors() {
@@ -42,11 +43,11 @@ export class AdminDoctorComponent implements OnInit {
         this.pendingDoctors = res;
         for (let i of this.pendingDoctors) {
           this.checkDocImg(i.doctorId);
-          this.docDocuments[i.doctorId] = false;
+          this.docDocuments.push(false);
           this.getCinImage(i.doctorId);
           this.getSpecialityImage(i.doctorId);
           this.getClinicImage(i.doctorId);
-          this.documentPic[i.doctorId] = 'cin';
+          this.documentPic.push('cin');
         }
       },
       err => {
@@ -65,10 +66,10 @@ export class AdminDoctorComponent implements OnInit {
       res => {
         if (res != null) {
           this.retrieveResonse = res;
-          this.profileImagesRes[doctorId] = this.retrieveResonse;
+          this.profileImagesRes.push(this.retrieveResonse);
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.profileImages[doctorId] = this.retrievedImage;
+          this.profileImages.push(this.retrievedImage);
         }
       }
     );
@@ -81,7 +82,7 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.cinImages[doctorId] = this.retrievedImage;
+          this.cinImages.push(this.retrievedImage);
         }
       }
     );
@@ -94,7 +95,7 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.clinicImages[doctorId] = this.retrievedImage;
+          this.clinicImages.push(this.retrievedImage);
         }
       }
     );
@@ -107,7 +108,7 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.specialityImages[doctorId] = this.retrievedImage;
+          this.specialityImages.push(this.retrievedImage);
         }
       }
     );

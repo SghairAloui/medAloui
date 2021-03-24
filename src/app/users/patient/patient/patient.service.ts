@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
@@ -29,5 +30,9 @@ export class PatientService {
   }
   public getDoctorPofilePhoto(imageName:string){
     return this.http.get<string>('http://localhost:8080/image/get/' + imageName)
+  }
+
+  public getAppPatientInfoById(id:number){
+    return this.http.get<AppointmentPatientInfo>('http://localhost:8080/patient/getAppPatientInfoById/' + id)
   }
 }

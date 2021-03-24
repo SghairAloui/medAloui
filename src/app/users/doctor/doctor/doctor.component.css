@@ -213,3 +213,177 @@ html,body{
     transform: translateX(-50%);
     padding: 20px 10px;
 }
+.patientProfilePicContainer{
+    position: relative;
+    float: left;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 3px solid #308a7b;
+    margin: 0px 20px;
+}
+.patientSmallInfo{
+    width: 60%;
+    float: left;
+    padding: 20px 0px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--gray-text);
+    transition: all .3s ease-in-out;
+}
+.patientSmallInfo .info{
+    display: inline-block;
+    color: white;
+    background-color: #308a7b;
+    margin: 3px;
+    border-radius: 5px;
+    padding: 1px 5px;
+}
+.patientInfoGridTowColumn{
+    padding: 0px;
+}
+.patientNumber{
+    font-weight: 600;
+    color: var(--gray-text);
+    padding-bottom: 10px;
+    transition: all .3s ease-in-out;
+}
+.patientUserTie{
+    font-size: 90px;
+    bottom: 0px;
+}
+.patientSmallInfoGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+    margin: 10px;
+    width: 92%;
+    margin-left: 4%;
+}
+.patientSmallInfoGrid .patient{
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px 0px;
+    background-color: var(--box-color2);
+    box-shadow: var(--infoBox);
+    transition: all .3s ease-in-out;
+}
+.patientSmallInfoGrid .patient:hover{
+    transform: scale(1.01);
+    cursor: pointer;
+}
+.todayPatientCon{
+    position: relative;
+}
+.patientNavigationRight{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0%;
+    font-size: 3rem;
+    color: var(--arrowNavigation);
+}
+.patientNavigationLeft{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0%;
+    font-size: 3rem;
+    color: var(--arrowNavigation);
+}
+.patientNavigationRight:hover, .patientNavigationLeft:hover{
+    color: var(--arrowNavigationHover);
+    cursor: pointer;
+}
+.patientProfilePicBigContainer{
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid #308a7b;
+    margin: 20px 5px;
+}
+.patientBigUserTie{
+    font-size: 140px;
+    bottom: 0px;
+}
+.horizentalCenter{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.patientInfoContainer{
+    display: inline-block;
+    position: relative;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 15px;
+}
+.patientInfoContainer .info{
+    display: inline-block;
+    color: white;
+    background-color: #308a7b;
+    margin: 5px;
+    border-radius: 5px;
+    padding: 1px 5px;
+}
+.patientMedicalProfile{
+    margin-left: 5%;
+    width: 90%;
+    background-color: var(--background-color);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.patientMedicalProfile .tilte{
+    background-color: #308a7b;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+}
+.patientMedicalProfile .medicalProfileinfo{
+    padding: 10px;
+}
+.diseasesContainer{
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--box-color);
+    transition: all .3s ease-in-out;
+    box-shadow: var(--infoBox);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.diseasesContainer .title{
+    background-color: #308a7b;
+    color: var(--text-color);
+    transition: all .3s ease-in-out;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+.diseasesContainer .content{
+    text-align: center;
+    padding: 5% 5%;
+}
+.newPadding{
+    padding: 5px;
+}
+.patientTurnIndex{
+    position: relative;
+    top: 0px;
+    right: 0px;
+    background-color: #308a7b;
+    padding-top: 18px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}

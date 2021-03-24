@@ -21,6 +21,10 @@ html,body{
     --infoBox:0px 0px 10px rgba(0, 0, 0, 0.3);
     --grayWhite:rgba(128, 128, 128, 0.76);
     --whiteGreen:white;
+    --greenWhite:#308a7b;
+    --arrowNavigation:#1c504786;
+    --arrowNavigationHover:#1c5047;
+    --box-color2:white;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -37,6 +41,10 @@ html,body{
     --infoBox:none;
     --grayWhite:white;
     --whiteGreen:#308a7b;
+    --greenWhite:white;
+    --arrowNavigation:#ffffff86;
+    --arrowNavigationHover:#fff;
+    --box-color2:#18191a;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -75,6 +83,7 @@ html,body{
     left: 1rem;
     top: .75rem;
     padding: 0 .25rem;
+    border-radius: 5px;
     background-color: var(--box-color);
     transition: all .3s ease-in-out;
     color: #888;
@@ -472,7 +481,8 @@ input[disabled]{
     text-align: center;
 }
 .calendarGrid .day{
-    color: white;
+    color: var(--greenWhite);
+    transition: all .3s ease-in-out;
 }
 .fillAllDay{
     width: 44px;
@@ -486,15 +496,15 @@ input[disabled]{
 }
 #day1Lab:hover,#day2Lab:hover,#day3Lab:hover,#day4Lab:hover,#day5Lab:hover,#day6Lab:hover,#day7Lab:hover,#day8Lab:hover,#day9Lab:hover,#day10Lab:hover,#day11Lab:hover,#day12Lab:hover,#day13Lab:hover,#day14Lab:hover,#day15Lab:hover,#day16Lab:hover,#day17Lab:hover,#day18Lab:hover,#day19Lab:hover,#day20Lab:hover,#day21Lab:hover,#day22Lab:hover,#day23Lab:hover,#day24Lab:hover,#day25Lab:hover,#day26Lab:hover,#day27Lab:hover,#day28Lab:hover,#day29Lab:hover,#day30Lab:hover,#day31Lab:hover{
     cursor: pointer;
-    background-color: white;
-    color: #308a7b;
-    transition: .3s;
+    background-color: var(--greenWhite);
+    color: var(--whiteGreen);
+    transition: all .3s ease-in-out;
 }
 #day1:checked + #day1Lab,#day2:checked + #day2Lab,#day3:checked + #day3Lab,#day4:checked + #day4Lab,#day5:checked + #day5Lab,#day6:checked + #day6Lab,#day7:checked + #day7Lab,#day8:checked + #day8Lab,#day9:checked + #day9Lab,#day10:checked + #day10Lab,#day11:checked + #day11Lab,#day12:checked + #day12Lab,#day13:checked + #day13Lab,#day14:checked + #day14Lab,#day15:checked + #day15Lab,#day16:checked + #day16Lab,#day17:checked + #day17Lab,#day18:checked + #day18Lab,#day19:checked + #day19Lab,#day20:checked + #day20Lab,#day21:checked + #day21Lab,#day22:checked + #day22Lab,#day23:checked + #day23Lab,#day24:checked + #day24Lab,#day25:checked + #day25Lab,#day26:checked + #day26Lab,#day27:checked + #day27Lab,#day28:checked + #day28Lab,#day29:checked + #day29Lab,#day30:checked + #day30Lab,#day31:checked + #day31Lab{
-    background-color: white;
-    color: #308a7b;
+    background-color: var(--greenWhite);
+    color: var(--whiteGreen);
     font-weight: 700;
-    transition: .3s;
+    transition: all .3s ease-in-out;
 }
 input[type=radio]:disabled + label {
     color: #308a7b;
@@ -518,13 +528,13 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     left: 50%;
     transform: translateX(-50%);
     width: 40%;
-    border: 1px solid white;
-    color:white;
+    border: 1px solid var(--greenWhite);
+    color:var(--greenWhite);
 }
 .white:hover{
     cursor: pointer;
-    color:#308a7b;
-    background-color: white;
+    color:var(--whiteGreen);
+    background-color: var(--greenWhite);
 }
 .white:disabled{
     border: 1px solid #cccccc;

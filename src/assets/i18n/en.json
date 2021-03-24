@@ -358,5 +358,16 @@
     "modify":"Modify",
     "changeDate":"Change date",
     "appointmentDeleted":"Appointment deleted",
-    "appontmentDateUpdated":"Appointment date updated"
+    "appontmentDateUpdated":"Appointment date updated",
+    "youTurn":"Your turn",
+    "todayPatient":"Today's patient",
+    "allMyPatient":"All my patient",
+    "noPatientToday":"You don't have patients today",
+    "youHave":"You have",
+    "patientToday":"patient today",
+    "notDiagnosedYet":"Not diagnosed yet",
+    "getMyFirstPatient":"get my first patient",
+    "tomorrowPatient":"Tomorrow's patient",
+    "notomorrowPatient":"You don't have yet any patients for tomorrow",
+    "patientTommorow":"Patient tommorow"
 }

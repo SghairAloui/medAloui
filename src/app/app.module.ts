@@ -33,6 +33,7 @@ import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease
 import { DoctorHeaderComponent } from './Headers/doctor-header/doctor-header.component';
 import { SpecialityService } from './speciality/speciality.service';
 import { AppointmentService } from './appointment/appointment.service';
+import { MedicalProfileService } from './medical profile/medical-profile.service';
 
 import { authInterceptorProviders } from './helpers/auth.interceptor';
 
@@ -77,6 +78,7 @@ import { authInterceptorProviders } from './helpers/auth.interceptor';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,
+    MedicalProfileService,
     authInterceptorProviders
   ],
   bootstrap: [AppComponent]
