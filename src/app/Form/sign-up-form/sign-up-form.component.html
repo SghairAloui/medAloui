@@ -7,7 +7,7 @@
         <div class="container">
             <div *ngIf="showForm; then showSignUpForm else showSignUp"></div>
         <ng-template #showSignUpForm>
-            <div *ngIf="formInfo=='userCreated'" class="userCreated">
+            <div *ngIf="isSuccessful" class="userCreated">
                 <i class="fas fa-check-circle"></i><br>
                 {{'accountCreated'|translate}}
                 <button type="submit" class="fullyBtnSmall" (click)="openSignIn()">{{'signIn'|translate}}</button>
@@ -298,9 +298,9 @@
         <ng-template #showSignUp>
             <div class="formInfoTitle"><i class="fas fa-user"></i> {{'accountType'|translate}} :</div>
         <div class="singupButtons">
-            <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='client'"> {{ 'client' | translate}} </button><br>
-            <button class="userTypeBtn" (click)="showForm=true; formInfo='pharmacy';userType='pharmacy'"> {{ 'pharmacist' | translate}} </button><br>
-            <button class="userTypeBtn" (click)="showForm=true; formInfo='emailAndName';userType='doctor'"> {{ 'doctor' | translate}} </button>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='client';roleUser='ROLE_PATIENT'"> {{ 'client' | translate}} </button><br>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='pharmacy';userType='pharmacy';roleUser='ROLE_PHARMACIEN'"> {{ 'pharmacist' | translate}} </button><br>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='doctor';roleUser='ROLE_DOCTEUR'"> {{ 'doctor' | translate}} </button>
         </div>
         <div class="strike"><span>{{'or'|translate}}</span></div>
         <button type="submit" class="emptyBtn" (click)="openSignIn()">{{'goBack'|translate}}</button>

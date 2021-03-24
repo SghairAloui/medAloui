@@ -3,6 +3,8 @@ import { EventEmitter, Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { UsernameAndPassPost } from 'src/model/UsernameAndPassPost';
 import { SignInService } from './sign-in.service';
 
@@ -13,13 +15,24 @@ import { SignInService } from './sign-in.service';
 })
 export class SignInFormComponent implements OnInit {
 
-  constructor(private http:HttpClient,private translate: TranslateService,private toastr:ToastrService, private signInService:SignInService,private router: Router) { }
+  constructor(private http:HttpClient,private translate: TranslateService,private toastr:ToastrService,
+     private signInService:SignInService,private router: Router
+     ,private authService: AuthService, private tokenStorage: TokenStorageService) { }
   @Output() outPutOpenSignUp = new EventEmitter<boolean>();
-  ngOnInit(): void {
-  }
+ 
+  /*form: any = {
+    username: null,
+    password: null
+  };*/
+  isLoggedIn = false;
+  isLoginFailed = false;
+  errorMessage = '';
+  roles: string[] = [];
+
   InvalidInfo:boolean=false;
   emailAddressInfo:string=this.translate.instant('username');passwordInfo:string=this.translate.instant('password');
-  username:string;password:string;
+  username:string;
+  password:string;
   private usernameAndPassPost:UsernameAndPassPost;
   openSignUp(){
     this.outPutOpenSignUp.emit(true);
@@ -98,4 +111,37 @@ export class SignInFormComponent implements OnInit {
       }
     );
   }
+
+  // second solution
+  ngOnInit(): void {
+    if (this.tokenStorage.getToken()) {
+      this.isLoggedIn = true;
+      this.roles = this.tokenStorage.getUser().roles;
+    }
+  }
+
+  onSubmit(): void {
+    //const { username, password } = this.form;
+
+    this.authService.login(this.username, this.password).subscribe(
+      data => {
+        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveUser(data);
+
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.roles = this.tokenStorage.getUser().roles;
+        this.reloadPage();
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.isLoginFailed = true;
+      }
+    );
+  }
+
+  reloadPage(): void {
+    window.location.reload();
+  }
+
 }

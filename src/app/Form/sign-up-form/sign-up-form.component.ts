@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 import { DoctorPost } from 'src/model/DoctorPost';
 import { PatientPost } from 'src/model/PatientPost';
 import { PharmacyPost } from 'src/model/PharmacyPost';
@@ -16,8 +17,12 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient,private toastr:ToastrService) { 
+  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,
+    private http:HttpClient,private toastr:ToastrService,
+    private authService: AuthService
+    ) { 
   }
+  private roleUser:string;
   saveUserResponse:any;
   private patientPost:PatientPost;
   private pharmacyPost:PharmacyPost;
@@ -42,6 +47,12 @@ export class SignUpFormComponent implements OnInit {
   usernameExist:string="null";
   showForm:boolean=false;
   formInfo:string='false';
+
+
+  isSuccessful = false;
+  isSignUpFailed = false;
+  errorMessage = '';
+
 
   ngOnInit(): void {
   }
@@ -164,15 +175,17 @@ export class SignUpFormComponent implements OnInit {
       this.passwordRepeatInfromation=this.translate.instant('repeatPasswordErr');
     }
     if(this.invalidPasswordVariable==false && this.invalidPasswordRepeatVariable==false)
-     this.saveUserNow();
+     this.saveNewUser();
   }
   checkEmailAndNameForm(){
-    this.checkMail();
-    this.checkFirstName();
-    this.checkLastName();
-    this.checkIfUserNameExist(this.mail);
+    this.formInfo='birthday';
+    //this.checkMail();
+    //this.checkFirstName();
+    //this.checkLastName();
+    //this.checkIfUserNameExist(this.mail);
   }
   checkBirthday(){
+    this.formInfo='GeneralInfo';
     if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2) ){
       this.invalidDayVariable=false;
       this.dayInformation=this.translate.instant('day');
@@ -257,7 +270,8 @@ export class SignUpFormComponent implements OnInit {
   }
 
   checkIfUserNameExist(username:string){
-    let url="http://localhost:8080/resource/ExistsByUsername/"+username;
+    this.formInfo='birthday';
+    /*let url="http://localhost:8080/resource/ExistsByUsername/"+username;
     this.http.get<boolean>(url).subscribe(
       res => {
         if(res==true){
@@ -274,11 +288,13 @@ export class SignUpFormComponent implements OnInit {
           positionClass: 'toast-bottom-left'
         });
       }
-    );
+    );*/
   }
+
   checkIfPharmacyUserNameExist(username:string){
+    this.formInfo='pharmacyPassword';
     let url="http://localhost:8080/resource/ExistsByUsername/"+username.toLowerCase();
-    this.http.get<boolean>(url).subscribe(
+    /*this.http.get<boolean>(url).subscribe(
       res => {
         if(res==true){
           this.invalidUserNameVariable=true;
@@ -294,6 +310,26 @@ export class SignUpFormComponent implements OnInit {
           positionClass: 'toast-bottom-left'
         });
       }
+    );*/
+  }
+
+  saveNewUser(){
+    //const { username, email, password } = this.form;
+    let roleUserList = new Set();
+    roleUserList.add(this.roleUser)
+    this.authService.register(this.firstName, this.mail, this.password, roleUserList).subscribe(
+      data => {
+        console.log(data);
+        this.isSuccessful = true;
+        this.isSignUpFailed = false;
+        this.formInfo=data.message;
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.isSignUpFailed = true;
+      }
     );
   }
+
+  
 }

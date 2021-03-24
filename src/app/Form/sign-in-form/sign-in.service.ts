@@ -1,12 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UsernameAndPassPost } from 'src/model/UsernameAndPassPost';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignInService {
+  private displaySignInfo: Subject<boolean>= new BehaviorSubject<any>("");
+  displaySignInfo$ = this.displaySignInfo.asObservable();
 
+  setDisplaySignInfo(data:any){
+    this.displaySignInfo.next(data);
+  }
   constructor(private http:HttpClient) { }
 
   public openDoctorAccount(usernameAndPassPost:UsernameAndPassPost){

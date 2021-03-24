@@ -34,6 +34,7 @@ import { DoctorHeaderComponent } from './Headers/doctor-header/doctor-header.com
 import { SpecialityService } from './speciality/speciality.service';
 import { AppointmentService } from './appointment/appointment.service';
 
+import { authInterceptorProviders } from './helpers/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,11 @@ import { AppointmentService } from './appointment/appointment.service';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AcceuilService,AppComponent,SaveNewUserService,SignInService,PatientService,PatientComponent,AdminService,AdminComponent,DoctorComponent,SpecialityService,AppointmentService],
+  providers: [AcceuilService,AppComponent,SaveNewUserService,
+    SignInService,PatientService,PatientComponent,AdminService,
+    AdminComponent,DoctorComponent,SpecialityService,AppointmentService,
+    authInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
