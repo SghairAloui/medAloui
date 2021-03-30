@@ -2,7 +2,7 @@
 .parentHeader{
     top: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     width: 100%;
     height: 50px;
     font-weight: 500;

@@ -3,6 +3,6 @@ export class ValidationPost{
         private validationDecision:string,
         private validateBy:string,
         private accountType:string,
-        private userId:string,
+        private userId:number,
     ){};
 }

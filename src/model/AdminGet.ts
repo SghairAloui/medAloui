@@ -1,5 +1,6 @@
 export interface AdminGet{
-    adminId:number;
-    adminUserName:string;
+    userId:number;
+    userUsername:string;
     adminFullName:string;
+    userCity:string;
 }

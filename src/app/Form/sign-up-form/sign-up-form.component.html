@@ -34,31 +34,8 @@
                         <label for="" class="formLabel">
                            {{adressInformation}}
                            <datalist id="governoratelistOptions">
-                               <option value="Ariana">
-                               <option value="Béja">
-                               <option value="Ben Arous">
-                               <option value="Bizerte">
-                               <option value="Gabès">
-                               <option value="Gafsa">
-                               <option value="Jendouba">
-                               <option value="Kairouan">
-                               <option value="Kasserine">
-                               <option value="Kébili">
-                               <option value="Kef">
-                               <option value="Mahdia">
-                               <option value="Manouba">
-                               <option value="Médenine">
-                               <option value="Monastir">
-                               <option value="Nabeul">
-                               <option value="Sfax">
-                               <option value="Sidi Bouzid">
-                               <option value="Siliana">
-                               <option value="Sousse">
-                               <option value="Tataouine">
-                               <option value="Tozeur">
-                               <option value="Tunis">
-                               <option value="Zaghouan">
-                             </datalist>
+                               <option *ngFor="let city of cities" value="{{city}}">
+                            </datalist>
                         </label>
                     </div>
                     <div class="formNavigateNextButton">
@@ -201,31 +178,8 @@
                      <label for="" class="formLabel">
                         {{adressInformation}}
                         <datalist id="governoratelistOptions">
-                            <option value="Ariana">
-                            <option value="Béja">
-                            <option value="Ben Arous">
-                            <option value="Bizerte">
-                            <option value="Gabès">
-                            <option value="Gafsa">
-                            <option value="Jendouba">
-                            <option value="Kairouan">
-                            <option value="Kasserine">
-                            <option value="Kébili">
-                            <option value="Kef">
-                            <option value="Mahdia">
-                            <option value="Manouba">
-                            <option value="Médenine">
-                            <option value="Monastir">
-                            <option value="Nabeul">
-                            <option value="Sfax">
-                            <option value="Sidi Bouzid">
-                            <option value="Siliana">
-                            <option value="Sousse">
-                            <option value="Tataouine">
-                            <option value="Tozeur">
-                            <option value="Tunis">
-                            <option value="Zaghouan">
-                          </datalist>
+                            <option *ngFor="let city of cities" value="{{city}}">
+                        </datalist>
                      </label>
                  </div>
                  <div class="formInfoTitle"><i class="fas fa-venus-mars"></i> {{'gender'|translate}} <div *ngIf="checkBoxInvaledInfoVriable" style="font-size: .80rem; color: red;">{{'selectGender'|translate}}</div></div>
@@ -298,9 +252,9 @@
         <ng-template #showSignUp>
             <div class="formInfoTitle"><i class="fas fa-user"></i> {{'accountType'|translate}} :</div>
         <div class="singupButtons">
-            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='client';roleUser='ROLE_PATIENT'"> {{ 'client' | translate}} </button><br>
-            <button class="userTypeBtn"  (click)="showForm=true; formInfo='pharmacy';userType='pharmacy';roleUser='ROLE_PHARMACIEN'"> {{ 'pharmacist' | translate}} </button><br>
-            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='doctor';roleUser='ROLE_DOCTEUR'"> {{ 'doctor' | translate}} </button>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='client';roleUser='PATIENT_ROLE'"> {{ 'client' | translate}} </button><br>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='pharmacy';userType='pharmacy';roleUser='PHARMACIST_ROLE'"> {{ 'pharmacist' | translate}} </button><br>
+            <button class="userTypeBtn"  (click)="showForm=true; formInfo='emailAndName';userType='doctor';roleUser='DOCTOR_ROLE'"> {{ 'doctor' | translate}} </button>
         </div>
         <div class="strike"><span>{{'or'|translate}}</span></div>
         <button type="submit" class="emptyBtn" (click)="openSignIn()">{{'goBack'|translate}}</button>

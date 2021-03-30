@@ -1,11 +1,8 @@
 export interface AppointmentDocInfoGet{
-    doctorFirstName:string;
-    doctorLastName:string;
-    doctorCity:string;
-    doctorGender:string;
-    doctorRate:string;
-    exactAdress:string;
+    exactAddress:string;
     workDays:string;
+    startTime:string;
     maxPatientPerDay:number;
-    specialityCode:number;
+    appointmentApproximateDuration:number;
+    appointmentPrice:number;
 }

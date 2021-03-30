@@ -45,9 +45,8 @@
                     <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">{{'Connection'|translate}}</a></li>
                 </ul>
             </nav>
-            <div class="cta" *ngIf="userName!=null"> {{userName}}</div>
             <a class="cta">
-                <button (click)="toConnexionSection()">{{userName!=null?'Déconnection':'Connection'}}</button>
+                <button (click)="toConnexionSection()"> {{'connection'|translate}} </button>
             </a>
         </header>
         <div *ngIf="settingsBoxUnder700" class="settingsBoxUnder700Conatiner">

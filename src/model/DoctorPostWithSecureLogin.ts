@@ -1,12 +1,12 @@
 export class DoctorPostWithSecureLogin{
     constructor(
-        private doctorUserName:string,
+        private userUsername:string,
         private doctorFirstName:string,
         private doctorLastName:string,
-        private doctorCity:string,
-        private doctorPassword:string,
+        private userCity:string,
+        private userPassword:string,
         private doctorBirthDay:string,
         private doctorGender:string,
-        private doctorSecureLogin:string
+        private userSecureLogin:string
     ){};
 }

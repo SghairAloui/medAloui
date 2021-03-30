@@ -1,20 +1,27 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AdminGet } from 'src/model/adminGet';
-import { DoctorGet } from 'src/model/Doctorget';
+import { DoctorPendingGet } from 'src/model/DoctorPendingGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
+
+const ADMIN_API = 'http://localhost:8080/api/admin/';
+const DOCTOR_API = 'http://localhost:8080/api/doctor/';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  public getAdminInfoFromSecureLogin(secureLogin:SecureLoginString){
-    return this.http.post<AdminGet>("http://localhost:8080/admin/getAdminInfoFromSecureLogin",secureLogin);
+  public getAdminInfoFromSecureLogin(secureLogin: SecureLoginString) {
+    return this.http.post<AdminGet>(ADMIN_API + "getAdminInfoFromSecureLogin", secureLogin, httpOptions);
   }
-  public getPendingDoctors(){
-    return this.http.get<DoctorGet[]>("http://localhost:8080/doctor/getPendingDoctors");
+  public getPendingDoctors(page: number, size: number) {
+    return this.http.get<DoctorPendingGet[]>(DOCTOR_API + "getPendingDoctors/" + page + "/" + size, httpOptions);
   }
 }

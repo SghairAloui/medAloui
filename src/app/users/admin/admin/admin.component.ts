@@ -25,15 +25,13 @@ export class AdminComponent implements OnInit {
     this.secureLogin = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.getAdminInfoFromSecureLogin(this.secureLogin);
   }
-
   getAdminInfoFromSecureLogin(secureLogin: SecureLoginString) {
     this.adminService.getAdminInfoFromSecureLogin(secureLogin).subscribe(
       res => {
         if (res) {
-          console.log(res);
           this.adminGet = res;
           this.adminInfo=true;
-          localStorage.setItem('id', this.adminGet.adminId.toString());
+          localStorage.setItem('id', this.adminGet.userId.toString());
         } else
           this.router.navigate(['/acceuil']);
       },

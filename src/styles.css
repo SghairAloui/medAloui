@@ -95,14 +95,14 @@ html,body{
     color: #308a7b;
     font-size: .75rem;
     font-weight: 500;
-    z-index: 10;
+    z-index: 1;
 }
 .formInput:not(:placeholder-shown).formInput:not(:focus)+ .formLabel{
     top: -.5rem;
     left: .8rem;
     font-size: .75rem;
     font-weight: 500;
-    z-index: 10;
+    z-index: 1;
 }
 .formInput:focus{
     border: 2px solid #308a7b;
@@ -160,6 +160,188 @@ input[disabled]{
   border: 1px solid #666666;
   background: none;
   color: #666666;
+}
+.formDiv .mesure{
+    position: absolute;
+    right: 0%;
+    padding: 12px;
+    height: 48px;
+    background-color: #308a7b;
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    text-transform: capitalize;
+}
+.loading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.loading span{
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    background-color: var(--greenWhite);
+    border-radius: 50%;
+    display: inline-block;
+    animation-name: LoadingDots;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+.loading span:nth-child(2){
+    animation-delay: 0.4s;
+}
+.loading span:nth-child(3){
+    animation-delay: 0.8s;
+}
+@keyframes LoadingDots{
+    50%{
+        opacity: 0;
+        transform: scale(0.7) translateY(5px);
+    }
+}
+
+
+/*search doctor*/
+.searchedDocGrid{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    width: 98%;
+    margin-left: 1%;
+}
+.searchedDocGrid .doctor{
+    position: relative;
+    background-color: var(--box-color);
+    border-radius: 10px;
+    margin: 20px 10px;
+    color: var(--text-color);
+    box-shadow: var(--infoBox);
+    transition: .3s ease-in-out;
+}
+.searchedDocGrid .doctor .docMoreDatails{
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    opacity: 0;
+}
+.doctor:hover .docMoreDatails:hover{
+    opacity: 1;
+}
+.doctor:hover{
+    cursor: pointer;
+    transform: scale(1.01);
+}
+.searchedDocGrid .doctor .docMoreDatails .text{
+    padding: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.doctor .searchedDocProfileImgContainer{
+    position: relative;
+    float: left;
+    height: 150px;
+    width: 150px;
+    border-radius: 10px;
+    overflow:hidden;
+}
+.doctor .searchedDocInfo{
+    position: absolute;
+    float: left;
+    margin-left: 200px;
+    max-width: 50%;
+    padding: 10px 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.searchedDocDefaultImg{
+    font-size: 135px;
+    margin-bottom: 0px;
+}
+.profileImg{
+    position: relative;
+    border-radius: 10px;
+    width: auto;
+    height: 100%;
+}
+.loadMoreArrow{
+    width: fit-content; 
+    color: var(--text-color);
+}
+.loadMoreArrow,.fa-angle-double-down{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.fa-angle-double-down{
+    font-size: 25px;
+    width: auto;
+    transition: .3s ease-in-out;
+}
+.loadMoreArrow:hover{
+    cursor: pointer;
+}
+.loadMoreArrow:hover .fa-angle-double-down{
+    transform: translateY(10px);
+}
+.loadMoreArrow:hover div{
+    transform: translateY(-5px);
+}
+.loadMoreArrow div{
+    transition: .3s ease-in-out;
+}
+.horizetanlCenter{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.takeAppointmentContainer{
+    background-color: var(--background-color);
+    border-radius: 20px;
+    margin: 20px;
+}
+.backToAllAppArrow{
+    z-index: 1;
+    position: absolute;
+    background-color: #308a7b;
+    color: white;
+    font-size: 25px;
+    padding: 3px 6px;
+    height: 45px;
+    width: 45px;
+    margin-top: -5px;
+    border-bottom-right-radius: 90%;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    transition: .3s ease-in-out;
+}
+.backToAllAppArrow:hover{
+    cursor: pointer;
+    transform: scale(1.01);
+}
+.priceContainer{
+    width: 30%;
+    margin-left: 35%;
+    border-radius: 5px;
+    text-align: center;
+    background-color: var(--background-color);
+    box-shadow: var(--infoBox);
+    color: var(--text-color);
+}
+.priceContainer .infoTitle{
+    text-align: center;
+    color: white;
+    background-color: #308a7b;
 }
 
 
