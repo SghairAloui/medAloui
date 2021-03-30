@@ -1,19 +1,10 @@
-import { AppointmentGet } from "./AppointmentGet";
-import { medicalProfileGet } from "./medicalProfileGet";
-import { prescriptionGet } from "./prescriptionGet";
-
 export interface PatientGet{
-    patientId:number;
-    patientUserName:string;
+    userId:number;
+    userUsername:string;
     patientFirstName:string;
     patientLastName:string;
-    patientCity:string;
-    patientPassword:string;
+    userCity:string;
     patientBirthDay:string;
     patientGender:string;
-    patientCreationDate:string;
-    patientSecureLogin:string;
-    medicalProfile:medicalProfileGet;
-    prescription:prescriptionGet [];
-    appointment:AppointmentGet[];
+    medicalProfileId:number;
 }

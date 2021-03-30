@@ -1,27 +1,41 @@
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <div class="container">
-      <form >
-          <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
-          <div class="formDiv">
-            <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
-            <label for="username" class="formLabel">{{emailAddressInfo}}</label>
-          </div>
-          <div class="formDiv">
-            <input type="password" [class.labelInvalidInfo]="InvalidInfo" name="password" [(ngModel)]="password" id="password" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
-            <label for="password" class="formLabel">{{passwordInfo}}</label>
-          </div>
-        <div class="centerButtons">
-          <button type="submit" class="fullyBtn" (click)="openAccount()" >{{'signIn'|translate}}</button>
-        <div class="strike"><span>{{'or'|translate}}</span></div>
-        <button type="submit" class="emptyBtn" (click)="openSignUp()">{{'signUp'|translate}}</button>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="container">
+    <form>
+      <div *ngIf="waitOppeningAcc; then showLoading else showSignIn"></div>
+      <ng-template #showLoading>
+        <div class="loading">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-        <!--<a href="forget yor paasword" style="text-align: left ;">Forget your paasword?</a>-->
+      </ng-template>
+      <ng-template #showSignIn>
+        <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
+        <div class="formDiv">
+          <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username"
+            (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+          <label for="username" class="formLabel">{{emailAddressInfo}}</label>
+        </div>
+        <div class="formDiv">
+          <input type="password" [class.labelInvalidInfo]="InvalidInfo" name="password" [(ngModel)]="password"
+            id="password" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+          <label for="password" class="formLabel">{{passwordInfo}}</label>
+        </div>
+        <div class="centerButtons">
+          <button type="submit" class="fullyBtn" (click)="onSubmit()">{{'signIn'|translate}}</button>
+          <div class="strike"><span>{{'or'|translate}}</span></div>
+          <button type="submit" class="emptyBtn" (click)="openSignUp()">{{'signUp'|translate}}</button>
+        </div>
+      </ng-template>
     </form>
-    </div>
-  </body>
+  </div>
+</body>
+
 </html>

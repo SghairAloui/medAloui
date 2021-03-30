@@ -14,7 +14,7 @@
                 <div class="sectionContainer" *ngIf="generalInfo=='show'">
                     <div class="patientName">{{patientGet.patientFirstName}} <span
                             class="last">{{patientGet.patientLastName}}</span></div>
-                    <i class="fas fa-user"></i> {{patientGet.patientUserName}}
+                    <i class="fas fa-user"></i> {{patientGet.userUsername}}
                     <div class="imgContainer">
                         <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
                         <div class="editImage">
@@ -49,7 +49,7 @@
                         <div class="infoContainer">
                             <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
                             <div class="info">
-                                {{patientGet.patientCity}}
+                                {{patientGet.userCity}}
                             </div>
                             <div class="infoTitle">{{'city'|translate}}</div>
                         </div>
@@ -58,324 +58,354 @@
                         (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
                 </div>
                 <div class="sectionContainer" *ngIf="generalInfo=='edit'">
-                    <div class="infoEdit">
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName"
-                                [(ngModel)]="firstName"
-                                (keyup)="compareFirstName();firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{firstNameInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName"
-                                [(ngModel)]="lastName"
-                                (keyup)="compareLastName();lastNameInformation=translate.instant('surname');invalidLastNameVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{lastNameInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
-                                [(ngModel)]="mail"
-                                (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{mailInformation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day"
-                                [(ngModel)]="day"
-                                (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
-                                class="formInput" list="daylistOptions" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{dayInformation}}
-                            </label>
-                            <datalist id="daylistOptions">
-                                <option value="01">
-                                <option value="02">
-                                <option value="03">
-                                <option value="04">
-                                <option value="05">
-                                <option value="06">
-                                <option value="07">
-                                <option value="08">
-                                <option value="09">
-                                <option value="10">
-                                <option value="11">
-                                <option value="12">
-                                <option value="13">
-                                <option value="14">
-                                <option value="15">
-                                <option value="16">
-                                <option value="17">
-                                <option value="18">
-                                <option value="19">
-                                <option value="20">
-                                <option value="21">
-                                <option value="22">
-                                <option value="23">
-                                <option value="24">
-                                <option value="25">
-                                <option value="26">
-                                <option value="27">
-                                <option value="28">
-                                <option value="29">
-                                <option value="30">
-                                <option value="31">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
-                                [(ngModel)]="month"
-                                (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
-                                maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{monthInformation}}
-                            </label>
-                            <datalist id="monthlistOptions">
-                                <option value="01">
-                                <option value="02">
-                                <option value="03">
-                                <option value="04">
-                                <option value="05">
-                                <option value="06">
-                                <option value="07">
-                                <option value="08">
-                                <option value="09">
-                                <option value="10">
-                                <option value="11">
-                                <option value="12">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
-                                [(ngModel)]="year"
-                                (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
-                                maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{yearInformation}}
-                            </label>
-                            <datalist id="yearlistOptions">
-                                <option value="1995">
-                                <option value="1996">
-                                <option value="1997">
-                                <option value="1998">
-                                <option value="1999">
-                                <option value="2000">
-                                <option value="2001">
-                                <option value="2002">
-                                <option value="2003">
-                                <option value="2004">
-                                <option value="2005">
-                                <option value="2006">
-                            </datalist>
-                        </div>
-                        <div class="formDiv">
-                            <input type="text" list="governoratelistOptions"
-                                [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
-                                (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{adressInformation}}
-                                <datalist id="governoratelistOptions">
-                                    <option value="Ariana">
-                                    <option value="Béja">
-                                    <option value="Ben Arous">
-                                    <option value="Bizerte">
-                                    <option value="Gabès">
-                                    <option value="Gafsa">
-                                    <option value="Jendouba">
-                                    <option value="Kairouan">
-                                    <option value="Kasserine">
-                                    <option value="Kébili">
-                                    <option value="Kef">
-                                    <option value="Mahdia">
-                                    <option value="Manouba">
-                                    <option value="Médenine">
-                                    <option value="Monastir">
-                                    <option value="Nabeul">
-                                    <option value="Sfax">
-                                    <option value="Sidi Bouzid">
-                                    <option value="Siliana">
-                                    <option value="Sousse">
-                                    <option value="Tataouine">
-                                    <option value="Tozeur">
-                                    <option value="Tunis">
-                                    <option value="Zaghouan">
+                    <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
+                    <ng-template #updateGeneralInfo>
+                        <div class="infoEdit">
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidFirstNameVariable" name="firstName"
+                                    [(ngModel)]="firstName"
+                                    (keyup)="compareFirstName();firstNameInformation=translate.instant('firstName');invalidFirstNameVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{firstNameInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidLastNameVariable" name="lastName"
+                                    [(ngModel)]="lastName"
+                                    (keyup)="compareLastName();lastNameInformation=translate.instant('surname');invalidLastNameVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{lastNameInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable" name="day"
+                                    [(ngModel)]="day"
+                                    (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
+                                    class="formInput" list="daylistOptions" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{dayInformation}}
+                                </label>
+                                <datalist id="daylistOptions">
+                                    <option value="01">
+                                    <option value="02">
+                                    <option value="03">
+                                    <option value="04">
+                                    <option value="05">
+                                    <option value="06">
+                                    <option value="07">
+                                    <option value="08">
+                                    <option value="09">
+                                    <option value="10">
+                                    <option value="11">
+                                    <option value="12">
+                                    <option value="13">
+                                    <option value="14">
+                                    <option value="15">
+                                    <option value="16">
+                                    <option value="17">
+                                    <option value="18">
+                                    <option value="19">
+                                    <option value="20">
+                                    <option value="21">
+                                    <option value="22">
+                                    <option value="23">
+                                    <option value="24">
+                                    <option value="25">
+                                    <option value="26">
+                                    <option value="27">
+                                    <option value="28">
+                                    <option value="29">
+                                    <option value="30">
+                                    <option value="31">
                                 </datalist>
-                            </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
+                                    [(ngModel)]="month"
+                                    (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
+                                    maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{monthInformation}}
+                                </label>
+                                <datalist id="monthlistOptions">
+                                    <option value="01">
+                                    <option value="02">
+                                    <option value="03">
+                                    <option value="04">
+                                    <option value="05">
+                                    <option value="06">
+                                    <option value="07">
+                                    <option value="08">
+                                    <option value="09">
+                                    <option value="10">
+                                    <option value="11">
+                                    <option value="12">
+                                </datalist>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
+                                    [(ngModel)]="year"
+                                    (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
+                                    maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{yearInformation}}
+                                </label>
+                                <datalist id="yearlistOptions">
+                                    <option value="1995">
+                                    <option value="1996">
+                                    <option value="1997">
+                                    <option value="1998">
+                                    <option value="1999">
+                                    <option value="2000">
+                                    <option value="2001">
+                                    <option value="2002">
+                                    <option value="2003">
+                                    <option value="2004">
+                                    <option value="2005">
+                                    <option value="2006">
+                                </datalist>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" list="governoratelistOptions"
+                                    [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
+                                    (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{adressInformation}}
+                                    <datalist id="governoratelistOptions">
+                                        <option value="Ariana">
+                                        <option value="Béja">
+                                        <option value="Ben Arous">
+                                        <option value="Bizerte">
+                                        <option value="Gabès">
+                                        <option value="Gafsa">
+                                        <option value="Jendouba">
+                                        <option value="Kairouan">
+                                        <option value="Kasserine">
+                                        <option value="Kébili">
+                                        <option value="Kef">
+                                        <option value="Mahdia">
+                                        <option value="Manouba">
+                                        <option value="Médenine">
+                                        <option value="Monastir">
+                                        <option value="Nabeul">
+                                        <option value="Sfax">
+                                        <option value="Sidi Bouzid">
+                                        <option value="Siliana">
+                                        <option value="Sousse">
+                                        <option value="Tataouine">
+                                        <option value="Tozeur">
+                                        <option value="Tunis">
+                                        <option value="Zaghouan">
+                                    </datalist>
+                                </label>
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="maleRadio"
+                                    (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
+                                    [checked]="maleCheckBox" name="btnradio" id="male">
+                                <label class="btn btn-outline-primary" id="maleLabel" for="male"
+                                    (click)="checkDisabledBtnFromMale()">{{'male'|translate}}</label>
+                                <input type="radio" class="femaleRadio"
+                                    (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false"
+                                    [checked]="femaleCheckBox" name="btnradio" id="female">
+                                <label class="btn btn-outline-primary" id="femaleLabel" for="female"
+                                    (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
+                            </div>
                         </div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="maleRadio"
-                                (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
-                                [checked]="maleCheckBox" name="btnradio" id="male">
-                            <label class="btn btn-outline-primary" id="maleLabel" for="male"
-                                (click)="checkDisabledBtnFromMale()">{{'male'|translate}}</label>
-                            <input type="radio" class="femaleRadio"
-                                (change)="checkBoxInvaledInfoVriable=false;femaleCheckBox=true;maleCheckBox=false"
-                                [checked]="femaleCheckBox" name="btnradio" id="female">
-                            <label class="btn btn-outline-primary" id="femaleLabel" for="female"
-                                (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
+                        <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick()">
+                            {{'changePassword'|translate}} ?</div>
+                        <div class="textLien" style="padding-left: 50px;" (click)="changeUsernameClick()">
+                            {{'changeUsername'|translate}} ?</div>
+                        <div class="buttons">
+                            <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
+                            <button class="fullyBtn" (click)="checkForm()"
+                                [disabled]="disableSaveBtn">{{'update'|translate}}</button>
                         </div>
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
-                                [(ngModel)]="password"
-                                (keyup)="comparePassword();invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordInfromation}}
-                            </label>
-                        </div>
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                                name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                                (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordRepeatInfromation}}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="buttons">
-                        <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
-                        <button class="fullyBtn" (click)="checkForm()"
-                            [disabled]="disableSaveBtn">{{'update'|translate}}</button>
-                    </div>
+                    </ng-template>
+                    <ng-template #updateSecureInfo>
+                        <span class="changeNote">{{'noteChangerPassOrUsername'|translate}}</span>
+                        <div *ngIf="editPassword; then showEditPassword else showEditUsername"></div>
+                        <ng-template #showEditPassword>
+                            <div class="infoEdit">
+                                <div class="formDiv">
+                                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
+                                        name="password" [(ngModel)]="password"
+                                        (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                                        class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{passwordInfromation}}
+                                    </label>
+                                </div>
+                                <div class="formDiv">
+                                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                                        name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                                        (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
+                                        class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{passwordRepeatInfromation}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <button class="fullyBtn"
+                                    (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn" (click)="updatePassword()">{{'update'|translate}}</button>
+                            </div>
+                        </ng-template>
+                        <ng-template #showEditUsername>
+                            <div class="formDiv editUserName">
+                                <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                    [(ngModel)]="mail"
+                                    (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{mailInformation}}
+                                </label>
+                            </div>
+                            <div class="buttons">
+                                <button class="fullyBtn"
+                                    (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn" (click)="updateUsername()"
+                                    [disabled]="disableChnageUsernameBtn">{{'update'|translate}}</button>
+                            </div>
+                        </ng-template>
+                    </ng-template>
                 </div>
             </section>
             <section id="medicalProfileSection">
                 <div class="sectionTitle">{{'medicalProfile'|translate}}</div>
                 <div class="sectionContainer">
-                    <div
-                        *ngIf="patientGet.medicalProfile.weight == 0 && patientGet.medicalProfile.height == 0 ; then nullTemplate else showTemplate">
+                    <div *ngIf="patientMedicalProfile">
+                        <div
+                            *ngIf="patientMedicalProfile.weight == 0 &&  patientMedicalProfile.height == 0 ; then nullTemplate else showTemplate">
+                        </div>
+                        <ng-template #nullTemplate>
+                            <div *ngIf="medicalProfileInfo=='noData'" class="noData">
+                                {{'editMedicalProfileInfoToShow'|translate}}, <span class="setInfo"
+                                    (click)="initializeMedicalProfileLabel();medicalProfileInfo='setMedicalProfileInfo'">{{'setInfo'|translate}}</span>
+                            </div>
+                            <div *ngIf="medicalProfileInfo=='setMedicalProfileInfo'">
+                                <div class="infoEdit">
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'metre'|translate}}</span>
+                                        <input type="text" [class.labelInvalidInfo]="invalidHeightVariable"
+                                            name="height" [(ngModel)]="height"
+                                            (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false"
+                                            class="formInput textLeft" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{heightInformation}}
+                                        </label>
+                                    </div>
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'kilogram'|translate}}</span>
+                                        <input type="text" [class.labelInvalidInfo]="invalidWeightVariable"
+                                            name="weight" [(ngModel)]="weight"
+                                            (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false"
+                                            class="formInput textLeft" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{weightInformation}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <button class="fullyBtn"
+                                        (click)="medicalProfileInfo='noData';">{{'goBack'|translate}}</button>
+                                    <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
+                                        (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #showTemplate>
+                            <div *ngIf="medicalProfile=='showData'">
+                                <div class="infoGridTowColumn">
+                                    <div class="infoContainer">
+                                        <div class="infoIcon">
+                                            <div *ngIf="patientGet.patientGender=='male'">
+                                                <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
+                                            </div>
+                                            <div *ngIf="patientGet.patientGender=='female'">
+                                                <i class="fas fa-female"></i><i class="fas fa-arrows-alt-v"></i>
+                                            </div>
+                                        </div>
+                                        <div class="info">
+                                            {{patientMedicalProfile.height}} {{'metre'|translate}}
+                                        </div>
+                                        <div class="infoTitle">{{'height'|translate}}</div>
+                                    </div>
+                                    <div class="infoContainer">
+                                        <div class="infoIcon"><i class="fas fa-weight"></i></div>
+                                        <div class="info">
+                                            {{patientMedicalProfile.weight}} {{'kilogram'|translate}}
+                                        </div>
+                                        <div class="infoTitle">{{'weight'|translate}}</div>
+                                    </div>
+                                </div>
+                                <button class="emptyBtn"
+                                    (click)="medicalProfile='editData';initilizeMedicalProfile();">{{'edit'|translate}}</button>
+                                <div class="diseasesContainer">
+                                    <div class="title"> {{'diseases'|translate}} </div>
+                                    <div class="content">
+                                        <div *ngIf="diseaseNumber == 0">
+                                            <div *ngIf="medicalProfileDiseaseInfo=='info'; then showInfo else showWhy">
+                                            </div>
+                                            <ng-template #showInfo>{{'noDiseaseYet'|translate}}, <span class="textLien"
+                                                    (click)="medicalProfileDiseaseInfo='why'">{{'why'|translate}}</span>
+                                            </ng-template>
+                                            <ng-template #showWhy>{{'whyNoDiseaseYet'|translate}}, <span
+                                                    class="textLien"
+                                                    (click)="medicalProfileDiseaseInfo='info'">{{'okay'|translate}}</span>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="medicalProfile=='editData'">
+                                <div class="infoEdit">
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'metre'|translate}}</span>
+                                        <input type="text" [class.labelInvalidInfo]="invalidHeightVariable"
+                                            name="height" [(ngModel)]="height"
+                                            (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false"
+                                            class="formInput textLeft" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{heightInformation}}
+                                        </label>
+                                    </div>
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'kilogram'|translate}}</span>
+                                        <input type="text" [class.labelInvalidInfo]="invalidWeightVariable"
+                                            name="weight" [(ngModel)]="weight"
+                                            (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false"
+                                            class="formInput textLeft" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{weightInformation}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <button class="fullyBtn"
+                                        (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
+                                    <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
+                                        (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
-                    <ng-template #nullTemplate>
-                        <div *ngIf="medicalProfileInfo=='noData'" class="noData">
-                            {{'editMedicalProfileInfoToShow'|translate}}, <span class="setInfo"
-                                (click)="initializeMedicalProfileLabel();medicalProfileInfo='setMedicalProfileInfo'">{{'setInfo'|translate}}</span>
-                        </div>
-                        <div *ngIf="medicalProfileInfo=='setMedicalProfileInfo'">
-                            <div class="infoEdit">
-                                <div class="formDiv">
-                                    <span class="mesure">{{'metre'|translate}}</span>
-                                    <input type="text" [class.labelInvalidInfo]="invalidHeightVariable" name="height"
-                                        [(ngModel)]="height"
-                                        (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false"
-                                        class="formInput textLeft" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{heightInformation}}
-                                    </label>
-                                </div>
-                                <div class="formDiv">
-                                    <span class="mesure">{{'kilogram'|translate}}</span>
-                                    <input type="text" [class.labelInvalidInfo]="invalidWeightVariable" name="weight"
-                                        [(ngModel)]="weight"
-                                        (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false"
-                                        class="formInput textLeft" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{weightInformation}}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="buttons">
-                                <button class="fullyBtn"
-                                    (click)="medicalProfileInfo='noData';">{{'goBack'|translate}}</button>
-                                <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
-                                    (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
-                            </div>
-                        </div>
-                    </ng-template>
-                    <ng-template #showTemplate>
-                        <div *ngIf="medicalProfile=='showData'">
-                            <div class="infoGridTowColumn">
-                                <div class="infoContainer">
-                                    <div class="infoIcon">
-                                        <div *ngIf="patientGet.patientGender=='male'">
-                                            <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
-                                        </div>
-                                        <div *ngIf="patientGet.patientGender=='female'">
-                                            <i class="fas fa-female"></i><i class="fas fa-arrows-alt-v"></i>
-                                        </div>
-                                    </div>
-                                    <div class="info">
-                                        {{patientGet.medicalProfile.height}} {{'metre'|translate}}
-                                    </div>
-                                    <div class="infoTitle">{{'height'|translate}}</div>
-                                </div>
-                                <div class="infoContainer">
-                                    <div class="infoIcon"><i class="fas fa-weight"></i></div>
-                                    <div class="info">
-                                        {{patientGet.medicalProfile.weight}} {{'kilogram'|translate}}
-                                    </div>
-                                    <div class="infoTitle">{{'weight'|translate}}</div>
-                                </div>
-                            </div>
-                            <button class="emptyBtn"
-                                (click)="medicalProfile='editData';initilizeMedicalProfile();">{{'edit'|translate}}</button>
-                            <div class="diseasesContainer">
-                                <div class="title"> {{'diseases'|translate}} </div>
-                                <div class="content">
-                                    <div *ngIf="patientGet.medicalProfile.medicalProfileDisease.length == 0">
-                                        <div *ngIf="medicalProfileDiseaseInfo=='info'; then showInfo else showWhy">
-                                        </div>
-                                        <ng-template #showInfo>{{'noDiseaseYet'|translate}}, <span class="textLien"
-                                                (click)="medicalProfileDiseaseInfo='why'">{{'why'|translate}}</span>
-                                        </ng-template>
-                                        <ng-template #showWhy>{{'whyNoDiseaseYet'|translate}}, <span class="textLien"
-                                                (click)="medicalProfileDiseaseInfo='info'">{{'okay'|translate}}</span>
-                                        </ng-template>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="medicalProfile=='editData'">
-                            <div class="infoEdit">
-                                <div class="formDiv">
-                                    <span class="mesure">{{'metre'|translate}}</span>
-                                    <input type="text" [class.labelInvalidInfo]="invalidHeightVariable" name="height"
-                                        [(ngModel)]="height"
-                                        (keyup)="compareHeight();heightInformation=translate.instant('height');invalidHeightVariable=false"
-                                        class="formInput textLeft" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{heightInformation}}
-                                    </label>
-                                </div>
-                                <div class="formDiv">
-                                    <span class="mesure">{{'kilogram'|translate}}</span>
-                                    <input type="text" [class.labelInvalidInfo]="invalidWeightVariable" name="weight"
-                                        [(ngModel)]="weight"
-                                        (keyup)="compareWeight();weightInformation=translate.instant('weight');invalidWeightVariable=false"
-                                        class="formInput textLeft" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{weightInformation}}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="buttons">
-                                <button class="fullyBtn"
-                                    (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
-                                <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
-                                    (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
-                            </div>
-                        </div>
-                    </ng-template>
                 </div>
             </section>
             <section id="myAppointmentsSection">
                 <div class="sectionTitle">{{'myAppointments'|translate}}</div>
                 <div class="sectionContainer">
-                    <div *ngIf="patientGet.appointment.length == 0; then noApp else showApp"></div>
+                    <div *ngIf="appointment.length == 0; then noApp else showApp"></div>
                     <ng-template #noApp>
                         <div class="noData">
                             {{'noAppointments'|translate}}
                         </div>
                     </ng-template>
                     <ng-template #showApp>
-                        {{patientGet.appointment.length}} {{'appointmentsFound'|translate}}
                         <div class="appointmentsGrid">
                             <div class="div rightBorder" style="text-transform: capitalize;"> {{'doctor'|translate}}
                             </div>
@@ -383,15 +413,22 @@
                             </div>
                             <div class="div" style="text-transform: capitalize;"> {{'modify'|translate}} </div>
                         </div>
-                        <div *ngFor="let app of patientGet.appointment | keyvalue">
+                        <div *ngFor="let app of appointment | keyvalue" class="appOfAppointment">
                             <section id="{{app.key}}">
-                                <div *ngIf="appointmentDocInfoGet[app.key]">
-                                    <div *ngIf="app.value.appointmentStatus=='pending'"  class="appointmentsGrid">
+                                <div *ngIf="deletedApp[app.key]">
+                                    <div class="deletedAppointment">
+                                        <div class="deletedAppText">
+                                            {{'appDeleted'|translate}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="docInfoForPatient[app.key]">
+                                    <div *ngIf="app.value.appointmentStatus=='pending'" class="appointmentsGrid">
                                         <div class="div">
                                             <div class="centerInDivGrid">
                                                 <div class="profileImgCon">
                                                     <div
-                                                        *ngIf="doctorProfileImgRes[app.key]; then showDocProfileImg else showDocDefaultImg">
+                                                        *ngIf="doctorProfileImg[app.key]; then showDocProfileImg else showDocDefaultImg">
                                                     </div>
                                                     <ng-template #showDocProfileImg><img
                                                             [src]="doctorProfileImg[app.key]" class="profileImg">
@@ -402,76 +439,76 @@
                                                 </div>
                                                 <div class="appDocName">
                                                     Dr. <span
-                                                        style="text-transform: capitalize;">{{appointmentDocInfoGet[app.key].doctorFirstName}}</span>
+                                                        style="text-transform: capitalize;">{{docInfoForPatient[app.key].doctorFirstName}}</span>
                                                     <span style="text-transform: uppercase;">
-                                                        {{appointmentDocInfoGet[app.key].doctorLastName}}</span>
+                                                        {{docInfoForPatient[app.key].doctorLastName}}</span>
                                                 </div>
-                                                <div *ngIf="appointmentDocInfoGet[app.key].doctorRate != 0"
+                                                <div *ngIf="docInfoForPatient[app.key].doctorRate != 0"
                                                     class="centerRate">
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 0.5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 0.5">
                                                         <i class="fas fa-star-half-alt"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 1">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 1">
                                                         <i class="fas fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 1.5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 1.5">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star-half-alt"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 2">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 2">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 2.5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 2.5">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star-half-alt"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 3">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 3">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 3.5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 3.5">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star-half-alt"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 4">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 4">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="far fa-star"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 4.5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 4.5">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star-half-alt"></i>
                                                     </div>
-                                                    <div *ngIf="appointmentDocInfoGet[app.key].doctorRate == 5">
+                                                    <div *ngIf="docInfoForPatient[app.key].doctorRate == 5">
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
                                                         <i class="fas fa-star"></i>
@@ -479,29 +516,38 @@
                                                         <i class="fas fa-star"></i>
                                                     </div>
                                                 </div>
-                                                <span
-                                                    class="appInfoTitleCon paddingRight">{{appointmentDocInfoGet[app.key].specialityCode.toString()|translate}}</span>
+                                                <div class="appInfoTitleCon"> <i class="fas fa-map-marked-alt"></i>
+                                                    <span class="appInfo">{{docInfoForPatient[app.key].userCity}}</span>
+                                                </div>
+                                                <div class="appInfoTitleCon"> {{'gender'|translate}} <span
+                                                        class="appInfo">{{docInfoForPatient[app.key].doctorGender}}</span>
+                                                </div>
+                                                <div class="appInfoTitleCon noWhite"><span class="appInfo">
+                                                        {{docInfoForPatient[app.key].exactAddress}}
+                                                    </span>
+                                                </div>
+                                                <!--<span
+                                                        class="appInfoTitleCon paddingRight">{{docInfoForPatient[app.key].specialityCode.toString()|translate}}</span>-->
                                             </div>
                                         </div>
                                         <div class="div">
                                             <div class="centerInDivGrid">
-                                                <div class="appInfoTitleCon"> {{'date'|translate}} <span
+                                                <div class="appInfoTitleCon"> <i class="fas fa-calendar-day"></i> <span
                                                         class="appInfo">{{app.value.appointmentDate}}</span> </div>
-                                                <div class="appInfoTitleCon"> {{'city'|translate}} <span
-                                                        class="appInfo">{{appointmentDocInfoGet[app.key].doctorCity}}</span>
-                                                </div>
-                                                <div class="appInfoTitleCon"> {{'exactAdress'|translate}} <span
-                                                        class="appInfo">{{appointmentDocInfoGet[app.key].exactAdress}}</span>
-                                                </div>
-                                                <div class="appInfoTitleCon"> {{'youTurn'|translate}} <span
+                                                <div class="appInfoTitleCon"> {{'turn'|translate}} <span
                                                         class="appInfo">{{app.value.patientTurn}}</span>
+                                                </div>
+                                                <div class="appInfoTitleCon"> <i class="fas fa-clock"></i> <span
+                                                        class="appInfo">{{getApproximationTime(docInfoForPatient[app.key].startTime,
+                                                        docInfoForPatient[app.key].appointmentApproximateDuration,
+                                                        docInfoForPatient[app.key].patientTurn)}}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="div">
                                             <div class="centerInDivGrid">
                                                 <button class="fullyBtn fullyBtnRed"
-                                                    (click)="deleteAppById(app.value.appointmentId)">
+                                                    (click)="deleteAppById(app.value.appointmentId,app.key)">
                                                     {{'delete'|translate}} <i class="fas fa-trash-alt"></i>
                                                 </button>
                                                 <button class="fullyBtn fullyBtnGreen"
@@ -525,15 +571,32 @@
                                                 [disabled]="monthDaysDis[day]">{{day}}</label>
                                         </div>
                                     </div>
-                                    <button class="emptyBtn white" (click)="updateAppById(app.value.appointmentId,app.key)">
+                                    <button class="emptyBtn white"
+                                        (click)="updateAppById(app.value.appointmentId,app.key)">
                                         {{'update'|translate}} </button>
                                 </div>
                             </section>
                         </div>
+                        <div *ngIf="showLoadMoreApp" class="showMoreApp">
+                            <div *ngIf="!appointmentLoading" (click)="getAppointments()">
+                                <div class="showMoreAppText">{{'showMore'|translate}}</div>
+                                <div><i class="fas fa-angle-double-down doubleArrowDownApp"></i></div>
+                            </div>
+                            <div *ngIf="appointmentLoading">
+                                <div class="loading" style="position: relative;">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!showLoadMoreApp" class="horizentalCenter">
+                            {{'allAppLoaded'|translate}}
+                        </div>
                     </ng-template>
                 </div>
             </section>
-            <section id="prescriptionSection">
+            <!--<section id="prescriptionSection">
                 <div class="sectionTitle">{{'prescription'|translate}}</div>
                 <div class="sectionContainer">
                     <div *ngIf="patientGet.prescription.length == 0; then showPrescriptionNull else showPrescription">
@@ -550,7 +613,7 @@
                     </ng-template>
                     <ng-template #showPrescription></ng-template>
                 </div>
-            </section>
+            </section>-->
             <section id="myDoctorsSection">
                 <div class="sectionTitle">{{'myDoctors'|translate}}</div>
                 <div class="sectionContainer">

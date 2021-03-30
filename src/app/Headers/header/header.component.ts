@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { AppComponent } from '../../app.component'
 
 @Component({
@@ -9,14 +10,22 @@ import { AppComponent } from '../../app.component'
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
-  constructor(private translate: TranslateService,private appComp:AppComponent,private toastr:ToastrService) { 
+  USER_KEY = 'auth-user';
+  userName:any;
+  constructor(private translate: TranslateService,private appComp:AppComponent,
+    private toastr:ToastrService,
+    private tokenStorageService:TokenStorageService) { 
     translate.addLangs(['en','fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
 
+  
 
   ngOnInit(): void {
+    const user = window.sessionStorage.getItem(this.USER_KEY);
+    if (user) {
+      this.userName= JSON.parse(user).username;
+    }
     if(localStorage.getItem("darkMode")=='true'){
       this.appComp.switchTheme('dark');
       this.darkMode=true;
@@ -63,9 +72,20 @@ export class HeaderComponent implements OnInit {
     this.menuCheckBox=false;
   }
   toConnexionSection(){
+    if(this.userName==null){
     document.getElementById("connexionSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
+    }else{
+      // deconnection
+      this.tokenStorageService.signOut();
+      this.reloadPage();
+    }
   }
+
+  reloadPage(): void {
+    window.location.reload();
+  }
+
   toMaladiesSection(){
     document.getElementById("maladiesSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;

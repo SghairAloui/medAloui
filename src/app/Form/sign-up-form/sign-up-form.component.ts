@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { DoctorPost } from 'src/model/DoctorPost';
 import { PatientPost } from 'src/model/PatientPost';
 import { PharmacyPost } from 'src/model/PharmacyPost';
@@ -16,8 +18,13 @@ export class SignUpFormComponent implements OnInit {
   @Output() outPutOpenClientSignUp = new EventEmitter<boolean>();
   @Output() outPutOpenSignIn = new EventEmitter<boolean>();
   
-  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,private http:HttpClient,private toastr:ToastrService) { 
+  constructor(private translate: TranslateService,private saveUser:SaveNewUserService,
+    private http:HttpClient,private toastr:ToastrService,
+    private authService: AuthService,private userService:UserService
+    ) { 
   }
+
+  private roleUser:string;
   saveUserResponse:any;
   private patientPost:PatientPost;
   private pharmacyPost:PharmacyPost;
@@ -43,20 +50,32 @@ export class SignUpFormComponent implements OnInit {
   showForm:boolean=false;
   formInfo:string='false';
 
+
+  isSuccessful = false;
+  isSignUpFailed = false;
+  errorMessage = '';
+  cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
+
+
   ngOnInit(): void {
   }
   openSignIn(){
     this.outPutOpenSignIn.emit(false);
   }
   checkAdress(){
-    let upperCaseAdress:string = this.adress.toUpperCase();
-    if(upperCaseAdress == "Ariana".toUpperCase() || upperCaseAdress == "Béja".toUpperCase()|| upperCaseAdress == "Ben Arous".toUpperCase() || upperCaseAdress =="Bizerte".toUpperCase()||upperCaseAdress =="Gabès".toUpperCase()||upperCaseAdress =="Gafsa".toUpperCase()||upperCaseAdress =="Jendouba".toUpperCase()||upperCaseAdress =="Kairouan".toUpperCase()||upperCaseAdress =="Kasserine".toUpperCase() ||upperCaseAdress == "Kébili".toUpperCase() ||upperCaseAdress =="Kef".toUpperCase()||upperCaseAdress =="Mahdia".toUpperCase()||upperCaseAdress == "Manouba".toUpperCase() ||upperCaseAdress =="Médenine".toUpperCase()||upperCaseAdress =="Monastir".toUpperCase()||upperCaseAdress == "Nabeul".toUpperCase() ||upperCaseAdress =="Sfax".toUpperCase()||upperCaseAdress =="Sidi Bouzid".toUpperCase()||upperCaseAdress == "Siliana".toUpperCase() ||upperCaseAdress =="Sousse".toUpperCase()||upperCaseAdress =="Tataouine".toUpperCase()||upperCaseAdress == "Tozeur".toUpperCase() ||upperCaseAdress =="Tunis".toUpperCase()||upperCaseAdress =="Zaghouan".toUpperCase()){
-      this.invalidAdressVariable=false;
-      this.adressInformation=this.translate.instant('city');
-    }
-    else{
-      this.invalidAdressVariable=true;
-      this.adressInformation=this.translate.instant('enterValidCity');
+    this.adress=this.adress.replace('é', 'e');
+    this.adress=this.adress.replace('è', 'e');
+    let lowerCaseAdress:string = this.adress.toLowerCase();
+    for (let city of this.cities){
+      if( city.toLowerCase() == lowerCaseAdress){
+        this.invalidAdressVariable=false;
+        this.adressInformation=this.translate.instant('city');
+        break;
+      }
+      else{
+        this.invalidAdressVariable=true;
+        this.adressInformation=this.translate.instant('enterValidCity');
+      }
     }
   }
   checkFirstName(){
@@ -103,8 +122,7 @@ export class SignUpFormComponent implements OnInit {
       this.userNameNameInformation=this.translate.instant('pharmacyUserName');
     }
   }
-  
-    this.checkIfPharmacyUserNameExist(this.userName);
+    this.checkIfUserNameExist(this.userName,'pharmacy');
   }
   checkLastName(){
     if(this.lastName.length<3){
@@ -164,15 +182,16 @@ export class SignUpFormComponent implements OnInit {
       this.passwordRepeatInfromation=this.translate.instant('repeatPasswordErr');
     }
     if(this.invalidPasswordVariable==false && this.invalidPasswordRepeatVariable==false)
-     this.saveUserNow();
+     this.saveNewUser();
   }
   checkEmailAndNameForm(){
     this.checkMail();
     this.checkFirstName();
     this.checkLastName();
-    this.checkIfUserNameExist(this.mail);
+    this.checkIfUserNameExist(this.mail,'normalAccount');
   }
   checkBirthday(){
+    this.formInfo='GeneralInfo';
     if((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2) ){
       this.invalidDayVariable=false;
       this.dayInformation=this.translate.instant('day');
@@ -203,69 +222,26 @@ export class SignUpFormComponent implements OnInit {
     }else
     this.formInfo='GeneralInfo';
   }
-
-  public saveUserNow(){
-    
-    if(this.userType=='pharmacy'){
-      this.pharmacyPost =new PharmacyPost(this.userName.toLowerCase(),this.pharmacyName.toLowerCase(),this.adress.toLowerCase(),this.password);
-        this.saveUser.savePharmacy(this.pharmacyPost).subscribe(
-          res => {
-            this.formInfo=res;
-          },
-          err => {
-            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
+  checkIfUserNameExist(username:string,accountType:string){
+    this.userService.checkIfUsernameExists(username.toLowerCase()).subscribe(
+      res=>{
+        if(accountType == 'pharmacy'){
+          if(res==true){
+            this.invalidUserNameVariable=true;
+            this.userNameNameInformation=this.translate.instant('mailExist');
+          }else{
+            if(!this.invalidUserNameVariable && !this.invalidPharmacyNameVariable && !this.invalidAdressVariable){
+              this.formInfo='pharmacyPassword';
+            }
           }
-        );
-    }else{
-      let gender:string;
-      if(this.maleCheckBox==true)
-      gender="male";
-      else
-      gender="female";  
-      let birthday:string=this.day+"/"+this.month+"/"+this.year;
-      if(this.userType=='doctor'){
-        this.doctorPost =new DoctorPost(this.mail.toLowerCase(),this.firstName.toLowerCase(),this.lastName.toLowerCase(),this.adress.toLowerCase(),birthday.toLowerCase(),this.password,gender.toLowerCase());
-        let resp = this.saveUser.saveDoctor(this.doctorPost).subscribe(
-          res => {
-            this.formInfo=res;
-          },
-          err => {
-            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-          }
-        );
-      }else{
-        this.patientPost =new PatientPost(this.mail.toLowerCase(),this.firstName.toLowerCase(),this.lastName.toLowerCase(),this.adress.toLowerCase(),this.password,birthday.toLowerCase(),gender.toLowerCase());
-        let resp = this.saveUser.savePatient(this.patientPost).subscribe(
-          res => {
-            this.formInfo=res;
-          },
-          err => {
-            this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-          }
-        );
-      }
-    }
-  }
-
-  checkIfUserNameExist(username:string){
-    let url="http://localhost:8080/resource/ExistsByUsername/"+username;
-    this.http.get<boolean>(url).subscribe(
-      res => {
-        if(res==true){
-          this.invalidMailVariable=true;
-          this.mailInformation=this.translate.instant('mailExist');
         }else{
-          if(this.invalidFirstNameVariable==false && this.invalidLastNameVariable==false && this.invalidMailVariable==false)
-          this.formInfo='birthday';
+          if(res==true){
+            this.invalidMailVariable=true;
+            this.mailInformation=this.translate.instant('mailExist');
+          }else{
+            if(!this.invalidFirstNameVariable && !this.invalidLastNameVariable && !this.invalidMailVariable)
+            this.formInfo='birthday';
+          }
         }
       },
       err => {
@@ -276,24 +252,30 @@ export class SignUpFormComponent implements OnInit {
       }
     );
   }
-  checkIfPharmacyUserNameExist(username:string){
-    let url="http://localhost:8080/resource/ExistsByUsername/"+username.toLowerCase();
-    this.http.get<boolean>(url).subscribe(
-      res => {
-        if(res==true){
-          this.invalidUserNameVariable=true;
-          this.userNameNameInformation=this.translate.instant('mailExist');
-        }else{
-          if(this.invalidUserNameVariable==false && this.invalidPharmacyNameVariable==false && this.invalidAdressVariable==false)
-          this.formInfo='pharmacyPassword';
-        }
+  saveNewUser(){
+    let roleUserList = new Set();
+    roleUserList.add(this.roleUser)
+
+    let birthday:string = this.day + '/' + this.month + '/' + this.year;
+    let gender:string;
+    if(this.maleCheckBox)
+      gender='male';
+    else
+      gender='female';
+
+    this.authService.register(this.mail.toLowerCase(),this.password,this.roleUser,this.firstName.toLowerCase(),this.lastName.toLowerCase(),this.pharmacyName.toLowerCase(),this.adress.toLowerCase(),gender,birthday).subscribe(
+      data => {
+        console.log(data);
+        this.isSuccessful = true;
+        this.isSignUpFailed = false;
+        this.formInfo=data.message;
       },
       err => {
-        this.toastr.warning(this.translate.instant('checkCnx'),this.translate.instant('cnx'),{
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
+        this.errorMessage = err.error.message;
+        this.isSignUpFailed = true;
       }
     );
   }
+
+  
 }

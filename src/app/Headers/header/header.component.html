@@ -45,7 +45,9 @@
                     <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">{{'Connection'|translate}}</a></li>
                 </ul>
             </nav>
-            <a class="cta"><button (click)="toConnexionSection()">{{'Connection'|translate}}</button></a>
+            <a class="cta">
+                <button (click)="toConnexionSection()"> {{'connection'|translate}} </button>
+            </a>
         </header>
         <div *ngIf="settingsBoxUnder700" class="settingsBoxUnder700Conatiner">
             <ul id="settingsBoxUnder700">

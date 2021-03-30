@@ -44,6 +44,7 @@ html,body{
     transform: translateX(-50%);
 }
 .notApproved{
+    padding: 2px 15px;
     position: fixed;
     color: white;
     font-size: 1.1rem;
@@ -54,6 +55,7 @@ html,body{
     text-align: center;
 }
 .disapprovedByAdmin{
+    padding: 2px 15px;
     position: fixed;
     color: white;
     font-size: 1.1rem;
@@ -103,6 +105,8 @@ html,body{
     position: absolute;
     height: 100%;
     width: 100%;
+    color: white;
+    font-weight: 600;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     transition: 0.3s;
@@ -162,6 +166,9 @@ html,body{
 #SunLab{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+.infoGrid{
+    width: 100%;
 }
 .infoGridTowColumn{
     grid-template-rows: auto auto;
@@ -377,6 +384,7 @@ html,body{
     padding: 5px;
 }
 .patientTurnIndex{
+    color: white;
     position: relative;
     top: 0px;
     right: 0px;
@@ -386,4 +394,20 @@ html,body{
     padding-right: 7px;
     padding-bottom: 5px;
     font-family: Arial, Helvetica, sans-serif;
+}
+.infoTitle{
+    padding: 2px 5px;
+}
+.specialityCon{
+    background-color: #308a7b;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 1rem;
+    margin: 5px 10px;
+}
+.formDiv .mesure{
+    color: white;
+}
+.editUserName{
+    margin: 30px;
 }

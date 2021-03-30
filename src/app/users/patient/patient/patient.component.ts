@@ -4,12 +4,19 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { UserService } from 'src/app/services/user.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
+import { AppointmentGet } from 'src/model/AppointmentGet';
+import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
+import { TwoStringsPost } from 'src/model/TwoStringsPost';
+import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
+import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PatientService } from './patient.service';
 
@@ -38,8 +45,9 @@ export class PatientComponent implements OnInit {
   appointmentYear: number;
   appointmentDay: number;
   appointmentDate: string;
+  appointmentPage: number = 0;
 
-  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService) { }
+  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService, private userService: UserService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -60,78 +68,83 @@ export class PatientComponent implements OnInit {
   base64Data: any;
   retrieveResonse: any;
   message: string;
-  doctorProfileImgRes: any[];
-  doctorProfileImg: any[];
-  appointmentDocInfoGet: AppointmentDocInfoGet[];
+  doctorProfileImg: any[] = [];
+  appointmentDocInfoGet: AppointmentDocInfoGet[] = [];
+  docInfoForPatient: DoctorInfoForPatient[] = [];
   patientInfo: boolean;
-  showUpdateCalendar: boolean [];
+  showUpdateCalendar: boolean[];
+  editeSecureInfo: boolean = false;
+  editPassword: boolean;
+  twoStringsPost: TwoStringsPost;
+  disableChnageUsernameBtn: boolean = true;
+  updatePasswordPost: UpdatePasswordPost;
+  disableUpdateUsernamePassBtn: boolean = false;
+  patientMedicalProfile: medicalProfileGet;
+  diseaseNumber: number = 0;
+  updateMedicalProfilePost: UpdateMedicalProfilePost;
+  cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
+  appointment: AppointmentGet[] = [];
+  deletedApp: boolean[] = [];
+  showLoadMoreApp: boolean;
+  appointmentLoading: boolean = false;
+  docProfileImages: boolean;
+  docInfos: boolean;
 
   ngOnInit(): void {
-    this.doctorProfileImgRes = [];
-    this.doctorProfileImg = [];
-    this.appointmentDocInfoGet = [];
+    this.deletedApp = [false];
     this.showUpdateCalendar = [false];
     this.patientInfo = false;
     this.getUserInfo();
   }
 
   checkForm() {
-    this.checkMail();
     this.checkFirstName();
     this.checkLastName();
     this.checkAdress();
     this.checkBirthday();
-    this.checkPassword();
-    if (this.invalidAdressVariable == false && this.invalidFirstNameVariable == false && this.invalidLastNameVariable == false && this.invalidDayVariable == false && this.invalidMonthVariable == false && this.invalidYearVariable == false && this.invalidPasswordVariable == false && this.invalidPasswordRepeatVariable == false) {
+    if (!this.invalidAdressVariable && !this.invalidFirstNameVariable && !this.invalidLastNameVariable && !this.invalidDayVariable && !this.invalidMonthVariable && !this.invalidYearVariable) {
       let birthday: string = this.day + '/' + this.month + '/' + this.year;
       let gender: string;
       if (this.maleCheckBox == true)
         gender = 'male';
       else
         gender = 'female';
-      this.patientPostWithSecureLogin = new PatientPostWithSecureLogin(this.mail.toLowerCase(), this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), this.passwordRepeat, birthday, gender.toLowerCase(), localStorage.getItem("secureLogin"));
-      this.patientService.updatePatientInfoBySecureLogin(this.patientPostWithSecureLogin).subscribe(
-        res => {
-          console.log(res);
-          if (res == 'usernameExist') {
-            this.invalidMailVariable = true;
-            this.mailInformation = this.translate.instant('mailExist');
-          } else if (res == 'updated') {
-            this.getUserInfo();
-            this.invalidMailVariable = false;
-            this.generalInfo = 'show';
-            this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-          }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 3500,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
+      this.patientPostWithSecureLogin = new PatientPostWithSecureLogin(this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), birthday, gender.toLowerCase(), localStorage.getItem("secureLogin"));
+      this.updateDoctorInfo();
     }
   }
-  public getUserInfo() {
+  updateDoctorInfo() {
+    this.patientService.updatePatientInfoBySecureLogin(this.patientPostWithSecureLogin).subscribe(
+      res => {
+        this.getUserInfo();
+        this.invalidMailVariable = false;
+        this.generalInfo = 'show';
+        this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+  getUserInfo() {
     this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.patientService.getPatientInfo(this.secureLoginString).subscribe(
       res => {
         if (res) {
           this.patientGet = res;
+          this.getPatientMedicalProfile();
+          this.getPatientMedicalProfielDiseasesNumber();
           this.patientInfo = true;
           this.intializeEdit();
-          localStorage.setItem('id', this.patientGet.patientId + '')
+          localStorage.setItem('id', this.patientGet.userId + '')
           this.getImage();
-          for (let app of this.patientGet.appointment) {
-            this.getDocProfileImg(app.doctorId);
-            this.getDoctorAppointmentInfoByDoctorId(app.doctorId);
-          }
-          for (let app of this.appointmentDocInfoGet){
-            console.log(app + 'jj');
-          }
+          this.getAppointments();
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -173,7 +186,7 @@ export class PatientComponent implements OnInit {
       }
     }
   }
-  checkMail() {
+  updateUsername() {
     if (this.mail.length < 6) {
       this.invalidMailVariable = true;
       this.mailInformation = this.translate.instant('mailApha');
@@ -187,14 +200,95 @@ export class PatientComponent implements OnInit {
         this.mailInformation = this.translate.instant('mail');
       }
     }
+    if (!this.invalidMailVariable) {
+      this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), this.mail.toLowerCase())
+      this.userService.updateUsernameBySecureLogin(this.twoStringsPost).subscribe(
+        async res => {
+          if (!res) {
+            this.invalidMailVariable = true;
+            this.mailInformation = this.translate.instant('mailExist');
+          } else {
+            this.router.navigate(['/acceuil']);
+            this.toastr.success(this.translate.instant('usernameChanged'), this.translate.instant('info'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            localStorage.setItem('secureLogin', '');
+            localStorage.setItem('id', '');
+            await this.sleep(1000);
+            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
+  }
+  updatePassword() {
+    if (this.password.length > 5) {
+      this.invalidPasswordVariable = false;
+      this.passwordInfromation = this.translate.instant('password');
+    }
+    else {
+      this.invalidPasswordVariable = true;
+      this.passwordInfromation = this.translate.instant('passwordUnder6');
+    }
+    if (this.passwordRepeat == this.password || this.password.length < 6) {
+      this.invalidPasswordRepeatVariable = false;
+      this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
+    }
+    else {
+      this.invalidPasswordRepeatVariable = true;
+      this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
+    }
+    if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
+      this.updatePasswordPost = new UpdatePasswordPost(localStorage.getItem('secureLogin'), this.passwordRepeat);
+      this.userService.updateUserPasswordBySecurelogin(this.updatePasswordPost).subscribe(
+        async res => {
+          if (!res) {
+            this.toastr.warning(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            localStorage.setItem('secureLogin', '');
+            localStorage.setItem('id', '');
+            await this.sleep(1000);
+            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
+          } else {
+            this.router.navigate(['/acceuil']);
+            this.toastr.success(this.translate.instant('passwordChanged'), this.translate.instant('info'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            localStorage.setItem('secureLogin', '');
+            localStorage.setItem('id', '');
+            await this.sleep(1000);
+            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
+  }
+  sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   }
   intializeEdit() {
     this.firstName = this.patientGet.patientFirstName;
     this.lastName = this.patientGet.patientLastName;
-    this.mail = this.patientGet.patientUserName;
-    this.password = this.patientGet.patientPassword;
-    this.passwordRepeat = this.patientGet.patientPassword;
-    this.adress = this.patientGet.patientCity;
+    this.mail = this.patientGet.userUsername;
+    this.adress = this.patientGet.userCity;
     this.day = this.patientGet.patientBirthDay.substr(0, 2);
     this.month = this.patientGet.patientBirthDay.substr(3, 2);
     this.year = this.patientGet.patientBirthDay.substr(6, 4);
@@ -213,34 +307,22 @@ export class PatientComponent implements OnInit {
     this.monthInformation = this.translate.instant('month');
     this.yearInformation = this.translate.instant('year');
     this.adressInformation = this.translate.instant('city');
+    document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
   checkAdress() {
     let upperCaseAdress: string = this.adress.toUpperCase();
-    if (upperCaseAdress == "Ariana".toUpperCase() || upperCaseAdress == "Béja".toUpperCase() || upperCaseAdress == "Ben Arous".toUpperCase() || upperCaseAdress == "Bizerte".toUpperCase() || upperCaseAdress == "Gabès".toUpperCase() || upperCaseAdress == "Gafsa".toUpperCase() || upperCaseAdress == "Jendouba".toUpperCase() || upperCaseAdress == "Kairouan".toUpperCase() || upperCaseAdress == "Kasserine".toUpperCase() || upperCaseAdress == "Kébili".toUpperCase() || upperCaseAdress == "Kef".toUpperCase() || upperCaseAdress == "Mahdia".toUpperCase() || upperCaseAdress == "Manouba".toUpperCase() || upperCaseAdress == "Médenine".toUpperCase() || upperCaseAdress == "Monastir".toUpperCase() || upperCaseAdress == "Nabeul".toUpperCase() || upperCaseAdress == "Sfax".toUpperCase() || upperCaseAdress == "Sidi Bouzid".toUpperCase() || upperCaseAdress == "Siliana".toUpperCase() || upperCaseAdress == "Sousse".toUpperCase() || upperCaseAdress == "Tataouine".toUpperCase() || upperCaseAdress == "Tozeur".toUpperCase() || upperCaseAdress == "Tunis".toUpperCase() || upperCaseAdress == "Zaghouan".toUpperCase()) {
-      this.invalidAdressVariable = false;
-      this.adressInformation = this.translate.instant('city');
-    }
-    else {
-      this.invalidAdressVariable = true;
-      this.adressInformation = this.translate.instant('enterValidCity');
-    }
-  }
-  checkPassword() {
-    if (this.password.length > 5) {
-      this.invalidPasswordVariable = false;
-      this.passwordInfromation = this.translate.instant('password');
-    }
-    else {
-      this.invalidPasswordVariable = true;
-      this.passwordInfromation = this.translate.instant('passwordUnder6');
-    }
-    if (this.passwordRepeat == this.password || this.password.length < 6) {
-      this.invalidPasswordRepeatVariable = false;
-      this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
-    }
-    else {
-      this.invalidPasswordRepeatVariable = true;
-      this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
+    this.adress = this.adress.replace('é', 'e');
+    this.adress = this.adress.replace('è', 'e');
+    for (let city of this.cities) {
+      if (upperCaseAdress == city.toLocaleUpperCase()) {
+        this.invalidAdressVariable = false;
+        this.adressInformation = this.translate.instant('city');
+        break;
+      }
+      else {
+        this.invalidAdressVariable = true;
+        this.adressInformation = this.translate.instant('enterValidCity');
+      }
     }
   }
   checkDisabledBtnFromMale() {
@@ -281,6 +363,16 @@ export class PatientComponent implements OnInit {
       this.yearInformation = this.translate.instant('yearErr');
     }
   }
+  changePasswordClick() {
+    this.editeSecureInfo = true;
+    this.editPassword = true;
+    document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
+  }
+  changeUsernameClick() {
+    this.editeSecureInfo = true;
+    this.editPassword = false;
+    document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
+  }
   compareFirstName() {
     if (this.firstName.toLowerCase() === this.patientGet.patientFirstName)
       this.disableSaveBtn = true;
@@ -294,10 +386,10 @@ export class PatientComponent implements OnInit {
       this.disableSaveBtn = false;
   }
   compareUserName() {
-    if (this.mail.toLowerCase() === this.patientGet.patientUserName)
-      this.disableSaveBtn = true;
+    if (this.mail.toLowerCase() === this.patientGet.userUsername)
+      this.disableUpdateUsernamePassBtn = true;
     else
-      this.disableSaveBtn = false;
+      this.disableUpdateUsernamePassBtn = false;
   }
   compareDay() {
     if (this.day === this.patientGet.patientBirthDay.substr(0, 2))
@@ -318,19 +410,13 @@ export class PatientComponent implements OnInit {
       this.disableSaveBtn = false;
   }
   compareCity() {
-    if (this.adress.toLowerCase() === this.patientGet.patientCity)
-      this.disableSaveBtn = true;
-    else
-      this.disableSaveBtn = false;
-  }
-  comparePassword() {
-    if (this.password === this.patientGet.patientPassword)
+    if (this.adress.toLowerCase() === this.patientGet.userCity)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
   compareHeight() {
-    if (parseFloat(this.height) == this.patientGet.medicalProfile.height || this.height == "")
+    if (parseFloat(this.height) == this.patientMedicalProfile.height || this.height == "")
       this.disableSaveMedicalProfileBtn = true;
     else
       this.disableSaveMedicalProfileBtn = false;
@@ -338,7 +424,7 @@ export class PatientComponent implements OnInit {
 
   }
   compareWeight() {
-    if (parseFloat(this.weight) == this.patientGet.medicalProfile.weight || this.weight == "")
+    if (parseFloat(this.weight) == this.patientMedicalProfile.weight || this.weight == "")
       this.disableSaveMedicalProfileBtn = true;
     else
       this.disableSaveMedicalProfileBtn = false;
@@ -381,10 +467,10 @@ export class PatientComponent implements OnInit {
       this.updateMedicalProfileData();
   }
   updateMedicalProfileData() {
-    this.stringAndTwoDoublePost = new StringAndTwoDoublePost(localStorage.getItem('secureLogin'), parseFloat(this.height), parseFloat(this.weight));
-    this.patientService.updateMedicalProfileBySecureLogin(this.stringAndTwoDoublePost).subscribe(
+    this.updateMedicalProfilePost = new UpdateMedicalProfilePost(this.patientGet.medicalProfileId, parseFloat(this.height), parseFloat(this.weight));
+    this.patientService.updateMedicalProfileByMedicalProfileId(this.updateMedicalProfilePost).subscribe(
       res => {
-        if (res == 'updated') {
+        if (res) {
           this.medicalProfile = 'showData';
           this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
             timeOut: 5000,
@@ -393,28 +479,22 @@ export class PatientComponent implements OnInit {
           this.getUserInfo();
           this.medicalProfileInfo = 'showData';
         }
-      },
-      err => {
-        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
       }
     );
   }
   initilizeMedicalProfile() {
-    this.height = this.patientGet.medicalProfile.height.toString();
-    this.weight = this.patientGet.medicalProfile.weight.toString();
+    // this.height = this.patientGet.medicalProfile.height.toString();
+    // this.weight = this.patientGet.medicalProfile.weight.toString();
   }
-  public onFileChanged(event) {
+  onFileChanged(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload();
     this.getImage();
   }
   onUpload() {
-    if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
+    if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
       const uploadImageData = new FormData();
-      uploadImageData.append('imageFile', this.selectedFile, this.patientGet.patientId + "patientProfilePic");
+      uploadImageData.append('imageFile', this.selectedFile, this.patientGet.userId + "patientProfilePic");
       this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
         res => {
           if (res == 'imageUpdated')
@@ -435,7 +515,7 @@ export class PatientComponent implements OnInit {
     }
   }
   getImage() {
-    if (this.patientGet.patientId == parseInt(localStorage.getItem('id'))) {
+    if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
       this.patientService.getPatientPofilePhoto().subscribe(
         res => {
           if (res != null) {
@@ -461,7 +541,7 @@ export class PatientComponent implements OnInit {
       });
     }
   }
-  getDocProfileImg(id: number) {
+  getDocProfileImg(id: number, index: number, appLength) {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
@@ -469,33 +549,49 @@ export class PatientComponent implements OnInit {
       res => {
         if (res != null) {
           retrieveResonse = res;
-          this.doctorProfileImgRes.push(retrieveResonse);
           base64Data = retrieveResonse.picByte;
           retrievedImage = 'data:image/jpeg;base64,' + base64Data;
-          this.doctorProfileImg.push(retrievedImage);
-        } else
-          this.doctorProfileImgRes.push(null);
-      }
-    );
-  }
-  getDoctorAppointmentInfoByDoctorId(id: number) {
-    this.doctorService.getDoctorAppointmentInfoByDoctorId(id).subscribe(
-      res => {
-        if (res) {
-          this.appointmentDocInfoGet.push(res);
+          this.doctorProfileImg[index] = retrievedImage;
+          if (appLength == ((index % 4) + 1)) {
+            this.docProfileImages = true;
+            if (this.docInfos && this.docProfileImages) {
+              this.appointmentLoading = false;
+            }
+          }
+        } else {
+          this.doctorProfileImg[index] = false;
+          this.docProfileImages = true;
         }
       }
     );
+
   }
-  deleteAppById(id: number) {
+  getDoctorAppointmentInfoForPatientByDoctorId(id: number, index: number, appLength) {
+    this.doctorService.getDoctorAppointmentInfoForPatientByDoctorId(id).subscribe(
+      res => {
+        if (res) {
+          this.docInfoForPatient[index] = res;
+          if (appLength == ((index % 4) + 1)) {
+            this.docInfos = true;
+            if (this.docInfos && this.docProfileImages) {
+              this.appointmentLoading = false;
+            }
+          }
+        } else
+          this.docInfos = true;
+      }
+    );
+
+  }
+  deleteAppById(id: number, key: number) {
     this.appointmentService.deleteAppointmentById(id).subscribe(
       res => {
-        if (res = "deleted") {
+        if (res) {
           this.toastr.success(this.translate.instant('appointmentDeleted'), this.translate.instant('appointment'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
           });
-          this.getUserInfo();
+          this.deletedApp[key] = true;
         }
       },
       err => {
@@ -506,9 +602,9 @@ export class PatientComponent implements OnInit {
       }
     );
   }
-  changeAppDate(docId: number, appDate: string, key:number) {
+  changeAppDate(docId: number, appDate: string, key: number) {
     this.generateMonthDay(docId, appDate, key);
-    this.showUpdateCalendar [key] = true;
+    this.showUpdateCalendar[key] = true;
     document.getElementById("calendarGridSection").scrollIntoView({ behavior: "smooth" });
   }
   getMonthLastDay() {
@@ -540,7 +636,7 @@ export class PatientComponent implements OnInit {
     else if (this.utcMonth == 12)
       this.lastMonthDay = 31;
   }
-  generateMonthDay(docId: number, appDate: string, key:number) {
+  generateMonthDay(docId: number, appDate: string, key: number) {
     this.daysName = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat')];
     this.daysNameDouble = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sat')];
     this.getMonthLastDay();
@@ -552,6 +648,7 @@ export class PatientComponent implements OnInit {
     let appointmentDate: string;
     let integerAndStringPost: IntegerAndStringPost;
     let j1: number;
+    let workDays: string;
     for (let c = 0; c < 7; c++) {
       if (this.daysNameEn[c] == this.todayName) {
         todayNumber = c;
@@ -565,7 +662,11 @@ export class PatientComponent implements OnInit {
     }
     for (var i = this.today; i <= this.lastMonthDay; i++) {
       this.monthDays[day] = i;
-      if (this.appointmentDocInfoGet[key].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+      if (this.appointmentDocInfoGet[key])
+        workDays = this.appointmentDocInfoGet[key].workDays;
+      else if (this.docInfoForPatient[key])
+        workDays = this.docInfoForPatient[key].workDays;
+      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)
@@ -578,7 +679,7 @@ export class PatientComponent implements OnInit {
           else
             appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + i;
           integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
-          this.checkIfDayAppFull(i, integerAndStringPost, docId, appDate,key);
+          this.checkIfDayAppFull(i, integerAndStringPost, docId, appDate, key);
         }
       }
       day++;
@@ -586,7 +687,7 @@ export class PatientComponent implements OnInit {
     for (var j = 0; j <= (this.today - this.lastMonthDay) + 26; j++) {
       this.monthDays[day + j] = j + 1;
       j1 = j + 1;
-      if (this.appointmentDocInfoGet[key].workDays.indexOf(this.daysNameEn[(this.todayNumber + day + j) % 7]) == -1)
+      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + day + j) % 7]) == -1)
         this.monthDaysDis[j1] = true;
       else {
         checkAppointmentMonth = this.utcMonth + 1;
@@ -601,17 +702,22 @@ export class PatientComponent implements OnInit {
           appointmentDate = checkAppointmentYear + '/' + checkAppointmentMonth + '/' + j1;
         }
         integerAndStringPost = new IntegerAndStringPost(docId, appointmentDate);
-        this.checkIfDayAppFull(j1, integerAndStringPost, docId, appDate,key);
+        this.checkIfDayAppFull(j1, integerAndStringPost, docId, appDate, key);
       }
     }
   }
-  checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string,key:number) {
+  checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string, key: number) {
+    let maxPatientPerDay: number;
+    if (this.appointmentDocInfoGet[key])
+      maxPatientPerDay = this.appointmentDocInfoGet[key].maxPatientPerDay;
+    else if (this.docInfoForPatient[key])
+      maxPatientPerDay = this.docInfoForPatient[key].maxPatientPerDay;
     if (i == parseInt(appDate.slice(8, 10)))
       this.monthDaysDis[i] = true;
     else {
       this.appointmentService.appointmentsCountByDoctorIdAndDate(integerAndStringPost).subscribe(
         res => {
-          if (res >= this.appointmentDocInfoGet[key].maxPatientPerDay)
+          if (res >= maxPatientPerDay)
             this.monthDaysDis[i] = true;
           else
             this.monthDaysDis[i] = false;
@@ -639,24 +745,31 @@ export class PatientComponent implements OnInit {
     else
       this.slectedDay = true;
   }
-  updateAppById(appId: number,key:number) {
+  updateAppById(appId: number, key: number) {
     if (this.slectedDay == false) {
-      if (this.utcMonth <= 9)
-        this.appointmentDate = this.appointmentYear + '/0' + this.appointmentMonth + '/' + this.appointmentDay;
-      else
-        this.appointmentDate = this.appointmentYear + '/' + this.appointmentMonth + '/' + this.appointmentDay;
-      this.integerAndStringPost=new IntegerAndStringPost(appId,this.appointmentDate);
+      if (this.appointmentMonth <= 9) {
+        if (this.appointmentDay <= 9)
+          this.appointmentDate = this.appointmentYear + '/0' + this.appointmentMonth + '/0' + this.appointmentDay;
+        else
+          this.appointmentDate = this.appointmentYear + '/0' + this.appointmentMonth + '/' + this.appointmentDay;
+      } else {
+        if (this.appointmentDay <= 9)
+          this.appointmentDate = this.appointmentYear + '/' + this.appointmentMonth + '/0' + this.appointmentDay;
+        else
+          this.appointmentDate = this.appointmentYear + '/' + this.appointmentMonth + '/' + this.appointmentDay;
+      }
+      this.integerAndStringPost = new IntegerAndStringPost(appId, this.appointmentDate);
       this.appointmentService.updateAppointmentDateById(this.integerAndStringPost).subscribe(
         res => {
-          if (res == 'updated') {
+          if (res) {
             this.toastr.success(this.translate.instant('appontmentDateUpdated'), this.translate.instant('appointment'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.showUpdateCalendar[key]=false;
+            this.showUpdateCalendar[key] = false;
             document.getElementById(key.toString()).scrollIntoView({ behavior: "smooth" });
-            this.slectedDay=true;
-            this.getUserInfo();
+            this.slectedDay = true;
+            this.appointment[key].appointmentDate = this.appointmentDate;
           }
         },
         err => {
@@ -671,6 +784,81 @@ export class PatientComponent implements OnInit {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
       });
+    }
+  }
+  getPatientMedicalProfile() {
+    this.patientService.getPatientMedicalProfileByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
+      res => {
+        this.patientMedicalProfile = res;
+      }
+    );
+  }
+  getPatientMedicalProfielDiseasesNumber() {
+    this.patientService.getPatientMedicalProfileDeseasesNumberByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
+      res => {
+        this.diseaseNumber = res;
+      }
+    );
+  }
+  getAppointments() {
+    this.docProfileImages = false;
+    this.docInfos = false;
+    this.appointmentLoading = true;
+    let appointment: AppointmentGet[] = [];
+    this.appointmentService.getPatientAppointmentByPatientId(this.patientGet.userId, this.appointmentPage, 4).subscribe(
+      res => {
+        appointment = res;
+        for (let app of appointment) {
+          this.deletedApp[this.appointment.length] = false;
+          this.getDocProfileImg(app.doctorId, this.appointment.length, appointment.length);
+          this.getDoctorAppointmentInfoForPatientByDoctorId(app.doctorId, this.appointment.length, appointment.length);
+          this.appointment.push(app);
+        }
+        if (appointment.length == 4)
+          this.showLoadMoreApp = true;
+        else
+          this.showLoadMoreApp = false;
+        this.appointmentPage += 1;
+      },
+      err => {
+        this.appointmentLoading = false;
+      }
+    );
+  }
+  getApproximationTime(startTime: string, approxTime: number, patientTurn: number): string {
+    let time: number = approxTime * (patientTurn - 1);
+    let startHour: number = 0; let endHour: number = 1;
+    let docStartHour: number; let docStartMunite: number;
+    if (startTime.length == 4) {
+      docStartHour = parseInt(startTime.slice(0, 1));
+      docStartMunite = parseInt(startTime.slice(2, 4));
+    }
+    else {
+      docStartHour = parseInt(startTime.slice(0, 2));
+      docStartMunite = parseInt(startTime.slice(3, 5));
+    }
+
+    time += docStartMunite;
+    if (time >= 60) {
+      while (time >= 60) {
+        time = time % 60;
+        startHour += 1;
+        endHour += 1;
+      }
+      time -= 30;
+      if (((60 + time) % 60) <= 9)
+        return (docStartHour + startHour) + 'h:0' + ((60 + time) % 60) + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((60 + time) % 60) + 'mn';
+      else
+        return (docStartHour + startHour) + 'h:' + ((60 + time) % 60) + 'mn - ' + (docStartHour + endHour) + 'h:' + ((60 + time) % 60) + 'mn';
+    } else {
+      if ((docStartMunite + (approxTime * patientTurn)+15) >= 60)
+        endHour += 1;
+      else
+        endHour = 0;
+      if (docStartMunite <= 9)
+        return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      else
+        return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
     }
   }
 }

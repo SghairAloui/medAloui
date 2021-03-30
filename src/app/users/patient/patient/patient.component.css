@@ -38,16 +38,6 @@ html,body{
 .formDiv{
     margin-bottom: 5px;
 }
-.formDiv .mesure{
-    position: absolute;
-    right: 0%;
-    padding: 12px;
-    height: 48px;
-    background-color: #308a7b;
-    border-top-right-radius: .5rem;
-    border-bottom-right-radius: .5rem;
-    text-transform: capitalize;
-}
 .textLeft{
     text-align: left;
 }
@@ -76,6 +66,9 @@ html,body{
     text-align: center;
     padding: 5% 5%;
 }
+.appOfAppointment{
+    position: relative;
+}
 .appointmentsGrid{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -92,7 +85,7 @@ html,body{
     width: 100%;
     position: relative;
     text-align: center;
-    padding: 20px 5px;
+    padding: 0px 5px;
 }
 .centerInDivGrid{
     position: relative;
@@ -120,6 +113,11 @@ html,body{
     padding-left: 10px;
     margin: 10px 10px;
     font-family: Arial, Helvetica, sans-serif;
+    box-shadow: var(--infoBox);
+}
+.noWhite{
+    background: transparent;
+    margin: 0px 0px;
 }
 .paddingRight{
     padding-right: 10px;
@@ -165,4 +163,60 @@ html,body{
 }
 .fullyBtnGreen:hover{
     border: 2px solid #308a7b;
+}
+.usernameChanged{
+    padding-top: 20px;
+}
+.changeNote{
+    padding: 15px
+}
+.editUserName{
+    margin: 30px;
+}
+.deletedAppointment{
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.80);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+.deletedAppointment .deletedAppText{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    font-weight: 600;
+}
+.fa-map-marked-alt,.fa-calendar-day,.fa-clock{
+    margin-right: 5px;
+}
+.showMoreApp{
+    text-align: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.doubleArrowDownApp{
+    font-size: 20px;
+}
+.doubleArrowDownApp,.showMoreAppText{
+    transition: .3s ease-in-out;
+}
+.showMoreApp:hover{
+    cursor: pointer;
+}
+.showMoreApp:hover .showMoreAppText{
+    transform: translateY(-5px);
+}
+.showMoreApp:hover .doubleArrowDownApp{
+    transform: translateY(10px);
+}
+.horizentalCenter{
+    width: fit-content;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
 }

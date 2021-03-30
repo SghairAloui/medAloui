@@ -1,14 +1,25 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
-import { doctor } from 'src/model/Doctor';
+import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
 import { DoctorGet } from 'src/model/Doctorget';
+import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
-import { FiveStringsPost } from 'src/model/FiveStringsPost';
+import { DoctorSettingsPost } from 'src/model/DoctorSettingsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { OneStringPost } from 'src/model/OneStringPost';
+import { SearchDoctorDoctorPost } from 'src/model/SearchDoctorDoctorPost';
+import { SearchedDocGet } from 'src/model/SearchedDocGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
+
+const DOC_API = 'http://localhost:8080/api/doctor/';
+const IAMAGE_API = 'http://localhost:8080/api/image/';
+const PATIENT_API = 'http://localhost:8080/api/patient/';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -17,54 +28,70 @@ export class DoctorService {
 
   constructor(private http:HttpClient) { }
 
+  public getDoctorSpecialitiesBySecureLogin(secureLogin:SecureLoginString){
+    return this.http.post<string[]>(DOC_API + "getDoctorSpecialitiesBySecureLogin",secureLogin,httpOptions);
+  }
+
   public getDoctorInfo(secureLogin:SecureLoginString){
-    return this.http.post<DoctorGet>("http://localhost:8080/doctor/getDoctorInfoFromSecureLogin",secureLogin);
+    return this.http.post<DoctorGet>(DOC_API + "getDoctorInfoFromSecureLogin",secureLogin,httpOptions);
   }
 
   public updateDoctorInfoBySecureLogin(doctorPostWithSecureLogin:DoctorPostWithSecureLogin){
-    return this.http.post<string>("http://localhost:8080/doctor/updateDoctorInfoBySecureLogin",doctorPostWithSecureLogin,{responseType:'text' as 'json'});
+    return this.http.post<boolean>(DOC_API + "updateDoctorInfoBySecureLogin",doctorPostWithSecureLogin,httpOptions);
   }
 
   public updateDoctorProfilePhoto(uploadImageData:FormData){
-    return this.http.post<string>('http://localhost:8080/image/upload', uploadImageData, {responseType: 'text' as 'json'});
+    return this.http.post<string>(IAMAGE_API + 'upload', uploadImageData, {responseType: 'text' as 'json'});
   }
   public getDoctorPofilePhoto(imageName:string){
-    return this.http.get<string>('http://localhost:8080/image/get/' + imageName)
+    return this.http.get<string>(IAMAGE_API + 'get/' + imageName,httpOptions)
   }
 
-  public changeDoctorStatusBySecureId(twoStringsPost:TwoStringsPost){
-    return this.http.post<string>('http://localhost:8080/doctor/changeDoctorStatusBySecureId', twoStringsPost, {responseType: 'text' as 'json'})
+  public changeDoctorStatusBySecureLogin(twoStringsPost:TwoStringsPost){
+    return this.http.post<boolean>(DOC_API + 'changeDoctorStatusBySecureLogin', twoStringsPost,httpOptions)
   }
 
   public checkIfDocumentExist(oneStringPost:OneStringPost){
-    return this.http.post<boolean>('http://localhost:8080/image/checkIfDocumentExist', oneStringPost)
+    return this.http.post<boolean>(IAMAGE_API + 'checkIfDocumentExist', oneStringPost)
   }
 
-  public changeDoctorStatusById(twoStringsPost:TwoStringsPost){
-    return this.http.post<string>('http://localhost:8080/doctor/changeDoctorStatusById', twoStringsPost, {responseType: 'text' as 'json'})
+  public changeDoctorStatusById(integerAndString:IntegerAndStringPost){
+    return this.http.post<boolean>(DOC_API + 'changeDoctorStatusById', integerAndString, httpOptions)
   }
 
-  public updateDoctorSettingsBySecurelogin(fiveStringsPost:FiveStringsPost){
-    return this.http.post<string>('http://localhost:8080/doctor/updateDoctorSettingsBySecurelogin', fiveStringsPost, {responseType: 'text' as 'json'})
+  public updateDoctorSettingsBySecurelogin(doctorSettingsPost:DoctorSettingsPost){
+    return this.http.post<boolean>(DOC_API + 'updateDoctorSettingsBySecurelogin', doctorSettingsPost, httpOptions)
   }
 
   public deleteByImageName(imageName:string){
-    return this.http.delete<number>('http://localhost:8080/image/deleteByImageName/'+imageName);
+    return this.http.delete<number>(IAMAGE_API + 'deleteByImageName/'+imageName,httpOptions);
   }
 
   public deteleDoctorById(id:number){
-    return this.http.delete<number>('http://localhost:8080/doctor/deteleDoctorById/'+id);
+    return this.http.delete<number>(DOC_API + 'deteleDoctorById/'+id,httpOptions);
   }
 
   public addspecialityTodoctor(integerAndStringPost:IntegerAndStringPost){
-    return this.http.post<string>('http://localhost:8080/doctor/addspeciality', integerAndStringPost, {responseType: 'text' as 'json'})
+    return this.http.post<boolean>(DOC_API + 'addspeciality', integerAndStringPost,httpOptions)
   }
 
-  public getApprovedDoctorsBySpecialityId (specialityId:number){
-    return this.http.get<doctor []>('http://localhost:8080/doctor/getApprovedDoctorsBySpecialityId/'+specialityId);
+  public getPendingDoctorsNumber(){
+    return this.http.get<number>(DOC_API + 'getPendingDoctorsNumber',httpOptions)
+  }
+
+  public getApprovedDoctorsBySpecialityIdAndCity (searchDoctorDoctor: SearchDoctorDoctorPost){
+    return this.http.post<SearchedDocGet []>(DOC_API + 'getApprovedDoctorsBySpecialityIdAndCity',searchDoctorDoctor,httpOptions);
   } 
 
   public getDoctorAppointmentInfoByDoctorId (docId:number){
-    return this.http.get<AppointmentDocInfoGet>('http://localhost:8080/doctor/getDoctorAppointmentInfoByDoctorId/'+docId);
+    return this.http.get<AppointmentDocInfoGet>(DOC_API + 'getDoctorAppointmentInfoByDoctorId/'+docId);
   } 
+
+  public getDoctorAppointmentInfoForPatientByDoctorId (docId:number){
+    return this.http.get<DoctorInfoForPatient>(PATIENT_API + 'getDoctorAppointmentInfoForPatientByDoctorId/'+docId);
+  } 
+
+  public getAppPatientInfoById(id:number){
+    return this.http.get<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoById/' + id,httpOptions)
+  }
 }

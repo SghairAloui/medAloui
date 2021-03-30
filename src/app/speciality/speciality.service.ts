@@ -1,7 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SpecialityGet } from 'src/model/SpecialityGet';
 import { SpecialityPost } from 'src/model/SpecialityPost';
+
+const SPECIALITY_API = 'http://localhost:8080/api/speciality/';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +21,10 @@ export class SpecialityService {
   }
 
   public getSpecialities(){
-    return this.http.get<SpecialityGet []>("http://localhost:8080/speciality/all");
+    return this.http.get<SpecialityGet []>(SPECIALITY_API+"all",httpOptions);
   }
 
   public deleteByDoctorId(docId:number){
-    return this.http.delete<string>("http://localhost:8080/speciality/deleteByDoctorId/"+docId,{responseType:'text' as 'json'});
+    return this.http.delete<boolean>(SPECIALITY_API + "deleteByDoctorId/"+docId,httpOptions);
   }
 }
