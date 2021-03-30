@@ -106,7 +106,6 @@ export class AcceuilComponent implements OnInit {
         this.disabledSearchDoc = true;
     }
   }
-
   showDoctorNameInfo() {
     if (this.disabledSearchDoc) {
       this.chooseSpeciality = true;
