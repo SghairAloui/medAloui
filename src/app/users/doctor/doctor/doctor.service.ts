@@ -94,4 +94,16 @@ export class DoctorService {
   public getAppPatientInfoById(id:number){
     return this.http.get<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoById/' + id,httpOptions)
   }
+
+  public changeCurrentPatientBySecureLogin(secureLogin:string,patientTurn){
+    return this.http.post<boolean>(DOC_API + 'changeCurrentPatientBySecureLogin',{secureLogin,patientTurn},httpOptions)
+  }
+
+  public getPatientInfoById(id:number){
+    return this.http.get<AppointmentPatientInfo>(PATIENT_API + "getPatientInfoById/"+id,httpOptions);
+  }
+
+  public getAppPatientInfoByDoctorIdTurnAndDate(id:number,turn:number,date:string){
+    return this.http.post<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoByDoctorIdTurnAndDate',{id,turn,date},httpOptions)
+  }
 }

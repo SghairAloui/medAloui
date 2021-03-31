@@ -438,7 +438,7 @@ export class PatientDoctorComponent implements OnInit {
 
   getApproximationTime(startTime: string, approxTime: number, patientTurn: number): string {
     let time: number = approxTime * (patientTurn - 1);
-    let startHour: number = 0; let endHour: number = 1;
+    let startHour: number = 0; let endHour: number = 0;
     let docStartHour: number; let docStartMunite: number;
     if (startTime.length == 4) {
       docStartHour = parseInt(startTime.slice(0, 1));
@@ -451,6 +451,7 @@ export class PatientDoctorComponent implements OnInit {
 
     time += docStartMunite;
     if (time >= 60) {
+      endHour=1;
       while (time >= 60) {
         time = time % 60;
         startHour += 1;
@@ -466,10 +467,18 @@ export class PatientDoctorComponent implements OnInit {
         endHour += 1;
       else
         endHour = 0;
-      if (docStartMunite <= 9)
+      if (docStartMunite <= 9){
+        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
+        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+        else
+        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      }
+      else{
+        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
         return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
-      else
+        else
         return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      }
     }
   }
 }

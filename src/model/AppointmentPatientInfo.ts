@@ -1,4 +1,5 @@
 export interface AppointmentPatientInfo{
+    userId:number;
     patientFirstName:string;
     patientLastName:string;
     userCity:string;

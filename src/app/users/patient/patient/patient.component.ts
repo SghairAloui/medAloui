@@ -83,7 +83,7 @@ export class PatientComponent implements OnInit {
   diseaseNumber: number = 0;
   updateMedicalProfilePost: UpdateMedicalProfilePost;
   cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
-  appointment: AppointmentGet[] = [];
+  myAppointment: AppointmentGet[] = [];
   deletedApp: boolean[] = [];
   showLoadMoreApp: boolean;
   appointmentLoading: boolean = false;
@@ -91,7 +91,6 @@ export class PatientComponent implements OnInit {
   docInfos: boolean;
 
   ngOnInit(): void {
-    this.deletedApp = [false];
     this.showUpdateCalendar = [false];
     this.patientInfo = false;
     this.getUserInfo();
@@ -113,6 +112,7 @@ export class PatientComponent implements OnInit {
       this.updateDoctorInfo();
     }
   }
+
   updateDoctorInfo() {
     this.patientService.updatePatientInfoBySecureLogin(this.patientPostWithSecureLogin).subscribe(
       res => {
@@ -132,19 +132,21 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   getUserInfo() {
     this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.patientService.getPatientInfo(this.secureLoginString).subscribe(
       res => {
         if (res) {
           this.patientGet = res;
+          this.getImage();
           this.getPatientMedicalProfile();
           this.getPatientMedicalProfielDiseasesNumber();
-          this.patientInfo = true;
-          this.intializeEdit();
-          localStorage.setItem('id', this.patientGet.userId + '')
-          this.getImage();
           this.getAppointments();
+          this.intializeEdit();
+          this.patientInfo = true;
+          localStorage.setItem('id', this.patientGet.userId + '')
+          
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -156,6 +158,7 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   checkLastName() {
     if (this.lastName.length < 3) {
       this.invalidLastNameVariable = true;
@@ -171,6 +174,7 @@ export class PatientComponent implements OnInit {
       }
     }
   }
+
   checkFirstName() {
     if (this.firstName.length < 3) {
       this.invalidFirstNameVariable = true;
@@ -186,6 +190,7 @@ export class PatientComponent implements OnInit {
       }
     }
   }
+
   updateUsername() {
     if (this.mail.length < 6) {
       this.invalidMailVariable = true;
@@ -228,6 +233,7 @@ export class PatientComponent implements OnInit {
       );
     }
   }
+
   updatePassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -279,11 +285,13 @@ export class PatientComponent implements OnInit {
       );
     }
   }
+
   sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   }
+
   intializeEdit() {
     this.firstName = this.patientGet.patientFirstName;
     this.lastName = this.patientGet.patientLastName;
@@ -297,6 +305,7 @@ export class PatientComponent implements OnInit {
     else
       this.femaleCheckBox = true;
   }
+
   initializeEditLabel() {
     this.firstNameInformation = this.translate.instant('firstName');
     this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
@@ -309,6 +318,7 @@ export class PatientComponent implements OnInit {
     this.adressInformation = this.translate.instant('city');
     document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
+
   checkAdress() {
     let upperCaseAdress: string = this.adress.toUpperCase();
     this.adress = this.adress.replace('é', 'e');
@@ -325,18 +335,21 @@ export class PatientComponent implements OnInit {
       }
     }
   }
+
   checkDisabledBtnFromMale() {
     if (this.patientGet.patientGender == 'female')
       this.disableSaveBtn = false;
     else
       this.disableSaveBtn = true;
   }
+
   checkDisabledBtnFromFemale() {
     if (this.patientGet.patientGender == 'male')
       this.disableSaveBtn = false;
     else
       this.disableSaveBtn = true;
   }
+
   checkBirthday() {
     if ((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2)) {
       this.invalidDayVariable = false;
@@ -363,58 +376,68 @@ export class PatientComponent implements OnInit {
       this.yearInformation = this.translate.instant('yearErr');
     }
   }
+
   changePasswordClick() {
     this.editeSecureInfo = true;
     this.editPassword = true;
     document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
+
   changeUsernameClick() {
     this.editeSecureInfo = true;
     this.editPassword = false;
     document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
+
   compareFirstName() {
     if (this.firstName.toLowerCase() === this.patientGet.patientFirstName)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareLastName() {
     if (this.lastName.toLowerCase() === this.patientGet.patientLastName)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareUserName() {
     if (this.mail.toLowerCase() === this.patientGet.userUsername)
       this.disableUpdateUsernamePassBtn = true;
     else
       this.disableUpdateUsernamePassBtn = false;
   }
+
   compareDay() {
     if (this.day === this.patientGet.patientBirthDay.substr(0, 2))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareMonth() {
     if (this.month === this.patientGet.patientBirthDay.substr(3, 2))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareYear() {
     if (this.year === this.patientGet.patientBirthDay.substr(6, 4))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareCity() {
     if (this.adress.toLowerCase() === this.patientGet.userCity)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareHeight() {
     if (parseFloat(this.height) == this.patientMedicalProfile.height || this.height == "")
       this.disableSaveMedicalProfileBtn = true;
@@ -423,6 +446,7 @@ export class PatientComponent implements OnInit {
     this.height = this.height.replace(',', '.');
 
   }
+
   compareWeight() {
     if (parseFloat(this.weight) == this.patientMedicalProfile.weight || this.weight == "")
       this.disableSaveMedicalProfileBtn = true;
@@ -430,10 +454,12 @@ export class PatientComponent implements OnInit {
       this.disableSaveMedicalProfileBtn = false;
     this.weight = this.weight.replace(',', '.');
   }
+
   initializeMedicalProfileLabel() {
     this.heightInformation = this.translate.instant('height');
     this.weightInformation = this.translate.instant('weight');
   }
+
   checkMedicalProfileForm() {
     if (parseFloat(this.height) > 0 && parseFloat(this.height) < 3 && this.er.test(this.height)) {
       if (this.height.length < 5) {
@@ -466,6 +492,7 @@ export class PatientComponent implements OnInit {
     if (this.invalidWeightVariable == false && this.invalidHeightVariable == false)
       this.updateMedicalProfileData();
   }
+
   updateMedicalProfileData() {
     this.updateMedicalProfilePost = new UpdateMedicalProfilePost(this.patientGet.medicalProfileId, parseFloat(this.height), parseFloat(this.weight));
     this.patientService.updateMedicalProfileByMedicalProfileId(this.updateMedicalProfilePost).subscribe(
@@ -482,15 +509,18 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   initilizeMedicalProfile() {
-    // this.height = this.patientGet.medicalProfile.height.toString();
-    // this.weight = this.patientGet.medicalProfile.weight.toString();
+    this.height = this.patientMedicalProfile.height.toString();
+    this.weight = this.patientMedicalProfile.weight.toString();
   }
+
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload();
     this.getImage();
   }
+
   onUpload() {
     if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
       const uploadImageData = new FormData();
@@ -514,6 +544,7 @@ export class PatientComponent implements OnInit {
       });
     }
   }
+
   getImage() {
     if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
       this.patientService.getPatientPofilePhoto().subscribe(
@@ -541,6 +572,7 @@ export class PatientComponent implements OnInit {
       });
     }
   }
+
   getDocProfileImg(id: number, index: number, appLength) {
     let retrieveResonse: any;
     let base64Data: any;
@@ -566,6 +598,7 @@ export class PatientComponent implements OnInit {
     );
 
   }
+
   getDoctorAppointmentInfoForPatientByDoctorId(id: number, index: number, appLength) {
     this.doctorService.getDoctorAppointmentInfoForPatientByDoctorId(id).subscribe(
       res => {
@@ -583,6 +616,7 @@ export class PatientComponent implements OnInit {
     );
 
   }
+
   deleteAppById(id: number, key: number) {
     this.appointmentService.deleteAppointmentById(id).subscribe(
       res => {
@@ -602,11 +636,13 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   changeAppDate(docId: number, appDate: string, key: number) {
     this.generateMonthDay(docId, appDate, key);
     this.showUpdateCalendar[key] = true;
     document.getElementById("calendarGridSection").scrollIntoView({ behavior: "smooth" });
   }
+
   getMonthLastDay() {
     if (this.utcMonth == 1)
       this.lastMonthDay = 31;
@@ -636,6 +672,7 @@ export class PatientComponent implements OnInit {
     else if (this.utcMonth == 12)
       this.lastMonthDay = 31;
   }
+
   generateMonthDay(docId: number, appDate: string, key: number) {
     this.daysName = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat')];
     this.daysNameDouble = [this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sun'), this.translate.instant('mon'), this.translate.instant('tue'), this.translate.instant('wed'), this.translate.instant('thu'), this.translate.instant('fri'), this.translate.instant('sat'), this.translate.instant('sat')];
@@ -706,6 +743,7 @@ export class PatientComponent implements OnInit {
       }
     }
   }
+
   checkIfDayAppFull(i: number, integerAndStringPost: IntegerAndStringPost, docId: number, appDate: string, key: number) {
     let maxPatientPerDay: number;
     if (this.appointmentDocInfoGet[key])
@@ -725,6 +763,7 @@ export class PatientComponent implements OnInit {
       );
     }
   }
+
   daySelected(day: number) {
     this.appointmentDay = day;
     if (day > 0 && day <= 31) {
@@ -745,6 +784,7 @@ export class PatientComponent implements OnInit {
     else
       this.slectedDay = true;
   }
+
   updateAppById(appId: number, key: number) {
     if (this.slectedDay == false) {
       if (this.appointmentMonth <= 9) {
@@ -769,7 +809,7 @@ export class PatientComponent implements OnInit {
             this.showUpdateCalendar[key] = false;
             document.getElementById(key.toString()).scrollIntoView({ behavior: "smooth" });
             this.slectedDay = true;
-            this.appointment[key].appointmentDate = this.appointmentDate;
+            this.myAppointment[key].appointmentDate = this.appointmentDate;
           }
         },
         err => {
@@ -786,6 +826,7 @@ export class PatientComponent implements OnInit {
       });
     }
   }
+
   getPatientMedicalProfile() {
     this.patientService.getPatientMedicalProfileByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
       res => {
@@ -793,6 +834,7 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   getPatientMedicalProfielDiseasesNumber() {
     this.patientService.getPatientMedicalProfileDeseasesNumberByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
       res => {
@@ -800,6 +842,7 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   getAppointments() {
     this.docProfileImages = false;
     this.docInfos = false;
@@ -809,10 +852,10 @@ export class PatientComponent implements OnInit {
       res => {
         appointment = res;
         for (let app of appointment) {
-          this.deletedApp[this.appointment.length] = false;
-          this.getDocProfileImg(app.doctorId, this.appointment.length, appointment.length);
-          this.getDoctorAppointmentInfoForPatientByDoctorId(app.doctorId, this.appointment.length, appointment.length);
-          this.appointment.push(app);
+          this.deletedApp[this.myAppointment.length] = false;
+          this.getDocProfileImg(app.doctorId, this.myAppointment.length, appointment.length);
+          this.getDoctorAppointmentInfoForPatientByDoctorId(app.doctorId, this.myAppointment.length, appointment.length);
+          this.myAppointment.push(app);
         }
         if (appointment.length == 4)
           this.showLoadMoreApp = true;
@@ -825,9 +868,10 @@ export class PatientComponent implements OnInit {
       }
     );
   }
+
   getApproximationTime(startTime: string, approxTime: number, patientTurn: number): string {
     let time: number = approxTime * (patientTurn - 1);
-    let startHour: number = 0; let endHour: number = 1;
+    let startHour: number = 0; let endHour: number = 0;
     let docStartHour: number; let docStartMunite: number;
     if (startTime.length == 4) {
       docStartHour = parseInt(startTime.slice(0, 1));
@@ -840,6 +884,7 @@ export class PatientComponent implements OnInit {
 
     time += docStartMunite;
     if (time >= 60) {
+      endHour=1;
       while (time >= 60) {
         time = time % 60;
         startHour += 1;
@@ -855,10 +900,18 @@ export class PatientComponent implements OnInit {
         endHour += 1;
       else
         endHour = 0;
-      if (docStartMunite <= 9)
+      if (docStartMunite <= 9){
+        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
+        return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+        else
+        return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      }
+      else{
+        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
         return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
-      else
+        else
         return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      }
     }
   }
 }

@@ -404,5 +404,8 @@
     "appDeleted":"Appointment deleted",
     "turn":"Turn",
     "showMore":"Show more",
-    "allAppLoaded":"All appointments loaded"
+    "allAppLoaded":"All appointments loaded",
+    "Patient":"Patient",
+    "addPrescription":"Add prescription",
+    "addDiagnose":"Add diagnose"
 }

@@ -26,27 +26,34 @@ export class PatientService {
   public getPatientInfo(secureLogin:SecureLoginString){
     return this.http.post<PatientGet>(PATIENT_API + "getPatientInfoFromSecureLogin",secureLogin,httpOptions);
   }
+
   public getPatientMedicalProfileByMedicalProfileId(id:number){
     return this.http.get<medicalProfileGet>(MEDICALPROFILE_API + "getPatientMedicalProfileByMedicalProfileId/"+ id ,httpOptions);
   }
+
   public getPatientMedicalProfileDeseasesByMedicalProfileId(id:number,page:number,size:number){
     return this.http.post<medicalProfileDiseaseGet[]>(MEDICALPROFILEDISEASE_API + "getPateintMedicalProfileDiseasesByMedicalProfileId",{id,page,size},httpOptions);
   }
+
   public getPatientMedicalProfileDeseasesNumberByMedicalProfileId(id:number){
     return this.http.get<number>(MEDICALPROFILEDISEASE_API + "getPateintMedicalProfileDiseasesNumberByMedicalProfileId/"+ id ,httpOptions);
   }
+
   public updatePatientInfoBySecureLogin(patientPostWithSecureLogin:PatientPostWithSecureLogin){
     return this.http.post<boolean>(PATIENT_API + "updatePatientInfoBySecureLogin",patientPostWithSecureLogin,httpOptions);
   }
+
   public updateMedicalProfileByMedicalProfileId(updateMedicalProfilePost:UpdateMedicalProfilePost){
     return this.http.post<boolean>(PATIENT_API + "updateMedicalProfileByMedicalProfileId",updateMedicalProfilePost,{responseType:'text' as 'json'})
   }
   public updatePatientProfilePhoto(uploadImageData:FormData){
     return this.http.post<string>(IMAGE_API + 'upload', uploadImageData, {responseType:'text' as 'json'});
   }
+
   public getPatientPofilePhoto(){
     return this.http.get<string>(IMAGE_API + 'get/' + localStorage.getItem('id')+"patientProfilePic",httpOptions)
   }
+
   public getDoctorPofilePhoto(imageName:string){
     return this.http.get<string>(IMAGE_API + 'get/' + imageName,httpOptions)
   }

@@ -399,13 +399,12 @@
             <section id="myAppointmentsSection">
                 <div class="sectionTitle">{{'myAppointments'|translate}}</div>
                 <div class="sectionContainer">
-                    <div *ngIf="appointment.length == 0; then noApp else showApp"></div>
-                    <ng-template #noApp>
+                    <div *ngIf="myAppointment.length == 0;">
                         <div class="noData">
                             {{'noAppointments'|translate}}
                         </div>
-                    </ng-template>
-                    <ng-template #showApp>
+                    </div>
+                    <div *ngIf="myAppointment.length != 0;">
                         <div class="appointmentsGrid">
                             <div class="div rightBorder" style="text-transform: capitalize;"> {{'doctor'|translate}}
                             </div>
@@ -413,7 +412,7 @@
                             </div>
                             <div class="div" style="text-transform: capitalize;"> {{'modify'|translate}} </div>
                         </div>
-                        <div *ngFor="let app of appointment | keyvalue" class="appOfAppointment">
+                        <div *ngFor="let app of myAppointment | keyvalue" class="appOfAppointment">
                             <section id="{{app.key}}">
                                 <div *ngIf="deletedApp[app.key]">
                                     <div class="deletedAppointment">
@@ -540,7 +539,7 @@
                                                 <div class="appInfoTitleCon"> <i class="fas fa-clock"></i> <span
                                                         class="appInfo">{{getApproximationTime(docInfoForPatient[app.key].startTime,
                                                         docInfoForPatient[app.key].appointmentApproximateDuration,
-                                                        docInfoForPatient[app.key].patientTurn)}}</span>
+                                                        app.value.patientTurn)}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -593,7 +592,7 @@
                         <div *ngIf="!showLoadMoreApp" class="horizentalCenter">
                             {{'allAppLoaded'|translate}}
                         </div>
-                    </ng-template>
+                    </div>
                 </div>
             </section>
             <!--<section id="prescriptionSection">

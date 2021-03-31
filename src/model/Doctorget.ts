@@ -14,4 +14,5 @@ export interface DoctorGet{
     workDays:string;
     appointmentApproximateDuration:number;
     appointmentPrice:number;
+    currentPatient:number;
 }

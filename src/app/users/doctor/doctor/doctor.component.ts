@@ -85,6 +85,12 @@ export class DoctorComponent implements OnInit {
   docTodayAppointments: AppointmentGet[] = []; docTomorrowAppointments: AppointmentGet[] = [];
   todayPatientNumber: number; tomorrowPatientNumber: number;
   todayAppCharged: boolean = false; tomorrowAppCharged: boolean = false;
+  currentPatientInfo: AppointmentPatientInfo[] = [];
+  nextPatientInfo: AppointmentPatientInfo; backPatientInfo: AppointmentPatientInfo;
+  currentPatientProfileImg: any[] = [];
+  currentPatientMedicalProfile: medicalProfileGet[] = []; currentPatientMedicalProfileDiseases: medicalProfileGet[] = [];
+  loadingCurrentPatientInfo: boolean = false;
+  addToCurrentPatient:string;
 
   ngOnInit(): void {
     this.lengthTested = false; this.tommorowLengthTested = false;
@@ -94,14 +100,18 @@ export class DoctorComponent implements OnInit {
     this.getDoctorInfo();
     this.getAllSpecialities();
   }
+
   getDoctorInfo() {
     this.doctorService.getDoctorInfo(this.secureLogin).subscribe(
       res => {
         if (res) {
           this.doctorGet = res;
-          this.getTodayAppPatientByDate(true);
-          this.getTomorrowAppPatientByDate(true);
           this.getPatientNumber(this.currentDate, 'today');
+          if (this.doctorGet.currentPatient != 0)
+            this.getPatientByTurn(true);
+          else
+            this.getTodayAppPatientByDate(true);
+          this.getTomorrowAppPatientByDate(true);
           if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
             this.deleteAccount();
             this.accountDeleted = true;
@@ -124,13 +134,12 @@ export class DoctorComponent implements OnInit {
           this.router.navigate(['/acceuil']);
       },
       err => {
-        this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
+        this.router.navigate(['/acceuil']);
+        console.clear;
       }
     );
   }
+
   checkForm() {
     this.checkFirstName();
     this.checkLastName();
@@ -168,6 +177,7 @@ export class DoctorComponent implements OnInit {
       );
     }
   }
+
   updateUsername() {
     if (this.mail.length < 6) {
       this.invalidMailVariable = true;
@@ -210,6 +220,7 @@ export class DoctorComponent implements OnInit {
       );
     }
   }
+
   updatePassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -261,21 +272,25 @@ export class DoctorComponent implements OnInit {
       );
     }
   }
+
   sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   }
+
   changePasswordClick() {
     this.editGeneralInformation = false;
     this.editPassword = true;
     this.toGeneralInfoSection();
   }
+
   changeUsernameClick() {
     this.editGeneralInformation = false;
     this.editPassword = false;
     this.toGeneralInfoSection();
   }
+
   ckeckFormAndUpdate(status: string) {
     if (parseInt(this.maxPatientPerDay) > 0 && parseInt(this.maxPatientPerDay) < 100 && this.maxPatientPerDay.length != 0) {
       this.invalidMaxPatientPerDay = false;
@@ -385,6 +400,7 @@ export class DoctorComponent implements OnInit {
       this.exactAdressInformation = this.translate.instant('exactAdressInvalid');
     }
   }
+
   checkLastName() {
     if (this.lastName.length < 3) {
       this.invalidLastNameVariable = true;
@@ -400,6 +416,7 @@ export class DoctorComponent implements OnInit {
       }
     }
   }
+
   checkFirstName() {
     if (this.firstName.length < 3) {
       this.invalidFirstNameVariable = true;
@@ -415,6 +432,7 @@ export class DoctorComponent implements OnInit {
       }
     }
   }
+
   intializeEdit() {
     this.password = null;
     this.passwordRepeat = null
@@ -430,6 +448,7 @@ export class DoctorComponent implements OnInit {
     else
       this.femaleCheckBox = true;
   }
+
   initializeEditLabel() {
     this.firstNameInformation = this.translate.instant('firstName');
     this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
@@ -442,6 +461,7 @@ export class DoctorComponent implements OnInit {
     this.adressInformation = this.translate.instant('city');
     this.toGeneralInfoSection();
   }
+
   checkAdress() {
     let upperCaseAdress: string = this.adress.toUpperCase();
     this.adress = this.adress.replace('é', 'e');
@@ -458,18 +478,21 @@ export class DoctorComponent implements OnInit {
       }
     }
   }
+
   checkDisabledBtnFromMale() {
     if (this.doctorGet.doctorGender == 'female')
       this.disableSaveBtn = false;
     else
       this.disableSaveBtn = true;
   }
+
   checkDisabledBtnFromFemale() {
     if (this.doctorGet.doctorGender == 'male')
       this.disableSaveBtn = false;
     else
       this.disableSaveBtn = true;
   }
+
   checkBirthday() {
     if ((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2)) {
       this.invalidDayVariable = false;
@@ -496,58 +519,68 @@ export class DoctorComponent implements OnInit {
       this.yearInformation = this.translate.instant('yearErr');
     }
   }
+
   compareFirstName() {
     if (this.firstName.toLowerCase() === this.doctorGet.doctorFirstName)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareLastName() {
     if (this.lastName.toLowerCase() === this.doctorGet.doctorLastName)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareUserName() {
     if (this.mail.toLowerCase() === this.doctorGet.userUsername)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareDay() {
     if (this.day === this.doctorGet.doctorBirthDay.substr(0, 2))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareMonth() {
     if (this.month === this.doctorGet.doctorBirthDay.substr(3, 2))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareYear() {
     if (this.year === this.doctorGet.doctorBirthDay.substr(6, 4))
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   compareCity() {
     if (this.adress.toLowerCase() === this.doctorGet.userCity)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
   }
+
   comparePassword() {
     if (this.password.length == 0 || this.password == null)
       this.disableSavePassBtn = true;
     else
       this.disableSavePassBtn = false;
   }
+
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload(this.doctorGet.userId + "doctorProfilePic");
   }
+
   onUpload(imageName: string) {
     if (this.doctorGet.userId == parseInt(localStorage.getItem('id'))) {
       const uploadImageData = new FormData();
@@ -571,6 +604,7 @@ export class DoctorComponent implements OnInit {
       });
     }
   }
+
   getImage(imageName: string) {
     if (this.doctorGet.userId == parseInt(localStorage.getItem('id'))) {
       if (imageName == this.doctorGet.userId + "doctorProfilePic") {
@@ -605,18 +639,22 @@ export class DoctorComponent implements OnInit {
       });
     }
   }
+
   onFileChangedCin(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload(this.doctorGet.userId + "doctorCinPic");
   }
+
   onFileChangedMedicalClinic(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload(this.doctorGet.userId + "doctorMedicalClinicPic");
   }
+
   onFileChangedMedicalSpecialty(event) {
     this.selectedFile = event.target.files[0];
     this.onUpload(this.doctorGet.userId + "doctorMedicalSpecialty");
   }
+
   submitDoctorDocuments() {
     this.testSpeciality = true;
     if (this.specialityName != null) {
@@ -663,6 +701,7 @@ export class DoctorComponent implements OnInit {
       );
     }
   }
+
   checkDocDocument(imageName: string) {
     this.oneStringPost = new OneStringPost(imageName);
     this.doctorService.checkIfDocumentExist(this.oneStringPost).subscribe(
@@ -678,15 +717,19 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
   toNotApprovedSection() {
     document.getElementById("notApprovedSection").scrollIntoView({ behavior: "smooth" });
   }
+
   toGeneralInfoSection() {
     document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
+
   toapprovedByAdminSection() {
     document.getElementById("approvedByAdminSection").scrollIntoView({ behavior: "smooth" });
   }
+
   initializeAccountSettings() {
     this.maxPatientPerDayInformation = this.translate.instant('maxPatientPerDay');
     this.startTimeInformation = this.translate.instant('startTime');
@@ -695,6 +738,7 @@ export class DoctorComponent implements OnInit {
     this.appointmentPriceInformation = this.translate.instant('appointmentPrice');
     this.appointmentApproximateDurationInformation = this.translate.instant('appointmentApproximateDuration');
   }
+
   initializeEditAccountSettigns() {
     this.startTime = this.doctorGet.startTime.toString();
     this.exactAdress = this.doctorGet.exactAddress;
@@ -718,24 +762,28 @@ export class DoctorComponent implements OnInit {
         this.Sun = true;
     }
   }
+
   compareMaxPateintPerDay() {
     if (this.doctorGet.maxPatientPerDay.toString() != this.maxPatientPerDay)
       this.disabledUpdateBtn = false;
     else
       this.disabledUpdateBtn = true;
   }
+
   compareStartTime() {
     if (this.doctorGet.startTime.toString() != this.startTime)
       this.disabledUpdateBtn = false;
     else
       this.disabledUpdateBtn = true;
   }
+
   compareExactAdress() {
     if (this.doctorGet.exactAddress != this.exactAdress)
       this.disabledUpdateBtn = false;
     else
       this.disabledUpdateBtn = true;
   }
+
   compareMon() {
     if (this.Mon == true) {
       if (this.doctorGet.workDays.indexOf('Mon') == -1)
@@ -749,6 +797,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareTue() {
     if (this.Tue == true) {
       if (this.doctorGet.workDays.indexOf('Tue') == -1)
@@ -762,6 +811,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareWed() {
     if (this.Wed == true) {
       if (this.doctorGet.workDays.indexOf('Wed') == -1)
@@ -775,6 +825,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareThu() {
     if (this.Thu == true) {
       if (this.doctorGet.workDays.indexOf('Thu') == -1)
@@ -788,6 +839,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareFri() {
     if (this.Fri == true) {
       if (this.doctorGet.workDays.indexOf('Fri') == -1)
@@ -801,6 +853,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareSat() {
     if (this.Mon == true) {
       if (this.doctorGet.workDays.indexOf('Sat') == -1)
@@ -814,6 +867,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareSun() {
     if (this.Sun == true) {
       if (this.doctorGet.workDays.indexOf('Sun') == -1)
@@ -827,6 +881,7 @@ export class DoctorComponent implements OnInit {
         this.disabledUpdateBtn = false;
     }
   }
+
   compareAppointmenTime() {
     if (parseInt(this.appointmentApproximateDuration) != this.doctorGet.appointmentApproximateDuration) {
       this.disabledUpdateBtn = false;
@@ -834,6 +889,7 @@ export class DoctorComponent implements OnInit {
       this.disabledUpdateBtn = true;
     }
   }
+
   compareAppointmentPrice() {
     if (parseInt(this.appointmentPrice) != this.doctorGet.appointmentPrice) {
       this.disabledUpdateBtn = false;
@@ -841,9 +897,11 @@ export class DoctorComponent implements OnInit {
       this.disabledUpdateBtn = true;
     }
   }
+
   toreVerifySection() {
     document.getElementById("reVerifySection").scrollIntoView({ behavior: "smooth" });
   }
+
   reVerifyDoctorDocuments() {
     this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'reVerify');
     this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
@@ -860,18 +918,23 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
   deleteAccount() {
     this.doctorService.deteleDoctorById(this.doctorGet.userId).subscribe(
       res => {
         if (res == 1) {
+          localStorage.setItem('secureLogin', '');
+          localStorage.setItem('id', '');
+          localStorage.setItem('secureLoginType', '');
           this.toastr.warning(this.translate.instant('accountDeleted'), this.translate.instant('delete'), {
-            timeOut: 5000,
+            timeOut: 10000,
             positionClass: 'toast-bottom-left'
           });
         }
       }
     );
   }
+
   getAllSpecialities() {
     this.specialityService.getSpecialities().subscribe(
       res => {
@@ -885,6 +948,7 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
   getPatientNumber(date: string, status: string) {
     this.appointmentService.getAppointmentNumberByDoctorIdAndDate(this.doctorGet.userId, date).subscribe(
       res => {
@@ -897,6 +961,7 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
   getTodayAppPatientByDate(firstTime: boolean) {
     if (!this.todayAppCharged) {
       let docTodayAppointments: AppointmentGet[] = [];
@@ -946,6 +1011,7 @@ export class DoctorComponent implements OnInit {
         this.showpatientNavigationLeft = false;
     }
   }
+
   getTomorrowAppPatientByDate(firstTime: boolean) {
     if (!this.tomorrowAppCharged) {
       let today = new Date();
@@ -998,6 +1064,7 @@ export class DoctorComponent implements OnInit {
         this.showTomorrowpatientNavigationLeft = false;
     }
   }
+
   patientNavigationLeftClick() {
     if (this.toadyAppointmentPatientInfo.length >= (this.patientFinish + 6)) {
       this.patientStart -= 6;
@@ -1011,6 +1078,7 @@ export class DoctorComponent implements OnInit {
       this.showpatientNavigationLeft = false;
     }
   }
+
   patientTomorrowNavigationLeftClick() {
     if (this.tomorrowAppointmentPatientInfo.length >= (this.patientTomorrowFinish + 6)) {
       this.patientTomorrowStart -= 6;
@@ -1024,6 +1092,7 @@ export class DoctorComponent implements OnInit {
       this.showTomorrowpatientNavigationLeft = false;
     }
   }
+
   showFullPatientTomorrowInfo(medicalProfileId: number, patientKey: number) {
     this.tomorrowPatientKey = patientKey;
     if (this.tomorrowPatientMedicalProfileGet[patientKey] == null) {
@@ -1043,10 +1112,11 @@ export class DoctorComponent implements OnInit {
           });
         }
       );
-    }else{
+    } else {
       this.tomorrowPatientInfo = true;
     }
   }
+
   getPatientInfo(patientId: number, patientTurn, status: string) {
     this.doctorService.getAppPatientInfoById(patientId).subscribe(
       res => {
@@ -1059,6 +1129,7 @@ export class DoctorComponent implements OnInit {
         }
       });
   }
+
   getPatientProfileImage(id: number, turn: number, status: string) {
     let retrieveResonse: any;
     let base64Data: any;
@@ -1087,9 +1158,11 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
   icreasePatientTurn(key: string): string {
     return parseInt(key) + 1 + '';
   }
+
   showFullPatientInfo(medicalProfileId: number, patientKey: number) {
     this.patientKey = patientKey;
     if (this.todayPatientMedicalProfileGet[patientKey] == null) {
@@ -1109,20 +1182,89 @@ export class DoctorComponent implements OnInit {
           });
         }
       );
-    }else{
+    } else {
       this.patientInfo = true;
     }
   }
+
   getMedicalProfileDiseases(id: number, patientKey: number, status: string) {
     this.patientService.getPatientMedicalProfileDeseasesByMedicalProfileId(id, 0, 3).subscribe(
       res => {
+        this.loadingCurrentPatientInfo = false;
         if (status == 'today')
           this.todayPatientMedicalProfileGet[patientKey].medicalProfileDisease = res;
         else if (status == 'tomorrow')
           this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease = res;
+        else if (status == 'currentPatient')
+          this.currentPatientMedicalProfileDiseases[patientKey - 1].medicalProfileDisease = res;
       }
     );
   }
+
+  getPatientByTurn(firsttime: boolean) {
+    this.loadingCurrentPatientInfo = true;
+    let patientTurn: number;
+    if (firsttime)
+      patientTurn = this.doctorGet.currentPatient;
+    else
+      patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
+    this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn).subscribe(
+      res => {
+        if (res) {
+          let nextPatient: number = parseInt(patientTurn.toString()) + 1;
+          this.doctorGet.currentPatient = patientTurn;
+          if (this.currentPatientInfo[patientTurn - 1] == null)
+            this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn);
+          if (nextPatient <= this.todayPatientNumber)
+            this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient);
+        }
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  getAppPatientInfoByDoctorIdTurnAndDate(patientTurn: number) {
+    this.doctorService.getAppPatientInfoByDoctorIdTurnAndDate(this.doctorGet.userId, patientTurn, this.currentDate).subscribe(
+      res => {
+        this.currentPatientInfo[patientTurn - 1] = res;
+        this.getCurrentPatientProfileImg(this.currentPatientInfo[patientTurn - 1].userId, patientTurn);
+        this.getCurrentPatientMedicalProfile(this.currentPatientInfo[patientTurn - 1].medicalProfileId, patientTurn);
+      }
+    );
+  }
+
+  getCurrentPatientMedicalProfile(medicalProfileId: number, patientTurn: number) {
+    this.patientService.getPatientMedicalProfileByMedicalProfileId(medicalProfileId).subscribe(
+      res => {
+        if (res) {
+          this.currentPatientMedicalProfile[patientTurn - 1] = res;
+          this.currentPatientMedicalProfile[patientTurn - 1].medicalProfileDisease = [];
+          this.getMedicalProfileDiseases(medicalProfileId, patientTurn, 'currentPatient');
+        }
+      }
+    );
+  }
+
+  getCurrentPatientProfileImg(id: number, patientTurn: number) {
+    let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
+    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.currentPatientProfileImg[patientTurn - 1] = retrievedImage;
+        } else
+          this.currentPatientProfileImg[patientTurn - 1] = false;
+      }
+    );
+  }
+
   getAppPatientInfo() {
     /*let 
     for (let app of this.doctorGet.appointment) {
