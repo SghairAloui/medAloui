@@ -407,5 +407,13 @@
     "allAppLoaded":"All appointments loaded",
     "Patient":"Patient",
     "addPrescription":"Add prescription",
-    "addDiagnose":"Add diagnose"
+    "addDiagnose":"Add diagnose",
+    "medicamentName":"Medicament name",
+    "nomedicamentAdded":"No medicament added",
+    "prescriptionNotNull":"Please confirm or cancel your prescription first",
+    "week":"Week",
+    "treatmentPeriod":"Treatment period",
+    "D":"D",
+    "W":"W",
+    "M":"M"
 }

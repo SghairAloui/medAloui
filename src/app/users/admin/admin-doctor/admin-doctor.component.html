@@ -52,7 +52,7 @@
                         <div *ngIf="!showPendingDoc[doc.key]" class="docDecision">
                             <div class="docNotAppNameText">Dr. <span
                                     style="text-transform: capitalize;">{{doc.value.doctorFirstName}}</span> <span
-                                    style="text-transform: uppercase;">{{doc.value.doctorLastName}}</span>
+                                    style="text-transform: uppercase;"> {{doc.value.doctorLastName}}</span>
                                 {{pendingDocDecision[doc.key]}}
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                         </div>
                         <div class="docNotAppName">Dr. <span
                                 style="text-transform: capitalize;">{{doc.value.doctorFirstName}}</span> <span
-                                style="text-transform: uppercase;">{{doc.value.doctorLastName}}</span>
+                                style="text-transform: uppercase;"> {{doc.value.doctorLastName}}</span>
                         </div>
                         <i class="fas fa-user"></i> {{doc.value.userUsername}}<br>
                         <div class="specialityContainer">{{doc.value.specialityCode|translate}}</div>

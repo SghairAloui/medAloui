@@ -552,3 +552,65 @@ html,body{
 .hr{
     background-color: var(--text-color);
 }
+.spanButton{
+    cursor: pointer;
+    border: 1px solid #308a7b;
+    z-index: 2;
+    background: none;
+    color: #308a7b;
+    transition: .3s ease-in-out;
+}
+.spanButton:hover{
+    background-color: #308a7b;
+    color: white;
+}
+.medicamentNameClass{
+    display: inline-block;
+    border-radius: 3px;
+    background-color: #308a7b;
+    padding: 2px 5px;
+    margin: 5px 7px;
+    color: white;
+}
+.cancelMed{
+    z-index: 10;
+    padding-left: 5px;
+    transition: .3s ease-in-out;
+}
+.cancelMed:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.emptyCentred{
+    width: 35%;
+    left: 0%;
+    transform: translateX(0%);
+}
+.treatement{
+    border: 1px solid #308a7b;
+    color: #308a7b;
+    background: transparent;
+    padding: 5px 10px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.treatement:hover{
+    background-color: #308a7b;
+    color: white;
+    cursor: pointer;
+}
+#treatementDay,#treatementWeek,#treatementMonth{
+    display: none;
+}
+.treatementDay{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.treatementMonth{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#treatementDay:checked + .treatementDay,#treatementWeek:checked + .treatementWeek,#treatementMonth:checked + .treatementMonth{
+    background-color: #308a7b;
+    color: white;
+}

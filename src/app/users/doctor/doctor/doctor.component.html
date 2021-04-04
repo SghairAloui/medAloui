@@ -990,13 +990,50 @@
                                 <div class="addToCurrentPatientClass">
                                     <div class="title"> {{'addPrescription'|translate}} </div>
                                     <div class="content">
+                                        <div *ngIf="medicaments.length == 0">
+                                            {{'nomedicamentAdded'|translate}}
+                                        </div>
+                                        <div *ngIf="medicaments.length != 0">
+                                            <div *ngFor="let med of medicaments | keyvalue" class="medicamentNameClass">
+                                                <span>{{med.value}} <span class="cancelMed"
+                                                        (click)="cancelMed(med.key)"><i class="fas fa-times"></i></span>
+                                                </span>
+                                            </div>
+                                        </div>
                                         <hr class="hr">
                                         <div class="formDiv">
                                             <input type="text" class="formInput" name="medicamentName"
-                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="medicamentName"
+                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="medNameAndTraitmentPer.medicamedntName"
                                                 id="medicamentName" placeholder=" ">
                                             <label for="chooseSpeciality"
-                                                class="formLabel">{{'chooseSpeciality'|translate}}</label>
+                                                class="formLabel">{{'medicamentName'|translate}}</label>
+                                        </div>
+                                        <input type="radio" id="treatmentDay" name="treatement" checked>
+                                        <label for="treatmentDay" class="treatmentDay treatement" (click)="periodMesure={{'D'|translate}}">
+                                            {{'day'|translate}} </label>
+                                        <input type="radio" id="treatmentWeek" name="treatement">
+                                        <label for="treatmentWeek" class="treatmentWeek treatement" (click)="periodMesure={{'W'|translate}}">
+                                            {{'week'|translate}} </label>
+                                        <input type="radio" id="treatmentMonth" name="treatement">
+                                        <label for="treatmentMonth" class="treatmentMonth treatment" (click)="periodMesure={{'M'|translate}}">
+                                            {{'month'|translate}} </label>
+                                        <div class="formDiv">
+                                            <span class="mesure spanButton" (click)="addMedicaments()">
+                                                {{'add'|translate}}
+                                            </span>
+                                            <input type="number" class="formInput" name="treatmentPeriod"
+                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="medNameAndTraitmentPer.medicamentPeriode"
+                                                id="treatmentPeriod" placeholder=" ">
+                                            <label for="chooseSpeciality"
+                                                class="formLabel">{{'treatmentPeriod'|translate}}</label>
+                                        </div>
+                                        <div class="buttons">
+                                            <button class="emptyBtn emptyCentred"
+                                                (click)="medicaments=[];addToCurrentPatient=null">
+                                                {{'cancel'|translate}} </button>
+                                            <button class="emptyBtn emptyCentred"
+                                                (click)="addPrescription(currentPatientInfo[doctorGet.currentPatient-1].userId)">
+                                                {{'save'|translate}} </button>
                                         </div>
                                     </div>
                                 </div>

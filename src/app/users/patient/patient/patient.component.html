@@ -175,30 +175,7 @@
                                 <label for="" class="formLabel">
                                     {{adressInformation}}
                                     <datalist id="governoratelistOptions">
-                                        <option value="Ariana">
-                                        <option value="Béja">
-                                        <option value="Ben Arous">
-                                        <option value="Bizerte">
-                                        <option value="Gabès">
-                                        <option value="Gafsa">
-                                        <option value="Jendouba">
-                                        <option value="Kairouan">
-                                        <option value="Kasserine">
-                                        <option value="Kébili">
-                                        <option value="Kef">
-                                        <option value="Mahdia">
-                                        <option value="Manouba">
-                                        <option value="Médenine">
-                                        <option value="Monastir">
-                                        <option value="Nabeul">
-                                        <option value="Sfax">
-                                        <option value="Sidi Bouzid">
-                                        <option value="Siliana">
-                                        <option value="Sousse">
-                                        <option value="Tataouine">
-                                        <option value="Tozeur">
-                                        <option value="Tunis">
-                                        <option value="Zaghouan">
+                                        <option *ngFor="let city of cities" value="{{city}}">
                                     </datalist>
                                 </label>
                             </div>

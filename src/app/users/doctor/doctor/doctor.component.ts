@@ -14,6 +14,7 @@ import { DoctorSettingsPost } from 'src/model/DoctorSettingsPost';
 import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
+import { medNameAndTraitmentPer } from 'src/model/medNameAndTraitmentPer';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { SpecialityGet } from 'src/model/SpecialityGet';
@@ -90,7 +91,10 @@ export class DoctorComponent implements OnInit {
   currentPatientProfileImg: any[] = [];
   currentPatientMedicalProfile: medicalProfileGet[] = []; currentPatientMedicalProfileDiseases: medicalProfileGet[] = [];
   loadingCurrentPatientInfo: boolean = false;
-  addToCurrentPatient:string;
+  addToCurrentPatient: string;
+ // medNameAndTraitmentPer:medNameAndTraitmentPer;
+ // medicaments: medNameAndTraitmentPer[] = []; periodMesure:string = this.translate.instant('D');
+
 
   ngOnInit(): void {
     this.lengthTested = false; this.tommorowLengthTested = false;
@@ -116,7 +120,6 @@ export class DoctorComponent implements OnInit {
             this.deleteAccount();
             this.accountDeleted = true;
           } else {
-            this.getAppPatientInfo();
             this.docInfo = true;
             this.getDoctorSpecialities();
             localStorage.setItem('id', this.doctorGet.userId.toString());
@@ -1202,30 +1205,37 @@ export class DoctorComponent implements OnInit {
   }
 
   getPatientByTurn(firsttime: boolean) {
-    this.loadingCurrentPatientInfo = true;
-    let patientTurn: number;
-    if (firsttime)
-      patientTurn = this.doctorGet.currentPatient;
-    else
-      patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
-    this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn).subscribe(
-      res => {
-        if (res) {
-          let nextPatient: number = parseInt(patientTurn.toString()) + 1;
-          this.doctorGet.currentPatient = patientTurn;
-          if (this.currentPatientInfo[patientTurn - 1] == null)
-            this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn);
-          if (nextPatient <= this.todayPatientNumber)
-            this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient);
+    if (/*this.medicaments.length > 0*/ true) {
+      this.toastr.warning(this.translate.instant('prescriptionNotNull'), this.translate.instant('info'), {
+        timeOut: 6000,
+        positionClass: 'toast-bottom-left'
+      });
+    } else {
+      this.loadingCurrentPatientInfo = true;
+      let patientTurn: number;
+      if (firsttime)
+        patientTurn = this.doctorGet.currentPatient;
+      else
+        patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
+      this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn).subscribe(
+        res => {
+          if (res) {
+            let nextPatient: number = parseInt(patientTurn.toString()) + 1;
+            this.doctorGet.currentPatient = patientTurn;
+            if (this.currentPatientInfo[patientTurn - 1] == null)
+              this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn);
+            if (nextPatient <= this.todayPatientNumber)
+              this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient);
+          }
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
         }
-      },
-      err => {
-        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
-      }
-    );
+      );
+    }
   }
 
   getAppPatientInfoByDoctorIdTurnAndDate(patientTurn: number) {
@@ -1265,103 +1275,26 @@ export class DoctorComponent implements OnInit {
     );
   }
 
-  getAppPatientInfo() {
-    /*let 
-    for (let app of this.doctorGet.appointment) {
-      if (app.appointmentDate == this.currentDate) {
-        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
-          res => {
-            if (res) {
-              this.toadyAppointmentPatientInfo[app.patientTurn - 1] = res;
-              this.getPatientTodayProfileImage(app.patientId, app.patientTurn);
-              if (this.toadyAppointmentPatientInfo.length <= 6 && !this.lengthTested) {
-                this.showpatientNavigationRight = false;
-                this.showpatientNavigationLeft = false;
-              } else if (this.toadyAppointmentPatientInfo.length > 6 && !this.lengthTested) {
-                this.showpatientNavigationRight = true;
-                this.showpatientNavigationLeft = false;
-                this.lengthTested = true;
-              }
-            }
-          }
-        );
-      } else if (app.appointmentDate == tomorrow) {
-        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
-          res => {
-            if (res) {
-              this.tomorrowAppointmentPatientInfo[app.patientTurn - 1]=res;
-              this.getPatientTomorrowProfileImage(app.patientId, app.patientTurn);
-              if (this.tomorrowAppointmentPatientInfo.length <= 6 && !this.tommorowLengthTested) {
-                this.showTomorrowpatientNavigationRight = false;
-                this.showTomorrowpatientNavigationLeft = false;
-              } else if (this.tomorrowAppointmentPatientInfo.length > 6 && !this.tommorowLengthTested) {
-                this.showTomorrowpatientNavigationRight = true;
-                this.showTomorrowpatientNavigationLeft = false;
-                this.tommorowLengthTested = true;
-              }
-            }
-          }
-        );
-      } else if (app.appointmentStatus == 'completed') {
-        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
-          res => {
-            if (res) {
-              this.completedAppointmentPatientInfo.push(res);
-            }
-          }
-        );
-      } else {
-        this.patientService.getAppPatientInfoById(app.patientId).subscribe(
-          res => {
-            if (res) {
-              this.nextAppointmentPatientInfo.push(res);
-            }
-          }
-        );
-      }
-    }
-  }
-  
-  getPatientTomorrowProfileImage(id: number, turn: number) {
-    let retrieveResonse: any;
-    let base64Data: any;
-    let retrievedImage: any;
-    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
-      res => {
-        if (res != null) {
-          retrieveResonse = res;
-          this.patientTomorrowProfilePicRes[turn - 1] = retrieveResonse;
-          base64Data = retrieveResonse.picByte;
-          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
-          this.patientTomorrowProfilePic[turn - 1] = retrievedImage;
-        } else {
-          this.patientTomorrowProfilePicRes[turn - 1] = null;
-          this.patientTomorrowProfilePic[turn - 1] = null;
-        }
-      }
-    );
-  }
-  patientNavigationRightClick() {
-    
-  }
-  patientTomorrowNavigationRightClick() {
-    if (this.tomorrowAppointmentPatientInfo.length >= (this.patientTomorrowFinish + 3)) {
-      this.patientTomorrowStart += 3;
-      this.patientTomorrowFinish += 3;
-      this.showTomorrowpatientNavigationLeft = true;
-      this.showTomorrowpatientNavigationRight = true;
+  /*addMedicaments() {
+    if (parseInt(this.medNameAndTraitmentPer.medicamentPeriode) > 0) {
+      this.medNameAndTraitmentPer.medicamedntName += " | ";
+      this.medNameAndTraitmentPer.medicamentPeriode += this.periodMesure;
+      this.medicaments.push(this.medNameAndTraitmentPer);
+      this.medNameAndTraitmentPer.medicamedntName = "";
+      this.medNameAndTraitmentPer.medicamentPeriode = "";
     } else {
-      this.patientTomorrowStart += (this.tomorrowAppointmentPatientInfo.length % 3);
-      this.patientTomorrowFinish += (this.tomorrowAppointmentPatientInfo.length % 3);
-      this.showTomorrowpatientNavigationRight = false;
-      this.showTomorrowpatientNavigationLeft = true;
+
     }
   }
- 
-    
+
+  cancelMed(key: number) {
+    this.medicaments.splice(key, 1);
+  }*/
+
+  addPrescription(id: number) {
+
   }
-  */
-  }
+
   getDoctorSpecialities() {
     this.doctorService.getDoctorSpecialitiesBySecureLogin(this.secureLogin).subscribe(
       res => {
