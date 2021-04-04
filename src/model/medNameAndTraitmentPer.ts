@@ -1,4 +1,4 @@
 export interface medNameAndTraitmentPer{
-    medicamedntName:string;
+    medicamentName:string;
     medicamentPeriode:string;
 }

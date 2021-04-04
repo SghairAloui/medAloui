@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { MedicamentService } from 'src/app/services/medicament.service';
 import { UserService } from 'src/app/services/user.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
@@ -55,7 +56,7 @@ export class DoctorComponent implements OnInit {
   secureLogin: SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
   Mon: boolean; Tue: boolean; Wed: boolean; Thu: boolean; Fri: boolean; Sat: boolean; Sun: boolean; selectDay: boolean = false;
 
-  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private userService: UserService, private appointmentService: AppointmentService) { }
+  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private userService: UserService, private appointmentService: AppointmentService,private medicamentService:MedicamentService) { }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -92,8 +93,10 @@ export class DoctorComponent implements OnInit {
   currentPatientMedicalProfile: medicalProfileGet[] = []; currentPatientMedicalProfileDiseases: medicalProfileGet[] = [];
   loadingCurrentPatientInfo: boolean = false;
   addToCurrentPatient: string;
- // medNameAndTraitmentPer:medNameAndTraitmentPer;
- // medicaments: medNameAndTraitmentPer[] = []; periodMesure:string = this.translate.instant('D');
+  currentMedicamentName:string; currentMedicamentPeriode:string;
+  currentMed:medNameAndTraitmentPer;falseNumber:boolean=false;
+  medicaments: medNameAndTraitmentPer[] = []; periodMesure:string = this.translate.instant('D');
+  searchedMedicaments:string []=[];
 
 
   ngOnInit(): void {
@@ -1205,7 +1208,7 @@ export class DoctorComponent implements OnInit {
   }
 
   getPatientByTurn(firsttime: boolean) {
-    if (/*this.medicaments.length > 0*/ true) {
+    if (this.medicaments.length > 0) {
       this.toastr.warning(this.translate.instant('prescriptionNotNull'), this.translate.instant('info'), {
         timeOut: 6000,
         positionClass: 'toast-bottom-left'
@@ -1275,21 +1278,36 @@ export class DoctorComponent implements OnInit {
     );
   }
 
-  /*addMedicaments() {
-    if (parseInt(this.medNameAndTraitmentPer.medicamentPeriode) > 0) {
-      this.medNameAndTraitmentPer.medicamedntName += " | ";
-      this.medNameAndTraitmentPer.medicamentPeriode += this.periodMesure;
-      this.medicaments.push(this.medNameAndTraitmentPer);
-      this.medNameAndTraitmentPer.medicamedntName = "";
-      this.medNameAndTraitmentPer.medicamentPeriode = "";
+  addMedicaments() {
+    if (parseInt(this.currentMedicamentPeriode) > 0) {
+      console.log(this.currentMedicamentName);
+      this.currentMed = {medicamentName: this.currentMedicamentName, medicamentPeriode: this.currentMedicamentPeriode + this.periodMesure};
+      this.medicaments.push(this.currentMed);
+      this.currentMedicamentName = "";
+      this.currentMedicamentPeriode = "";
     } else {
+      this.falseNumber=true;
+      this.toastr.warning(this.translate.instant('enterValidNumber'), this.translate.instant('info'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }
+  }
 
+  getMedicaments(){
+    if(this.currentMedicamentName.length == 3){
+      this.medicamentService.getMedicamentsByFirstLetters(this.currentMedicamentName).subscribe(
+        res=>{
+          console.log(res);
+          this.searchedMedicaments=res;
+        }
+      );
     }
   }
 
   cancelMed(key: number) {
     this.medicaments.splice(key, 1);
-  }*/
+  }
 
   addPrescription(id: number) {
 
@@ -1302,4 +1320,5 @@ export class DoctorComponent implements OnInit {
       }
     );
   }
+
 }

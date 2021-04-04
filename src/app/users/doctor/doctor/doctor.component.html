@@ -995,36 +995,47 @@
                                         </div>
                                         <div *ngIf="medicaments.length != 0">
                                             <div *ngFor="let med of medicaments | keyvalue" class="medicamentNameClass">
-                                                <span>{{med.value}} <span class="cancelMed"
+                                                <span>{{med.value.medicamentName}} |
+                                                    {{med.value.medicamentPeriode}}<span class="cancelMed"
                                                         (click)="cancelMed(med.key)"><i class="fas fa-times"></i></span>
                                                 </span>
                                             </div>
                                         </div>
                                         <hr class="hr">
                                         <div class="formDiv">
-                                            <input type="text" class="formInput" name="medicamentName"
-                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="medNameAndTraitmentPer.medicamedntName"
-                                                id="medicamentName" placeholder=" ">
-                                            <label for="chooseSpeciality"
+                                            <input type="text" class="formInput" name="currentMedicamentName"
+                                                [(ngModel)]="currentMedicamentName" list="medList"
+                                                (keyup)="getMedicaments()" id="currentMedicamentName" placeholder=" ">
+                                            <label for="currentMedicamentName"
                                                 class="formLabel">{{'medicamentName'|translate}}</label>
                                         </div>
-                                        <input type="radio" id="treatmentDay" name="treatement" checked>
-                                        <label for="treatmentDay" class="treatmentDay treatement" (click)="periodMesure={{'D'|translate}}">
+                                        <div *ngIf="searchedMedicaments.length != 0">
+                                            <datalist id="medList">
+                                                <option *ngFor="let med of searchedMedicaments" value="{{med}}">
+                                                </option>
+                                            </datalist>
+                                        </div>
+                                        <input type="radio" id="treatmentDay" name="treatment" checked>
+                                        <label for="treatmentDay" class="treatmentDay treatment"
+                                            (click)="periodMesure=translate.instant('D')">
                                             {{'day'|translate}} </label>
-                                        <input type="radio" id="treatmentWeek" name="treatement">
-                                        <label for="treatmentWeek" class="treatmentWeek treatement" (click)="periodMesure={{'W'|translate}}">
+                                        <input type="radio" id="treatmentWeek" name="treatment">
+                                        <label for="treatmentWeek" class="treatmentWeek treatment"
+                                            (click)="periodMesure=translate.instant('W')">
                                             {{'week'|translate}} </label>
-                                        <input type="radio" id="treatmentMonth" name="treatement">
-                                        <label for="treatmentMonth" class="treatmentMonth treatment" (click)="periodMesure={{'M'|translate}}">
+                                        <input type="radio" id="treatmentMonth" name="treatment">
+                                        <label for="treatmentMonth" class="treatmentMonth treatment"
+                                            (click)="periodMesure=translate.instant('M')">
                                             {{'month'|translate}} </label>
                                         <div class="formDiv">
                                             <span class="mesure spanButton" (click)="addMedicaments()">
                                                 {{'add'|translate}}
                                             </span>
-                                            <input type="number" class="formInput" name="treatmentPeriod"
-                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="medNameAndTraitmentPer.medicamentPeriode"
-                                                id="treatmentPeriod" placeholder=" ">
-                                            <label for="chooseSpeciality"
+                                            <input type="number" class="formInput" name="currentMedicamentPeriode"
+                                                [class.labelInvalidInfo]="falseNumber" (keyup)="falseNumber=false;"
+                                                [(ngModel)]="currentMedicamentPeriode" id="currentMedicamentPeriode"
+                                                placeholder=" ">
+                                            <label for="currentMedicamentPeriode"
                                                 class="formLabel">{{'treatmentPeriod'|translate}}</label>
                                         </div>
                                         <div class="buttons">

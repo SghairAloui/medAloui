@@ -415,5 +415,6 @@
     "treatmentPeriod":"Treatment period",
     "D":"D",
     "W":"W",
-    "M":"M"
+    "M":"M",
+    "enterValidNumber":"Enter valid treatment number"
 }

@@ -556,15 +556,17 @@ html,body{
     cursor: pointer;
     border: 1px solid #308a7b;
     z-index: 2;
-    background: none;
+    background: var(--background-color);
     color: #308a7b;
     transition: .3s ease-in-out;
+
 }
 .spanButton:hover{
     background-color: #308a7b;
     color: white;
 }
 .medicamentNameClass{
+    font-family: Arial, Helvetica, sans-serif;
     display: inline-block;
     border-radius: 3px;
     background-color: #308a7b;
@@ -586,7 +588,7 @@ html,body{
     left: 0%;
     transform: translateX(0%);
 }
-.treatement{
+.treatment{
     border: 1px solid #308a7b;
     color: #308a7b;
     background: transparent;
@@ -594,23 +596,23 @@ html,body{
     margin-top: 7px;
     margin-bottom: 7px;
 }
-.treatement:hover{
+.treatment:hover{
     background-color: #308a7b;
     color: white;
     cursor: pointer;
 }
-#treatementDay,#treatementWeek,#treatementMonth{
+#treatmentDay,#treatmentWeek,#treatmentMonth{
     display: none;
 }
-.treatementDay{
+.treatmentDay{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
-.treatementMonth{
+.treatmentMonth{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-#treatementDay:checked + .treatementDay,#treatementWeek:checked + .treatementWeek,#treatementMonth:checked + .treatementMonth{
+#treatmentDay:checked + .treatmentDay,#treatmentWeek:checked + .treatmentWeek,#treatmentMonth:checked + .treatmentMonth{
     background-color: #308a7b;
     color: white;
 }
