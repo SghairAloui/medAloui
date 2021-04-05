@@ -416,5 +416,9 @@
     "D":"D",
     "W":"W",
     "M":"M",
-    "enterValidNumber":"Enter valid treatment number"
+    "enterValidNumber":"Enter valid treatment number",
+    "prescriptionSaved":"Prescription saved",
+    "prescriptionAdded":"Prescription added",
+    "prescriptionDeleted":"Prescription deleted",
+    "patientAlreadyhavePrescription":"Patient already have an prescription"
 }

@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { MedicamentService } from 'src/app/services/medicament.service';
+import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
@@ -17,6 +18,8 @@ import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { medNameAndTraitmentPer } from 'src/model/medNameAndTraitmentPer';
 import { OneStringPost } from 'src/model/OneStringPost';
+import { prescriptionGet } from 'src/model/prescriptionGet';
+import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { SpecialityGet } from 'src/model/SpecialityGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -56,7 +59,7 @@ export class DoctorComponent implements OnInit {
   secureLogin: SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
   Mon: boolean; Tue: boolean; Wed: boolean; Thu: boolean; Fri: boolean; Sat: boolean; Sun: boolean; selectDay: boolean = false;
 
-  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private userService: UserService, private appointmentService: AppointmentService,private medicamentService:MedicamentService) { }
+  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private userService: UserService, private appointmentService: AppointmentService, private medicamentService: MedicamentService, private prescriptionService: PrescriptionService) { }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -93,10 +96,12 @@ export class DoctorComponent implements OnInit {
   currentPatientMedicalProfile: medicalProfileGet[] = []; currentPatientMedicalProfileDiseases: medicalProfileGet[] = [];
   loadingCurrentPatientInfo: boolean = false;
   addToCurrentPatient: string;
-  currentMedicamentName:string; currentMedicamentPeriode:string;
-  currentMed:medNameAndTraitmentPer;falseNumber:boolean=false;
-  medicaments: medNameAndTraitmentPer[] = []; periodMesure:string = this.translate.instant('D');
-  searchedMedicaments:string []=[];
+  currentMedicamentName: string; currentMedicamentPeriode: string;
+  currentMed: PrescriptionMedicament; falseNumber: boolean = false;
+  medicaments: PrescriptionMedicament[] = []; periodMesure: string = this.translate.instant('D');
+  treatmentPerMonth: boolean = false; treatmentPerWeek: boolean = false; treatmentPerday: boolean = true;
+  searchedMedicaments: string[] = []; savePrescription: boolean = true;
+  prescriptionAddedToCurrentPatient: number = 0;
 
 
   ngOnInit(): void {
@@ -141,7 +146,6 @@ export class DoctorComponent implements OnInit {
       },
       err => {
         this.router.navigate(['/acceuil']);
-        console.clear;
       }
     );
   }
@@ -365,7 +369,6 @@ export class DoctorComponent implements OnInit {
             res => {
               if (res) {
                 if (status == 'set') {
-                  console.log('set');
                   this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'approved');
                   this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
                     res => {
@@ -379,7 +382,6 @@ export class DoctorComponent implements OnInit {
                     }
                   );
                 } else {
-                  console.log('update');
                   this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
                     timeOut: 5000,
                     positionClass: 'toast-bottom-left'
@@ -1226,9 +1228,11 @@ export class DoctorComponent implements OnInit {
             let nextPatient: number = parseInt(patientTurn.toString()) + 1;
             this.doctorGet.currentPatient = patientTurn;
             if (this.currentPatientInfo[patientTurn - 1] == null)
-              this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn);
+              this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn, firsttime);
             if (nextPatient <= this.todayPatientNumber)
-              this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient);
+              this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient, false);
+            this.prescriptionAddedToCurrentPatient = 0;
+            this.medicaments = [];
           }
         },
         err => {
@@ -1241,12 +1245,14 @@ export class DoctorComponent implements OnInit {
     }
   }
 
-  getAppPatientInfoByDoctorIdTurnAndDate(patientTurn: number) {
+  getAppPatientInfoByDoctorIdTurnAndDate(patientTurn: number, firstTime: boolean) {
     this.doctorService.getAppPatientInfoByDoctorIdTurnAndDate(this.doctorGet.userId, patientTurn, this.currentDate).subscribe(
       res => {
         this.currentPatientInfo[patientTurn - 1] = res;
         this.getCurrentPatientProfileImg(this.currentPatientInfo[patientTurn - 1].userId, patientTurn);
         this.getCurrentPatientMedicalProfile(this.currentPatientInfo[patientTurn - 1].medicalProfileId, patientTurn);
+        if (firstTime)
+          this.getPrescriptionByDoctorIdPatientIdAndDate(this.currentPatientInfo[patientTurn - 1].userId);
       }
     );
   }
@@ -1280,13 +1286,13 @@ export class DoctorComponent implements OnInit {
 
   addMedicaments() {
     if (parseInt(this.currentMedicamentPeriode) > 0) {
-      console.log(this.currentMedicamentName);
-      this.currentMed = {medicamentName: this.currentMedicamentName, medicamentPeriode: this.currentMedicamentPeriode + this.periodMesure};
+      this.currentMed = { medicamentName: this.currentMedicamentName, treatmentPeriode: this.currentMedicamentPeriode + this.periodMesure };
       this.medicaments.push(this.currentMed);
       this.currentMedicamentName = "";
       this.currentMedicamentPeriode = "";
+      this.savePrescription = false;
     } else {
-      this.falseNumber=true;
+      this.falseNumber = true;
       this.toastr.warning(this.translate.instant('enterValidNumber'), this.translate.instant('info'), {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
@@ -1294,12 +1300,27 @@ export class DoctorComponent implements OnInit {
     }
   }
 
-  getMedicaments(){
-    if(this.currentMedicamentName.length == 3){
+  changeTreatmentPeriode(periode: string) {
+    if (periode == 'd') {
+      this.treatmentPerday = true;
+      this.treatmentPerWeek = false;
+      this.treatmentPerMonth = false;
+    } else if (periode == 'w') {
+      this.treatmentPerday = false;
+      this.treatmentPerWeek = true;
+      this.treatmentPerMonth = false;
+    } else if (periode == 'm') {
+      this.treatmentPerday = false;
+      this.treatmentPerWeek = false;
+      this.treatmentPerMonth = true;
+    }
+  }
+
+  getMedicaments() {
+    if (this.currentMedicamentName.length == 3) {
       this.medicamentService.getMedicamentsByFirstLetters(this.currentMedicamentName).subscribe(
-        res=>{
-          console.log(res);
-          this.searchedMedicaments=res;
+        res => {
+          this.searchedMedicaments = res;
         }
       );
     }
@@ -1307,10 +1328,83 @@ export class DoctorComponent implements OnInit {
 
   cancelMed(key: number) {
     this.medicaments.splice(key, 1);
+    if (this.medicaments.length == 0)
+      this.savePrescription = true;
   }
 
-  addPrescription(id: number) {
+  addPrescription(patientId: number) {
+    if (this.prescriptionAddedToCurrentPatient == 0) {
+      this.prescriptionService.addPres(patientId, this.doctorGet.userId).subscribe(
+        res => {
+          this.prescriptionAddedToCurrentPatient = res;
+          for (let med of this.medicaments) {
+            med.treatmentPeriode = med.treatmentPeriode.replace('J', 'D');
+            med.treatmentPeriode = med.treatmentPeriode.replace('S', 'W');
+            this.prescriptionService.addMedicamentToPresById(med.medicamentName, med.treatmentPeriode, this.prescriptionAddedToCurrentPatient).subscribe();
+          }
+          this.currentMedicamentName = '';
+          this.currentMedicamentPeriode = '';
+          this.savePrescription = true;
+          this.addToCurrentPatient = '';
+          document.getElementById("addedToCurrentPatient").scrollIntoView({ behavior: "smooth" });
+          this.toastr.success(this.translate.instant('prescriptionSaved'), this.translate.instant('prescription'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else
+      this.deletePres(false, patientId);
+  }
 
+  deletePres(doctor: boolean, patientId: number) {
+    this.prescriptionService.deleteById(this.prescriptionAddedToCurrentPatient).subscribe(
+      res => {
+        if (res) {
+          if (doctor) {
+            this.toastr.warning(this.translate.instant('prescriptionDeleted'), this.translate.instant('prescription'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+            this.prescriptionAddedToCurrentPatient = 0;
+          } else {
+            this.prescriptionAddedToCurrentPatient = 0;
+            this.addPrescription(patientId);
+          }
+        }
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  addPrescriptionBtn() {
+    if (this.prescriptionAddedToCurrentPatient == 0)
+      this.addToCurrentPatient = 'prescription';
+    else {
+      this.toastr.warning(this.translate.instant('patientAlreadyhavePrescription'), this.translate.instant('prescription'), {
+        timeOut: 3500,
+        positionClass: 'toast-bottom-left'
+      });
+      document.getElementById("addedToCurrentPatient").scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  getPrescriptionByDoctorIdPatientIdAndDate(patientId: number) {
+    let response: prescriptionGet;
+    this.prescriptionService.getPrescriptionByDoctorIdPatientIdAndDate(this.doctorGet.userId, parseInt(patientId.toString()), this.currentDate).subscribe(
+      res => {
+        if (res) {
+          response = res;
+          this.prescriptionAddedToCurrentPatient = response.prescriptionId;
+          this.medicaments = response.medicament;
+        }
+      }
+    );
   }
 
   getDoctorSpecialities() {

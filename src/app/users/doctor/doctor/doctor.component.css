@@ -345,6 +345,7 @@ html,body{
     margin-left: 5%;
     width: 90%;
     background-color: var(--background-color);
+    box-shadow: var(--infoBox);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -443,7 +444,7 @@ html,body{
     width: 40%;
     transition: .3s ease-in-out;
     background-color: var(--background-color);
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--infoBox);
     margin-top: 15px;
     border-radius: 5px;
     overflow: hidden;
@@ -615,4 +616,30 @@ html,body{
 #treatmentDay:checked + .treatmentDay,#treatmentWeek:checked + .treatmentWeek,#treatmentMonth:checked + .treatmentMonth{
     background-color: #308a7b;
     color: white;
+}
+.prescriptionAdded{
+    position: relative;
+    display: flex;
+    padding: 10px 20px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: var(--background-color);
+    box-shadow: var(--infoBox);
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.addedPresBtns{
+    width: fit-content;
+}
+.addedPresText{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.prescriptionAdded .emptyBtn{
+    left: 0px;
+    transform: translateX(0px);
+    position: relative;
+    width: fit-content;
+    padding: 0px 5px;
+    margin: 0px 15px;
 }

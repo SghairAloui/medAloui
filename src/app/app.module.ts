@@ -37,6 +37,7 @@ import { AppointmentService } from './appointment/appointment.service';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { UserService } from './services/user.service';
 import { MedicamentService } from './services/medicament.service';
+import { PrescriptionService } from './services/prescription.service';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,7 @@ import { MedicamentService } from './services/medicament.service';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
-    MedicamentService,
+    MedicamentService,PrescriptionService,
     authInterceptorProviders
   ],
   bootstrap: [AppComponent]

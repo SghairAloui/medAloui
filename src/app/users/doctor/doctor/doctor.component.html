@@ -983,7 +983,7 @@
                             <div class="buttons">
                                 <button class="emptyBtn left0" (click)="addToCurrentPatient='disease'">
                                     {{'addDiagnose'|translate}} </button>
-                                <button class="emptyBtn left0" (click)="addToCurrentPatient='prescription'">
+                                <button class="emptyBtn left0" (click)="addPrescriptionBtn()">
                                     {{'addPrescription'|translate}} </button>
                             </div>
                             <div *ngIf="addToCurrentPatient=='prescription'">
@@ -996,7 +996,7 @@
                                         <div *ngIf="medicaments.length != 0">
                                             <div *ngFor="let med of medicaments | keyvalue" class="medicamentNameClass">
                                                 <span>{{med.value.medicamentName}} |
-                                                    {{med.value.medicamentPeriode}}<span class="cancelMed"
+                                                    {{med.value.treatmentPeriode}}<span class="cancelMed"
                                                         (click)="cancelMed(med.key)"><i class="fas fa-times"></i></span>
                                                 </span>
                                             </div>
@@ -1015,15 +1015,15 @@
                                                 </option>
                                             </datalist>
                                         </div>
-                                        <input type="radio" id="treatmentDay" name="treatment" checked>
+                                        <input type="radio" id="treatmentDay" name="treatment" (change)="changeTreatmentPeriode('d')" [checked]="treatmentPerday">
                                         <label for="treatmentDay" class="treatmentDay treatment"
                                             (click)="periodMesure=translate.instant('D')">
                                             {{'day'|translate}} </label>
-                                        <input type="radio" id="treatmentWeek" name="treatment">
+                                        <input type="radio" id="treatmentWeek" name="treatment" (change)="changeTreatmentPeriode('w')" [checked]="treatmentPerWeek">
                                         <label for="treatmentWeek" class="treatmentWeek treatment"
                                             (click)="periodMesure=translate.instant('W')">
                                             {{'week'|translate}} </label>
-                                        <input type="radio" id="treatmentMonth" name="treatment">
+                                        <input type="radio" id="treatmentMonth" name="treatment" (change)="changeTreatmentPeriode('m')" [checked]="treatmentPerMonth">
                                         <label for="treatmentMonth" class="treatmentMonth treatment"
                                             (click)="periodMesure=translate.instant('M')">
                                             {{'month'|translate}} </label>
@@ -1042,7 +1042,7 @@
                                             <button class="emptyBtn emptyCentred"
                                                 (click)="medicaments=[];addToCurrentPatient=null">
                                                 {{'cancel'|translate}} </button>
-                                            <button class="emptyBtn emptyCentred"
+                                            <button class="emptyBtn emptyCentred" [disabled]="savePrescription"
                                                 (click)="addPrescription(currentPatientInfo[doctorGet.currentPatient-1].userId)">
                                                 {{'save'|translate}} </button>
                                         </div>
@@ -1064,6 +1064,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <section id="addedToCurrentPatient">
+                                <div *ngIf="prescriptionAddedToCurrentPatient" class="prescriptionAdded">
+                                    <span class="addedPresText">{{'prescriptionAdded'|translate}}</span>
+                                    <span class="addedPresBtns">
+                                        <button class="emptyBtn"
+                                            (click)="addToCurrentPatient='prescription';savePrescription=true">
+                                            {{'edit'|translate}} <i class="fas fa-edit"></i> </button>
+                                        <button class="emptyBtn" (click)="deletePres(true,currentPatientInfo[doctorGet.currentPatient-1].userId)"> {{'delete'|translate}} <i class="fas fa-times"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </section>
                             <div class="nextPatient" (click)="getPatientByTurn(false)">
                                 <div *ngIf="loadingCurrentPatientInfo" class="loadingCuurentPatientInfo">
                                     <div class="loading">
