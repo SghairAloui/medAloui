@@ -10,11 +10,14 @@ import { UserService } from 'src/app/services/user.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
 import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
+import { dignoses } from 'src/model/dignoses';
+import { doctor } from 'src/model/Doctor';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
 import { DoctorSettingsPost } from 'src/model/DoctorSettingsPost';
 import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { medNameAndTraitmentPer } from 'src/model/medNameAndTraitmentPer';
 import { OneStringPost } from 'src/model/OneStringPost';
@@ -101,7 +104,14 @@ export class DoctorComponent implements OnInit {
   medicaments: PrescriptionMedicament[] = []; periodMesure: string = this.translate.instant('D');
   treatmentPerMonth: boolean = false; treatmentPerWeek: boolean = false; treatmentPerday: boolean = true;
   searchedMedicaments: string[] = []; savePrescription: boolean = true;
-  prescriptionAddedToCurrentPatient: number = 0;
+  prescriptionAddedToCurrentPatient: number = 0; diseaseName: string; docDiagnose: string;
+  diagnoseAddedToCurrentPatient: number = 0;
+  currentDiagnose: dignoses;
+  diagnoses: dignoses[] = [];
+  saveDiagnose: boolean = true;
+  doctorInfoForMedicalProfileDis: doctor[] = [];
+  doctorProfileImgForMedicalProfileDis: any[] = [];
+  loadDoctorInfoForMedicalProfileDis: boolean[] = [];
 
 
   ngOnInit(): void {
@@ -1203,8 +1213,14 @@ export class DoctorComponent implements OnInit {
           this.todayPatientMedicalProfileGet[patientKey].medicalProfileDisease = res;
         else if (status == 'tomorrow')
           this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease = res;
-        else if (status == 'currentPatient')
-          this.currentPatientMedicalProfileDiseases[patientKey - 1].medicalProfileDisease = res;
+        else if (status == 'currentPatient') {
+          let response: medicalProfileDiseaseGet[] = [];
+          response = res;
+          for (let dis of response) {
+            dis.showFullInfo = false;
+            this.currentPatientMedicalProfile[patientKey - 1].medicalProfileDisease.push(dis);
+          }
+        }
       }
     );
   }
@@ -1251,8 +1267,10 @@ export class DoctorComponent implements OnInit {
         this.currentPatientInfo[patientTurn - 1] = res;
         this.getCurrentPatientProfileImg(this.currentPatientInfo[patientTurn - 1].userId, patientTurn);
         this.getCurrentPatientMedicalProfile(this.currentPatientInfo[patientTurn - 1].medicalProfileId, patientTurn);
-        if (firstTime)
+        if (firstTime) {
           this.getPrescriptionByDoctorIdPatientIdAndDate(this.currentPatientInfo[patientTurn - 1].userId);
+          this.getDiagnoseByMedicalProfileIdAndDate();
+        }
       }
     );
   }
@@ -1285,15 +1303,16 @@ export class DoctorComponent implements OnInit {
   }
 
   addMedicaments() {
-    if (parseInt(this.currentMedicamentPeriode) > 0) {
+    if ((parseInt(this.currentMedicamentPeriode) > 0) && this.currentMedicamentName != null && this.currentMedicamentName.length > 2) {
       this.currentMed = { medicamentName: this.currentMedicamentName, treatmentPeriode: this.currentMedicamentPeriode + this.periodMesure };
       this.medicaments.push(this.currentMed);
       this.currentMedicamentName = "";
       this.currentMedicamentPeriode = "";
+      this.currentMed = { medicamentName: "", treatmentPeriode: "" };
       this.savePrescription = false;
     } else {
       this.falseNumber = true;
-      this.toastr.warning(this.translate.instant('enterValidNumber'), this.translate.instant('info'), {
+      this.toastr.warning(this.translate.instant('fillTheFieldsWithCoorectInfo'), this.translate.instant('prescription'), {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
       });
@@ -1330,6 +1349,12 @@ export class DoctorComponent implements OnInit {
     this.medicaments.splice(key, 1);
     if (this.medicaments.length == 0)
       this.savePrescription = true;
+  }
+
+  cancelDiagnose(key: number) {
+    this.diagnoses.splice(key, 1);
+    if (this.diagnoses.length == 0)
+      this.saveDiagnose = true;
   }
 
   addPrescription(patientId: number) {
@@ -1383,8 +1408,10 @@ export class DoctorComponent implements OnInit {
   }
 
   addPrescriptionBtn() {
-    if (this.prescriptionAddedToCurrentPatient == 0)
+    if (this.prescriptionAddedToCurrentPatient == 0) {
       this.addToCurrentPatient = 'prescription';
+      document.getElementById("addToPatientSection").scrollIntoView({ behavior: "smooth" });
+    }
     else {
       this.toastr.warning(this.translate.instant('patientAlreadyhavePrescription'), this.translate.instant('prescription'), {
         timeOut: 3500,
@@ -1411,6 +1438,127 @@ export class DoctorComponent implements OnInit {
     this.doctorService.getDoctorSpecialitiesBySecureLogin(this.secureLogin).subscribe(
       res => {
         this.doctorSpecialities = res;
+      }
+    );
+  }
+
+  addDiagnoseBtn() {
+    if (this.diagnoseAddedToCurrentPatient == 0) {
+      this.addToCurrentPatient = 'disease';
+      document.getElementById("addToPatientSection").scrollIntoView({ behavior: "smooth" });
+    }
+    else {
+      this.toastr.warning(this.translate.instant('patientAlreadyDiagnosed'), this.translate.instant('diagnose'), {
+        timeOut: 3500,
+        positionClass: 'toast-bottom-left'
+      });
+      document.getElementById("addedToCurrentPatient").scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  addDiagnose() {
+    if (this.diseaseName == null || this.diseaseName.length < 3) {
+      this.toastr.warning(this.translate.instant('fillTheFieldsWithCoorectInfo'), this.translate.instant('diagnose'), {
+        timeOut: 3500,
+        positionClass: 'toast-bottom-left'
+      });
+    } else {
+      this.currentDiagnose = { medicalProfileDiseaseName: this.diseaseName, medicalProfileDiseaseDiagnose: this.docDiagnose, medicalProfileDiseaseId: 0 };
+      this.diagnoses.push(this.currentDiagnose);
+      this.diseaseName = "";
+      this.docDiagnose = "";
+      this.currentDiagnose = { medicalProfileDiseaseName: "", medicalProfileDiseaseDiagnose: "", medicalProfileDiseaseId: 0 };
+      this.saveDiagnose = false;
+    }
+  }
+
+  getDiagnoseByMedicalProfileIdAndDate() {
+    this.patientService.getDiagnoseByMedicalProfileIdAndDate(this.currentPatientInfo[this.doctorGet.currentPatient - 1].medicalProfileId, this.currentDate).subscribe(
+      res => {
+        if (res) {
+          this.diagnoses = res;
+          if (this.diagnoses.length > 0) {
+            this.diagnoseAddedToCurrentPatient = 1;
+          }
+        }
+      }
+    );
+  }
+
+  saveCurrentPatientDiagnose(medicalProfileId: number) {
+    if (this.diagnoseAddedToCurrentPatient == 0) {
+      let i: number = 1;
+      for (let diag of this.diagnoses) {
+        this.patientService.addDiagnoseToMedicalProfileById(this.doctorGet.userId, medicalProfileId, diag.medicalProfileDiseaseName, diag.medicalProfileDiseaseDiagnose).subscribe(
+          res => {
+            console.log(res);
+            if (res && i == this.diagnoses.length) {
+              this.toastr.success(this.translate.instant('diagnoseAdded'), this.translate.instant('diagnose'), {
+                timeOut: 3500,
+                positionClass: 'toast-bottom-left'
+              });
+              document.getElementById("addedToCurrentPatient").scrollIntoView({ behavior: "smooth" });
+              this.addToCurrentPatient = null;
+              this.diagnoseAddedToCurrentPatient = 1;
+            }
+            i += 1;
+          }
+        );
+      }
+    } else
+      this.deleteDiagnoseByMedicalProfileIdDoctorIdAndDate(false);
+  }
+
+  deleteDiagnoseByMedicalProfileIdDoctorIdAndDate(fromHtml: boolean) {
+    this.patientService.deleteDiagnoseByMedicalProfileIdDoctorIdAndDate(parseInt(this.currentPatientInfo[this.doctorGet.currentPatient - 1].medicalProfileId.toString()), this.doctorGet.userId, this.currentDate).subscribe(
+      res => {
+        if (res) {
+          if (fromHtml) {
+            this.toastr.success(this.translate.instant('diagnoseDeleted'), this.translate.instant('diagnose'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+            this.diagnoseAddedToCurrentPatient = 0;
+          } else {
+            this.diagnoseAddedToCurrentPatient = 0;
+            this.saveCurrentPatientDiagnose(this.currentPatientInfo[this.doctorGet.currentPatient - 1].medicalProfileId);
+          }
+        }
+      }
+    );
+  }
+
+  getDoctorFullInfo(doctorId: number, diseaseKey: number) {
+    console.log('id : '+doctorId + ' diseaseKey : '+diseaseKey);
+    if (this.doctorInfoForMedicalProfileDis[diseaseKey])
+      this.currentPatientMedicalProfile[this.doctorGet.currentPatient - 1].medicalProfileDisease[diseaseKey].showFullInfo = true;
+    else {
+      this.loadDoctorInfoForMedicalProfileDis[diseaseKey] = true;
+      this.doctorService.GetDoctorInfoById(doctorId).subscribe(
+        res => {
+          console.log(res);
+          this.doctorInfoForMedicalProfileDis[diseaseKey] = res;
+          this.getDoctorProfileImage(doctorId, diseaseKey);
+        }
+      );
+    }
+  }
+
+  getDoctorProfileImage(doctorId: number, diseaseKey: number) {
+    let retrieveResonse: any;
+    let base64Data: any;
+    let retrievedImage: any;
+    this.doctorService.getDoctorPofilePhoto(doctorId + 'doctorProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.doctorProfileImgForMedicalProfileDis[diseaseKey] = retrievedImage;
+        } else
+          this.doctorProfileImgForMedicalProfileDis[diseaseKey] = false;
+        this.loadDoctorInfoForMedicalProfileDis[diseaseKey] = false;
+        this.currentPatientMedicalProfile[this.doctorGet.currentPatient - 1].medicalProfileDisease[diseaseKey].showFullInfo = true;
       }
     );
   }

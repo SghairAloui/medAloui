@@ -4,7 +4,7 @@ export interface doctor{
     doctorFirstName:string;
     doctorLastName:string;
     doctorGender:string;
-    doctorCity:string;
+    userCity:string;
     doctorRate:number;
     exactAdress:string;
     workDays:string;

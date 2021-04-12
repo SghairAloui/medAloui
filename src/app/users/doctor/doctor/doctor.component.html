@@ -975,103 +975,301 @@
                                                     *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length == 0">
                                                     {{'notDiagnosedYet'|translate}}
                                                 </div>
+                                                <div
+                                                    *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length != 0">
+                                                    <div *ngFor="let dis of currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease | keyvalue"
+                                                        class="diseaseContainer">
+                                                        <div *ngIf="dis.value.showFullInfo==false && !loadDoctorInfoForMedicalProfileDis[dis.key]"
+                                                            class="showDoctorinfo" (click)="getDoctorFullInfo(dis.value.doctorId,dis.key)">
+                                                            <span class="showDoctorinfoCentred">
+                                                                {{'showDocInfo'|translate}}
+                                                            </span>
+                                                        </div>
+                                                        <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]" class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
+                                                            <div class="loading">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="diseaseContainerDate">
+                                                            {{dis.value.medicalProfileDiseaseDiagnoseDay}}
+                                                        </div>
+                                                        <div *ngIf="dis.value.showFullInfo==true" (click)="dis.value.showFullInfo=false">
+                                                            <div class="docProfileImgForMedicalProfileDis">
+                                                                <div
+                                                                    *ngIf="doctorProfileImgForMedicalProfileDis[dis.key]; then showDocProfileImg else showDocDefaultImg">
+                                                                </div>
+                                                                <ng-template #showDocProfileImg><img
+                                                                        [src]="doctorProfileImgForMedicalProfileDis[dis.key]"
+                                                                        class="profileImg">
+                                                                </ng-template>
+                                                                <ng-template #showDocDefaultImg><i
+                                                                        class="fas fa-user-tie userTie75"></i>
+                                                                </ng-template>
+                                                            </div>
+                                                            Dr.<span style="text-transform: capitalize;">
+                                                                {{doctorInfoForMedicalProfileDis[dis.key].doctorFirstName}}</span>
+                                                            <span style="text-transform: uppercase;">
+                                                                {{doctorInfoForMedicalProfileDis[dis.key].doctorLastName}}</span><br>
+                                                            <div
+                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate !=0">
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 0.5">
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                </div>
+                                                            </div><br>
+                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                <i class="fas fa-venus-mars"></i>
+                                                                <span class="disease">
+                                                                    {{doctorInfoForMedicalProfileDis[dis.key].doctorGender}}
+                                                                </span>
+                                                            </div>
+                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                <i class="fas fa-map-marked-alt"></i>
+                                                                <span class="disease">
+                                                                    {{doctorInfoForMedicalProfileDis[dis.key].userCity}}
+                                                                </span>
+                                                            </div>
+                                                            <hr>
+                                                        </div>
+                                                        <div class="diseaseName">
+                                                            {{'disease'|translate}}
+                                                            <span class="disease">
+                                                                {{dis.value.medicalProfileDiseaseName}}
+                                                            </span>
+                                                        </div>
+                                                        <div *ngIf="dis.value.showFullInfo==true && dis.value.medicalProfileDiseaseDiagnose"
+                                                            class="diseaseDiagnose">
+                                                            {{dis.value.medicalProfileDiseaseDiagnose}}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="buttons">
-                                <button class="emptyBtn left0" (click)="addToCurrentPatient='disease'">
+                                <button class="emptyBtn left0" (click)="addDiagnoseBtn()">
                                     {{'addDiagnose'|translate}} </button>
                                 <button class="emptyBtn left0" (click)="addPrescriptionBtn()">
                                     {{'addPrescription'|translate}} </button>
                             </div>
-                            <div *ngIf="addToCurrentPatient=='prescription'">
-                                <div class="addToCurrentPatientClass">
-                                    <div class="title"> {{'addPrescription'|translate}} </div>
-                                    <div class="content">
-                                        <div *ngIf="medicaments.length == 0">
-                                            {{'nomedicamentAdded'|translate}}
-                                        </div>
-                                        <div *ngIf="medicaments.length != 0">
-                                            <div *ngFor="let med of medicaments | keyvalue" class="medicamentNameClass">
-                                                <span>{{med.value.medicamentName}} |
-                                                    {{med.value.treatmentPeriode}}<span class="cancelMed"
-                                                        (click)="cancelMed(med.key)"><i class="fas fa-times"></i></span>
+                            <section id="addToPatientSection">
+                                <div *ngIf="addToCurrentPatient=='prescription'">
+                                    <div class="addToCurrentPatientClass">
+                                        <div class="title"> {{'addPrescription'|translate}} </div>
+                                        <div class="content">
+                                            <div *ngIf="medicaments.length == 0">
+                                                {{'nomedicamentAdded'|translate}}
+                                            </div>
+                                            <div *ngIf="medicaments.length != 0">
+                                                <div *ngFor="let med of medicaments | keyvalue"
+                                                    class="medicamentNameClass">
+                                                    <span>{{med.value.medicamentName}} |
+                                                        {{med.value.treatmentPeriode}}<span class="cancelMed"
+                                                            (click)="cancelMed(med.key)"><i
+                                                                class="fas fa-times"></i></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="formDiv">
+                                                <input type="text" class="formInput" name="currentMedicamentName"
+                                                    [(ngModel)]="currentMedicamentName" list="medList"
+                                                    (keyup)="getMedicaments()" id="currentMedicamentName"
+                                                    placeholder=" ">
+                                                <label for="currentMedicamentName"
+                                                    class="formLabel">{{'medicamentName'|translate}}</label>
+                                            </div>
+                                            <div *ngIf="searchedMedicaments.length != 0">
+                                                <datalist id="medList">
+                                                    <option *ngFor="let med of searchedMedicaments" value="{{med}}">
+                                                    </option>
+                                                </datalist>
+                                            </div>
+                                            <input type="radio" id="treatmentDay" name="treatment"
+                                                (change)="changeTreatmentPeriode('d')" [checked]="treatmentPerday">
+                                            <label for="treatmentDay" class="treatmentDay treatment"
+                                                (click)="periodMesure=translate.instant('D')">
+                                                {{'day'|translate}} </label>
+                                            <input type="radio" id="treatmentWeek" name="treatment"
+                                                (change)="changeTreatmentPeriode('w')" [checked]="treatmentPerWeek">
+                                            <label for="treatmentWeek" class="treatmentWeek treatment"
+                                                (click)="periodMesure=translate.instant('W')">
+                                                {{'week'|translate}} </label>
+                                            <input type="radio" id="treatmentMonth" name="treatment"
+                                                (change)="changeTreatmentPeriode('m')" [checked]="treatmentPerMonth">
+                                            <label for="treatmentMonth" class="treatmentMonth treatment"
+                                                (click)="periodMesure=translate.instant('M')">
+                                                {{'month'|translate}} </label>
+                                            <div class="formDiv">
+                                                <span class="mesure spanButton" (click)="addMedicaments()">
+                                                    {{'add'|translate}}
                                                 </span>
+                                                <input type="number" class="formInput" name="currentMedicamentPeriode"
+                                                    [class.labelInvalidInfo]="falseNumber" (keyup)="falseNumber=false;"
+                                                    [(ngModel)]="currentMedicamentPeriode" id="currentMedicamentPeriode"
+                                                    placeholder=" ">
+                                                <label for="currentMedicamentPeriode"
+                                                    class="formLabel">{{'treatmentPeriod'|translate}}</label>
+                                            </div>
+                                            <div class="buttons">
+                                                <button class="emptyBtn emptyCentred"
+                                                    (click)="medicaments=[];addToCurrentPatient=null">
+                                                    {{'cancel'|translate}} </button>
+                                                <button class="emptyBtn emptyCentred" [disabled]="savePrescription"
+                                                    (click)="addPrescription(currentPatientInfo[doctorGet.currentPatient-1].userId)">
+                                                    {{'save'|translate}} </button>
                                             </div>
                                         </div>
-                                        <hr class="hr">
-                                        <div class="formDiv">
-                                            <input type="text" class="formInput" name="currentMedicamentName"
-                                                [(ngModel)]="currentMedicamentName" list="medList"
-                                                (keyup)="getMedicaments()" id="currentMedicamentName" placeholder=" ">
-                                            <label for="currentMedicamentName"
-                                                class="formLabel">{{'medicamentName'|translate}}</label>
-                                        </div>
-                                        <div *ngIf="searchedMedicaments.length != 0">
-                                            <datalist id="medList">
-                                                <option *ngFor="let med of searchedMedicaments" value="{{med}}">
-                                                </option>
-                                            </datalist>
-                                        </div>
-                                        <input type="radio" id="treatmentDay" name="treatment" (change)="changeTreatmentPeriode('d')" [checked]="treatmentPerday">
-                                        <label for="treatmentDay" class="treatmentDay treatment"
-                                            (click)="periodMesure=translate.instant('D')">
-                                            {{'day'|translate}} </label>
-                                        <input type="radio" id="treatmentWeek" name="treatment" (change)="changeTreatmentPeriode('w')" [checked]="treatmentPerWeek">
-                                        <label for="treatmentWeek" class="treatmentWeek treatment"
-                                            (click)="periodMesure=translate.instant('W')">
-                                            {{'week'|translate}} </label>
-                                        <input type="radio" id="treatmentMonth" name="treatment" (change)="changeTreatmentPeriode('m')" [checked]="treatmentPerMonth">
-                                        <label for="treatmentMonth" class="treatmentMonth treatment"
-                                            (click)="periodMesure=translate.instant('M')">
-                                            {{'month'|translate}} </label>
-                                        <div class="formDiv">
-                                            <span class="mesure spanButton" (click)="addMedicaments()">
-                                                {{'add'|translate}}
-                                            </span>
-                                            <input type="number" class="formInput" name="currentMedicamentPeriode"
-                                                [class.labelInvalidInfo]="falseNumber" (keyup)="falseNumber=false;"
-                                                [(ngModel)]="currentMedicamentPeriode" id="currentMedicamentPeriode"
-                                                placeholder=" ">
-                                            <label for="currentMedicamentPeriode"
-                                                class="formLabel">{{'treatmentPeriod'|translate}}</label>
-                                        </div>
-                                        <div class="buttons">
-                                            <button class="emptyBtn emptyCentred"
-                                                (click)="medicaments=[];addToCurrentPatient=null">
-                                                {{'cancel'|translate}} </button>
-                                            <button class="emptyBtn emptyCentred" [disabled]="savePrescription"
-                                                (click)="addPrescription(currentPatientInfo[doctorGet.currentPatient-1].userId)">
-                                                {{'save'|translate}} </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="addToCurrentPatient=='disease'">
+                                    <div class="addToCurrentPatientClass">
+                                        <div class="title"> {{'addDiagnose'|translate}} </div>
+                                        <div class="content">
+                                            <div *ngIf="diagnoses.length == 0">
+                                                {{'noDiagnoseAdded'|translate}}
+                                            </div>
+                                            <div *ngIf="diagnoses.length != 0">
+                                                <div *ngFor="let diagnose of diagnoses | keyvalue"
+                                                    class="medicamentNameClass">
+                                                    <span>{{diagnose.value.medicalProfileDiseaseName}}<span
+                                                            class="cancelMed" (click)="cancelDiagnose(diagnose.key)"><i
+                                                                class="fas fa-times"></i></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="formDiv">
+                                                <input type="text" class="formInput" name="diseaseName"
+                                                    [class.labelInvalidInfo]="falseSpec" [(ngModel)]="diseaseName"
+                                                    id="diseaseName" placeholder=" ">
+                                                <label for="diseaseName"
+                                                    class="formLabel">{{'disease'|translate}}</label>
+                                            </div>
+                                            <div class="formDiv" style="margin-top:15px">
+                                                <span class="mesure spanButton" (click)="addDiagnose()">
+                                                    {{'add'|translate}}
+                                                </span>
+                                                <input type="text" class="formInput" name="docDiagnose"
+                                                    [class.labelInvalidInfo]="falseSpec" [(ngModel)]="docDiagnose"
+                                                    id="docDiagnose" placeholder=" ">
+                                                <label for="docDiagnose"
+                                                    class="formLabel">{{'diagnose'|translate}}</label>
+                                            </div>
+                                            <div class="buttons">
+                                                <button class="emptyBtn emptyCentred"
+                                                    (click)="diagnoses=[];addToCurrentPatient=null">
+                                                    {{'cancel'|translate}} </button>
+                                                <button class="emptyBtn emptyCentred" [disabled]="saveDiagnose"
+                                                    (click)="saveCurrentPatientDiagnose(currentPatientInfo[doctorGet.currentPatient-1].medicalProfileId)">
+                                                    {{'save'|translate}} </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div *ngIf="addToCurrentPatient=='disease'">
-                                <div class="addToCurrentPatientClass">
-                                    <div class="title"> {{'addDiagnose'|translate}} </div>
-                                    <div class="content">
-                                        <hr class="hr">
-                                        <div class="formDiv">
-                                            <input type="text" class="formInput" name="diseaseName"
-                                                [class.labelInvalidInfo]="falseSpec" [(ngModel)]="diseaseName"
-                                                id="diseaseName" placeholder=" ">
-                                            <label for="chooseSpeciality"
-                                                class="formLabel">{{'chooseSpeciality'|translate}}</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </section>
                             <section id="addedToCurrentPatient">
                                 <div *ngIf="prescriptionAddedToCurrentPatient" class="prescriptionAdded">
                                     <span class="addedPresText">{{'prescriptionAdded'|translate}}</span>
                                     <span class="addedPresBtns">
                                         <button class="emptyBtn"
-                                            (click)="addToCurrentPatient='prescription';savePrescription=true">
+                                            (click)="addToCurrentPatient='prescription';saveDiagnose=true">
                                             {{'edit'|translate}} <i class="fas fa-edit"></i> </button>
-                                        <button class="emptyBtn" (click)="deletePres(true,currentPatientInfo[doctorGet.currentPatient-1].userId)"> {{'delete'|translate}} <i class="fas fa-times"></i>
+                                        <button class="emptyBtn"
+                                            (click)="deletePres(true,currentPatientInfo[doctorGet.currentPatient-1].userId) ">
+                                            {{'delete'|translate}} <i class="fas fa-times"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div *ngIf="diagnoseAddedToCurrentPatient != 0" class="prescriptionAdded">
+                                    <span class="addedPresText">{{'diagnoseAdded'|translate}}</span>
+                                    <span class="addedPresBtns">
+                                        <button class="emptyBtn"
+                                            (click)="addToCurrentPatient='disease';savePrescription=true;consoleee()">
+                                            {{'edit'|translate}} <i class="fas fa-edit"></i> </button>
+                                        <button class="emptyBtn"
+                                            (click)="deleteDiagnoseByMedicalProfileIdDoctorIdAndDate(true)">
+                                            {{'delete'|translate}} <i class="fas fa-times"></i>
                                         </button>
                                     </span>
                                 </div>

@@ -416,9 +416,15 @@
     "D":"D",
     "W":"W",
     "M":"M",
-    "enterValidNumber":"Enter valid treatment number",
     "prescriptionSaved":"Prescription saved",
     "prescriptionAdded":"Prescription added",
     "prescriptionDeleted":"Prescription deleted",
-    "patientAlreadyhavePrescription":"Patient already have an prescription"
+    "patientAlreadyhavePrescription":"Patient already have an prescription",
+    "diagnose":"Diagnose",
+    "fillTheFieldsWithCoorectInfo":"Fill the fields with correct informations",
+    "noDiagnoseAdded":"No diagnose added",
+    "patientAlreadyDiagnosed":"Patient already diagnosed",
+    "diagnoseAdded":"Diagnose saved",
+    "diagnoseDeleted":"Diagnose deleted",
+    "showDocInfo":"click to show doctor informations"
 }

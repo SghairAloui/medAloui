@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
+import { doctor } from 'src/model/Doctor';
 import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
@@ -105,5 +106,9 @@ export class DoctorService {
 
   public getAppPatientInfoByDoctorIdTurnAndDate(id:number,turn:number,date:string){
     return this.http.post<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoByDoctorIdTurnAndDate',{id,turn,date},httpOptions)
+  }
+
+  public GetDoctorInfoById(doctorId:number){
+    return this.http.get<doctor>(DOC_API+'getDoctorInfoByDoctorId/'+doctorId,httpOptions);
   }
 }
