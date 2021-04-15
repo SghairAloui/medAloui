@@ -34,7 +34,7 @@ export class AppointmentService {
   }
 
   public getAppointmentNumberByDoctorIdAndDate(id:number,date:string){
-    return this.http.post<number>(APPOINTMENT_API + 'getAppointmentNumberByDoctorIdAndDate',{id,date},httpOptions)
+    return this.http.post<number>(APPOINTMENT_API + 'getAppointmentNumberByDoctorIdAndDate',{id,date},httpOptions);
   }
 
   public deleteAppointmentById(id:number){
@@ -43,5 +43,9 @@ export class AppointmentService {
 
   public updateAppointmentDateById(integerAndStringPost:IntegerAndStringPost){
     return this.http.post<boolean>(APPOINTMENT_API + "updateAppointmentDateById",integerAndStringPost,httpOptions);
+  }
+
+  public changeAppointmentStatusById(integer:number,string:string){
+    return this.http.post<boolean>(APPOINTMENT_API + "changeAppointmentStatusById",{integer,string},httpOptions);
   }
 }

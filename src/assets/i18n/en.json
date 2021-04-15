@@ -426,5 +426,10 @@
     "patientAlreadyDiagnosed":"Patient already diagnosed",
     "diagnoseAdded":"Diagnose saved",
     "diagnoseDeleted":"Diagnose deleted",
-    "showDocInfo":"click to show doctor informations"
+    "showDocInfo":"click to show doctor informations",
+    "loadMoreDiagnose":"Load more diagnose",
+    "allDiseasesLoaded":"All diseases loaded",
+    "diagNotNull":"Confirm or cancel your diagnose",
+    "allPatientDiagnosedClickTo":"All patient diagnosed click to confirm you have completed today's appointments",
+    "todayPatientDiagnosed":"All today's patient diagnosed"
 }

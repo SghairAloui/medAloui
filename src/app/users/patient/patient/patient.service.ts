@@ -63,8 +63,8 @@ export class PatientService {
     return this.http.post<boolean>(MEDICALPROFILEDISEASE_API + 'add', { doctorId, medicalProfileId, medicalProfileDiseaseName, medicalProfileDiseaseDiagnose }, httpOptions);
   }
 
-  public getDiagnoseByMedicalProfileIdAndDate(medicalProfileId: number, date: string) {
-    return this.http.post<dignoses[]>(MEDICALPROFILEDISEASE_API + 'getDiagnoseByMedicalProfileIdAndDate', { medicalProfileId, date }, httpOptions);
+  public getDiagnoseByMedicalProfileIdDoctorIdAndDate(medicalProfileId: number,doctorId:number, date: string) {
+    return this.http.post<dignoses[]>(MEDICALPROFILEDISEASE_API + 'getDiagnoseByMedicalProfileIdDoctorIdAndDate', { medicalProfileId,doctorId, date }, httpOptions);
   }
 
   public deleteDiagnoseByMedicalProfileIdDoctorIdAndDate(medicalProfileId: number, doctorId: number, date: string) {

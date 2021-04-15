@@ -6,4 +6,5 @@ export interface AppointmentPatientInfo{
     patientBirthDay:string;
     patientGender:string;
     medicalProfileId:number;
+    appointmentId:number;
 }

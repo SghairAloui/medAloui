@@ -647,8 +647,13 @@ html,body{
     margin-top: 15px;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
-    width: 100%;
-    border-radius: 10px;
+    width: 95%;
+    margin-left: 2.5%;
+    border: 2px solid #308a7b;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 .diseaseContainerDate{
     width: 100%;
@@ -667,7 +672,7 @@ html,body{
     padding-left: 5px;
 }
 .newDiseaseNameMargin{
-    margin: 0px 5px;
+    margin: 2px 5px;
 }
 .diseaseName .disease{
     display: inline-block;
@@ -680,7 +685,9 @@ html,body{
 }
 .docProfileImgForMedicalProfileDis{
     position: relative;
-    margin-top: 15px;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
     width: 75px;
@@ -724,4 +731,50 @@ html,body{
 .newloadingCuurentPatientInfoRaduis{
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+.loadMoreDiagnoses{
+    padding: 15px 5px;
+}
+.loadMoreDiagnoses:hover{
+    cursor: pointer;
+}
+.loadMoreDiagnosesText, .loadMoreDiagnosesIcon{
+    transition: .3s ease-in-out;
+}
+.loadMoreDiagnoses:hover .loadMoreDiagnosesText{
+    transform: translateY(-5px);
+}
+.loadMoreDiagnoses:hover .loadMoreDiagnosesIcon{
+    transform: translateY(5px);
+}
+.greenContainer{
+    display: inline-block;
+    background-color: #308a7b;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin: 3px 5px;
+}
+.diseaseDocName,.docDiseaseGeneralInfo{
+    position: relative;
+    float: left;
+    margin-top: 47px;
+    transform: translateY(-50%);
+    margin-left: 15px;
+}
+.diseaseDocInfo{
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+}
+.greenLine{
+    border-top: 1px solid #308a7b;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+.confirmFinishApp{
+    padding: 13px 10px;
+    width: 100%;
+    text-align: center;
 }
