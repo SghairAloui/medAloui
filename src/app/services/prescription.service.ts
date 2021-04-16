@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { prescriptionGet } from 'src/model/prescriptionGet';
+import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 
 const PRES_API = 'http://localhost:8080/api/prescription/';
 const PRESMED_API = 'http://localhost:8080/api/prescriptionMedicament/';
@@ -30,5 +31,13 @@ export class PrescriptionService {
 
   public getPrescriptionByDoctorIdPatientIdAndDate(doctorId:number,patientId:number,prescriptionDate:string){
     return this.http.post<prescriptionGet>(PRES_API+'getPrescriptionByDoctorIdPatientIdAndDate',{doctorId,patientId,prescriptionDate},httpOptions);
+  }
+
+  public getPrescriptionsByPatientIdAndPrescriptionStatus(patientId:number,prescriptionStatus:string,page:number,size:number){
+    return this.http.post<prescriptionGet []>(PRES_API+'getPrescriptionsByPatientIdAndPrescriptionStatus',{patientId,prescriptionStatus,page,size},httpOptions)
+  }
+
+  public getMedicamentsByPrescriptionId(presId:number){
+    return this.http.get<PrescriptionMedicament []>(PRESMED_API + 'getMedicamentsByPrescriptionId/'+presId,httpOptions);
   }
 }

@@ -4,14 +4,18 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { AppointmentGet } from 'src/model/AppointmentGet';
+import { doctor } from 'src/model/Doctor';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
+import { prescriptionGet } from 'src/model/prescriptionGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -47,7 +51,7 @@ export class PatientComponent implements OnInit {
   appointmentDate: string;
   appointmentPage: number = 0;
 
-  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService, private userService: UserService) { }
+  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService, private userService: UserService, private prescriptionService: PrescriptionService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -57,7 +61,7 @@ export class PatientComponent implements OnInit {
   patientGet: PatientGet;
   generalInfo: string = 'show';
   maleCheckBox: boolean; femaleCheckBox: boolean;
-  container: string = 'profile'; medicalProfileInfo: string = 'noData'; medicalProfile: string = 'showData'; medicalProfileDiseaseInfo: string = 'info'; prescriptionInfo: string = 'info';
+  container: string = 'profile'; medicalProfileInfo: string = 'noData'; medicalProfile: string = 'showData'; prescriptionInfo: string = 'info';
   height: string; weight: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
   heightInformation: string; weightInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean; invalidHeightVariable: boolean = false; invalidWeightVariable: boolean = false;
@@ -80,7 +84,6 @@ export class PatientComponent implements OnInit {
   updatePasswordPost: UpdatePasswordPost;
   disableUpdateUsernamePassBtn: boolean = false;
   patientMedicalProfile: medicalProfileGet;
-  diseaseNumber: number = 0;
   updateMedicalProfilePost: UpdateMedicalProfilePost;
   cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
   myAppointment: AppointmentGet[] = [];
@@ -89,6 +92,14 @@ export class PatientComponent implements OnInit {
   appointmentLoading: boolean = false;
   docProfileImages: boolean;
   docInfos: boolean;
+  prescriptions: prescriptionGet[] = [];
+  disPrescriptions: prescriptionGet[] = [];
+  pendingPrescriptionPage: number = 0;
+  loadMorePrescription: boolean;
+  diseasePage: number = 0;
+  medicalProfileDiseaseInfo: string = 'info';
+  loadDoctorInfoForMedicalProfileDis: boolean[] = [];
+  loadMoreDis: boolean;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
@@ -141,12 +152,12 @@ export class PatientComponent implements OnInit {
           this.patientGet = res;
           this.getImage();
           this.getPatientMedicalProfile();
-          this.getPatientMedicalProfielDiseasesNumber();
           this.getAppointments();
+          this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, 'pending', this.pendingPrescriptionPage, 'prescription');
           this.intializeEdit();
           this.patientInfo = true;
           localStorage.setItem('id', this.patientGet.userId + '')
-          
+
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -546,31 +557,24 @@ export class PatientComponent implements OnInit {
   }
 
   getImage() {
-    if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
-      this.patientService.getPatientPofilePhoto().subscribe(
-        res => {
-          if (res != null) {
-            this.retrieveResonse = res;
-            this.base64Data = this.retrieveResonse.picByte;
-            this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          } else
-            this.retrieveResonse = null;
-        },
-        err => {
-          if (this.retrievedImage) {
-            this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-          }
+    this.patientService.getPatientPofilePhoto(this.patientGet.userId).subscribe(
+      res => {
+        if (res != null) {
+          this.retrieveResonse = res;
+          this.base64Data = this.retrieveResonse.picByte;
+          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+        } else
+          this.retrieveResonse = null;
+      },
+      err => {
+        if (this.retrievedImage) {
+          this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
         }
-      );
-    } else {
-      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
-        timeOut: 5000,
-        positionClass: 'toast-bottom-left'
-      });
-    }
+      }
+    );
   }
 
   getDocProfileImg(id: number, index: number, appLength) {
@@ -831,14 +835,8 @@ export class PatientComponent implements OnInit {
     this.patientService.getPatientMedicalProfileByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
       res => {
         this.patientMedicalProfile = res;
-      }
-    );
-  }
-
-  getPatientMedicalProfielDiseasesNumber() {
-    this.patientService.getPatientMedicalProfileDeseasesNumberByMedicalProfileId(this.patientGet.medicalProfileId).subscribe(
-      res => {
-        this.diseaseNumber = res;
+        this.patientMedicalProfile.medicalProfileDisease = [];
+        this.getPatientMedicalProfielDiseases(this.patientGet.medicalProfileId);
       }
     );
   }
@@ -884,7 +882,7 @@ export class PatientComponent implements OnInit {
 
     time += docStartMunite;
     if (time >= 60) {
-      endHour=1;
+      endHour = 1;
       while (time >= 60) {
         time = time % 60;
         startHour += 1;
@@ -896,22 +894,134 @@ export class PatientComponent implements OnInit {
       else
         return (docStartHour + startHour) + 'h:' + ((60 + time) % 60) + 'mn - ' + (docStartHour + endHour) + 'h:' + ((60 + time) % 60) + 'mn';
     } else {
-      if ((docStartMunite + (approxTime * patientTurn)+15) >= 60)
+      if ((docStartMunite + (approxTime * patientTurn) + 15) >= 60)
         endHour += 1;
       else
         endHour = 0;
-      if (docStartMunite <= 9){
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      if (docStartMunite <= 9) {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:0' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
-      else{
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      else {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:' + docStartMunite + 'mn - ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
     }
   }
+
+  getPrescriptionsByPatientIdAndPrescriptionStatus(patientId: number, prescriptionStatus: string, page: number, status: string) {
+    this.prescriptionService.getPrescriptionsByPatientIdAndPrescriptionStatus(patientId, prescriptionStatus, page, 3).subscribe(
+      res => {
+        let prescriptions: prescriptionGet[] = [];
+        prescriptions = res;
+        if (status == 'prescription') {
+          for (let pres of prescriptions) {
+            pres.fullData = false;
+            this.prescriptions.push(pres);
+            this.getPrescriptionMedicamentsByPrescriptionId(pres.prescriptionId, (this.prescriptions.length - 1), status)
+          }
+          if (prescriptions.length == 3)
+            this.loadMorePrescription = true;
+          else
+            this.loadMorePrescription = false;
+          this.pendingPrescriptionPage += 1;
+        }
+      }
+    );
+  }
+
+  getPrescriptionMedicamentsByPrescriptionId(prescriptionId: number, presKey: number, status: string) {
+    this.prescriptionService.getMedicamentsByPrescriptionId(prescriptionId).subscribe(
+      res => {
+        if (status == 'prescription')
+          this.prescriptions[presKey].medicament = res;
+        else if (status == 'disease')
+          this.disPrescriptions[presKey].medicament = res;
+      }
+    );
+  }
+
+  getDoctorInfoForPresById(docId: number, patientKey: number, status: string) {
+    this.doctorService.GetDoctorInfoById(docId).subscribe(
+      res => {
+        if (status == 'prescription') {
+          this.prescriptions[patientKey].prescriptiondoctor = res;
+          this.prescriptions[patientKey].fullData = true;
+        }
+        if (status == 'disease') {
+          this.disPrescriptions[patientKey].prescriptiondoctor = res;
+          this.disPrescriptions[patientKey].fullData = true;
+          this.patientMedicalProfile.medicalProfileDisease[patientKey].showFullInfo = true;
+        }
+        this.getDocProfileImgForPres(docId, patientKey, status);
+      }
+    );
+  }
+
+  getDocProfileImgForPres(id: number, patientkey: number, status: string) {
+    let retrieveResonse: any;
+    let base64Data: any;
+    let retrievedImage: any;
+    this.patientService.getDoctorPofilePhoto(id + 'doctorProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          if (status == 'prescription')
+            this.prescriptions[patientkey].prescriptiondoctor.profileImg = retrievedImage;
+          if (status == 'disease')
+            this.disPrescriptions[patientkey].prescriptiondoctor.profileImg = retrievedImage;
+        } else {
+          if (status == 'prescription')
+            this.prescriptions[patientkey].prescriptiondoctor.profileImg = false;
+          if (status == 'disease')
+            this.disPrescriptions[patientkey].prescriptiondoctor.profileImg = false;
+        }
+      }
+    );
+  }
+
+  getPatientMedicalProfielDiseases(medicalProfileId: number) {
+    this.patientService.getPatientMedicalProfileDeseasesByMedicalProfileId(medicalProfileId, this.diseasePage, 3).subscribe(
+      res => {
+        let response: medicalProfileDiseaseGet[];
+        response = res;
+        for (let dis of response) {
+          dis.showFullInfo = false;
+          this.loadDoctorInfoForMedicalProfileDis.push(false);
+          this.patientMedicalProfile.medicalProfileDisease.push(dis);
+        }
+        if (response.length == 3)
+          this.loadMoreDis = true;
+        else
+          this.loadMoreDis = false;
+        this.diseasePage += 1;
+      }
+    );
+  }
+
+  getPrescriptionByDocIdPatientIdAndDate(docId: number, date: string, presKey: number, status: string) {
+    this.prescriptionService.getPrescriptionByDoctorIdPatientIdAndDate(docId, this.patientGet.userId, date.slice(0, 10)).subscribe(
+      res => {
+        if (res) {
+          this.disPrescriptions[presKey] = res;
+          this.disPrescriptions[presKey].fullData = false;
+          this.patientMedicalProfile.medicalProfileDisease[presKey].showFullInfo = false;
+          this.getPrescriptionMedicamentsByPrescriptionId(this.disPrescriptions[presKey].prescriptionId, presKey, status);
+          this.getDoctorInfoForPresById(this.disPrescriptions[presKey].doctorId, presKey, 'disease');
+        } else {
+          let pres: prescriptionGet;
+          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null };
+          this.disPrescriptions[presKey] = pres;
+          this.getDoctorInfoForPresById(docId, presKey, 'disease');
+        }
+      }
+    );
+  }
+
 }

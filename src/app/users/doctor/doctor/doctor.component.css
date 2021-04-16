@@ -151,6 +151,7 @@ html,body{
     border: 1px solid var(--headerText);
     color: var(--headerText);
     cursor: pointer;
+    transition: all .3s ease-in-out;
 }
 #Mon:checked ~ #MonLab, #Tue:checked ~ #TueLab, #Wed:checked ~ #WedLab, #Thu:checked ~ #ThuLab, #Fri:checked ~ #FriLab, #Sat:checked ~ #SatLab, #Sun:checked ~ #SunLab{
     background-color: #308a7b;
@@ -177,9 +178,11 @@ html,body{
 .infoGridTowColumn .infoContainer{
     height: 100%;
     background-color: var(--box-color);
+    transition: all .3s ease-in-out;
 }
 .infoGridTowColumn .backgroundColor{
     background-color: var(--background-color);
+    transition: all .3s ease-in-out;
 }
 .info span{
     display: inline-block;
@@ -293,6 +296,7 @@ html,body{
     right: 0%;
     font-size: 3rem;
     color: var(--arrowNavigation);
+    transition: all .3s ease-in-out;
 }
 .patientNavigationLeft{
     position: absolute;
@@ -301,10 +305,12 @@ html,body{
     left: 0%;
     font-size: 3rem;
     color: var(--arrowNavigation);
+    transition: all .3s ease-in-out;
 }
 .patientNavigationRight:hover, .patientNavigationLeft:hover{
     color: var(--arrowNavigationHover);
     cursor: pointer;
+    transition: all .3s ease-in-out;
 }
 .patientProfilePicBigContainer{
     position: relative;
@@ -348,6 +354,7 @@ html,body{
     box-shadow: var(--infoBox);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    transition: all .3s ease-in-out;
 }
 .patientMedicalProfile .tilte{
     background-color: #308a7b;
@@ -463,6 +470,7 @@ html,body{
     border-radius: 50%;
     border: 2px solid #308a7b;
     overflow: hidden;
+    transition: all .3s ease-in-out;
 }
 .nextPatient .nextPatientProfileDefaultPic{
     font-size: 43px;
@@ -474,6 +482,7 @@ html,body{
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-color);
+    transition: all .3s ease-in-out;
 }
 .patientProfileConDesign{
     position: absolute;
@@ -545,12 +554,15 @@ html,body{
     background-color: var(--background-color);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    transition: all .3s ease-in-out;
 }
 .addToCurrentPatientClass .content .formLabel{
     background-color: var(--background-color);
+    transition: all .3s ease-in-out;
 }
 .hr{
     background-color: var(--text-color);
+    transition: all .3s ease-in-out;
 }
 .spanButton{
     cursor: pointer;
@@ -626,6 +638,7 @@ html,body{
     box-shadow: var(--infoBox);
     justify-content: space-between;
     margin-top: 15px;
+    transition: all .3s ease-in-out;
 }
 .addedPresBtns{
     width: fit-content;
@@ -670,6 +683,7 @@ html,body{
     color: #308a7b;
     border-radius: 5px;
     padding-left: 5px;
+    transition: all .3s ease-in-out;
 }
 .newDiseaseNameMargin{
     margin: 2px 5px;
@@ -777,4 +791,7 @@ html,body{
     padding: 13px 10px;
     width: 100%;
     text-align: center;
+}
+.defaultCursor:hover{
+    cursor:default;
 }

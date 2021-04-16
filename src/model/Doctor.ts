@@ -9,4 +9,5 @@ export interface doctor{
     exactAdress:string;
     workDays:string;
     maxPatientPerDay:number;
+    profileImg:any;
 }

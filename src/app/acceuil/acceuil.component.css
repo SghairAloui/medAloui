@@ -127,6 +127,7 @@ html,body{
     padding-bottom: 10px;
     font-weight: 600;
     color: var(--gray-text);
+    transition: all .3s ease-in-out;
 }
 .sectionTitle{
     color: var(--Black-text);

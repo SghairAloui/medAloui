@@ -51,8 +51,8 @@ export class PatientService {
     return this.http.post<string>(IMAGE_API + 'upload', uploadImageData, { responseType: 'text' as 'json' });
   }
 
-  public getPatientPofilePhoto() {
-    return this.http.get<string>(IMAGE_API + 'get/' + localStorage.getItem('id') + "patientProfilePic", httpOptions)
+  public getPatientPofilePhoto(id:number) {
+    return this.http.get<string>(IMAGE_API + 'get/' + id + "patientProfilePic", httpOptions)
   }
 
   public getDoctorPofilePhoto(imageName: string) {

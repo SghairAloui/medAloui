@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="buttons">
                                     <button class="fullyBtn"
-                                        (click)="editGeneralInformation=ture;toGeneralInfoSection();">{{'goBack'|translate}}</button>
+                                        (click)="editGeneralInformation=true;toGeneralInfoSection();">{{'goBack'|translate}}</button>
                                     <button class="fullyBtn" (click)="updateUsername()"
                                         [disabled]="disableUpdateUsernamePassBtn">{{'update'|translate}}</button>
                                 </div>
@@ -1346,7 +1346,7 @@
                                                             {{'loadMoreDiagnose'|translate}}</div>
                                                         <i class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
                                                     </div>
-                                                    <div *ngIf="!loadMoreDiagnose" class="loadMoreDiagnoses">
+                                                    <div *ngIf="!loadMoreDiagnose" class="loadMoreDiagnoses defaultCursor">
                                                         {{'allDiseasesLoaded'|translate}}
                                                     </div>
                                                 </div>

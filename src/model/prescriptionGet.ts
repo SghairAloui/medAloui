@@ -1,3 +1,4 @@
+import { doctor } from "./Doctor";
 import { PrescriptionMedicament } from "./PrescriptionMedicament";
 
 export interface prescriptionGet{
@@ -6,4 +7,6 @@ export interface prescriptionGet{
     patientId:number;
     doctorId:number;
     medicament:PrescriptionMedicament [];
+    fullData:boolean;
+    prescriptiondoctor:doctor;
 }
