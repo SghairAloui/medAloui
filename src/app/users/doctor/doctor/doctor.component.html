@@ -791,12 +791,19 @@
                 <section id="todayPatientSection">
                     <div *ngIf="doctorGet.currentPatient==0">
                         <div class="sectionTitle">{{'todayPatient'|translate}}</div>
-                        <div *ngIf="docTodayAppointments[0].appointmentStatus=='pending'">
-                            <div class="sectionContainer">
-                                <div *ngIf="toadyAppointmentPatientInfo.length == 0">
-                                    <div style="text-align: center;padding: 20px;">{{'noPatientToday'|translate}}</div>
+                        <div class="sectionContainer">
+                            <div *ngIf="toadyAppointmentPatientInfo.length == 0">
+                                <div style="text-align: center;padding: 20px;">{{'noPatientToday'|translate}}</div>
+                            </div>
+                            <div *ngIf="toadyAppointmentPatientInfo.length != 0">
+                                <div *ngIf="docTodayAppointments[0].appointmentStatus=='completed'">
+                                    <div class="sectionContainer">
+                                        <div style="padding: 10px; text-align: center;">
+                                            {{'todayPatientDiagnosed'|translate}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div *ngIf="toadyAppointmentPatientInfo.length != 0">
+                                <div *ngIf="docTodayAppointments[0].appointmentStatus=='pending'">
                                     <div *ngIf="patientInfo; then showPatientinfo else showPatientSmallInfo "></div>
                                     <ng-template #showPatientinfo>
                                         <div class="patientProfilePicBigContainer">
@@ -1108,13 +1115,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="docTodayAppointments[0].appointmentStatus=='completed'">
-                            <div class="sectionContainer">
-                                <div style="padding: 10px; text-align: center;">
-                                    {{'todayPatientDiagnosed'|translate}}
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div *ngIf="doctorGet.currentPatient!=0">
                         <section id="currentPatientSection" class="sectionContainer">
@@ -1346,7 +1346,8 @@
                                                             {{'loadMoreDiagnose'|translate}}</div>
                                                         <i class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
                                                     </div>
-                                                    <div *ngIf="!loadMoreDiagnose" class="loadMoreDiagnoses defaultCursor">
+                                                    <div *ngIf="!loadMoreDiagnose"
+                                                        class="loadMoreDiagnoses defaultCursor">
                                                         {{'allDiseasesLoaded'|translate}}
                                                     </div>
                                                 </div>

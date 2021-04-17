@@ -225,12 +225,14 @@ export class HeaderComponent implements OnInit {
   //doctor header
   openContainerToDoctor(containerName:string){
     this.doctorComp.container=containerName;
+    this.parentHeader=containerName;
   }
   //doctor header
 
   //admin header
   openContainerToAdmin(containerName:string){
     this.adminComp.container=containerName;
+    this.parentHeader=containerName;
   }
   //admin header
   logOut(){
