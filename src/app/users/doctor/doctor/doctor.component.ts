@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { HeaderService } from 'src/app/Headers/header/header.service';
 import { MedicamentService } from 'src/app/services/medicament.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
@@ -62,7 +63,17 @@ export class DoctorComponent implements OnInit {
   secureLogin: SecureLoginString = new SecureLoginString(localStorage.getItem('secureLogin'));
   Mon: boolean; Tue: boolean; Wed: boolean; Thu: boolean; Fri: boolean; Sat: boolean; Sun: boolean; selectDay: boolean = false;
 
-  constructor(private doctorService: DoctorService, private toastr: ToastrService, private translate: TranslateService, private router: Router, private specialityService: SpecialityService, private patientService: PatientService, private userService: UserService, private appointmentService: AppointmentService, private medicamentService: MedicamentService, private prescriptionService: PrescriptionService) { }
+  constructor(private doctorService: DoctorService,
+    private toastr: ToastrService,
+    private translate: TranslateService,
+    private router: Router,
+    private specialityService: SpecialityService,
+    private patientService: PatientService,
+    private userService: UserService,
+    private appointmentService: AppointmentService,
+    private medicamentService: MedicamentService,
+    private prescriptionService: PrescriptionService,
+    private headerService:HeaderService) { }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -122,6 +133,7 @@ export class DoctorComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.headerService.setHeader('doctor');
     this.lengthTested = false; this.tommorowLengthTested = false;
     this.toadyAppointmentPatientInfo = []; this.tomorrowAppointmentPatientInfo = []; this.completedAppointmentPatientInfo = []; this.nextAppointmentPatientInfo = []; this.patientTodayProfilePicRes = []; this.patientTodayProfilePic = []; this.patientTomorrowProfilePicRes = []; this.patientTomorrowProfilePic = [];
     this.currentDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
@@ -1126,7 +1138,7 @@ export class DoctorComponent implements OnInit {
       this.patientService.getPatientMedicalProfileByMedicalProfileId(medicalProfileId).subscribe(
         res => {
           if (res) {
-            this.tomorrowMedicalProfileDiseasePage[patientKey]=0;
+            this.tomorrowMedicalProfileDiseasePage[patientKey] = 0;
             this.tomorrowPatientMedicalProfileGet[patientKey] = res;
             this.tomorrowPatientInfo = true;
             this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease = [];
@@ -1231,7 +1243,7 @@ export class DoctorComponent implements OnInit {
   }
 
   getMedicalProfileDiseases(id: number, patientKey: number, status: string, page: number) {
-    console.log('id: ' +id+ ' patientKey: ' +patientKey+ ' status: '+status+  ' page: '+page);
+    console.log('id: ' + id + ' patientKey: ' + patientKey + ' status: ' + status + ' page: ' + page);
     this.patientService.getPatientMedicalProfileDeseasesByMedicalProfileId(id, page, 3).subscribe(
       res => {
         let response: medicalProfileDiseaseGet[] = [];
@@ -1256,7 +1268,7 @@ export class DoctorComponent implements OnInit {
             dis.showFullInfo = false;
             this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease.push(dis);
             console.log('pat key ' + this.tomorrowPatientKey);
-            console.log('app ' +this.docTomorrowAppointments[this.tomorrowPatientKey]);
+            console.log('app ' + this.docTomorrowAppointments[this.tomorrowPatientKey]);
             this.getPatientPrescriptionByDoctorIdPatientIdAndDate(this.docTomorrowAppointments[this.tomorrowPatientKey].patientId, dis.medicalProfileDiseaseDiagnoseDay.slice(0, 10), this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease.length, 'tomorrow');
           }
           if (response.length == 3)

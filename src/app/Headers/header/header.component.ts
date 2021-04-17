@@ -1,8 +1,13 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
+import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
+import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { AppComponent } from '../../app.component'
+import { HeaderService } from './header.service';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +17,15 @@ import { AppComponent } from '../../app.component'
 export class HeaderComponent implements OnInit {
   USER_KEY = 'auth-user';
   userName:any;
+
   constructor(private translate: TranslateService,private appComp:AppComponent,
     private toastr:ToastrService,
-    private tokenStorageService:TokenStorageService) { 
+    private tokenStorageService:TokenStorageService,
+    private router: Router,
+    private patientComp:PatientComponent,
+    private doctorComp:DoctorComponent,
+    private adminComp:AdminComponent,
+    private headerService:HeaderService) { 
     translate.addLangs(['en','fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -23,9 +34,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     const user = window.sessionStorage.getItem(this.USER_KEY);
+    
     if (user) {
       this.userName= JSON.parse(user).username;
     }
+    
     if(localStorage.getItem("darkMode")=='true'){
       this.appComp.switchTheme('dark');
       this.darkMode=true;
@@ -33,6 +46,7 @@ export class HeaderComponent implements OnInit {
       this.appComp.switchTheme('light');
       this.darkMode=false;
     }
+
     this.translate.use(localStorage.getItem("lang"));
     if(localStorage.getItem("lang")=='en'){
       this.en=true;
@@ -45,7 +59,14 @@ export class HeaderComponent implements OnInit {
       this.en=true;
       this.fr=false;
     }
+
+    this.headerService.header$.subscribe(
+      (message)=>{
+        this.role= message;
+      }
+    );
   }
+
   en:boolean=true;
   fr:boolean=false;
   settingsBoxUnder700:boolean=false;
@@ -54,6 +75,11 @@ export class HeaderComponent implements OnInit {
 
   menuCheckBox:boolean=false;
   headerOnScrollVariable=false;
+  parentHeader:string='profile';
+  role:any=this.headerService.header$;
+
+
+  //Home header
 
   @HostListener("document:scroll")
   scroll(){
@@ -63,14 +89,17 @@ export class HeaderComponent implements OnInit {
       this.headerOnScrollVariable=false;
     }
   }
+
   toDoctocSection(){
     document.getElementById("doctocSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
   }
+
   toAcceuilSection(){
     document.getElementById("acceuilSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
   }
+
   toConnexionSection(){
     if(this.userName==null){
     document.getElementById("connexionSection").scrollIntoView({behavior:"smooth"});
@@ -90,10 +119,12 @@ export class HeaderComponent implements OnInit {
     document.getElementById("maladiesSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
   }
+
   toAboutSection(){
     document.getElementById("aboutSection").scrollIntoView({behavior:"smooth"});
     this.menuCheckBox=false;
   }
+
   changeLang(lang:string){
     this.translate.use(lang);
     localStorage.setItem("lang",lang);
@@ -109,6 +140,7 @@ export class HeaderComponent implements OnInit {
       positionClass: 'toast-bottom-left'
     });
   }
+
   /*closeAllMenu(event:any) {
     if(this.menuCheckBox==true || this.displaySettingsBox==true){
       this.menuCheckBox=false;
@@ -119,6 +151,7 @@ export class HeaderComponent implements OnInit {
   closeMenu(){
     this.menuCheckBox=false;
   }
+
   switchTheme(){
     if(this.darkMode==false){
       this.appComp.switchTheme('dark');
@@ -139,4 +172,76 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
+  //Home header
+
+  //patient header
+  toMedicalProfileSection(){
+    document.getElementById("medicalProfileSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toPrescriptionSection(){
+    document.getElementById("prescriptionSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toMyDoctorsSection(){
+    document.getElementById("myDoctorsSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toMyPharmaciesSection(){
+    document.getElementById("myPharmaciesSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  doctorClick(){
+    this.patientComp.container='patientDoctor';
+    this.parentHeader='doctor';
+  }
+
+  profileCLick(){
+    this.patientComp.container='profile';
+    this.patientComp.ngOnInit();
+    this.parentHeader='profile';
+  }
+
+  toFindDoctorSection(){
+    document.getElementById("patientFindDoctorSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toTopRatedSection(){
+    document.getElementById("patientTopRatedDoctorSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toOurMethodologySection(){
+    document.getElementById("patientOurMethodologySection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toWhyHealthCareSection(){
+    document.getElementById("patientWhyHealthCareSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toMyAppointmentsSection(){
+    document.getElementById("myAppointmentsSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  //doctor header
+  openContainerToDoctor(containerName:string){
+    this.doctorComp.container=containerName;
+  }
+  //doctor header
+
+  //admin header
+  openContainerToAdmin(containerName:string){
+    this.adminComp.container=containerName;
+  }
+  //admin header
+  logOut(){
+    localStorage.setItem("secureLogin","");
+    localStorage.setItem("id","");
+    localStorage.setItem("secureLoginType","");
+    this.router.navigate(['/acceuil']);
+  }
+
+  toGeneralInfoSection(){
+    document.getElementById("generalInfoSection").scrollIntoView({behavior:"smooth"});
+  }
+
 }

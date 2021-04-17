@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
+import { HeaderComponent } from 'src/app/Headers/header/header.component';
+import { HeaderService } from 'src/app/Headers/header/header.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
@@ -51,7 +53,15 @@ export class PatientComponent implements OnInit {
   appointmentDate: string;
   appointmentPage: number = 0;
 
-  constructor(private patientService: PatientService, private translate: TranslateService, private http: HttpClient, private toastr: ToastrService, private router: Router, private doctorService: DoctorService, private appointmentService: AppointmentService, private userService: UserService, private prescriptionService: PrescriptionService) { }
+  constructor(private patientService: PatientService,
+    private translate: TranslateService,
+    private toastr: ToastrService,
+    private router: Router,
+    private doctorService: DoctorService,
+    private appointmentService: AppointmentService,
+    private userService: UserService,
+    private prescriptionService: PrescriptionService,
+    private headerService:HeaderService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -150,6 +160,7 @@ export class PatientComponent implements OnInit {
       res => {
         if (res) {
           this.patientGet = res;
+          this.headerService.setHeader('patient');
           this.getImage();
           this.getPatientMedicalProfile();
           this.getAppointments();

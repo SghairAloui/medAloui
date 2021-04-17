@@ -11,6 +11,7 @@ import { SearchedDocGet } from 'src/model/SearchedDocGet';
 import { SearchedDoctorInfo } from 'src/model/SearchedDoctorInfo';
 import { SpecialityGet } from 'src/model/SpecialityGet';
 import { AppointmentService } from '../appointment/appointment.service';
+import { HeaderService } from '../Headers/header/header.service';
 import { SpecialityService } from '../speciality/speciality.service';
 import { DoctorService } from '../users/doctor/doctor/doctor.service';
 import { PatientService } from '../users/patient/patient/patient.service';
@@ -22,7 +23,15 @@ import { AcceuilService } from './acceuil.service';
   styleUrls: ['./acceuil.component.css']
 })
 export class AcceuilComponent implements OnInit {
-  constructor(private acceuilService: AcceuilService, private router: Router, private translate: TranslateService, private toastr: ToastrService, private doctorService: DoctorService, private specialityService: SpecialityService, private appointmentService: AppointmentService,private patientService:PatientService) {
+  constructor(private acceuilService: AcceuilService,
+    private router: Router,
+    private translate: TranslateService,
+    private toastr: ToastrService,
+    private doctorService: DoctorService,
+    private specialityService: SpecialityService,
+    private appointmentService: AppointmentService,
+    private patientService: PatientService,
+    private headerService: HeaderService) {
     translate.addLangs(['en', 'fr']);
     translate.setDefaultLang('en');
   }
@@ -81,10 +90,12 @@ export class AcceuilComponent implements OnInit {
   cities: string[] = [];
 
   ngOnInit(): void {
+    this.headerService.setHeader('home');
     this.cities = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
     this.appointment = true;
     this.getAllSpecialities();
   }
+
   changeLangTo(lang: string) {
     this.translate.use(lang);
   }
@@ -118,6 +129,7 @@ export class AcceuilComponent implements OnInit {
       }
     );
   }
+  
   getDocProfileImage(docId: number, index: number) {
     let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
     this.patientService.getDoctorPofilePhoto(docId + 'doctorProfilePic').subscribe(
@@ -168,6 +180,7 @@ export class AcceuilComponent implements OnInit {
       );
     }
   }
+  
   generateAppointmentInfo() {
     console.log('takeAppointment');
     if (this.slectedDay) {
@@ -202,9 +215,9 @@ export class AcceuilComponent implements OnInit {
   }
 
   checkDoctorCity() {
-    if(this.doctorCity.toLowerCase() == 'whole tunisia' || this.doctorCity.toLowerCase() == 'toute la tunisie'){
+    if (this.doctorCity.toLowerCase() == 'whole tunisia' || this.doctorCity.toLowerCase() == 'toute la tunisie') {
       this.cityVariable = true;
-    }else{
+    } else {
       for (let city of this.cities) {
         if (this.doctorCity == city) {
           this.cityVariable = true;
@@ -302,7 +315,7 @@ export class AcceuilComponent implements OnInit {
 
     time += docStartMunite;
     if (time >= 60) {
-      endHour=1;
+      endHour = 1;
       while (time >= 60) {
         time = time % 60;
         startHour += 1;
@@ -314,21 +327,21 @@ export class AcceuilComponent implements OnInit {
       else
         return (docStartHour + startHour) + 'h:' + ((60 + time) % 60) + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((60 + time) % 60) + 'mn';
     } else {
-      if ((docStartMunite + (approxTime * patientTurn)+15) >= 60)
+      if ((docStartMunite + (approxTime * patientTurn) + 15) >= 60)
         endHour += 1;
       else
         endHour = 0;
-      if (docStartMunite <= 9){
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      if (docStartMunite <= 9) {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
-      else{
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      else {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
     }
   }
@@ -469,5 +482,5 @@ export class AcceuilComponent implements OnInit {
     else
       this.slectedDay = true;
   }
-  
+
 }

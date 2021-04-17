@@ -20,17 +20,14 @@ import { ToastrModule } from 'ngx-toastr';
 import { SignInService } from './Form/sign-in-form/sign-in.service';
 import { DoctorComponent } from './users/doctor/doctor/doctor.component';
 import { PharmacyComponent } from './users/pharmacy/pharmacy/pharmacy.component';
-import { PatientHeaderComponent } from './Headers/patient-header/patient-header.component';
 import { PatientService } from './users/patient/patient/patient.service';
 import { PatientDoctorComponent } from './users/patient/patient-doctor/patient-doctor.component';
 import { AdminComponent } from './users/admin/admin/admin.component';
-import { AdminHeaderComponent } from './Headers/admin-header/admin-header.component';
 import { AdminService } from './users/admin/admin/admin.service';
 import { AdminDoctorComponent } from './users/admin/admin-doctor/admin-doctor.component';
 import { AdminPatientComponent } from './users/admin/admin-patient/admin-patient.component';
 import { AdminPharmacyComponent } from './users/admin/admin-pharmacy/admin-pharmacy.component';
 import { AdminDiseaseComponent } from './users/admin/admin-disease/admin-disease.component';
-import { DoctorHeaderComponent } from './Headers/doctor-header/doctor-header.component';
 import { SpecialityService } from './speciality/speciality.service';
 import { AppointmentService } from './appointment/appointment.service';
 
@@ -38,6 +35,7 @@ import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { UserService } from './services/user.service';
 import { MedicamentService } from './services/medicament.service';
 import { PrescriptionService } from './services/prescription.service';
+import { HeaderService } from './Headers/header/header.service';
 
 @NgModule({
   declarations: [
@@ -50,15 +48,12 @@ import { PrescriptionService } from './services/prescription.service';
     PatientComponent,
     DoctorComponent,
     PharmacyComponent,
-    PatientHeaderComponent,
     PatientDoctorComponent,
     AdminComponent,
-    AdminHeaderComponent,
     AdminDoctorComponent,
     AdminPatientComponent,
     AdminPharmacyComponent,
-    AdminDiseaseComponent,
-    DoctorHeaderComponent,
+    AdminDiseaseComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +75,7 @@ import { PrescriptionService } from './services/prescription.service';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
-    MedicamentService,PrescriptionService,
+    MedicamentService,PrescriptionService,HeaderService,
     authInterceptorProviders
   ],
   bootstrap: [AppComponent]

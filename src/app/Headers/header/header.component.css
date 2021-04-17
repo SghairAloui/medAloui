@@ -5,7 +5,7 @@ html,body{
 }
 
 
-.darkModeCheckBoxLabel,.darkModeCheckBoxLabelUnder700{
+.homeHeader .darkModeCheckBoxLabel,.homeHeader .darkModeCheckBoxLabelUnder700{
     position: relative;
     background-color: transparent;
     display: flex;
@@ -19,7 +19,7 @@ html,body{
     justify-content: space-between;
     border: 1px solid #308a7b;
 }
-.ball{
+.homeHeader .ball{
     position: absolute;
     width: 20px;
     height: 20px;
@@ -29,28 +29,28 @@ html,body{
     border-radius: 50%;
     transition: all .3s ease-in-out;
 }
-.darkModeCheckBox:checked + .darkModeCheckBoxLabel .ball{
+.homeHeader .darkModeCheckBox:checked +.darkModeCheckBoxLabel .ball{
     transform: translateX(24px);
 }
-.darkModeCheckBoxUnder700:checked + .darkModeCheckBoxLabelUnder700 .ball{
+.homeHeader .darkModeCheckBoxUnder700:checked + .darkModeCheckBoxLabelUnder700 .ball{
     transform: translateX(24px);
 }
-#darkModeCheckBox,#darkModeCheckBoxUnder700{
+.homeHeader #darkModeCheckBox,.homeHeader #darkModeCheckBoxUnder700{
     display: none;
 }
-.fa-moon{
+.homeHeader .fa-moon{
     color: white;
 }
-.fa-sun{
+.homeHeader .fa-sun{
     color: #f39c12;
 }
-.settingsBoxUnder700Conatiner{
+.homeHeader .settingsBoxUnder700Conatiner{
     display: none;
 }
-#settignsLi{
+.homeHeader #settignsLi{
     position: relative;
 }
-#settingsBox{
+.homeHeader #settingsBox{
     padding: 0;
     margin: 0;
     position: absolute;
@@ -62,7 +62,7 @@ html,body{
     border-radius: 10px;
     box-shadow: 0px 0px 25px  rgba(0, 0, 0, .6);
 }
-#settingsBoxCancel{
+.homeHeader #settingsBoxCancel{
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -71,41 +71,41 @@ html,body{
     font-size: 30px;
     margin-bottom: 15px;
 }
-#settingsBoxCancel:hover{
+.homeHeader #settingsBoxCancel:hover{
     color: #308a7b;
 }
-#en,#fr{
+.homeHeader #en,.homeHeader #fr{
     display: none;
 }
-#enLabel, #frLabel{
+.homeHeader #enLabel, .homeHeader #frLabel{
     color: #308a7b;
     border: 1px solid #308a7b;
 }
-#enLabel:hover, #frLabel:hover{
+.homeHeader #enLabel:hover, .homeHeader #frLabel:hover{
     color: white;
     background-color: #308a7b;
 }
-#frLabel{
+.homeHeader #frLabel{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-#enLabel{
+.homeHeader #enLabel{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
-#fr:checked ~ #frLabel, #en:checked ~ #enLabel{
+.homeHeader #fr:checked ~ #frLabel, .homeHeader #en:checked ~ #enLabel{
     color: white;
     background-color: #308a7b;
     box-shadow: var(--gender-box-shadow);
     transition: all .3s ease-in-out;
 }
-#displaySettingsBox:checked ~ #settingsBox{
+.homeHeader #displaySettingsBox:checked ~ #settingsBox{
     display: block;
 }
-#displaySettingsBox{
+.homeHeader #displaySettingsBox{
     display: none;
 }
-.navItem li ul li{
+.homeHeader .navItem li ul li{
     clear: both;
     display: inline-block;
     overflow: hidden;
@@ -115,18 +115,18 @@ html,body{
     text-align: center;
     list-style: none;
 }
-li, button{
+.homeHeader li, .homeHeader button{
     text-decoration: none;
     text-transform: uppercase;
     color: white;
     cursor: pointer;
 }
-a{
+.homeHeader a{
     text-decoration: none;
     color: white;
     cursor: pointer; 
 }
-#healthCareMenu{
+.homeHeader #healthCareMenu{
     clear: both;
     display: inline-block;
     overflow: hidden;
@@ -134,7 +134,7 @@ a{
     font-size: 20px;
     font-family: 'Dancing Script', cursive;
 }
-header{
+.homeHeader header{
     top: 0;
     position: fixed;
     z-index: 2;
@@ -150,46 +150,46 @@ header{
     padding: 5px 5%;
     transition: 1s;
 }
-.headerOnScroll{
+.homeHeader .headerOnScroll{
     background-color: var(--box-color);
     color: #3f9788;
     box-shadow: 0px 0px 10px rgb(0, 0, 0);
     transition: all .3s ease-in-out;
 }
-.headerOnScroll a button{
+.homeHeader .headerOnScroll a button{
     background-color: #3f9788;
     border: 2px solid #3f978800;
 }
-.headerOnScroll button:hover{
+.homeHeader .headerOnScroll button:hover{
     transform: scale(1.02);
     color: white;
 }
-.headerOnScroll a{
+.homeHeader .headerOnScroll a{
     color: #3f9788;
 }
-.headerOnScroll a:hover{
+.homeHeader .headerOnScroll a:hover{
     color: #308a7b;
 }
-.headerOnScroll .menuHoverEffect::after{
+.homeHeader .headerOnScroll .menuHoverEffect::after{
     background: #308a7b;
 }
-nav{
+.homeHeader nav{
     position: relative;
     height: 40px;
 }
-.navItem{
+.homeHeader .navItem{
     line-height: 40px;
     list-style: none;
 }
-li{
+.homeHeader li{
     display: inline-block;
     padding: 0px 20px;
     transition: .3s;
 }
-li a{
+.homeHeader li a{
     transition: all 0.3s ease 0s;
 }
-button{
+.homeHeader button{
     padding: 5px 25px;
     background-color: transparent;
     color: white;
@@ -197,11 +197,11 @@ button{
     border-radius: 50px;
     transition: all 0.3s ease 0s;
 }
-button:hover{
+.homeHeader button:hover{
     border: 2px solid #3f9788;
     color: #3f9788;
 }
-.menuHoverEffect::after{
+.homeHeader .menuHoverEffect::after{
     content: '';
     display: block;
     width: 0;
@@ -209,18 +209,18 @@ button:hover{
     background: white;
     transition: width .3s;
 }
-.menuHoverEffect:hover::after{
+.homeHeader .menuHoverEffect:hover::after{
     width: 100%;
     transition: width .3s;
 }
-#menuConnexion{
+.homeHeader #menuConnexion{
     display: none;
 }
-.fa-times, .fa-bars{
+.homeHeader .fa-times, .homeHeader .fa-bars{
     display: none;
     color: white;
 }
-.fa-bars{
+.homeHeader .fa-bars{
     font-size: 30px;
 }
 ::-webkit-scrollbar {
@@ -236,41 +236,213 @@ button:hover{
 ::-webkit-scrollbar-thumb:hover {
     background: #91bdb5;
 }
-#displayMenu, #displayMenuLabel{
+.homeHeader #displayMenu, .homeHeader #displayMenuLabel{
     display: none;
 }
+
+/*login header*/
+.loginHeader .parentHeader{
+    top: 0;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    height: 50px;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--headerText);
+    background-color: var(--box-color);
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 5%;
+    transition: all .3s ease-in-out;
+}
+.loginHeader .headerTitle{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+    cursor: pointer;
+}
+.loginHeader .parentHeader nav{
+    position: relative;
+    height: 40px;
+}
+.loginHeader .parentHeader .navItem{
+    line-height: 40px;
+    list-style: none;
+    text-transform: capitalize;
+}
+.loginHeader .parentHeader li{
+    display: inline-block;
+    padding: 0px 20px;
+    transition: .3s;
+    cursor: pointer;
+}
+.loginHeader .parentHeader .fa-user-circle{
+    position: absolute;
+    font-size: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.loginHeader .parentHeader li a{
+    color: var(--headerText);
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+.loginHeader .menuHoverEffect::after{
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    background: var(--headerText);
+    transition: width .3s;
+}
+.loginHeader .menuHoverEffect:hover::after{
+    width: 100%;
+    transition: width .3s;
+}
+.loginHeader .headerChild{
+    position: fixed;
+    height: 100%;
+    width: 20%;
+    z-index: 1;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+}
+.loginHeader .headerChild nav{
+    margin-top: 100px;
+}
+.loginHeader .headerChild .navItem{
+    line-height: 40px;
+}
+.loginHeader .headerChild .navItem ul{
+    list-style: none;
+    font-weight: 600;
+    color: var(--gray-text);
+    padding-left: 0px;
+    transition: all .3s ease-in-out;
+}
+.loginHeader .headerChild .navItem ul li,.loginHeader .headerChild .navItem .settingItems li:hover{
+    cursor: pointer;
+    padding-left: 0px;
+    transition: linear 0.3s;
+    background: none;
+}
+.loginHeader .headerChild .navItem ul li a{
+    padding-left: 20px;
+}
+.loginHeader .headerChild .navItem ul li:hover{
+    background-color: #a4cac460;
+    padding-left: 30px;
+}
+
+
+.loginHeader #en,.loginHeader #fr,.loginHeader #darkModeCheckBox{
+    display: none;
+}
+.loginHeader #enLabel, .loginHeader #frLabel{
+    color: #308a7b;
+    border: 1px solid #308a7b;
+}
+.loginHeader #enLabel:hover, .loginHeader #frLabel:hover{
+    color: white;
+    background-color: #308a7b;
+}
+.loginHeader #frLabel{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.loginHeader #enLabel{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.loginHeader #fr:checked ~ #frLabel, .loginHeader #en:checked ~ #enLabel{
+    color: white;
+    background-color: #308a7b;
+    box-shadow: var(--gender-box-shadow);
+    transition: all .3s ease-in-out;
+}
+.loginHeader .btn-group{
+    height: auto;
+    margin: 5% 0px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.loginHeader .darkModeCheckBoxLabel{
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    height: 26px;
+    width: 70px;
+    border-radius: 50px;
+    padding: 5px;
+    margin: 5% 0px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    justify-content: space-between;
+    border: 1px solid #308a7b;
+}
+.loginHeader .ball{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #308a7b;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    transition: all .3s ease-in-out;
+}
+.loginHeader .darkModeCheckBox:checked + .darkModeCheckBoxLabel .ball{
+    transform: translateX(44px);
+}
+.loginHeader .fa-moon{
+    color: white;
+}
+.loginHeader .fa-sun{
+    color: #f39c12;
+}
+
 @media screen and (max-width: 1000px){
-    header{
+    .homeHeader header{
         font-size: 14px;
         padding: 5px 2%;
     }
 }
 @media screen and (max-width: 900px){
-    header{
+    .homeHeader header{
         font-size: 13px;
     }
-    li{
+    .homeHeader li{
         padding: 0px 15px;
     }
 }
 @media screen and (max-width: 800px){
-    header{
+    .homeHeader header{
         padding: 5px 2%;
     }
-    li{
+    .homeHeader li{
         padding: 0px 10px;
     }
 }
 @media screen and (max-width: 720px){
-    header{
+    .homeHeader header{
         padding-left: 1%;
     }
-    li{
+    .homeHeader li{
         padding: 0px 9px;
     }
 }
 @media screen and (max-width: 700px){
-    .settingsBoxUnder700Conatiner{
+    .homeHeader .settingsBoxUnder700Conatiner{
         padding: 5px 10px;
         display: block;
         z-index: 4;
@@ -285,13 +457,13 @@ button:hover{
         border-radius: 5px;
         box-shadow: 0px 0px 25px  rgba(0, 0, 0, .6);
     }
-    .settingsBoxUnder700Conatiner #settingsBoxUnder700 #settingsBoxCancel{
+    .homeHeader .settingsBoxUnder700Conatiner #settingsBoxUnder700 #settingsBoxCancel{
         margin-bottom: 5px;
     }
-    .settingsBoxUnder700Conatiner #settingsBoxUnder700 li{
+    .homeHeader .settingsBoxUnder700Conatiner #settingsBoxUnder700 li{
         padding: 5px 10px;
     }
-    .settingsBoxUnder700Conatiner #settingsBoxUnder700 li{
+    .homeHeader .settingsBoxUnder700Conatiner #settingsBoxUnder700 li{
         clear: both;
         display: inline-block;
         overflow: hidden;
@@ -301,10 +473,10 @@ button:hover{
         text-align: center;
         list-style: none;
     }
-    #displaySettingsBox:checked ~ #settingsBox, #settingsBox{
+    .homeHeader #displaySettingsBox:checked ~ #settingsBox, .homeHeader #settingsBox{
         display: none;
     }
-    header{
+    .homeHeader header{
         border-bottom-right-radius: 20px;
         border-top-right-radius: 20px;
         left: 0;
@@ -318,33 +490,33 @@ button:hover{
         background-color: #3f9788;
         transition: 0.7s;
     }
-    .fa-times, #menuConnexion, .fa-bars, #displayMenuLabel{
+    .homeHeader .fa-times, .homeHeader #menuConnexion, .homeHeader .fa-bars, .homeHeader #displayMenuLabel{
         display: block;
     }
-    #menuCancel{
+    .homeHeader #menuCancel{
         position: relative;
         margin-top: 10px;
         left: 50%;
         transform: translateX(-50%);
         font-size: 30px;
     }
-    #displayMenu, #healthCareMenu, .cta{
+    .homeHeader #displayMenu, .homeHeader #healthCareMenu, .homeHeader .cta{
         display: none;
     }
-    ul{
+    .homeHeader ul{
         list-style: none;
         text-decoration: none;
         padding: 0;
         margin: 0;
     }
-    li{
+    .homeHeader li{
         display:block;
         padding: 5px;
     }
-    #displayMenu:checked ~ #header{
+    .homeHeader #displayMenu:checked ~ #header{
         left: 0;
     }
-    #displayMenuLabel{
+    .homeHeader #displayMenuLabel{
         opacity: 100%;
         z-index: 2;
         width: 40px;
@@ -356,26 +528,26 @@ button:hover{
         left: 5%;
         transition: 0.5s;
     }
-    #displayMenuLabel:hover{
+    .homeHeader #displayMenuLabel:hover{
         background-color: #3f9788;
     }
-    .fa-bars{
+    .homeHeader .fa-bars{
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
     }
-    .headerOnScroll{
+    .homeHeader .headerOnScroll{
         background-color: #3f9788;
         color: white;
     }
-    .headerOnScroll a, .navItem li a:hover {
+    .homeHeader .headerOnScroll a, .homeHeader .navItem li a:hover {
         color: white;
     }
-    .menuHoverEffect::after{
+    .homeHeader .menuHoverEffect::after{
         background: none;
     }
-    .headerOnScroll .menuHoverEffect::after{
+    .homeHeader .headerOnScroll .menuHoverEffect::after{
         background: none;
     }
 }

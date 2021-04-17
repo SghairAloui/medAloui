@@ -1,9 +1,12 @@
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="veiwport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div *ngIf="role=='home'" class="homeHeader">
         <label for="displayMenu" id="displayMenuLabel">
             <i class="fas fa-bars" id="menuShow"></i>
         </label>
@@ -13,36 +16,49 @@
             <a id="healthCareMenu"><strong>Health Care</strong></a>
             <nav>
                 <ul class="navItem">
-                    <li (click)="toAcceuilSection()"><a class="menuHoverEffect" >{{'home'|translate}}</a></li>
+                    <li (click)="toAcceuilSection()"><a class="menuHoverEffect">{{'home'|translate}}</a></li>
                     <li (click)="toDoctocSection()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
-                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect" >{{'diseases'|translate}}</a></li>
+                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
                     <li (click)="toAboutSection()"><a class="menuHoverEffect">{{'aboutUs'|translate}}</a></li>
                     <li id="settignsLi" (click)="settingsBoxUnder700=true;closeMenu()">
-                        <label for="displaySettingsBox"><a class="menuHoverEffect" id="settignsLiA">{{'settings'|translate}}</a></label>
-                        <input type="checkbox" id="displaySettingsBox" (change)="displaySettingsBox=true" [checked]="displaySettingsBox">
+                        <label for="displaySettingsBox"><a class="menuHoverEffect"
+                                id="settignsLiA">{{'settings'|translate}}</a></label>
+                        <input type="checkbox" id="displaySettingsBox" (change)="displaySettingsBox=true"
+                            [checked]="displaySettingsBox">
                         <ul id="settingsBox">
                             <li>{{'ChooseLang'|translate}}</li>
                             <li>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="padding-bottom: 5%;">
-                                    <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradio" id="en">
-                                    <label class="btn btn-outline-primary" id="enLabel" for="en">{{'anglais'|translate}}</label>
-                                    <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradio" id="fr">
-                                    <label class="btn btn-outline-primary" id="frLabel" for="fr">{{'francais'|translate}}</label>
-                                 </div><hr>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
+                                    style="padding-bottom: 5%;">
+                                    <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;"
+                                        [checked]="en" name="btnradio" id="en">
+                                    <label class="btn btn-outline-primary" id="enLabel"
+                                        for="en">{{'anglais'|translate}}</label>
+                                    <input type="radio" class="femaleRadio"
+                                        (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradio"
+                                        id="fr">
+                                    <label class="btn btn-outline-primary" id="frLabel"
+                                        for="fr">{{'francais'|translate}}</label>
+                                </div>
+                                <hr>
                             </li>
                             <li> {{'darkMode'|translate}} </li>
                             <li>
-                                <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox" [checked]="darkMode" id="darkModeCheckBox">
+                                <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox"
+                                    [checked]="darkMode" id="darkModeCheckBox">
                                 <label for="darkModeCheckBox" class="darkModeCheckBoxLabel">
                                     <i class="fas fa-moon"></i>
                                     <i class="fas fa-sun"></i>
                                     <div class="ball"></div>
-                                </label><hr>
+                                </label>
+                                <hr>
                             </li>
-                            <li (click)="displaySettingsBox=false"><i class="fas fa-times" id="settingsBoxCancel"></i></li>
+                            <li (click)="displaySettingsBox=false"><i class="fas fa-times" id="settingsBoxCancel"></i>
+                            </li>
                         </ul>
                     </li>
-                    <li (click)="toConnexionSection()"><a class="menuHoverEffect" id="menuConnexion">{{'Connection'|translate}}</a></li>
+                    <li (click)="toConnexionSection()"><a class="menuHoverEffect"
+                            id="menuConnexion">{{'Connection'|translate}}</a></li>
                 </ul>
             </nav>
             <a class="cta">
@@ -54,23 +70,245 @@
                 <li style="font-weight: 600;">{{'ChooseLang'|translate}}</li>
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;" [checked]="en" name="btnradioo" id="en">
-                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;" id="enLabel" for="en">{{'anglais'|translate}}</label>
-                        <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;" [checked]="fr" name="btnradioo" id="fr">
-                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;" id="frLabel" for="fr">{{'francais'|translate}}</label>
-                     </div><hr>
+                        <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;"
+                            [checked]="en" name="btnradioo" id="en">
+                        <label class="btn btn-outline-primary" (click)="changeLang('en');en=true;fr=false;" id="enLabel"
+                            for="en">{{'anglais'|translate}}</label>
+                        <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;"
+                            [checked]="fr" name="btnradioo" id="fr">
+                        <label class="btn btn-outline-primary" (click)="changeLang('fr');en=false;fr=true;" id="frLabel"
+                            for="fr">{{'francais'|translate}}</label>
+                    </div>
+                    <hr>
                 </li>
                 <li> {{'darkMode'|translate}} </li>
                 <li>
-                    <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBoxUnder700" [checked]="darkMode" id="darkModeCheckBoxUnder700">
+                    <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBoxUnder700"
+                        [checked]="darkMode" id="darkModeCheckBoxUnder700">
                     <label for="darkModeCheckBoxUnder700" class="darkModeCheckBoxLabelUnder700">
                         <i class="fas fa-moon"></i>
                         <i class="fas fa-sun"></i>
                         <div class="ball"></div>
-                    </label><hr>
+                    </label>
+                    <hr>
                 </li>
                 <li (click)="settingsBoxUnder700=false;"><i class="fas fa-times" id="settingsBoxCancel"></i></li>
             </ul>
         </div>
-    </body>
+    </div>
+
+    <div *ngIf="role=='patient'" class="loginHeader">
+        <header class="parentHeader">
+            <a><strong class="headerTitle">Health Care</strong></a>
+            <nav>
+                <ul class="navItem">
+                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
+                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
+                    <li><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="doctorClick()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
+                    <li (click)="profileCLick()"><a><i class="fas fa-user-circle"></i></a></li>
+                </ul>
+            </nav>
+        </header>
+        <header class="headerChild">
+            <nav class="navItem">
+                <div *ngIf="parentHeader=='doctor'">
+                    <ul>
+                        <li (click)="toFindDoctorSection()"><a>{{'findDoctor'|translate}}</a></li>
+                        <li (click)="toTopRatedSection()"><a>{{'topRated'|translate}}</a></li>
+                        <li (click)="toOurMethodologySection()"><a>{{'ourMethodology'|translate}}</a></li>
+                        <li (click)="toWhyHealthCareSection()"><a>{{'whyHealthCare'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='profile'">
+                    <ul>
+                        <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
+                        <li (click)="toMedicalProfileSection()"><a>{{'medicalProfile'|translate}}</a></li>
+                        <li (click)="toMyAppointmentsSection()"><a>{{'myAppointments'|translate}}</a></li>
+                        <li (click)="toPrescriptionSection()"><a>{{'prescription'|translate}}</a></li>
+                        <li (click)="toMyDoctorsSection()"><a>{{'myDoctors'|translate}}</a></li>
+                        <li (click)="toMyPharmaciesSection()"><a>{{'myPharmacies'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='settings'" class="settingItems">
+                    <ul>
+                        <li><a>{{'ChooseLang'|translate}}</a></li>
+                        <li>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;"
+                                    [checked]="en" name="btnradio" id="en">
+                                <label class="btn btn-outline-primary" id="enLabel"
+                                    for="en">{{'anglais'|translate}}</label>
+                                <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;"
+                                    [checked]="fr" name="btnradio" id="fr">
+                                <label class="btn btn-outline-primary" id="frLabel"
+                                    for="fr">{{'francais'|translate}}</label>
+                            </div>
+                        </li>
+                        <li><a>{{'darkMode'|translate}} </a></li>
+                        <li>
+                            <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox"
+                                [checked]="darkMode" id="darkModeCheckBox">
+                            <label for="darkModeCheckBox" class="darkModeCheckBoxLabel">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                                <div class="ball"></div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div *ngIf="role=='admin'" class="loginHeader">
+        <header class="parentHeader">
+            <!--<a><strong class="headerTitle">Health Care</strong></a>-->
+            <img src="../../../assets/img/healthCareLogo.png" style="height: 40px;">
+            <nav>
+                <ul class="navItem">
+                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
+                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
+                    <li (click)="parentHeader='disease';openContainerToAdmin('disease');"><a
+                            class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="parentHeader='pharmacies';openContainerToAdmin('pharmacy');"><a
+                            class="menuHoverEffect">{{'pharmacies'|translate}}</a></li>
+                    <li (click)="parentHeader='doctors';openContainerToAdmin('doctor');"><a
+                            class="menuHoverEffect">{{'doctors'|translate}}</a></li>
+                    <li (click)="parentHeader='patients';openContainerToAdmin('patient');"><a
+                            class="menuHoverEffect">{{'patients'|translate}}</a></li>
+                    <li (click)="openContainerToAdmin('profile');"><a><i class="fas fa-user-circle"></i></a></li>
+                </ul>
+            </nav>
+        </header>
+        <header class="headerChild">
+            <nav class="navItem">
+                <div *ngIf="parentHeader=='doctors'">
+                    <ul>
+                        <li><a>{{'findDoctor'|translate}}</a></li>
+                        <li><a>{{'addSpeciality'|translate}}</a></li>
+                        <li><a>{{'notApproved'|translate}}</a></li>
+                        <li><a>{{'topRated'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='pharmacies'">
+                    <ul>
+                        <li><a>{{'findPharmacy'|translate}}</a></li>
+                        <li><a>{{'notApproved'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='patients'">
+                    <ul>
+                        <li><a>{{'findPatient'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='profile'">
+                    <ul>
+                        <li><a>{{'generalInfo'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='disease'">
+                    <ul>
+                        <li><a>{{'addDisease'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='settings'" class="settingItems">
+                    <ul>
+                        <li><a>{{'ChooseLang'|translate}}</a></li>
+                        <li>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;"
+                                    [checked]="en" name="btnradio" id="en">
+                                <label class="btn btn-outline-primary" id="enLabel" for="en">{{'anglais'|translate}}</label>
+                                <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;"
+                                    [checked]="fr" name="btnradio" id="fr">
+                                <label class="btn btn-outline-primary" id="frLabel"
+                                    for="fr">{{'francais'|translate}}</label>
+                            </div>
+                        </li>
+                        <li><a>{{'darkMode'|translate}} </a></li>
+                        <li>
+                            <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox" [checked]="darkMode"
+                                id="darkModeCheckBox">
+                            <label for="darkModeCheckBox" class="darkModeCheckBoxLabel">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                                <div class="ball"></div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div *ngIf="role=='doctor'" class="loginHeader">
+        <header class="parentHeader">
+            <a><strong class="headerTitle">Health Care</strong></a>
+            <nav>
+                <ul class="navItem">
+                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
+                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
+                    <li (click)="parentHeader='disease';openContainerToDoctor('disease');"><a
+                            class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="parentHeader='myPatients';openContainerToDoctor('patient');"><a
+                            class="menuHoverEffect">{{'myPatients'|translate}}</a></li>
+                    <li (click)="openContainerToDoctor('profile');"><a><i class="fas fa-user-circle"></i></a></li>
+                </ul>
+            </nav>
+        </header>
+        <header class="headerChild">
+            <nav class="navItem">
+                <div *ngIf="parentHeader=='myPatients'">
+                    <ul>
+                        <li><a>{{'todayPatient'|translate}}</a></li>
+                        <li><a>{{'allMyPatient'|translate}}</a></li>
+                        <li><a>{{'findPatient'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='profile'">
+                    <ul>
+                        <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='disease'">
+                    <ul>
+                        <li><a>{{'addDisease'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='settings'" class="settingItems">
+                    <ul>
+                        <li><a>{{'ChooseLang'|translate}}</a></li>
+                        <li>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="maleRadio" (change)="changeLang('en');en=true;fr=false;"
+                                    [checked]="en" name="btnradio" id="en">
+                                <label class="btn btn-outline-primary" id="enLabel" for="en">{{'anglais'|translate}}</label>
+                                <input type="radio" class="femaleRadio" (change)="changeLang('fr');en=false;fr=true;"
+                                    [checked]="fr" name="btnradio" id="fr">
+                                <label class="btn btn-outline-primary" id="frLabel"
+                                    for="fr">{{'francais'|translate}}</label>
+                            </div>
+                        </li>
+                        <li><a>{{'darkMode'|translate}} </a></li>
+                        <li>
+                            <input type="checkbox" (change)="switchTheme()" class="darkModeCheckBox" [checked]="darkMode"
+                                id="darkModeCheckBox">
+                            <label for="darkModeCheckBox" class="darkModeCheckBoxLabel">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                                <div class="ball"></div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div *ngIf="role=='pharmacy'" class="loginHeader">
+
+    </div>
+</body>
+
 </html>
