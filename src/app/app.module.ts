@@ -36,6 +36,7 @@ import { UserService } from './services/user.service';
 import { MedicamentService } from './services/medicament.service';
 import { PrescriptionService } from './services/prescription.service';
 import { HeaderService } from './Headers/header/header.service';
+import { PharmacyService } from './users/pharmacy/pharmacy.service';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,7 @@ import { HeaderService } from './Headers/header/header.service';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
-    MedicamentService,PrescriptionService,HeaderService,
+    MedicamentService,PrescriptionService,HeaderService,PharmacyService,
     authInterceptorProviders
   ],
   bootstrap: [AppComponent]
