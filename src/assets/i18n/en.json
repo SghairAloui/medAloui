@@ -433,5 +433,8 @@
     "todayPatientDiagnosed":"All today's patient diagnosed",
     "loadMorePrescription":"Load more prescription",
     "allPrescriptionLoaded":"All prescription loaded",
-    "showDoctorInfo":"Show doctor informations"
+    "showDoctorInfo":"Show doctor informations",
+
+    "ownershipOfPharmacy":"A photo proving that you are the owner of a pharmacy",
+    "PictureProvingSpecialty":"A photo proving your specialty"
 }

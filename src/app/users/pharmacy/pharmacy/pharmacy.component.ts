@@ -4,11 +4,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { UserService } from 'src/app/services/user.service';
+import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { OneStringPost } from 'src/model/OneStringPost';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../pharmacy.service';
 
 @Component({
@@ -23,7 +26,8 @@ export class PharmacyComponent implements OnInit {
     private translate: TranslateService,
     private userService: UserService,
     private router: Router,
-    private toastr: ToastrService,) { }
+    private toastr: ToastrService,
+    private doctorService: DoctorService) { }
   pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin;
   secureLoginString: SecureLoginString;
   re = /^[A-Za-z-' ']+$/;
@@ -54,7 +58,9 @@ export class PharmacyComponent implements OnInit {
   base64Data: any;
   retrieveResonse: any;
   container: string = 'profile';
-  passwordDis:boolean=true;
+  passwordDis: boolean = true;
+  cinPic: Boolean = false; pharmacyOwnershipPic: Boolean = false; pharmacySpecialty: Boolean = false;
+  notApproved:string='info';
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -94,22 +100,22 @@ export class PharmacyComponent implements OnInit {
       }
     }
 
-    if(!this.invalidAdressVariable && !this.invalidPharmacyNameVariable){
-      let data:PharmacyPostWithSecureLogin = new PharmacyPostWithSecureLogin(this.pharmacyName,this.adress,localStorage.getItem('secureLogin'));
+    if (!this.invalidAdressVariable && !this.invalidPharmacyNameVariable) {
+      let data: PharmacyPostWithSecureLogin = new PharmacyPostWithSecureLogin(this.pharmacyName, this.adress, localStorage.getItem('secureLogin'));
       this.pharmacyService.updatePharmacyInfoBySecureLogin(data).subscribe(
-        res=>{
-          if(res){
+        res => {
+          if (res) {
             this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
               timeOut: 3500,
               positionClass: 'toast-bottom-left'
             });
-            this.generalInfo='show';
+            this.generalInfo = 'show';
             document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
-            this.pharmacyGet.pharmacyFullName=this.pharmacyName;
-            this.pharmacyGet.userCity=this.adress
+            this.pharmacyGet.pharmacyFullName = this.pharmacyName;
+            this.pharmacyGet.userCity = this.adress
           }
         },
-        err=>{
+        err => {
           this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
@@ -128,9 +134,13 @@ export class PharmacyComponent implements OnInit {
           this.headerService.setHeader('pharmacy');
           this.getImage();
           this.intializeEdit();
+          if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapprovedByAdmin') {
+            this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
+            this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
+            this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
+          }
           this.pharmacyInfo = true;
           localStorage.setItem('id', this.pharmacyGet.userId + '')
-
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -245,7 +255,6 @@ export class PharmacyComponent implements OnInit {
   }
 
   intializeEdit() {
-    console.log(this.pharmacyGet);
     this.pharmacyName = this.pharmacyGet.pharmacyFullName;
     this.mail = this.pharmacyGet.userUsername;
     this.adress = this.pharmacyGet.userCity;
@@ -295,17 +304,25 @@ export class PharmacyComponent implements OnInit {
 
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload();
+    this.onUpload(this.pharmacyGet.userId + "pharmacyProfilePic");
     this.getImage();
   }
 
-  onUpload() {
+  onUpload(imageName: string) {
     const uploadImageData = new FormData();
-    uploadImageData.append('imageFile', this.selectedFile, this.pharmacyGet.userId + "pharmacyProfilePic");
+    uploadImageData.append('imageFile', this.selectedFile, imageName);
     this.pharmacyService.updatePharmacyProfilePhoto(uploadImageData).subscribe(
       res => {
-        if (res == 'imageUpdated')
-          this.getImage();
+        if (res == 'imageUpdated') {
+          if (imageName == this.pharmacyGet.userId + "pharmacyCinPic")
+            this.cinPic = true;
+          else if (imageName == this.pharmacyGet.userId + "pharmacyOwnershipPic")
+            this.pharmacyOwnershipPic = true;
+          else if (imageName == this.pharmacyGet.userId + "pharmacySpecialty")
+            this.pharmacySpecialty = true;
+          else
+            this.getImage();
+        }
       },
       err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -335,5 +352,51 @@ export class PharmacyComponent implements OnInit {
         }
       }
     );
+  }
+
+  onFileChangedCin(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(this.pharmacyGet.userId + "pharmacyCinPic");
+  }
+
+  onFileChangedMedicalClinic(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(this.pharmacyGet.userId + "pharmacyOwnershipPic");
+  }
+
+  onFileChangedMedicalSpecialty(event) {
+    this.selectedFile = event.target.files[0];
+    this.onUpload(this.pharmacyGet.userId + "pharmacySpecialty");
+  }
+
+  checkDocDocument(imageName: string) {
+    let oneStringPost: OneStringPost = new OneStringPost(imageName);
+    this.doctorService.checkIfDocumentExist(oneStringPost).subscribe(
+      res => {
+        if (res == true) {
+          if (imageName == this.pharmacyGet.userId + "pharmacyCinPic")
+            this.cinPic = true;
+          else if (imageName == this.pharmacyGet.userId + "pharmacyOwnershipPic")
+            this.pharmacyOwnershipPic = true;
+          else if (imageName == this.pharmacyGet.userId + "pharmacySpecialty")
+            this.pharmacySpecialty = true;
+        }
+      }
+    );
+  }
+
+  submitPharmacyDocuments() {
+    let twoStringsPost:TwoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'pending');
+    this.pharmacyService.changePharamcyStatusBySecureLogin(twoStringsPost).subscribe(
+      res => {
+        if(res){
+          this.pharmacyGet.pharmacyStatus='pending';
+        }
+      }
+    );
+  }
+
+  toNotApprovedSection(){
+    document.getElementById("approvePharmacySection").scrollIntoView({behavior:'smooth'});
   }
 }

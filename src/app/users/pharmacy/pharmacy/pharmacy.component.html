@@ -9,6 +9,34 @@
     <app-header></app-header>
     <div class="pharmacyContainer">
         <div *ngIf="container=='profile' && pharmacyInfo">
+            <div *ngIf="pharmacyGet.pharmacyStatus!='approved'">
+                <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved'" class="notApproved">
+                    <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
+                    <ng-template #showNotApprovedInfo>
+                        {{'notApprovedText'|translate}}, <span class="textLien"
+                            (click)="notApproved='why'">{{'why'|translate}}</span>
+                    </ng-template>
+                    <ng-template #showNotApprovedWhy>
+                        {{'notApprovedWhy'|translate}}
+                        <div class="center">
+                            <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}}
+                            </button><br>
+                            <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+                        </div>
+                    </ng-template>
+                </div>
+                <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'" class="notApproved">
+                    {{'pendingInfo'|translate}}<br>
+                </div>
+                <div *ngIf="pharmacyGet.pharmacyStatus=='approvedByAdmin'" class="notApproved">
+                    {{'approvedByAdmin'|translate}}, <span class="textLien"
+                        (click)="toapprovedByAdminSection()">{{'setUpNow'|translate}}</span>
+                </div>
+                <div *ngIf="pharmacyGet.pharmacyStatus=='disapprovedByAdmin'" class="disapprovedByAdmin">
+                    {{'disapprovedText'|translate}}<br><span class="textLien"
+                        (click)="toNotApprovedSection()">{{'disapprovedReVerify'|translate}}</span>
+                </div>
+            </div>
             <section id="generalInfoSection">
                 <div class="sectionTitle">{{'generalInfo'|translate}}</div>
                 <div class="sectionContainer" *ngIf="generalInfo=='show'">
@@ -25,13 +53,18 @@
                             <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
                         </div>
                     </div>
-                    <div class="infoContainer">
-                        <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
-                        <div class="info">
-                            {{pharmacyGet.userCity}}
-                        </div>
-                        <div class="infoTitle">{{'city'|translate}}</div>
+                    <div class="pharmacyName">
+                        {{pharmacyGet.pharmacyFullName}}
                     </div>
+                    <span class="notGrid">
+                        <div class="infoContainer">
+                            <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
+                            <div class="info">
+                                {{pharmacyGet.userCity}}
+                            </div>
+                            <div class="infoTitle">{{'city'|translate}}</div>
+                        </div>
+                    </span>
                     <button class="emptyBtn" style="margin-top: 20px;"
                         (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
                 </div>
@@ -62,7 +95,8 @@
                             </div>
 
                         </div>
-                        <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick();passwordDis=true;">
+                        <div class="textLien" style="padding-left: 50px;"
+                            (click)="changePasswordClick();passwordDis=true;">
                             {{'changePassword'|translate}} ?</div>
                         <div class="textLien" style="padding-left: 50px;" (click)="changeUsernameClick()">
                             {{'changeUsername'|translate}} ?</div>
@@ -99,7 +133,8 @@
                             <div class="buttons">
                                 <button class="fullyBtn"
                                     (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
-                                <button class="fullyBtn" (click)="updatePassword()" [disabled]="passwordDis">{{'update'|translate}}</button>
+                                <button class="fullyBtn" (click)="updatePassword()"
+                                    [disabled]="passwordDis">{{'update'|translate}}</button>
                             </div>
                         </ng-template>
                         <ng-template #showEditUsername>
@@ -122,6 +157,111 @@
                     </ng-template>
                 </div>
 
+            </section>
+            <section *ngIf="pharmacyGet.pharmacyStatus!='approved'" id="approvePharmacySection">
+                <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved'">
+                    <div class="sectionTitle">{{'notApproved'|translate}}</div>
+                    <div class="sectionContainer">
+                        {{'toProveYourAccount'|translate}}
+                        <div class="infoGrid">
+                            <div class="infoContainer proveContainer">
+                                <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
+                                <ng-template #cinUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadCin>
+                                    <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'nationalIdentityCard'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                            <div class="infoContainer proveContainer">
+                                <div
+                                    *ngIf="pharmacyOwnershipPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
+                                </div>
+                                <ng-template #medicalClinicUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                        class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadMedicalClinic>
+                                    <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                        class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file"
+                                            (change)="onFileChangedMedicalClinic($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'ownershipOfPharmacy'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                            <div class="infoContainer proveContainer">
+                                <div
+                                    *ngIf="pharmacySpecialty; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
+                                </div>
+                                <ng-template #medicalSpecialtyUploadedSuccessfully>
+                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                        class="uploadImgBtn">
+                                    <div class="editPic">
+                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="center">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="photoUploaded">
+                                        <i class="fas fa-check-circle"></i><br>
+                                        {{'PhotoUploadedSucc'|translate}}
+                                    </div>
+                                </ng-template>
+                                <ng-template #uploadMedicalSpecialty>
+                                    <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                        class="uploadImgBtn">
+                                    <div class="infoTitle"><input type="file"
+                                            (change)="onFileChangedMedicalSpecialty($event)"
+                                            class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                    <div class="info">
+                                        {{'PictureProvingSpecialty'|translate}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div *ngIf="cinPic && pharmacyOwnershipPic && pharmacySpecialty">
+                            <button class="emptyBtn"
+                                (click)="submitPharmacyDocuments();">{{'submitDocuments'|translate}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'">
+                    <section id="pendingSection">
+                        <div class="sectionTitle">{{'pending'|translate}}</div>
+                        <div class="sectionContainer pending">
+                            {{'pendingForConfirmation'|translate}}<br>
+                            <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
+                        </div>
+                    </section>
+                </div>
             </section>
         </div>
     </div>

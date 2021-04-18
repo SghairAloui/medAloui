@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
+import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
 const PHARMACY_API = 'http://localhost:8080/api/pharmacy/';
 const IMAGE_API = 'http://localhost:8080/api/image/';
@@ -36,4 +37,7 @@ export class PharmacyService {
     return this.http.get<string>(IMAGE_API + 'get/' + name, httpOptions)
   }
 
+  public changePharamcyStatusBySecureLogin(twoStringsPost:TwoStringsPost){
+    return this.http.post<boolean>(PHARMACY_API+'changePharamcyStatusBySecureLogin',twoStringsPost,httpOptions);
+  }
 }

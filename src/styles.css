@@ -372,7 +372,7 @@ input[disabled]{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 25px;
-    width: 90%;
+    width: 100%;
     padding: 5% 5%;
     left: 50%;
     transform: translateX(-50%);
@@ -387,7 +387,7 @@ input[disabled]{
     grid-template-columns: 1fr 1fr;
     grid-gap: 25px;
     width: 90%;
-    padding: 5% 5%;
+    padding: 5% 2%;
     left: 50%;
     transform: translateX(-50%);
     color: var(--text-color);
@@ -423,9 +423,9 @@ input[disabled]{
     background-color: #308a7b;
 }
 .infoGrid .infoContainer .info, .infoGridTowColumn .infoContainer .info{
-    text-transform: capitalize;
     padding: 10px 5px;
     text-align: center;
+    padding: 2px 5px;
 }
 .labelInvalidInfo{
     border: 1px solid red;

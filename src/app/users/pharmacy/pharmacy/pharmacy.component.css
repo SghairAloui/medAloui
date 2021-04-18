@@ -45,7 +45,7 @@ html,body{
 .editUserName{
     margin: 30px;
 }
-.infoContainer{
+.notGrid .infoContainer{
     width: 40%;
     left: 30%;
     position: relative;
@@ -58,18 +58,97 @@ html,body{
     border: none;
     box-shadow: var(--infoBox);
 }
-.infoContainer .infoIcon{
+.notGrid .infoContainer .infoIcon{
     position: relative;
     font-size: 23px;
 }
-.infoContainer .info{
+.notGrid .infoContainer .info{
     text-transform: capitalize;
     padding: 10px 5px;
     text-align: center;
 }
-.infoContainer .infoTitle{
+.notGrid .infoContainer .infoTitle{
     position: relative;
     font-size: 20px;
     font-weight: 300;
     background-color: #308a7b;
+}
+.pharmacyName{
+    font-size: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+.uploadImgBtn{
+    left: 0%;
+    z-index: 2;
+}
+.uploadImgBtn:hover + .editPic{
+    opacity: 1;
+}
+.editPic{
+    z-index: 1;
+    opacity: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    color: white;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.center{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.editImage .center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.photoUploaded{
+    position: relative;
+    padding: 5% 5%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.pending{
+    padding: 5% 5%;
+    text-align: center;
+}
+.notApproved{
+    padding: 2px 15px;
+    position: fixed;
+    color: white;
+    font-size: 1.1rem;
+    background-color: #ff9100;
+    top: 50px;
+    left: 20%;
+    width: 80%;
+    text-align: center;
+    z-index: 1;
+}
+.notApproved .center{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.white{
+    color: white;
+    border: 1px solid white;
+    left: 0%;
+    transform: translateX(0%);
+    margin: 2%;
+}
+.white:hover{
+    background-color: white;
+    color: #ff9100;
+    left: 0%;
+    transform: translateX(0%);
+    margin: 2%;
 }
