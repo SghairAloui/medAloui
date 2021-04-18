@@ -1,7 +1,7 @@
 export interface PharmacyGet{
     userId:number;
     userUsername:string;
-    pharmacyName:string;
+    pharmacyFullName:string;
     userCity:string;
     pharmacyStatus:string;
 

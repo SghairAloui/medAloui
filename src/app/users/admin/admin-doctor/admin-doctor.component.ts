@@ -41,6 +41,7 @@ export class AdminDoctorComponent implements OnInit {
   ngOnInit(): void {
     this.getPendingDoctorsNumber();
   }
+
   getPendingDoctors(page: number, size: number) {
     let pendingDoctors:DoctorPendingGet[]=[];
     this.adminService.getPendingDoctors(page,size).subscribe(
@@ -66,9 +67,11 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   checkDocImg(doctorId: number,index:number) {
     this.getProfileImage(doctorId + 'doctorProfilePic', doctorId,index);
   }
+
   getProfileImage(imageName: string, doctorId: number,index:number) {
     this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
       res => {
@@ -82,6 +85,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   getCinImage(doctorId: number,index:number) {
     let imageName: string = 'doctorCinPic';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
@@ -95,6 +99,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   getClinicImage(doctorId: number,index:number) {
     let imageName: string = 'doctorMedicalClinicPic';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
@@ -108,6 +113,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   getSpecialityImage(doctorId: number,index:number) {
     let imageName: string = 'doctorMedicalSpecialty';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
@@ -121,6 +127,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   approveDoc(id: number, key: number) {
     this.integerAndString = new IntegerAndStringPost(id, 'approvedByAdmin');
     this.doctorService.changeDoctorStatusById(this.integerAndString).subscribe(
@@ -149,6 +156,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   disapproveDoc(id: number, doctorStatus: string, key: number) {
     if (doctorStatus == 'pending')
       this.integerAndString = new IntegerAndStringPost(id, 'disapprovedByAdmin');
@@ -300,6 +308,7 @@ export class AdminDoctorComponent implements OnInit {
      );
    }*/
   }
+
   addSpeciality() {
     this.specialityPost = new SpecialityPost(this.specialityCode, this.specialityName);
     this.specialityService.addSpeciality(this.specialityPost).subscribe(
@@ -324,6 +333,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+
   getPendingDoctorsNumber(){
     this.doctorService.getPendingDoctorsNumber().subscribe(
       res=>{
@@ -331,6 +341,7 @@ export class AdminDoctorComponent implements OnInit {
       }
     );
   }
+  
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
     if(this.loadPendingDoc){

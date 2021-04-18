@@ -83,6 +83,9 @@ export class PatientDoctorComponent implements OnInit {
     this.seachDocLoading = true;
     this.searchedDocBool = true;
     let searchedDoc: SearchedDocGet[] = [];
+    this.doctorCity = this.doctorCity.toLocaleLowerCase();
+    this.doctorCity = this.doctorCity.replace('é','e');
+    this.doctorCity = this.doctorCity.replace('è','e');
     this.searchDoctorDoctor = new SearchDoctorDoctorPost(this.specialityCode, this.doctorCity, this.searchDocPage, 4);
     this.doctorService.getApprovedDoctorsBySpecialityIdAndCity(this.searchDoctorDoctor).subscribe(
       res => {

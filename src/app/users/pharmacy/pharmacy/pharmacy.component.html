@@ -32,94 +32,97 @@
                         </div>
                         <div class="infoTitle">{{'city'|translate}}</div>
                     </div>
+                    <button class="emptyBtn" style="margin-top: 20px;"
+                        (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
                 </div>
-                <button class="emptyBtn"
-                    (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>            
-        <div class="sectionContainer" *ngIf="generalInfo=='edit'">
-            <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
-            <ng-template #updateGeneralInfo>
-                <div class="infoEdit">
-                    <div class="formDiv">
-                        <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable" name="pharmacyName"
-                            [(ngModel)]="firstName"
-                            (keyup)="comparePharmacyName();pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{pharmacyNameInformation}}
-                        </label>
-                    </div>
-                    <div class="formDiv">
-                        <input type="text" list="governoratelistOptions"
-                            [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
-                            (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{adressInformation}}
-                            <datalist id="governoratelistOptions">
-                                <option *ngFor="let city of cities" value="{{city}}">
-                            </datalist>
-                        </label>
-                    </div>
+                <div class="sectionContainer" *ngIf="generalInfo=='edit'">
+                    <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
+                    <ng-template #updateGeneralInfo>
+                        <div class="infoEdit">
+                            <div class="formDiv">
+                                <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable"
+                                    name="pharmacyName" [(ngModel)]="pharmacyName"
+                                    (keyup)="comparePharmacyName();pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{pharmacyNameInformation}}
+                                </label>
+                            </div>
+                            <div class="formDiv">
+                                <input type="text" list="governoratelistOptions"
+                                    [class.labelInvalidInfo]="invalidAdressVariable" name="adress" [(ngModel)]="adress"
+                                    (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{adressInformation}}
+                                    <datalist id="governoratelistOptions">
+                                        <option *ngFor="let city of cities" value="{{city}}">
+                                    </datalist>
+                                </label>
+                            </div>
 
-                </div>
-                <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick()">
-                    {{'changePassword'|translate}} ?</div>
-                <div class="textLien" style="padding-left: 50px;" (click)="changeUsernameClick()">
-                    {{'changeUsername'|translate}} ?</div>
-                <div class="buttons">
-                    <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
-                    <button class="fullyBtn" (click)="checkForm()"
-                        [disabled]="disableSaveBtn">{{'update'|translate}}</button>
-                </div>
-            </ng-template>
-            <ng-template #updateSecureInfo>
-                <span class="changeNote">{{'noteChangerPassOrUsername'|translate}}</span>
-                <div *ngIf="editPassword; then showEditPassword else showEditUsername"></div>
-                <ng-template #showEditPassword>
-                    <div class="infoEdit">
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
-                                [(ngModel)]="password"
-                                (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordInfromation}}
-                            </label>
                         </div>
-                        <div class="formDiv">
-                            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                                name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                                (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
-                                class="formInput" placeholder=" ">
-                            <label for="" class="formLabel">
-                                {{passwordRepeatInfromation}}
-                            </label>
+                        <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick();passwordDis=true;">
+                            {{'changePassword'|translate}} ?</div>
+                        <div class="textLien" style="padding-left: 50px;" (click)="changeUsernameClick()">
+                            {{'changeUsername'|translate}} ?</div>
+                        <div class="buttons">
+                            <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
+                            <button class="fullyBtn" (click)="checkForm()"
+                                [disabled]="disableSaveBtn">{{'update'|translate}}</button>
                         </div>
-                    </div>
-                    <div class="buttons">
-                        <button class="fullyBtn" (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
-                        <button class="fullyBtn" (click)="updatePassword()">{{'update'|translate}}</button>
-                    </div>
-                </ng-template>
-                <ng-template #showEditUsername>
-                    <div class="formDiv editUserName">
-                        <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail" [(ngModel)]="mail"
-                            (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{mailInformation}}
-                        </label>
-                    </div>
-                    <div class="buttons">
-                        <button class="fullyBtn" (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
-                        <button class="fullyBtn" (click)="updateUsername()"
-                            [disabled]="disableChnageUsernameBtn">{{'update'|translate}}</button>
-                    </div>
-                </ng-template>
-            </ng-template>
-        </div>
-        
-        </section>
+                    </ng-template>
+                    <ng-template #updateSecureInfo>
+                        <span class="changeNote">{{'noteChangerPassOrUsername'|translate}}</span>
+                        <div *ngIf="editPassword; then showEditPassword else showEditUsername"></div>
+                        <ng-template #showEditPassword>
+                            <div class="infoEdit">
+                                <div class="formDiv">
+                                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
+                                        name="password" [(ngModel)]="password"
+                                        (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                                        class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{passwordInfromation}}
+                                    </label>
+                                </div>
+                                <div class="formDiv">
+                                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                                        name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                                        (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false;passwordDis=false;"
+                                        class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{passwordRepeatInfromation}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <button class="fullyBtn"
+                                    (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn" (click)="updatePassword()" [disabled]="passwordDis">{{'update'|translate}}</button>
+                            </div>
+                        </ng-template>
+                        <ng-template #showEditUsername>
+                            <div class="formDiv editUserName">
+                                <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                    [(ngModel)]="mail"
+                                    (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{mailInformation}}
+                                </label>
+                            </div>
+                            <div class="buttons">
+                                <button class="fullyBtn"
+                                    (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                <button class="fullyBtn" (click)="updateUsername()"
+                                    [disabled]="disableChnageUsernameBtn">{{'update'|translate}}</button>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </div>
+
+            </section>
         </div>
     </div>
 </body>

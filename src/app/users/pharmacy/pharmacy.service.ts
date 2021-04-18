@@ -32,8 +32,8 @@ export class PharmacyService {
     return this.http.post<string>(IMAGE_API + 'upload', uploadImageData, { responseType: 'text' as 'json' });
   }
 
-  public getPharmacyPofilePhoto(id:number) {
-    return this.http.get<string>(IMAGE_API + 'get/' + id + "patientProfilePic", httpOptions)
+  public getPharmacyPofilePhoto(name:string) {
+    return this.http.get<string>(IMAGE_API + 'get/' + name, httpOptions)
   }
 
 }

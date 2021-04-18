@@ -496,11 +496,11 @@ export class DoctorComponent implements OnInit {
   }
 
   checkAdress() {
-    let upperCaseAdress: string = this.adress.toUpperCase();
+    let lowerCaseAdress: string = this.adress.toLocaleLowerCase();
     this.adress = this.adress.replace('é', 'e');
     this.adress = this.adress.replace('è', 'e');
     for (let city of this.cities) {
-      if (upperCaseAdress == city.toUpperCase()) {
+      if (lowerCaseAdress == city.toLocaleLowerCase()) {
         this.invalidAdressVariable = false;
         this.adressInformation = this.translate.instant('city');
         break;

@@ -19,14 +19,14 @@ import { PharmacyService } from '../pharmacy.service';
 export class PharmacyComponent implements OnInit {
 
   constructor(private pharmacyService: PharmacyService,
-    private headerService:HeaderService,
+    private headerService: HeaderService,
     private translate: TranslateService,
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,) { }
-    pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin;
-    secureLoginString: SecureLoginString;
-  re = /^[A-Za-z]+$/;
+  pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin;
+  secureLoginString: SecureLoginString;
+  re = /^[A-Za-z-' ']+$/;
   generalInfo: string = 'show';
   pharmacyGet: PharmacyGet;
   pharmacyInfo: boolean;
@@ -53,7 +53,8 @@ export class PharmacyComponent implements OnInit {
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
-  container:string='profile';
+  container: string = 'profile';
+  passwordDis:boolean=true;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -62,9 +63,60 @@ export class PharmacyComponent implements OnInit {
   }
 
   checkForm() {
-    this.checkPharmacyName();
-    this.checkAdress();
-   
+    //name
+    if (this.pharmacyName.length < 3) {
+      this.invalidPharmacyNameVariable = true;
+      this.pharmacyNameInformation = this.translate.instant('nameFirst');
+    } else {
+      if (this.re.test(this.pharmacyName)) {
+        this.invalidPharmacyNameVariable = false;
+        this.pharmacyNameInformation = this.translate.instant('pharmacyName');
+      }
+      else {
+        this.invalidPharmacyNameVariable = true;
+        this.pharmacyNameInformation = this.translate.instant('nameApha');
+      }
+    }
+
+    //address
+    let lowerCaseAdress: string = this.adress.toLocaleLowerCase();
+    this.adress = this.adress.replace('é', 'e');
+    this.adress = this.adress.replace('è', 'e');
+    for (let city of this.cities) {
+      if (lowerCaseAdress == city.toLocaleLowerCase()) {
+        this.invalidAdressVariable = false;
+        this.adressInformation = this.translate.instant('city');
+        break;
+      }
+      else {
+        this.invalidAdressVariable = true;
+        this.adressInformation = this.translate.instant('enterValidCity');
+      }
+    }
+
+    if(!this.invalidAdressVariable && !this.invalidPharmacyNameVariable){
+      let data:PharmacyPostWithSecureLogin = new PharmacyPostWithSecureLogin(this.pharmacyName,this.adress,localStorage.getItem('secureLogin'));
+      this.pharmacyService.updatePharmacyInfoBySecureLogin(data).subscribe(
+        res=>{
+          if(res){
+            this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+            this.generalInfo='show';
+            document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
+            this.pharmacyGet.pharmacyFullName=this.pharmacyName;
+            this.pharmacyGet.userCity=this.adress
+          }
+        },
+        err=>{
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
   }
 
   getUserInfo() {
@@ -89,22 +141,6 @@ export class PharmacyComponent implements OnInit {
         });
       }
     );
-  }
-
-  checkPharmacyName() {
-    if (this.pharmacyName.length < 3) {
-      this.invalidPharmacyNameVariable = true;
-      this.pharmacyNameInformation = this.translate.instant('nameFirst');
-    } else {
-      if (this.re.test(this.pharmacyName)) {
-        this.invalidPharmacyNameVariable = false;
-        this.pharmacyNameInformation = this.translate.instant('PharmacyName');
-      }
-      else {
-        this.invalidPharmacyNameVariable = true;
-        this.pharmacyNameInformation = this.translate.instant('nameApha');
-      }
-    }
   }
 
   updateUsername() {
@@ -202,23 +238,6 @@ export class PharmacyComponent implements OnInit {
     }
   }
 
-  checkAdress() {
-    let upperCaseAdress: string = this.adress.toUpperCase();
-    this.adress = this.adress.replace('é', 'e');
-    this.adress = this.adress.replace('è', 'e');
-    for (let city of this.cities) {
-      if (upperCaseAdress == city.toLocaleUpperCase()) {
-        this.invalidAdressVariable = false;
-        this.adressInformation = this.translate.instant('city');
-        break;
-      }
-      else {
-        this.invalidAdressVariable = true;
-        this.adressInformation = this.translate.instant('enterValidCity');
-      }
-    }
-  }
-
   sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -226,13 +245,14 @@ export class PharmacyComponent implements OnInit {
   }
 
   intializeEdit() {
-    this.pharmacyName = this.pharmacyGet.pharmacyName;
+    console.log(this.pharmacyGet);
+    this.pharmacyName = this.pharmacyGet.pharmacyFullName;
     this.mail = this.pharmacyGet.userUsername;
     this.adress = this.pharmacyGet.userCity;
   }
 
   initializeEditLabel() {
-    this.pharmacyNameInformation = this.translate.instant('firstName');
+    this.pharmacyNameInformation = this.translate.instant('pharmacyName');
     this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
     this.passwordInfromation = this.translate.instant('password');
     this.mailInformation = this.translate.instant('mail');
@@ -253,7 +273,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   comparePharmacyName() {
-    if (this.pharmacyName.toLowerCase() === this.pharmacyGet.pharmacyName)
+    if (this.pharmacyName.toLowerCase() === this.pharmacyGet.pharmacyFullName)
       this.disableSaveBtn = true;
     else
       this.disableSaveBtn = false;
@@ -265,6 +285,7 @@ export class PharmacyComponent implements OnInit {
     else
       this.disableUpdateUsernamePassBtn = false;
   }
+
   compareCity() {
     if (this.adress.toLowerCase() === this.pharmacyGet.userCity)
       this.disableSaveBtn = true;
@@ -279,31 +300,24 @@ export class PharmacyComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.pharmacyGet.userId == parseInt(localStorage.getItem('id'))) {
-      const uploadImageData = new FormData();
-      uploadImageData.append('imageFile', this.selectedFile, this.pharmacyGet.userId + "patientProfilePic");
-      this.pharmacyService.updatePharmacyProfilePhoto(uploadImageData).subscribe(
-        res => {
-          if (res == 'imageUpdated')
-            this.getImage();
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
-    } else {
-      this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
-        timeOut: 5000,
-        positionClass: 'toast-bottom-left'
-      });
-    }
+    const uploadImageData = new FormData();
+    uploadImageData.append('imageFile', this.selectedFile, this.pharmacyGet.userId + "pharmacyProfilePic");
+    this.pharmacyService.updatePharmacyProfilePhoto(uploadImageData).subscribe(
+      res => {
+        if (res == 'imageUpdated')
+          this.getImage();
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
   }
 
   getImage() {
-    this.pharmacyService.getPharmacyPofilePhoto(this.pharmacyGet.userId).subscribe(
+    this.pharmacyService.getPharmacyPofilePhoto(this.pharmacyGet.userId + "pharmacyProfilePic").subscribe(
       res => {
         if (res != null) {
           this.retrieveResonse = res;
