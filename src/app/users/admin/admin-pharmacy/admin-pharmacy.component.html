@@ -1,1 +1,104 @@
-<p>admin-pharmacy works!</p>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <section id="pendingPharmaciesSection">
+        <div class="sectionTitle">{{'pending'|translate}}</div>
+        <div class="sectionContainer">
+            <div *ngIf="pendingPharmacies" class="notApprovedDocGrid">
+                <div *ngFor="let pharmacy of pendingPharmacies | keyvalue" class="col">
+                    <div *ngIf="pharmacy.value.decision != 'null'" class="docDecision">
+                        <div class="docNotAppNameText">Ph. <span
+                                style="text-transform: capitalize;">{{pharmacy.value.pharmacyFullName}} </span>
+                             {{pharmacy.value.decision}}
+                        </div>
+                    </div>
+                    <div *ngIf="pharmacy.value.pharmacyStatus == 'pending'" class="pendingStatus">
+                        {{'pending'|translate}} </div>
+                    <div *ngIf="pharmacy.value.pharmacyStatus == 'reVerify'" class="reVerifyStatus">
+                        {{'reVerify'|translate}} </div>
+                    <div class="pendingDocImg">
+                        <div class="strok"></div>
+                        <div *ngIf="pharmacy.value.profilePic; then showDocProfileImg else showDocDefaultImg">
+                        </div>
+                        <ng-template #showDocProfileImg><img [src]="pharmacy.value.profilePic" class="profileImg">
+                        </ng-template>
+                        <ng-template #showDocDefaultImg>
+                            <i class="fas fa-user-tie"></i>
+                        </ng-template>
+                    </div>
+                    <div class="docNotAppName">Ph. <span
+                            style="text-transform: capitalize;">{{pharmacy.value.pharmacyFullName}}</span>
+                    </div>
+                    <i class="fas fa-user"></i> {{pharmacy.value.userUsername}}<br>
+                    <div *ngIf="pharmacy.value.showFullInfo; then showDocDocuments else hideDocDocuments"></div>
+                    <ng-template #hideDocDocuments>
+                        <div class="showHideDocuments">
+                            <div (click)="pharmacy.value.showFullInfo=true">
+                                {{'showDoc'|translate}}<br>
+                                <i class="fas fa-angle-double-down"></i>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template #showDocDocuments>
+                        <div *ngIf="pharmacy.value.currentDoc=='cin'">
+                            <div class="documentImgContainer">
+                                <span (click)="pharmacy.value.currentDoc='speciality'"><i
+                                        class="fas fa-chevron-right rightArrow"></i></span>
+                                <img [src]="pharmacy.value.cinPic" class="img90">
+                            </div>
+                        </div>
+                        <div *ngIf="pharmacy.value.currentDoc=='speciality'">
+                            <div class="documentImgContainer">
+                                <span (click)="pharmacy.value.currentDoc='cin'"><i
+                                        class="fas fa-chevron-left leftArrow"></i></span>
+                                <span (click)="pharmacy.value.currentDoc='clinic'"><i
+                                        class="fas fa-chevron-right rightArrow"></i></span>
+                                <img [src]="pharmacy.value.specialityPic" class="img90">
+                            </div>
+                        </div>
+                        <div *ngIf="pharmacy.value.currentDoc=='clinic'">
+                            <div class="documentImgContainer">
+                                <span (click)="pharmacy.value.currentDoc='speciality'"><i
+                                        class="fas fa-chevron-left leftArrow"></i></span>
+                                <img [src]="pharmacy.value.appartmentPic" class="img90">
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="fullyBtn" (click)="approvePharmacy(pharmacy.value.userId,pharmacy.key);">
+                                {{'approve'|translate}} </button>
+                            <button class="fullyBtn"
+                                (click)="disapprovePharmacy(pharmacy.value.userId,pharmacy.value.pharmacyStatus,pharmacy.key);">
+                                {{'disapprove'|translate}} </button>
+                        </div>
+                        <div class="showHideDocuments">
+                            <div (click)="pharmacy.value.showFullInfo=false">
+                                <i class="fas fa-angle-double-up"></i><br>
+                                {{'hideDoc'|translate}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div *ngIf="loadPendingPharmacies; then loadingMore else allDoctorsLoaded"></div>
+            <ng-template #loadingMore>
+                <div *ngIf="loadingPharmacies" class="loadPendingDocStatus">
+                    <div class="loading">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #allDoctorsLoaded>
+                <div class="loadPendingDocStatus">{{'allPharLoaded'|translate}}</div>
+            </ng-template>
+        </div>
+    </section>
+</body>
+
+</html>

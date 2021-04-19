@@ -48,116 +48,10 @@
     box-shadow: var(--infoBox);
     transition: all .3s ease-in-out;
 }
-.col .docNotAppName{
-    padding-top: 10px;
-    font-size: 1.2rem;
-}
 .patientName{
     font-size: 1.5rem;
     text-transform: capitalize;
     font-weight: 600;
-}
-.fa-user{
-    padding: 2px;
-    margin: 0px 5px;
-}
-.col .pendingDocImg{
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
-    border: 3px solid #308a7b;
-    overflow: hidden;
-}
-.fa-user-tie{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 0px;
-    font-size: 90px;
-}
-.profileImg{
-    height: 100%;
-    width: auto;
-}
-.strok{
-    z-index: 2;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    border-radius: 50%;
-    border:1px solid var(--box-color);
-    transition: all .3s ease-in-out;
-}
-.col .documentImgContainer{
-    position: relative;
-    width: 100%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-.col .documentImgContainer .img90{
-    width: 80%;
-    left: 10%;
-}
-.rightArrow{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 2%;
-    font-size: 30px;
-    color: var(--text-color);
-    transition: all .3s ease-in-out;
-}
-.leftArrow{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 2%;
-    font-size: 30px;
-    color: var(--text-color);
-    transition: all .3s ease-in-out;
-}
-.fullyBtn{
-    width: 35%;
-}
-.col .showHideDocuments{
-    padding: 4% 0%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.col .showHideDocuments:hover, .leftArrow:hover, .rightArrow:hover{
-    cursor: pointer;
-}
-.col .fa-angle-double-down,.col  .fa-angle-double-up{
-    transition: .3s;
-}
-.col .showHideDocuments:hover .fa-angle-double-down{
-    margin-top: 10px;
-}
-.col .showHideDocuments:hover .fa-angle-double-up{
-    margin-bottom: 10px;
-}
-.col .pendingStatus{
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #308a7b;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    width: auto;
-}
-.col .reVerifyStatus{
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #ff9100;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    width: auto;
 }
 .col .specialityContainer{
     display: inline-block;
@@ -165,44 +59,6 @@
     border-radius: 5px;
     padding: 5px 10px;
     margin-top: 10px;
-}
-.notApprovedDocGrid{
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 10px;
-    margin: 10px;
-    width: 100%;
-}
-.notApprovedDocGrid .col{
-    position: relative;
-    text-align: center;
-    border-radius: 10px;
-    background-color: var(--background-color);
-    box-shadow: var(--infoBox);
-    transition: all .3s ease-in-out;
-    width: 95%;
-    height: 95%;
-    padding: 25px 10px;
-}
-.docDecision{
-    z-index: 2;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.90);
-    border-radius: 10px;
-}
-.docDecision .docNotAppNameText{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    color: white;
-    font-weight: 600;
 }
 .loadPendingDocStatus{
     position: absolute;

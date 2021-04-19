@@ -436,5 +436,9 @@
     "showDoctorInfo":"Show doctor informations",
 
     "ownershipOfPharmacy":"A photo proving that you are the owner of a pharmacy",
-    "PictureProvingSpecialty":"A photo proving your specialty"
+    "PictureProvingSpecialty":"A photo proving your specialty",
+    "allPharLoaded":"All pharmacies loaded",
+    "pharmacyApproved":"Pharmacy approved",
+    "disapproved":"disapproved",
+    "disapprovedPermanently":"Disapproved permanently"
 }

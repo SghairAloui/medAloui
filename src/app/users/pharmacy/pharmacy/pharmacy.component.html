@@ -32,9 +32,12 @@
                     {{'approvedByAdmin'|translate}}, <span class="textLien"
                         (click)="toapprovedByAdminSection()">{{'setUpNow'|translate}}</span>
                 </div>
-                <div *ngIf="pharmacyGet.pharmacyStatus=='disapprovedByAdmin'" class="disapprovedByAdmin">
+                <div *ngIf="pharmacyGet.pharmacyStatus=='disapproved'" class="disapprovedByAdmin">
                     {{'disapprovedText'|translate}}<br><span class="textLien"
                         (click)="toNotApprovedSection()">{{'disapprovedReVerify'|translate}}</span>
+                </div>
+                <div *ngIf="deleteAccount"  class="disapprovedByAdmin">
+                    {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
                 </div>
             </div>
             <section id="generalInfoSection">
@@ -159,7 +162,7 @@
 
             </section>
             <section *ngIf="pharmacyGet.pharmacyStatus!='approved'" id="approvePharmacySection">
-                <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved'">
+                <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved' || pharmacyGet.pharmacyStatus=='disapproved'">
                     <div class="sectionTitle">{{'notApproved'|translate}}</div>
                     <div class="sectionContainer">
                         {{'toProveYourAccount'|translate}}

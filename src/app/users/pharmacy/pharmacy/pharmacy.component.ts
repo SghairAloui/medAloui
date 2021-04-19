@@ -60,7 +60,8 @@ export class PharmacyComponent implements OnInit {
   container: string = 'profile';
   passwordDis: boolean = true;
   cinPic: Boolean = false; pharmacyOwnershipPic: Boolean = false; pharmacySpecialty: Boolean = false;
-  notApproved:string='info';
+  notApproved: string = 'info';
+  deleteAccount:boolean=false;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -134,21 +135,20 @@ export class PharmacyComponent implements OnInit {
           this.headerService.setHeader('pharmacy');
           this.getImage();
           this.intializeEdit();
-          if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapprovedByAdmin') {
+          if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
           }
+          if (this.pharmacyGet.pharmacyStatus == 'disapprovedPermanently')
+            this.deleteByUserId();
           this.pharmacyInfo = true;
           localStorage.setItem('id', this.pharmacyGet.userId + '')
         } else
           this.router.navigate(['/acceuil']);
       },
       err => {
-        this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 5000,
-          positionClass: 'toast-bottom-left'
-        });
+        this.router.navigate(['/acceuil']);
       }
     );
   }
@@ -386,17 +386,36 @@ export class PharmacyComponent implements OnInit {
   }
 
   submitPharmacyDocuments() {
-    let twoStringsPost:TwoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'pending');
+    let status: string;
+    if (this.pharmacyGet.pharmacyStatus == 'notApproved')
+      status = 'pending';
+    else if (this.pharmacyGet.pharmacyStatus == 'disapproved')
+      status = 'reVerify';
+    let twoStringsPost: TwoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), status);
     this.pharmacyService.changePharamcyStatusBySecureLogin(twoStringsPost).subscribe(
       res => {
-        if(res){
-          this.pharmacyGet.pharmacyStatus='pending';
+        if (res) {
+          this.pharmacyGet.pharmacyStatus = status;
         }
       }
     );
   }
 
-  toNotApprovedSection(){
-    document.getElementById("approvePharmacySection").scrollIntoView({behavior:'smooth'});
+  toNotApprovedSection() {
+    document.getElementById("approvePharmacySection").scrollIntoView({ behavior: 'smooth' });
+  }
+
+  deleteByUserId() {
+    this.pharmacyService.deleteByUserId(this.pharmacyGet.userId).subscribe(
+      res => {
+        if (res) {
+          this.toastr.warning(this.translate.instant('accountDeleted'), this.translate.instant('info'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+          this.deleteAccount=true;
+        }
+      }
+    );
   }
 }

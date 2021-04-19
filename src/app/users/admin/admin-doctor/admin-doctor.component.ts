@@ -23,39 +23,44 @@ export class AdminDoctorComponent implements OnInit {
   validationPost: ValidationPost;
   twoStringsPost: TwoStringsPost;
   integerAndString: IntegerAndStringPost;
-  docDocuments: boolean[]= [];
+  docDocuments: boolean[] = [];
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
-  profileImages: any[]= [];
-  documentPic: string[]= [];
-  cinImages: any[] = []; specialityImages: any[]= []; clinicImages: any[]= [];
+  profileImages: any[] = [];
+  documentPic: string[] = [];
+  cinImages: any[] = []; specialityImages: any[] = []; clinicImages: any[] = [];
   showPendingDoc: boolean[] = []; pendingDocDecision: string[] = [];
-  pendingDoctors: DoctorPendingGet[]= [];
-  page:number=0;
+  pendingDoctors: DoctorPendingGet[] = [];
+  page: number = 0;
   doctorName: string;
-  pendingDoctorsNumber:number;
-  loadPendingDoc:boolean=true;
-  constructor(private adminService: AdminService, private toastr: ToastrService, private translate: TranslateService, private doctorService: DoctorService, private validationService: ValidationService, private specialityService: SpecialityService) { }
+  pendingDoctorsNumber: number;
+  loadPendingDoc: boolean = true;
+  constructor(private adminService: AdminService,
+    private toastr: ToastrService,
+    private translate: TranslateService,
+    private doctorService: DoctorService,
+    private validationService: ValidationService,
+    private specialityService: SpecialityService) { }
 
   ngOnInit(): void {
     this.getPendingDoctorsNumber();
   }
 
   getPendingDoctors(page: number, size: number) {
-    let pendingDoctors:DoctorPendingGet[]=[];
-    this.adminService.getPendingDoctors(page,size).subscribe(
+    let pendingDoctors: DoctorPendingGet[] = [];
+    this.adminService.getPendingDoctors(page, size).subscribe(
       res => {
         pendingDoctors = res;
         for (let i of pendingDoctors) {
-          i.docIndex=this.pendingDoctors.length;
+          i.docIndex = this.pendingDoctors.length;
           this.pendingDoctors.push(i);
           this.showPendingDoc.push(true);
-          this.checkDocImg(i.userId,i.docIndex);
+          this.checkDocImg(i.userId, i.docIndex);
           this.docDocuments.push(false);
-          this.getCinImage(i.userId,i.docIndex);
-          this.getSpecialityImage(i.userId,i.docIndex);
-          this.getClinicImage(i.userId,i.docIndex);
+          this.getCinImage(i.userId, i.docIndex);
+          this.getSpecialityImage(i.userId, i.docIndex);
+          this.getClinicImage(i.userId, i.docIndex);
           this.documentPic.push('cin');
         }
       },
@@ -68,25 +73,25 @@ export class AdminDoctorComponent implements OnInit {
     );
   }
 
-  checkDocImg(doctorId: number,index:number) {
-    this.getProfileImage(doctorId + 'doctorProfilePic', doctorId,index);
+  checkDocImg(doctorId: number, index: number) {
+    this.getProfileImage(doctorId + 'doctorProfilePic', doctorId, index);
   }
 
-  getProfileImage(imageName: string, doctorId: number,index:number) {
+  getProfileImage(imageName: string, doctorId: number, index: number) {
     this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
       res => {
         if (res != null) {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.profileImages[index]=this.retrievedImage;
-        }else
-          this.profileImages[index]=false;
+          this.profileImages[index] = this.retrievedImage;
+        } else
+          this.profileImages[index] = false;
       }
     );
   }
 
-  getCinImage(doctorId: number,index:number) {
+  getCinImage(doctorId: number, index: number) {
     let imageName: string = 'doctorCinPic';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
       res => {
@@ -94,13 +99,13 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.cinImages[index]=this.retrievedImage;
+          this.cinImages[index] = this.retrievedImage;
         }
       }
     );
   }
 
-  getClinicImage(doctorId: number,index:number) {
+  getClinicImage(doctorId: number, index: number) {
     let imageName: string = 'doctorMedicalClinicPic';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
       res => {
@@ -108,13 +113,13 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.clinicImages[index]=this.retrievedImage;
+          this.clinicImages[index] = this.retrievedImage;
         }
       }
     );
   }
 
-  getSpecialityImage(doctorId: number,index:number) {
+  getSpecialityImage(doctorId: number, index: number) {
     let imageName: string = 'doctorMedicalSpecialty';
     this.doctorService.getDoctorPofilePhoto(doctorId + imageName).subscribe(
       res => {
@@ -122,7 +127,7 @@ export class AdminDoctorComponent implements OnInit {
           this.retrieveResonse = res;
           this.base64Data = this.retrieveResonse.picByte;
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          this.specialityImages[index]=this.retrievedImage;
+          this.specialityImages[index] = this.retrievedImage;
         }
       }
     );
@@ -334,25 +339,25 @@ export class AdminDoctorComponent implements OnInit {
     );
   }
 
-  getPendingDoctorsNumber(){
+  getPendingDoctorsNumber() {
     this.doctorService.getPendingDoctorsNumber().subscribe(
-      res=>{
-        this.pendingDoctorsNumber=res;
+      res => {
+        this.pendingDoctorsNumber = res;
       }
     );
   }
-  
+
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
-    if(this.loadPendingDoc){
+    if (this.loadPendingDoc) {
       let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
       let max = document.documentElement.scrollHeight;
       if (max == pos) {
-        if(this.pendingDoctors.length < this.pendingDoctorsNumber){
-          this.getPendingDoctors(this.page,4);
-          this.page+=1;
-        }else{
-          this.loadPendingDoc=false;
+        if (this.pendingDoctors.length < this.pendingDoctorsNumber) {
+          this.getPendingDoctors(this.page, 4);
+          this.page += 1;
+        } else {
+          this.loadPendingDoc = false;
         }
       }
     }
