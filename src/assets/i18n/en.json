@@ -440,5 +440,11 @@
     "allPharLoaded":"All pharmacies loaded",
     "pharmacyApproved":"Pharmacy approved",
     "disapproved":"disapproved",
-    "disapprovedPermanently":"Disapproved permanently"
+    "disapprovedPermanently":"Disapproved permanently",
+    "closeTime":"Close time",
+    "exactAddress":"Exact address",
+    "nightPharmacy":"Night pharmacy",
+    "dayPharmacy":"Day pharmacy",
+    "selectPharmacyType":"Please select your pharmacy type",
+    "enterValidAddress":"Enter valid address"
 }

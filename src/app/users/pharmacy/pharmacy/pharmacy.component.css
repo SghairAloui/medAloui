@@ -164,3 +164,67 @@ html,body{
     width: 80%;
     text-align: center;
 }
+.infoGridTowColumn .infoContainer{
+    height: 100%;
+    background-color: var(--box-color);
+    transition: all .3s ease-in-out;
+}
+.infoGridTowColumn{
+    padding: 2% 2% ;
+}
+.pharmacyType{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+#dayPh,#nightPh{
+    display: none;
+}
+#dayPh:checked + .dayPhLabel,#nightPh:checked + .nightPhLabel{
+    color: white;
+    background-color: #308a7b;
+    box-shadow: var(--gender-box-shadow);
+}
+.dayPhLabel:hover, .nightPhLabel:hover{
+    color: white;
+    background-color: #308a7bb2;
+}
+.nightPhLabel{
+    border: 1px solid #308a7b;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    color: #308a7b;
+    background: transparent;
+}
+.dayPhLabel{
+    border: 1px solid #308a7b;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 5px;
+    color: #308a7b;
+    background: transparent;
+}
+.exactAddress{
+    width: 60%;
+    left:20%;
+}
+.selectPharmacyType{
+    margin-top: 2%;
+    margin-bottom: 1%;
+    color: red;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+.dashedLine{
+    border-bottom: 1px dashed red;
+    width: 110%;
+    margin-left: -5%;
+    margin-top: 1%;
+    margin-bottom: 2%;
+}

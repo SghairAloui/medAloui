@@ -21,9 +21,9 @@ import { PharmacyService } from '../pharmacy.service';
 })
 export class PharmacyComponent implements OnInit {
 
-  constructor(private pharmacyService: PharmacyService,
+  constructor(private translate: TranslateService,
+    private pharmacyService: PharmacyService,
     private headerService: HeaderService,
-    private translate: TranslateService,
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,
@@ -61,7 +61,9 @@ export class PharmacyComponent implements OnInit {
   passwordDis: boolean = true;
   cinPic: Boolean = false; pharmacyOwnershipPic: Boolean = false; pharmacySpecialty: Boolean = false;
   notApproved: string = 'info';
-  deleteAccount:boolean=false;
+  deleteAccount: boolean = false;
+  exactAddress: string; exactAddressInformation: string; invalidExactAddress: boolean = false;
+  nightPh: boolean = false; dayPh: boolean = false; accountType: boolean = false;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -139,11 +141,12 @@ export class PharmacyComponent implements OnInit {
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
             this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
+            this.exactAddressInformation = this.translate.instant('exactAddress');
           }
           if (this.pharmacyGet.pharmacyStatus == 'disapprovedPermanently')
             this.deleteByUserId();
           this.pharmacyInfo = true;
-          localStorage.setItem('id', this.pharmacyGet.userId + '')
+          localStorage.setItem('id', this.pharmacyGet.userId + '');
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -386,19 +389,37 @@ export class PharmacyComponent implements OnInit {
   }
 
   submitPharmacyDocuments() {
-    let status: string;
-    if (this.pharmacyGet.pharmacyStatus == 'notApproved')
-      status = 'pending';
-    else if (this.pharmacyGet.pharmacyStatus == 'disapproved')
-      status = 'reVerify';
-    let twoStringsPost: TwoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), status);
-    this.pharmacyService.changePharamcyStatusBySecureLogin(twoStringsPost).subscribe(
-      res => {
-        if (res) {
-          this.pharmacyGet.pharmacyStatus = status;
+    if (!this.dayPh && !this.nightPh)
+      this.accountType = true;
+    else if (this.exactAddress == null) {
+      this.invalidExactAddress = true;
+      this.exactAddressInformation = this.translate.instant('enterValidAddress');
+    }
+    else if (this.exactAddress.length < 6) {
+      this.invalidExactAddress = true;
+      this.exactAddressInformation = this.translate.instant('enterValidAddress');
+    }
+    else {
+      let status: string;
+      if (this.pharmacyGet.pharmacyStatus == 'notApproved')
+        status = 'pending';
+      else if (this.pharmacyGet.pharmacyStatus == 'disapproved')
+        status = 'reVerify';
+      
+      let pharmacyType: string;
+      if (this.dayPh)
+        pharmacyType = 'day';
+      else if (this.nightPh)
+        pharmacyType = 'night';
+      
+      this.pharmacyService.changePharamcyStatusAndSettingsBySecureLogin(localStorage.getItem('secureLogin'), status, this.exactAddress, pharmacyType).subscribe(
+        res => {
+          if (res) {
+            this.pharmacyGet.pharmacyStatus = status;
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   toNotApprovedSection() {
@@ -413,9 +434,13 @@ export class PharmacyComponent implements OnInit {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
           });
-          this.deleteAccount=true;
+          this.deleteAccount = true;
         }
       }
     );
+  }
+
+  toapprovedByAdminSection() {
+    document.getElementById("approvedByAdminSection").scrollIntoView({ behavior: 'smooth' });
   }
 }

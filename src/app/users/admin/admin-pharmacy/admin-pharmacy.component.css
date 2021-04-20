@@ -9,3 +9,20 @@
     left: 0%;
     transform: translate(0%,0%);
 }
+.pharmacyInfo{
+    background-color: white;
+    box-shadow: var(--info-box);
+    color: #308a7b;
+    border-radius: 5px;
+    margin: 5px 5px;
+}
+.pharmacyInfoIncon{
+    margin: 2px 5px;
+}
+.pharmacyInfoText{
+    text-transform: capitalize;
+    background-color:#308a7b;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 5px;
+}

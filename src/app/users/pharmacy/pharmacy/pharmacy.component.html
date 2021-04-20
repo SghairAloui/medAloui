@@ -19,24 +19,23 @@
                     <ng-template #showNotApprovedWhy>
                         {{'notApprovedWhy'|translate}}
                         <div class="center">
-                            <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}}
+                            <button (click)="toNotApprovedSection()" class="emptyBtn white">
+                                {{'approveAccount'|translate}}
                             </button><br>
-                            <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+                            <span class="textLien"
+                                (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
                         </div>
                     </ng-template>
                 </div>
-                <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'" class="notApproved">
+                <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'"
+                    class="notApproved">
                     {{'pendingInfo'|translate}}<br>
-                </div>
-                <div *ngIf="pharmacyGet.pharmacyStatus=='approvedByAdmin'" class="notApproved">
-                    {{'approvedByAdmin'|translate}}, <span class="textLien"
-                        (click)="toapprovedByAdminSection()">{{'setUpNow'|translate}}</span>
                 </div>
                 <div *ngIf="pharmacyGet.pharmacyStatus=='disapproved'" class="disapprovedByAdmin">
                     {{'disapprovedText'|translate}}<br><span class="textLien"
                         (click)="toNotApprovedSection()">{{'disapprovedReVerify'|translate}}</span>
                 </div>
-                <div *ngIf="deleteAccount"  class="disapprovedByAdmin">
+                <div *ngIf="deleteAccount" class="disapprovedByAdmin">
                     {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
                 </div>
             </div>
@@ -166,6 +165,27 @@
                     <div class="sectionTitle">{{'notApproved'|translate}}</div>
                     <div class="sectionContainer">
                         {{'toProveYourAccount'|translate}}
+                        <div class="pharmacyType">
+                            <div *ngIf="accountType" class="selectPharmacyType">
+                                {{'selectPharmacyType'|translate}}
+                                <div class="dashedLine"></div>
+                            </div>
+                            <input type="radio" id="dayPh" name="ph" (change)="dayPh=true;nightPh=false;accountType=false;" (checked)="dayPh">
+                            <label for="dayPh" class="dayPhLabel"> {{'dayPharmacy'|translate}} </label>
+                            <input type="radio" id="nightPh" name="ph" (change)="dayPh=false;nightPh=true;accountType=false;" (checked)="nightPh">
+                            <label for="nightPh" class="nightPhLabel"> {{'nightPharmacy'|translate}} </label>
+                        </div>
+                        <div class="infoContainer" style="box-shadow: none;">
+                            <div class="formDiv exactAddress">
+                                <input type="text" [class.labelInvalidInfo]="invalidExactAddress" name="exactAddress"
+                                    [(ngModel)]="exactAddress"
+                                    (keyup)="exactAddressInformation=translate.instant('exactAddress');invalidExactAddress=false"
+                                    class="formInput" placeholder=" ">
+                                <label for="" class="formLabel">
+                                    {{exactAddressInformation}}
+                                </label>
+                            </div>
+                        </div>
                         <div class="infoGrid">
                             <div class="infoContainer proveContainer">
                                 <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>

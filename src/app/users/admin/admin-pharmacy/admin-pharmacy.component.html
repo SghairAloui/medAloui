@@ -45,6 +45,22 @@
                         </div>
                     </ng-template>
                     <ng-template #showDocDocuments>
+                        <span class="pharmacyInfo">
+                            <span class="pharmacyInfoIncon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </span>
+                            <span class="pharmacyInfoText">
+                                {{pharmacy.value.pharmacyExactAddress}}
+                            </span>
+                        </span>
+                        <span class="pharmacyInfo">
+                            <span class="pharmacyInfoIncon">
+                                <i class="fas fa-clock"></i>
+                            </span>
+                            <span  class="pharmacyInfoText">
+                                {{pharmacy.value.pharmacyType}}
+                            </span>
+                        </span>
                         <div *ngIf="pharmacy.value.currentDoc=='cin'">
                             <div class="documentImgContainer">
                                 <span (click)="pharmacy.value.currentDoc='speciality'"><i

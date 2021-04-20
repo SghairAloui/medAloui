@@ -93,7 +93,7 @@ export class AdminPharmacyComponent implements OnInit {
   }
 
   approvePharmacy(pharmacyId: number, pharmacyKey: number) {
-    this.pharmacyService.changePharmacyStatusById('approvedByAdmin', pharmacyId).subscribe(
+    this.pharmacyService.changePharmacyStatusById('approved', pharmacyId).subscribe(
       res => {
         if (res) {
           this.addValidation('approved', pharmacyId, pharmacyKey);
