@@ -170,9 +170,11 @@
                                 {{'selectPharmacyType'|translate}}
                                 <div class="dashedLine"></div>
                             </div>
-                            <input type="radio" id="dayPh" name="ph" (change)="dayPh=true;nightPh=false;accountType=false;" (checked)="dayPh">
+                            <input type="radio" id="dayPh" name="ph"
+                                (change)="dayPh=true;nightPh=false;accountType=false;" (checked)="dayPh">
                             <label for="dayPh" class="dayPhLabel"> {{'dayPharmacy'|translate}} </label>
-                            <input type="radio" id="nightPh" name="ph" (change)="dayPh=false;nightPh=true;accountType=false;" (checked)="nightPh">
+                            <input type="radio" id="nightPh" name="ph"
+                                (change)="dayPh=false;nightPh=true;accountType=false;" (checked)="nightPh">
                             <label for="nightPh" class="nightPhLabel"> {{'nightPharmacy'|translate}} </label>
                         </div>
                         <div class="infoContainer" style="box-shadow: none;">
@@ -284,6 +286,47 @@
                             <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
                         </div>
                     </section>
+                </div>
+            </section>
+            <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="approvedPharmacySection">
+                <div class="sectionTitle">{{'myMedicaments'|translate}}</div>
+                <div class="sectionContainer">
+                    <div *ngIf="savingExcelFile" class="loadingConatiner">
+                        <div class="loading">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="excelNote">
+                        {{'excelImportNote'|translate}}
+                    </div>
+                    <div class="uploadExcelFileBtn">
+                        <input type="file" (change)="saveExcelFile($event)" class="excelFileInput">
+                        {{'updateMyMedicaments'|translate}}
+                    </div>
+                    <div *ngIf="myMedicamentNumber == 0" class="noMedicamentInfo">
+                        {{'noMedicamentInfo'|translate}}
+                    </div>
+                    <div *ngIf="myMedicamentNumber != 0" style="margin-top: 10px;">
+                        <div class="medicamentsFound">
+                            {{myMedicamentNumber}} {{'medicamentsFound'|translate}}
+                            <div class="greenLineMed"></div>
+                        </div>
+                        <div class="findForMedicamentName">
+                            {{'find'|translate}} <i class="fas fa-search"></i>
+                        </div>
+                        <div class="formDiv medicamentName">
+                            <span class="mesure spanButton" (click)="searchMedByNameAndPharmacyId()">
+                                {{'find'|translate}}
+                            </span>
+                            <input type="text" name="medicamentName" [(ngModel)]="medicamentName" class="formInput"
+                                placeholder=" ">
+                            <label for="" class="formLabel">
+                                {{'medicamentName'|translate}}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>

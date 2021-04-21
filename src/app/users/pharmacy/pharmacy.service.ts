@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GetPendingPharmacy } from 'src/model/GetPendingPharmacy';
+import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
@@ -8,12 +9,13 @@ import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
 const PHARMACY_API = 'http://localhost:8080/api/pharmacy/';
 const IMAGE_API = 'http://localhost:8080/api/image/';
+const UPLOADEXCELFILE_API = 'http://localhost:8080/api/uploadExcelFile/';
+const MEDSTOCK_API = 'http://localhost:8080/api/medicamentstock/';
 
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +62,21 @@ export class PharmacyService {
 
   public deleteByUserId(pharmacyId: number) {
     return this.http.get<boolean>(PHARMACY_API + 'deleteByUserId/' + pharmacyId, httpOptions);
+  }
+
+  public getStockNumberByPharmacyId(pharmacyId: number) {
+    return this.http.get<number>(MEDSTOCK_API + 'getStockNumberByPharmacyId/' + pharmacyId, httpOptions);
+  }
+
+  public importExcelFile(pharmacyId: number,uploadFileData: FormData) {
+    return this.http.post<number>(UPLOADEXCELFILE_API + 'import/' + pharmacyId,uploadFileData);
+  }
+
+  public deleteByPharmacyId(pharmacyId: number) {
+    return this.http.delete<boolean>(MEDSTOCK_API + 'deleteByPharmacyId/' + pharmacyId, httpOptions);
+  }
+
+  public searchMedByNameAndPharmacyId(pharmacyId: number,medicamentName:string) {
+    return this.http.post<MedicamentStockGet []>(MEDSTOCK_API + 'searchMedByNameAndPharmacyId', {pharmacyId,medicamentName}, httpOptions);
   }
 }

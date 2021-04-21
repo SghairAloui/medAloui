@@ -228,3 +228,89 @@ html,body{
     margin-top: 1%;
     margin-bottom: 2%;
 }
+.excelNote{
+    padding: 10px 25px;
+}
+.uploadExcelFileBtn{
+    position: relative;
+    background-color: var(--background-color);
+    box-shadow: var(--infoBox);
+    border-radius: 5px;
+    padding: 7px 15px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    transition: .3s ease-in-out;
+    overflow: hidden;
+}
+.uploadExcelFileBtn:hover{
+    transform: scale(1.05);
+}
+.noMedicamentInfo{
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    width: fit-content;
+}
+.excelFileInput{
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    left: -100%;
+    top: 0px;
+    width: 200%;
+    height: 200px;
+    z-index: 1;
+}
+.loadingConatiner{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.80);
+    width: 110%;
+    height: 110%;
+    left: -5%;
+    top: -5%;
+    border-radius: 20px;
+    z-index: 2;
+}
+.sectionContainer{
+    position: relative;
+    overflow: hidden;
+}
+.medicamentsFound{
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.greenLineMed{
+    margin-top: 3px;
+    margin-bottom: 10px;
+    margin-left: -10%;
+    width: 120%;
+    border-bottom: 1px solid #308a7b;
+}
+.findForMedicamentName{
+    padding-top: 7px;
+    padding-bottom: 5px;
+    margin-left: 21%;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gray-text);
+}
+.medicamentName{
+    width: 60%;
+    margin-left: 20%;
+}
+.spanButton{
+    cursor: pointer;
+    border: 1px solid #308a7b;
+    z-index: 2;
+    background: transparent;
+    color: #308a7b;
+    transition: .3s ease-in-out;
+}
+.spanButton:hover{
+    background-color: #308a7b;
+    color: white;
+}

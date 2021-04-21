@@ -446,5 +446,13 @@
     "nightPharmacy":"Night pharmacy",
     "dayPharmacy":"Day pharmacy",
     "selectPharmacyType":"Please select your pharmacy type",
-    "enterValidAddress":"Enter valid address"
+    "enterValidAddress":"Enter valid address",
+    "myMedicaments":"My medicaments",
+    "excelImportNote":"Note: Please note that the Excel file should only contain 1 column contain the names of the medicaments.",
+    "updateMyMedicaments":"Update my medicaments",
+    "noMedicamentInfo":"Your pharmacy does not have any medication yet, please upload your Excel file to add medicaments",
+    "medicamentsUpdated":"Medicaments updated",
+    "fileNotValid":"File not valid",
+    "medicamentsFound":"Medicaments found",
+    "find":"Find"
 }

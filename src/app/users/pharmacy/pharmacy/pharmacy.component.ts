@@ -54,6 +54,7 @@ export class PharmacyComponent implements OnInit {
   passwordRepeat: string; invalidPasswordRepeatVariable: boolean;
   updatePasswordPost: UpdatePasswordPost;
   selectedFile: File;
+  excelFile: File;
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
@@ -64,6 +65,8 @@ export class PharmacyComponent implements OnInit {
   deleteAccount: boolean = false;
   exactAddress: string; exactAddressInformation: string; invalidExactAddress: boolean = false;
   nightPh: boolean = false; dayPh: boolean = false; accountType: boolean = false;
+  myMedicamentNumber: number = 0; savingExcelFile: boolean = false;
+  medicamentName:string;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -135,6 +138,7 @@ export class PharmacyComponent implements OnInit {
         if (res) {
           this.pharmacyGet = res;
           this.headerService.setHeader('pharmacy');
+          this.getStockNumberByPharmacyId();
           this.getImage();
           this.intializeEdit();
           if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
@@ -405,13 +409,13 @@ export class PharmacyComponent implements OnInit {
         status = 'pending';
       else if (this.pharmacyGet.pharmacyStatus == 'disapproved')
         status = 'reVerify';
-      
+
       let pharmacyType: string;
       if (this.dayPh)
         pharmacyType = 'day';
       else if (this.nightPh)
         pharmacyType = 'night';
-      
+
       this.pharmacyService.changePharamcyStatusAndSettingsBySecureLogin(localStorage.getItem('secureLogin'), status, this.exactAddress, pharmacyType).subscribe(
         res => {
           if (res) {
@@ -442,5 +446,60 @@ export class PharmacyComponent implements OnInit {
 
   toapprovedByAdminSection() {
     document.getElementById("approvedByAdminSection").scrollIntoView({ behavior: 'smooth' });
+  }
+
+  getStockNumberByPharmacyId() {
+    this.pharmacyService.getStockNumberByPharmacyId(this.pharmacyGet.userId).subscribe(
+      res => {
+        this.myMedicamentNumber = res;
+      }
+    );
+  }
+
+  saveExcelFile(event) {
+    this.excelFile = null;
+    this.excelFile = event.target.files[0];
+    if (this.excelFile.name.length != 0) {
+      this.savingExcelFile = true;
+      this.uploadPharmacyMedicaments();
+    }
+  }
+
+  uploadPharmacyMedicaments() {
+    let uploadExcelFileData = new FormData();
+    uploadExcelFileData.append('file', this.excelFile);
+    this.pharmacyService.deleteByPharmacyId(this.pharmacyGet.userId).subscribe(
+      res => {
+        if (res) {
+          this.pharmacyService.importExcelFile(this.pharmacyGet.userId, uploadExcelFileData).subscribe(
+            res => {
+              this.toastr.success(this.translate.instant('medicamentsUpdated'), this.translate.instant('info'), {
+                timeOut: 3500,
+                positionClass: 'toast-bottom-left'
+              });
+              this.savingExcelFile = false;
+              this.getStockNumberByPharmacyId();
+            },
+            err => {
+              this.toastr.warning(this.translate.instant('fileNotValid'), this.translate.instant('info'), {
+                timeOut: 3500,
+                positionClass: 'toast-bottom-left'
+              });
+              this.savingExcelFile = false;
+            }
+          );
+        }
+      }
+    );
+  }
+
+  searchMedByNameAndPharmacyId(){
+    let medSearch:string='%'+this.medicamentName.split(' ').join('% %')+'%';
+    console.log(medSearch);
+    this.pharmacyService.searchMedByNameAndPharmacyId(this.pharmacyGet.userId,medSearch).subscribe(
+      res=>{
+        console.log(res);
+      }
+    );
   }
 }
