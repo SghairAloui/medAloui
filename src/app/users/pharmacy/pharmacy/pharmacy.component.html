@@ -288,7 +288,7 @@
                     </section>
                 </div>
             </section>
-            <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="approvedPharmacySection">
+            <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="myMedicamentsSection">
                 <div class="sectionTitle">{{'myMedicaments'|translate}}</div>
                 <div class="sectionContainer">
                     <div *ngIf="savingExcelFile" class="loadingConatiner">
@@ -325,6 +325,23 @@
                             <label for="" class="formLabel">
                                 {{'medicamentName'|translate}}
                             </label>
+                        </div>
+                        <div *ngFor="let med of myMedicaments | keyvalue">
+                            <div class="medicament">
+                                <div *ngIf="med.value.deleted" class="deletedMed">
+                                    <div class="deletedMedCenterText">
+                                        {{med.value.medicamentName}} {{'deleted'|translate}}
+                                    </div>
+                                </div>
+                                <div class="phMedicamentName">
+                                    {{med.value.medicamentName}}
+                                </div>
+                                <div>
+                                    <button class="fullyBtn red" (click)="deleteByMedicamentStockId(med.value.medicamentStockId,med.key)">
+                                        {{'delete'|translate}}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

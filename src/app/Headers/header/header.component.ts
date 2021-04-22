@@ -235,6 +235,13 @@ export class HeaderComponent implements OnInit {
     this.parentHeader=containerName;
   }
   //admin header
+
+  //pharmacy header
+  toMyMedicamentsInfoSection(){
+    document.getElementById("myMedicamentsSection").scrollIntoView({behavior:"smooth"});
+  }
+  //pharmacy header
+
   logOut(){
     localStorage.setItem("secureLogin","");
     localStorage.setItem("id","");

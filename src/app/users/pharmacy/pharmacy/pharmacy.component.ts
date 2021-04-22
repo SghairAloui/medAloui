@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { UserService } from 'src/app/services/user.service';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
+import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
@@ -66,7 +67,7 @@ export class PharmacyComponent implements OnInit {
   exactAddress: string; exactAddressInformation: string; invalidExactAddress: boolean = false;
   nightPh: boolean = false; dayPh: boolean = false; accountType: boolean = false;
   myMedicamentNumber: number = 0; savingExcelFile: boolean = false;
-  medicamentName:string;
+  medicamentName:string;myMedicaments:MedicamentStockGet[]=[];
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -498,7 +499,27 @@ export class PharmacyComponent implements OnInit {
     console.log(medSearch);
     this.pharmacyService.searchMedByNameAndPharmacyId(this.pharmacyGet.userId,medSearch).subscribe(
       res=>{
-        console.log(res);
+        let response:MedicamentStockGet[]=[];
+        response=res;
+        console.log(response);
+        for(let med of response){
+          med.deleted=false;
+          this.myMedicaments.push(med);
+        }
+      }
+    );
+  }
+
+  deleteByMedicamentStockId(stockId:number,medKey:number){
+    this.pharmacyService.deleteByMedicamentStockId(stockId).subscribe(
+      res=>{
+        if(res){
+          this.toastr.success(this.translate.instant('stockDeleted'), this.translate.instant('info'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+          this.myMedicaments[medKey].deleted=true;
+        }
       }
     );
   }

@@ -454,5 +454,7 @@
     "medicamentsUpdated":"Medicaments updated",
     "fileNotValid":"File not valid",
     "medicamentsFound":"Medicaments found",
-    "find":"Find"
+    "find":"Find",
+    "stockDeleted":"Stock deleted",
+    "deleted":"deleted"
 }

@@ -79,4 +79,8 @@ export class PharmacyService {
   public searchMedByNameAndPharmacyId(pharmacyId: number,medicamentName:string) {
     return this.http.post<MedicamentStockGet []>(MEDSTOCK_API + 'searchMedByNameAndPharmacyId', {pharmacyId,medicamentName}, httpOptions);
   }
+
+  public deleteByMedicamentStockId(stockId: number) {
+    return this.http.delete<boolean>(MEDSTOCK_API + 'deleteByMedicamentStockId/' + stockId, httpOptions);
+  }
 }
