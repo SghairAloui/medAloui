@@ -12,6 +12,7 @@ import { OneStringPost } from 'src/model/OneStringPost';
 import { SearchDoctorDoctorPost } from 'src/model/SearchDoctorDoctorPost';
 import { SearchedDocGet } from 'src/model/SearchedDocGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
+import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
 const DOC_API = 'http://localhost:8080/api/doctor/';
@@ -110,5 +111,9 @@ export class DoctorService {
 
   public GetDoctorInfoById(doctorId:number){
     return this.http.get<doctor>(DOC_API+'getDoctorInfoByDoctorId/'+doctorId,httpOptions);
+  }
+
+  public getTopRatedDoctor(page:number,size:number){
+    return this.http.post<TopRatedDoctorGet []>(DOC_API+'getTopRatedDoctor',{page,size},httpOptions);
   }
 }

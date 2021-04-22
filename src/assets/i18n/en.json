@@ -456,5 +456,6 @@
     "medicamentsFound":"Medicaments found",
     "find":"Find",
     "stockDeleted":"Stock deleted",
-    "deleted":"deleted"
+    "deleted":"deleted",
+    "ourAppHaveNoDocYet":"Our application have no doctor yet"
 }

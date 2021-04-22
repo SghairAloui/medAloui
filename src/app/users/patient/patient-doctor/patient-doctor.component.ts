@@ -14,6 +14,7 @@ import { PatientComponent } from '../patient/patient.component';
 import { PatientService } from '../patient/patient.service';
 import { DoctorGet } from 'src/model/Doctorget';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
+import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 
 @Component({
   selector: 'app-patient-doctor',
@@ -22,7 +23,13 @@ import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 })
 export class PatientDoctorComponent implements OnInit {
 
-  constructor(private translate: TranslateService, private toastr: ToastrService, private doctorService: DoctorService, private specialityService: SpecialityService, private appointmentService: AppointmentService, private patientComponent: PatientComponent, private patientService: PatientService) { }
+  constructor(private translate: TranslateService,
+    private toastr: ToastrService,
+    private doctorService: DoctorService,
+    private specialityService: SpecialityService,
+    private appointmentService: AppointmentService,
+    private patientComponent: PatientComponent,
+    private patientService: PatientService) { }
   medicalFilePapers: string = 'info'; losingTime: string = 'info'; appOrganize: string = 'info';
   slectedDay: boolean = true;
   monthDays: any[] = [];
@@ -46,6 +53,8 @@ export class PatientDoctorComponent implements OnInit {
   specialityGet: SpecialityGet[] = [];
   doctors: doctor[] = [];
   doctorId: number;
+  topRatedPage: number = 0;
+  topRatedDoctors: TopRatedDoctorGet[] = [];
 
 
   appointmentPost: AppointmentPost;
@@ -71,10 +80,14 @@ export class PatientDoctorComponent implements OnInit {
   appointmentDocInfo: AppointmentDocInfoGet[] = [];
   loadDoctorInfo: boolean[] = [];
   doctorApp: boolean; generateDays: boolean;
+  topRatedLoadMore: boolean;
+
   ngOnInit(): void {
     this.appointment = true;
     this.getAllSpecialities();
+    this.getTopRatedDoctor();
   }
+
   toOurMethodologySection() {
     document.getElementById("patientOurMethodologySection").scrollIntoView({ behavior: "smooth" });
   }
@@ -84,8 +97,8 @@ export class PatientDoctorComponent implements OnInit {
     this.searchedDocBool = true;
     let searchedDoc: SearchedDocGet[] = [];
     this.doctorCity = this.doctorCity.toLocaleLowerCase();
-    this.doctorCity = this.doctorCity.replace('é','e');
-    this.doctorCity = this.doctorCity.replace('è','e');
+    this.doctorCity = this.doctorCity.replace('é', 'e');
+    this.doctorCity = this.doctorCity.replace('è', 'e');
     this.searchDoctorDoctor = new SearchDoctorDoctorPost(this.specialityCode, this.doctorCity, this.searchDocPage, 4);
     this.doctorService.getApprovedDoctorsBySpecialityIdAndCity(this.searchDoctorDoctor).subscribe(
       res => {
@@ -454,7 +467,7 @@ export class PatientDoctorComponent implements OnInit {
 
     time += docStartMunite;
     if (time >= 60) {
-      endHour=1;
+      endHour = 1;
       while (time >= 60) {
         time = time % 60;
         startHour += 1;
@@ -466,22 +479,58 @@ export class PatientDoctorComponent implements OnInit {
       else
         return (docStartHour + startHour) + 'h:' + ((60 + time) % 60) + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((60 + time) % 60) + 'mn';
     } else {
-      if ((docStartMunite + (approxTime * patientTurn)+15) >= 60)
+      if ((docStartMunite + (approxTime * patientTurn) + 15) >= 60)
         endHour += 1;
       else
         endHour = 0;
-      if (docStartMunite <= 9){
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      if (docStartMunite <= 9) {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:0' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
-      else{
-        if(((docStartMunite + (approxTime * patientTurn)+15)%60)<=9)
-        return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+      else {
+        if (((docStartMunite + (approxTime * patientTurn) + 15) % 60) <= 9)
+          return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:0' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
         else
-        return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn)+15)%60) + 'mn';
+          return docStartHour + 'h:' + docStartMunite + 'mn ' + this.translate.instant('and') + ' ' + (docStartHour + endHour) + 'h:' + ((docStartMunite + (approxTime * patientTurn) + 15) % 60) + 'mn';
       }
     }
   }
+
+  getTopRatedDoctor() {
+    this.doctorService.getTopRatedDoctor(this.topRatedPage, 2).subscribe(
+      res => {
+        let doctors: TopRatedDoctorGet[] = [];
+        doctors = res;
+        for (let doc of doctors) {
+          this.topRatedDoctors.push(doc);
+          this.getTopRatedDocProfileImage(doc.userId, this.topRatedDoctors.length);
+        }
+        this.topRatedPage += 1;
+        if (doctors.length == 2)
+          this.topRatedLoadMore = true;
+        else
+          this.topRatedLoadMore = false;
+      }
+    );
+  }
+
+  getTopRatedDocProfileImage(docId: number, index: number) {
+    let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
+    this.patientService.getDoctorPofilePhoto(docId + 'doctorProfilePic').subscribe(
+      res => {
+        if (res != null) {
+          retrieveResonse = res;
+          base64Data = retrieveResonse.picByte;
+          retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+          this.topRatedDoctors[index - 1].profileImg = retrievedImage;
+        } else {
+          this.topRatedDoctors[index - 1].profileImg = false;
+        }
+      }
+    );
+  }
+
+
 }

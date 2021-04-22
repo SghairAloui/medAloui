@@ -259,3 +259,19 @@ body{
 .loadingClass .loading{
     margin-top: 0px;
 }
+.searchedDocDefaultImg{
+    font-size: 140px;
+}
+#patientTopRatedDoctorSection .doctor{
+    background-color: var(--background-color);
+}
+#patientTopRatedDoctorSection .doctor:hover{
+    transform: scale(1);
+    cursor: default;
+}
+.centerAddDocLoaded{
+    width: fit-content;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}

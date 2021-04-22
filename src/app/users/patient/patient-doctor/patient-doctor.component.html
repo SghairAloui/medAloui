@@ -32,6 +32,7 @@
                 style="height: 43px;">{{'search'|translate}}</button>
         </div>
     </section>
+
     <section id="searchedDoctorSection">
         <div *ngIf="searchedDoc" class="paddinfTop">
             <div *ngIf="docInfo; then docotorInfo else allDoctorinfo"></div>
@@ -163,7 +164,8 @@
             </ng-template>
             <ng-template #docotorInfo>
                 <div class="takeAppointmentContainer">
-                    <div class="backToAllAppArrow" (click)="docInfo=false;appointment=true;"><i class="fas fa-arrow-left"></i></div>
+                    <div class="backToAllAppArrow" (click)="docInfo=false;appointment=true;"><i
+                            class="fas fa-arrow-left"></i></div>
                     <div *ngIf="appointment">
                         <div class="sectionContainer">
                             <div class="doctorInfoContainer">
@@ -333,9 +335,115 @@
             </ng-template>
         </div>
     </section>
+
     <section id="patientTopRatedDoctorSection">
         <div class="sectionTitle">{{'topRated'|translate}}</div>
         <div class="sectionContainer">
+            <div *ngIf="topRatedDoctors.length == 0" style="text-align: center; margin-left: auto;margin-right: auto;padding: 0px 15px;">
+                {{'ourAppHaveNoDocYet'|translate}}
+            </div>
+            <div *ngIf="topRatedDoctors" class="searchedDocGrid">
+                <div *ngFor="let doc of topRatedDoctors | keyvalue" class="doctor">
+                    <div class="searchedDocProfileImgContainer">
+                        <div *ngIf="doc.value.profileImg; then showDocProfileImg else showDocDefaultImg">
+                        </div>
+                        <ng-template #showDocProfileImg><img [src]="doc.value.profileImg" class="profileImg">
+                        </ng-template>
+                        <ng-template #showDocDefaultImg><i class="fas fa-user-tie searchedDocDefaultImg"></i>
+                        </ng-template>
+                    </div>
+                    <div class="searchedDocInfo">
+                        <div><span style="text-transform: capitalize;">{{doc.value.doctorFirstName}} </span> <span
+                                style="text-transform: uppercase;">{{doc.value.doctorLastName}}</span></div>
+                        <div><i class="fas fa-map-marked-alt"></i> {{doc.value.userCity}} </div>
+                        <div *ngIf="doc.value.doctorRate != 0; then showRate else notRated"></div>
+                        <ng-template #showRate>
+                            <div *ngIf="doc.value.doctorRate == 0.5">
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 1">
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 1.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 2.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 3.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 4">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 4.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <div *ngIf="doc.value.doctorRate == 5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </ng-template>
+                        <ng-template #notRated>
+                            {{'notRated'|translate}}
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="topRatedLoadMore" class="loadMoreArrow" (click)="getTopRatedDoctor()">
+                <div>
+                    {{'loadMoreDiagnose'|translate}}</div>
+                <i
+                    class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
+            </div>
+            <div *ngIf="!topRatedLoadMore" class="centerAddDocLoaded">
+                {{'allDocLoaded'|translate}}
+            </div>
         </div>
     </section>
     <section id="patientOurMethodologySection">
@@ -384,7 +492,7 @@
     <section id="patientWhyHealthCareSection">
         <div class="sectionTitle">{{'whyHealthCare'|translate}}</div>
         <div class="sectionContainer">
-            <span style="font-size: 1.1rem;font-weight: 500;">{{'helthCareHelpYouTo'|translate}}</span>
+            <span style="font-size: 1.1rem;font-weight: 500; padding-left: 20px;">{{'helthCareHelpYouTo'|translate}}</span>
             <div class="grid">
                 <div class="gridInfo">
                     <div class="gridinfoCenter">
