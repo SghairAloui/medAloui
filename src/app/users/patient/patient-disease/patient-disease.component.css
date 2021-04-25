@@ -1,0 +1,261 @@
+.askButtons{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.emptyBtn{
+    width: fit-content;
+    padding: 0 25px;
+    margin: 10px;
+}
+.questionName{
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 15px;
+}
+.question{
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--background-color);
+    box-shadow: var(--box-info);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+.questionTitle{
+    background-color: white;
+    color: #308a7b;
+    box-shadow: var(--infoBox);
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 5px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.questionTitle .title{
+    padding: 2px 5px;
+}
+.questionTitle .text{
+    display: inline-block;
+    padding: 2px 5px;
+    color: white;
+    background-color: #308a7b;
+    border-radius: 5px;
+}
+.questionAbout{
+    margin-left: 20px;
+}
+.questionText{
+    width: 95%;
+    margin-left: 20px;
+}
+.questionPoints{
+    margin: 2px;
+    padding: 0px 15px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: var(--grayBackground);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+}
+.fa-sort-up{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    margin-bottom: -21px;
+    cursor: pointer;
+}
+.fa-sort-down{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    margin-top: -15px;
+    cursor: pointer;
+}
+.questionPoints .points{
+    text-align: center;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.questionContainer{
+    margin: 2px;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 15px 25px;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+}
+.centerQuestionPoints{
+    position: absolute;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-left: 2px;
+    transform: translate(-50%,-50%);
+}
+.commentsLine{
+    border-bottom: 1px solid #308a7b;
+    padding: 5px 15px;
+}
+.commentContainer{
+    margin-top: 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.loadMorePrescription{
+    position: relative;
+    width: fit-content;
+    margin-left:auto;
+    margin-right:auto;
+}
+.defaultCursor:hover{
+    cursor:default;
+}
+.centerLoading{
+    position: relative;
+    margin-bottom:20px;
+}
+.commentsLine{
+    border-bottom: 1px solid #308a7b;
+    padding: 5px 15px;
+}
+.loadMorePrescription{
+    position: relative;
+    width: fit-content;
+    margin-left:auto;
+    margin-right:auto;
+}
+.defaultCursor:hover{
+    cursor:default;
+}
+.centerLoading{
+    position: relative;
+    margin-bottom:20px;
+}
+.spanButton{
+    cursor: pointer;
+    border: 1px solid #308a7b;
+    z-index: 2;
+    background: transparent;
+    color: #308a7b;
+    transition: .3s ease-in-out;
+
+}
+.spanButton:hover{
+    background-color: #308a7b;
+    color: white;
+}
+.comment{
+    display: flex;
+    padding: 0px 5px;
+    margin: 15px 5px;
+}
+.commentLeftLine{
+    border-left: 1px solid #308a7b;
+    margin-left: 50px;
+}
+.commentPoints{
+    padding: 0px 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin: 5px;
+}
+.commentProfileImgConatiner{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #308a7b;
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    overflow: hidden;
+}
+.commentProfileImg{
+    position: absolute;
+    height: 40px;
+}
+.userTie50{
+    position: absolute;
+    font-size: 35px;
+    margin-bottom: 0px;
+}
+.fa-chevron-up{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+    cursor: pointer;
+}
+.fa-chevron-down{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+    cursor: pointer;
+}
+.comment .commentText{
+    padding: 10px 0px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 100%;
+}
+.commentPoints .points{
+    text-align: center;
+    font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.commentPostBy{
+    margin-left: 10px;
+}
+.allCommentLoaded{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.loadMoreComment{
+    width: fit-content;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+.commentValue{
+    margin-left: 15px;
+}
+.posterImageProfileContainer{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #308a7b;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.posterImageProfile{
+    position: absolute;
+    width: 50px;
+}
+.posterInfo{
+    position: relative;
+}
+.posterName{
+    position: relative;
+    text-transform: capitalize;
+    margin-left: 60px;
+    top: 25px;
+    transform: translateY(-50%);
+}
+.questionInfo{
+    display: flex;
+    justify-content: space-between;
+}
+.userTiePoster{
+    font-size: 45px;
+    margin-top: 0px;
+}

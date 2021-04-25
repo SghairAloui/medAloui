@@ -104,7 +104,7 @@
                 <ul class="navItem">
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
                     <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
-                    <li><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="diseaseClick()"><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
                     <li (click)="doctorClick()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
                     <li (click)="profileCLick()"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
@@ -118,6 +118,12 @@
                         <li (click)="toTopRatedSection()"><a>{{'topRated'|translate}}</a></li>
                         <li (click)="toOurMethodologySection()"><a>{{'ourMethodology'|translate}}</a></li>
                         <li (click)="toWhyHealthCareSection()"><a>{{'whyHealthCare'|translate}}</a></li>
+                    </ul>
+                </div>
+                <div *ngIf="parentHeader=='disease'">
+                    <ul>
+                        <li (click)="toAddQuestionSection()"><a>{{'addQuestion'|translate}}</a></li>
+                        <li (click)="toAllQuestionSection()"><a>{{'allQuestion'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='profile'">

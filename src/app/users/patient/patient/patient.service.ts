@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { dignoses } from 'src/model/dignoses';
+import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { PatientGet } from 'src/model/PatientGet';
@@ -74,6 +75,10 @@ export class PatientService {
       }),
       body: { medicalProfileId: medicalProfileId, doctorId: doctorId, date: date }
     });
+  }
+
+  public getUserFullNameById(patientId:number) {
+    return this.http.get<FirstAndLastNameGet>(PATIENT_API + 'getUserFullNameById/'+patientId, httpOptions);
   }
 
 }

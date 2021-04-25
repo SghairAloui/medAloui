@@ -1,0 +1,174 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <section id="addQuestionSection">
+        <div class="sectionTitle">{{'addQuestion'|translate}}</div>
+        <div class="sectionContainer">
+            <div *ngIf="question=='question'" class="askButtons">
+                <button class="emptyBtn" (click)="question='disease'">
+                    {{'askAboutDisease'|translate}}
+                </button>
+                <button class="emptyBtn" (click)="question='medicament'">
+                    {{'askAboutMedicament'|translate}}
+                </button>
+            </div>
+            <div *ngIf="question=='disease'">
+                <div class="formDiv questionName">
+                    <input type="text" class="formInput" [class.labelInvalidInfo]="invalidDiseaseName"
+                        name="diseaseName" [(ngModel)]="diseaseName" id="diseaseName" placeholder=" "
+                        (keyup)="invalidDiseaseName=false">
+                    <label for="chooseSpeciality" class="formLabel">{{'diseaseName'|translate}}</label>
+                </div>
+                <div class="formDiv">
+                    <input type="text" class="formInput" [class.labelInvalidInfo]="invalidDiseaseQuestion"
+                        name="diseaseQuestion" [(ngModel)]="diseaseQuestion" id="diseaseQuestion" placeholder=" "
+                        (keyup)="invalidDiseaseQuestion=false">
+                    <label for="chooseSpeciality" class="formLabel">{{'question'|translate}}</label>
+                </div>
+                <div class="buttons">
+                    <button class="emptyBtn" (click)="question='question'">
+                        {{'goBack'|translate}}
+                    </button>
+                    <button class="emptyBtn" (click)="postQuestion()">
+                        {{'postQuestion'|translate}}
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="question=='medicament'">
+                <div class="formDiv questionName">
+                    <input type="text" class="formInput" name="medicamentName"
+                        [class.labelInvalidInfo]="invalidMedicamentName" [(ngModel)]="medicamentName"
+                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentName=false">
+                    <label for="chooseSpeciality" class="formLabel">{{'medicamentName'|translate}}</label>
+                </div>
+                <div class="formDiv">
+                    <input type="text" class="formInput" name="medicamentQuestion"
+                        [class.labelInvalidInfo]="invalidMedicamentQuestion" [(ngModel)]="medicamentQuestion"
+                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentQuestion=false">
+                    <label for="chooseSpeciality" class="formLabel">{{'question'|translate}}</label>
+                </div>
+                <div class="buttons">
+                    <button class="emptyBtn" (click)="question='question'">
+                        {{'goBack'|translate}}
+                    </button>
+                    <button class="emptyBtn" (click)="postQuestion()">
+                        {{'postQuestion'|translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="allQuestionSection">
+        <div class="sectionTitle">{{'allQuestion'|translate}}</div>
+        <div *ngIf="questions">
+            <div *ngFor="let ques of questions | keyvalue" class="question">
+                <div class="questionPoints">
+                    <div class="centerQuestionPoints">
+                        <div (click)="addPointToQuestion(ques.value.questionId,ques.key)">
+                            <i class="fas fa-sort-up"></i>
+                        </div>
+                        <div class="points">
+                            {{ques.value.questionPoints}}
+                        </div>
+                        <div (click)="deletePointFromQuestion(ques.value.questionId,ques.key)">
+                            <i class="fas fa-sort-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="questionContainer">
+                    <div class="questionInfo">
+                        <div class="questionWithoutPosterInfo">
+                            <div class="questionAbout">
+                                <div *ngIf="ques.value.questionAbout=='disease'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'disease'|translate}} <i class="fas fa-virus"></i>
+                                    </div>
+                                </div>
+                                <div *ngIf="ques.value.questionAbout=='medicament'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'medicament'|translate}} <i class="fas fa-pills"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="questionTitle">
+                                <span class="title">
+                                    {{'questionAbout'|translate}}
+                                </span>
+                                <span class="text">
+                                    {{ques.value.questionName}}
+                                </span>
+                            </div>
+                            <div class="questionText">
+                                {{ques.value.question}} ?
+                            </div>
+                        </div>
+                        <div class="questionWithPosterInfo">
+                            <div class="posterInfo">
+                                <span *ngIf="ques.value.posterImageProfile" class="posterImageProfileContainer">
+                                    <img [src]="ques.value.posterImageProfile" class="posterImageProfile">
+                                </span>
+                                <span *ngIf="!ques.value.posterImageProfile" class="posterImageProfileContainer">
+                                    <i class="fas fa-user-tie userTiePoster"></i>
+                                </span>
+                                <div class="posterName">
+                                    {{ques.value.userFullName}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentsLine"></div>
+                    <div *ngIf="ques.value.comments.length==0" class="commentContainer">
+                        {{'noCommentYet'|translate}}
+                    </div>
+                    <div *ngFor="let comment of ques.value.comments | keyvalue" class="comment">
+                        <div *ngIf="comment.value.posterProfileImage;" class="commentProfileImgConatiner">
+                            <img [src]="comment.value.posterProfileImage" class="commentProfileImg">
+                        </div>
+                        <div *ngIf="!comment.value.posterProfileImage;" class="commentProfileImgConatiner">
+                            <i class="fas fa-user-tie userTie50"></i>
+                        </div>
+                        <div class="commentLeftLine"></div>
+                        <div class="commentText">
+                            <div class="commentPostBy">
+                                {{comment.value.commentPostBy}}
+                            </div>
+                            <div class="commentValue">
+                                {{comment.value.comment}}
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="ques.value.loadMoreComment"
+                        (click)="getPostCommentsByPostId(ques.value.questionId,ques.key)">
+                        <div class="loadMoreComment">
+                            {{'loadMoreComment'|translate}}
+                        </div>
+                        <div class="loadMoreComment">
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                    </div>
+                    <div *ngIf="ques.value.comments.length!=0 && !ques.value.loadMoreComment" class="allCommentLoaded defaultCursor">
+                        {{'allCommentLoaded'|translate}}
+                    </div>
+                </div>
+            </div>
+            <div class="centerLoading">
+                <div *ngIf="loadMoreQuestion" class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div *ngIf="!loadMoreQuestion" class="loadMorePrescription defaultCursor">
+                {{'allQuestionsLoaded'|translate}}
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

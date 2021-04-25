@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 
@@ -28,5 +29,9 @@ export class UserService {
 
   updateUsernameBySecureLogin(twoStringsPost:TwoStringsPost){
     return this.http.post<boolean>(USER_API + 'updateUsernameBySecureLogin',twoStringsPost,httpOptions);
+  }
+
+  public getUserFullNameById(docId:number) {
+    return this.http.get<FirstAndLastNameGet>(USER_API + 'getUserFullNameById/'+docId, httpOptions);
   }
 }

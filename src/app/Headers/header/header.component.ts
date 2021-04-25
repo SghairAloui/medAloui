@@ -202,6 +202,11 @@ export class HeaderComponent implements OnInit {
     this.parentHeader='profile';
   }
 
+  diseaseClick(){
+    this.patientComp.container='patientDisease';
+    this.parentHeader='disease';
+  }
+
   toFindDoctorSection(){
     document.getElementById("patientFindDoctorSection").scrollIntoView({behavior:"smooth"});
   }
@@ -220,6 +225,14 @@ export class HeaderComponent implements OnInit {
 
   toMyAppointmentsSection(){
     document.getElementById("myAppointmentsSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toAddQuestionSection(){
+    document.getElementById("addQuestionSection").scrollIntoView({behavior:"smooth"});
+  }
+
+  toAllQuestionSection(){
+    document.getElementById("allQuestionSection").scrollIntoView({behavior:"smooth"});
   }
 
   //doctor header

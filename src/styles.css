@@ -25,6 +25,7 @@ html,body{
     --arrowNavigation:#1c504786;
     --arrowNavigationHover:#1c5047;
     --box-color2:white;
+    --grayBackground:rgb(250, 250, 250);
 }
 .dark-theme{
     --background-color: #18191a;
@@ -45,6 +46,7 @@ html,body{
     --arrowNavigation:#ffffff86;
     --arrowNavigationHover:#fff;
     --box-color2:#18191a;
+    --grayBackground:rgb(44, 45, 48);
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';

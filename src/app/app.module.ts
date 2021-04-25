@@ -37,6 +37,9 @@ import { MedicamentService } from './services/medicament.service';
 import { PrescriptionService } from './services/prescription.service';
 import { HeaderService } from './Headers/header/header.service';
 import { PharmacyService } from './users/pharmacy/pharmacy.service';
+import { PatientDiseaseComponent } from './users/patient/patient-disease/patient-disease.component';
+import { QuestionService } from './services/question.service';
+import { DoctorDiseaseComponent } from './users/doctor/doctor-disease/doctor-disease.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +57,9 @@ import { PharmacyService } from './users/pharmacy/pharmacy.service';
     AdminDoctorComponent,
     AdminPatientComponent,
     AdminPharmacyComponent,
-    AdminDiseaseComponent
+    AdminDiseaseComponent,
+    PatientDiseaseComponent,
+    DoctorDiseaseComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +81,7 @@ import { PharmacyService } from './users/pharmacy/pharmacy.service';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
-    MedicamentService,PrescriptionService,HeaderService,PharmacyService,
+    MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,
     authInterceptorProviders
   ],
   bootstrap: [AppComponent]

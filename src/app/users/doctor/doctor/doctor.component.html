@@ -1848,6 +1848,9 @@
                     </div>
                 </section>
             </div>
+            <div *ngIf="container=='disease'">
+                <app-doctor-disease></app-doctor-disease>
+            </div>
         </div>
         <div *ngIf="doctorGet.doctorStatus=='notApproved'" class="notApproved">
             <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>

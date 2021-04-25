@@ -1,0 +1,134 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <section id="allQuestionSection">
+        <div class="sectionTitle">{{'allQuestion'|translate}}</div>
+        <div *ngIf="questions">
+            <div *ngFor="let ques of questions | keyvalue" class="question">
+                <div class="questionContainer">
+                    <div class="questionInfo">
+                        <div class="questionWithoutPosterInfo">
+                            <div class="questionAbout">
+                                <div *ngIf="ques.value.questionAbout=='disease'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'disease'|translate}} <i class="fas fa-virus"></i>
+                                    </div>
+                                </div>
+                                <div *ngIf="ques.value.questionAbout=='medicament'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'medicament'|translate}} <i class="fas fa-pills"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="questionTitle">
+                                <span class="title">
+                                    {{'questionAbout'|translate}}
+                                </span>
+                                <span class="text">
+                                    {{ques.value.questionName}}
+                                </span>
+                            </div>
+                            <div class="questionText">
+                                {{ques.value.question}} ?
+                            </div>
+                        </div>
+                        <div class="questionWithPosterInfo">
+                            <div class="posterInfo">
+                                <span *ngIf="ques.value.posterImageProfile" class="posterImageProfileContainer">
+                                    <img [src]="ques.value.posterImageProfile" class="posterImageProfile">
+                                </span>
+                                <span *ngIf="!ques.value.posterImageProfile" class="posterImageProfileContainer">
+                                    <i class="fas fa-user-tie userTiePoster"></i>
+                                </span>
+                                <div class="posterName">
+                                    {{ques.value.userFullName}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentsLine"></div>
+                    <div *ngIf="ques.value.comments.length==0">
+                        <div class="formDiv commentInput">
+                            <span class="mesure spanButton" (click)="addComment(ques.value.questionId,ques.key)">
+                                {{'add'|translate}}
+                            </span>
+                            <input type="text" class="formInput" name="firstComment"
+                                [class.labelInvalidInfo]="ques.value.invalidComment"
+                                [(ngModel)]="ques.value.doctorComment" id="firstComment" placeholder=" "
+                                (keyup)="ques.value.invalidComment=false">
+                            <label for="chooseSpeciality" class="formLabel">{{'firstComment'|translate}}</label>
+                        </div>
+                    </div>
+                    <div *ngIf="ques.value.comments.length!=0">
+                        <div *ngFor="let comment of ques.value.comments | keyvalue" class="comment">
+                            <div *ngIf="comment.value.posterProfileImage;" class="commentProfileImgConatiner">
+                                <img [src]="comment.value.posterProfileImage" class="commentProfileImg">
+                            </div>
+                            <div *ngIf="!comment.value.posterProfileImage;"  class="commentProfileImgConatiner">
+                                <i class="fas fa-user-tie userTie50"></i>
+                            </div>
+                            <div class="commentLeftLine"></div>
+                            <div class="commentPoints">
+                                <div (click)="addPointToComment(comment.value.commentId,ques.key,comment.key)">
+                                    <i class="fas fa-chevron-up"></i>
+                                </div>
+                                <div class="points">
+                                    {{comment.value.commentPoints}}
+                                </div>
+                                <div (click)="deletePointFromComment(comment.value.commentId,ques.key,comment.key)">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <div class="commentText">
+                                <div class="commentPostBy">
+                                {{comment.value.commentPostBy}}
+                                </div>
+                                <div>
+                                    {{comment.value.comment}}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="ques.value.loadMoreComment" (click)="getPostCommentsByPostId(ques.value.questionId,ques.key)">
+                            <div class="loadMoreComment">
+                                {{'loadMoreComment'|translate}}
+                            </div>
+                            <div class="loadMoreComment">
+                                <i class="fas fa-angle-down"></i>
+                            </div>
+                        </div>
+                        <div *ngIf="!ques.value.loadMoreComment" class="allCommentLoaded defaultCursor">
+                            {{'allCommentLoaded'|translate}}
+                        </div>
+                        <div class="formDiv commentInput">
+                            <span class="mesure spanButton" (click)="addComment(ques.value.questionId,ques.key)">
+                                {{'add'|translate}}
+                            </span>
+                            <input type="text" class="formInput" name="addComment"
+                                [class.labelInvalidInfo]="ques.value.invalidComment"
+                                [(ngModel)]="ques.value.doctorComment" id="addComment" placeholder=" "
+                                (keyup)="ques.value.invalidComment=false">
+                            <label for="chooseSpeciality" class="formLabel">{{'addComment'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="centerLoading">
+                <div *ngIf="loadMoreQuestion" class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div *ngIf="!loadMoreQuestion" class="loadMorePrescription defaultCursor">
+                {{'allQuestionsLoaded'|translate}}
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
