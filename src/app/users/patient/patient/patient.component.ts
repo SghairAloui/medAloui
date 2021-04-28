@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderComponent } from 'src/app/Headers/header/header.component';
 import { HeaderService } from 'src/app/Headers/header/header.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
@@ -15,6 +16,7 @@ import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
+import { NotificationGet } from 'src/model/NotificationGet';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { prescriptionGet } from 'src/model/prescriptionGet';
@@ -61,7 +63,8 @@ export class PatientComponent implements OnInit {
     private appointmentService: AppointmentService,
     private userService: UserService,
     private prescriptionService: PrescriptionService,
-    private headerService:HeaderService) { }
+    private headerService:HeaderService,
+    private notificationService:NotificationService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -110,6 +113,7 @@ export class PatientComponent implements OnInit {
   medicalProfileDiseaseInfo: string = 'info';
   loadDoctorInfoForMedicalProfileDis: boolean[] = [];
   loadMoreDis: boolean;
+  notificationPage:number=0;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
@@ -161,6 +165,7 @@ export class PatientComponent implements OnInit {
         if (res) {
           this.patientGet = res;
           this.headerService.setHeader('patient');
+          this.getMyNotifications(this.patientGet.userId);
           this.getImage();
           this.getPatientMedicalProfile();
           this.getAppointments();
@@ -177,6 +182,19 @@ export class PatientComponent implements OnInit {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });
+      }
+    );
+  }
+
+  getMyNotifications(userId: number) {
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+      res => {
+        console.log(res);
+        let notifications: NotificationGet[] = [];
+        notifications = res;
+        for (let notification of notifications) {
+          this.headerService.addNotification(notification);
+        }
       }
     );
   }

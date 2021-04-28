@@ -41,34 +41,43 @@
             </div>
             <section id="generalInfoSection">
                 <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                <div class="sectionContainer" *ngIf="generalInfo=='show'">
-                    <div class="pharmacyName">{{pharmacyGet.pharmacyName}} </div>
-                    <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
-                    <div class="imgContainer">
-                        <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                        <div class="editImage">
-                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
-                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                            <div class="center">{{'changeImage'|translate}}</div>
-                        </div>
-                        <div class="strok">
-                            <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
-                        </div>
-                    </div>
-                    <div class="pharmacyName">
-                        {{pharmacyGet.pharmacyFullName}}
-                    </div>
-                    <span class="notGrid">
-                        <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
-                            <div class="info">
-                                {{pharmacyGet.userCity}}
+                <div class="newSectionContainer" *ngIf="generalInfo=='show'">
+                    <div class="sectionContainerTopGreen"></div>
+                    <div>
+                        <div class="imgContainer">
+                            <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                            <div class="editImage">
+                                <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                </ng-template>
+                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                <div class="centerChangeText">{{'changeImage'|translate}}</div>
                             </div>
-                            <div class="infoTitle">{{'city'|translate}}</div>
+                            <div class="strok">
+                                <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                            </div>
                         </div>
-                    </span>
-                    <button class="emptyBtn" style="margin-top: 20px;"
-                        (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="verified">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="doctorGeneralInfo">
+                            <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}}</div>
+                            <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
+                        </div>
+                    </div>
+                    <button class="iconButton" style="margin-top: 20px;"
+                        (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
+                    <div class="userInfoContainer">
+                        <div class="userInfoContainerTitle">
+                            <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div class="userInfoContainerTitleValue">
+                                {{'city'|translate}}
+                            </div>
+                        </div>
+                        <div class="userInfoContainerValue">
+                            {{pharmacyGet.userCity}}
+                        </div>
+                    </div>
                 </div>
                 <div class="sectionContainer" *ngIf="generalInfo=='edit'">
                     <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
@@ -337,7 +346,8 @@
                                     {{med.value.medicamentName}}
                                 </div>
                                 <div>
-                                    <button class="fullyBtn red" (click)="deleteByMedicamentStockId(med.value.medicamentStockId,med.key)">
+                                    <button class="fullyBtn red"
+                                        (click)="deleteByMedicamentStockId(med.value.medicamentStockId,med.key)">
                                         {{'delete'|translate}}
                                     </button>
                                 </div>
@@ -346,7 +356,7 @@
                     </div>
                 </div>
 
-                <section  id="myPositionSection">
+                <section id="myPositionSection">
                     <div class="sectionTitle">{{'myPosition'|translate}}</div>
                     <div *ngIf="position" class="myMap">
                         <div *ngIf="position" id="map"></div>

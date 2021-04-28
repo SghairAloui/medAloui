@@ -515,6 +515,7 @@ html,body{
     cursor: pointer;
 }
 .imgContainer{
+    background-color: var(--box-color);
     display: inline-block;
     position: relative;
     left: 10%;

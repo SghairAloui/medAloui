@@ -11,51 +11,76 @@
         <div *ngIf="container=='profile' && patientInfo">
             <section id="generalInfoSection">
                 <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                <div class="sectionContainer" *ngIf="generalInfo=='show'">
-                    <div class="patientName">{{patientGet.patientFirstName}} <span
-                            class="last">{{patientGet.patientLastName}}</span></div>
-                    <i class="fas fa-user"></i> {{patientGet.userUsername}}
-                    <div class="imgContainer">
-                        <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                        <div class="editImage">
-                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg"></ng-template>
-                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                            <div class="center">{{'changeImage'|translate}}</div>
+                <div class="newSectionContainer" *ngIf="generalInfo=='show'">
+                    <div class="sectionContainerTopGreen"></div>
+                    <div>
+                        <div class="imgContainer">
+                            <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                            <div class="editImage">
+                                <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                </ng-template>
+                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                <div class="centerChangeText">{{'changeImage'|translate}}</div>
+                            </div>
+                            <div class="strok">
+                                <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                            </div>
                         </div>
-                        <div class="strok">
-                            <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                        <div class="doctorGeneralInfo">
+                            <div class="doctorName">{{patientGet.patientFirstName}} <span
+                                    class="last">{{patientGet.patientLastName}}</span></div>
+                            <i class="fas fa-user"></i> {{patientGet.userUsername}}
                         </div>
                     </div>
+                    <button class="iconButton"
+                        (click)="generalInfo='edit';initializeEditLabel();"><i
+                        class="far fa-edit"></i></button>
                     <div class="infoGrid">
                         <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
-                            <div class="info">
-                                <div *ngIf="patientGet.patientGender=='male'">
-                                    {{'male'|translate}}
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-venus-mars"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'gender'|translate}}
+                                    </div>
                                 </div>
-                                <div *ngIf="patientGet.patientGender=='female'">
-                                    {{'female'|translate}}
+                                <div class="userInfoContainerValue">
+                                    <div *ngIf="patientGet.patientGender=='male'">
+                                        {{'male'|translate}}
+                                    </div>
+                                    <div *ngIf="patientGet.patientGender=='female'">
+                                        {{'female'|translate}}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="infoTitle">{{'gender'|translate}}</div>
                         </div>
                         <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-birthday-cake"></i></div>
-                            <div class="info">
-                                {{patientGet.patientBirthDay}}
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-birthday-cake"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'birthday'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{patientGet.patientBirthDay}}
+                                </div>
                             </div>
-                            <div class="infoTitle">{{'birthday'|translate}}</div>
                         </div>
                         <div class="infoContainer">
-                            <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
-                            <div class="info">
-                                {{patientGet.userCity}}
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'city'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{patientGet.userCity}}
+                                </div>
                             </div>
-                            <div class="infoTitle">{{'city'|translate}}</div>
                         </div>
                     </div>
-                    <button class="emptyBtn"
-                        (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
                 </div>
                 <div class="sectionContainer" *ngIf="generalInfo=='edit'">
                     <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>

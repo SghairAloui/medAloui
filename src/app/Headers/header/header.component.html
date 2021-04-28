@@ -99,7 +99,13 @@
 
     <div *ngIf="role=='patient'" class="loginHeader">
         <header class="parentHeader">
-            <a><strong class="headerTitle">Health Care</strong></a>
+            <div>
+                <li (click)="parentHeader='notification';" class="notificationIcon">
+                    <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
+                    <a><i class="fas fa-bell faBellMenuIcon"></i></a>
+                </li>
+                <a><strong class="headerTitle">Health Care</strong></a>
+            </div>
             <nav>
                 <ul class="navItem">
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>

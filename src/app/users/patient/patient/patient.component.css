@@ -437,3 +437,135 @@ html,body{
     text-align: center;
     padding-bottom: 5px;
 }
+.newSectionContainer{
+    position: relative;
+    margin: 20px 30px;
+    border-radius: 20px;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+    overflow: hidden;
+    padding-bottom: 15px;
+}
+.sectionContainerTopGreen{
+    height: 150px;
+    width: 100%;
+    position: absolute;
+    background-color: #308a7b;
+    left: 0px;
+    top: 0px;
+}
+.imgContainer{
+    background-color: var(--box-color);
+    display: inline-block;
+    position: relative;
+    left: 10%;
+    margin: 2% 0%;
+    transform: translateX(0%);
+    width: 200px;
+    height: 200px;
+    border: none;
+    border-radius: 50%;
+    overflow:hidden;
+}
+.centerChangeText{
+    opacity: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transform: translate(-50%,-50%);
+    color: white;
+    transition: 0.3s;
+}
+.doctorGeneralInfo{
+    display: inline-block;
+    position: absolute;
+    color: #eceff3;
+    margin-top: 50px;
+    margin-left: 150px;
+}
+.doctorName{
+    color: #242f3d;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.doctorName span{
+    text-transform: uppercase;
+}
+.infoGrid .infoContainer{
+    background-color: none;
+    background: transparent;
+    box-shadow: none;
+}
+.infoGrid .infoContainer .userInfoContainer{
+    display: block;
+    width: 100%;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    font-family: 'Raleway', sans-serif;
+    cursor: default;
+}
+.infoGrid .infoContainer .userInfoContainerValue{
+    font-size: 25px;
+    padding: 10px 0px;
+}
+.iconButton{
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    padding: 10px;
+    background-color: #308a7b;
+    border-radius: 50%;
+    border: none;
+    margin-left: 90%;
+    margin-top: -150px;
+    color: white;
+    box-shadow: 0px 0px 5px #308a7b;
+}
+.userInfoContainer{
+    flex: 0 0 auto;
+    display: inline-block;
+    background-color: var(--userInfoContainerBackground);
+    padding: 15px 25px;
+    margin: 10px;
+    border-radius: 30px;
+    width: fit-content;
+    box-shadow: var(--userInfoContainerShadow);
+}
+.userInfoContainerTitle{
+    text-transform: capitalize;
+    position: relative;
+    display: flex;
+    margin-left: 10px;
+    color: var(--userInfoContainerTitleColor);
+}
+.userInfoContainerTitleIcon{
+    position: absolute;
+}
+.userInfoContainerTitleValue{
+    margin-left: 45px;
+    position: relative;
+    top:20px;
+    transform: translateY(-50%);
+    font-weight: 600;
+}
+.userInfoContainerValue{
+    padding: 5px 0px;
+    text-align: center;
+    margin-left:auto;
+    margin-right: auto;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--userInfoContainerValueColor);
+    text-transform: capitalize;
+}
+.fa-birthday-cake,.fa-venus-mars,.fa-map-marked-alt{
+    position: absolute;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
