@@ -209,7 +209,7 @@ export class PharmacyComponent implements OnInit {
         accessToken: 'your.mapbox.access.token'
       }).addTo(myMap);
 
-      let marker = L.marker([this.pharmacyGet.pharmacyLongitude, this.pharmacyGet.pharmacyLongitude]).addTo(myMap);
+      let marker = L.marker([this.pharmacyGet.pharmacyLatitude, this.pharmacyGet.pharmacyLongitude]).addTo(myMap);
       marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.pharmacyGet.pharmacyFullName  + "</b>").openPopup();
     }
   }
