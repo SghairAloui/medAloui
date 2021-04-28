@@ -40,6 +40,8 @@ import { PharmacyService } from './users/pharmacy/pharmacy.service';
 import { PatientDiseaseComponent } from './users/patient/patient-disease/patient-disease.component';
 import { QuestionService } from './services/question.service';
 import { DoctorDiseaseComponent } from './users/doctor/doctor-disease/doctor-disease.component';
+import { NotificationService } from './services/notification.service';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { DoctorDiseaseComponent } from './users/doctor/doctor-disease/doctor-dis
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    DragScrollModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
@@ -82,7 +85,7 @@ import { DoctorDiseaseComponent } from './users/doctor/doctor-disease/doctor-dis
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,
-    authInterceptorProviders
+    NotificationService,authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -7,7 +7,6 @@ import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
 import { DoctorSettingsPost } from 'src/model/DoctorSettingsPost';
-import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SearchDoctorDoctorPost } from 'src/model/SearchDoctorDoctorPost';
@@ -116,5 +115,9 @@ export class DoctorService {
 
   public getTopRatedDoctor(page:number,size:number){
     return this.http.post<TopRatedDoctorGet []>(DOC_API+'getTopRatedDoctor',{page,size},httpOptions);
+  }
+
+  public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
+    return this.http.post<boolean>(DOC_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
   }
 }

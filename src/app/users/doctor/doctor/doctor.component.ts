@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { MedicamentService } from 'src/app/services/medicament.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
@@ -21,6 +22,7 @@ import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { medNameAndTraitmentPer } from 'src/model/medNameAndTraitmentPer';
+import { NotificationGet } from 'src/model/NotificationGet';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { prescriptionGet } from 'src/model/prescriptionGet';
 import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
@@ -30,6 +32,8 @@ import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
+
+declare const L: any;
 
 @Component({
   selector: 'app-doctor',
@@ -73,7 +77,8 @@ export class DoctorComponent implements OnInit {
     private appointmentService: AppointmentService,
     private medicamentService: MedicamentService,
     private prescriptionService: PrescriptionService,
-    private headerService:HeaderService) { }
+    private headerService: HeaderService,
+    private notificationService: NotificationService) { }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -130,6 +135,9 @@ export class DoctorComponent implements OnInit {
   todayMedicalProfilePrescription: prescriptionGet[] = [];
   tomorrowMedicalProfilePrescription: prescriptionGet[] = [];
   todayPatientMedicalProfileId: number = 0;
+  notificationPage: number = 0;
+  position: boolean = false;
+  geoNotId:number=0;
 
 
   ngOnInit(): void {
@@ -142,11 +150,80 @@ export class DoctorComponent implements OnInit {
     this.getAllSpecialities();
   }
 
+  async setDoctorPosition() {
+    if (!navigator.geolocation) {
+      console.log('not supported');
+    }
+    if (this.doctorGet.doctorLongitude && this.doctorGet.doctorLongitude) {
+      this.position = true;
+      let container = document.getElementById('map');
+      while (!container) {
+        container = document.getElementById('map');
+        await this.sleep(500);
+      }
+      let myMap = L.map('map').setView([this.doctorGet.doctorLongitude, this.doctorGet.doctorLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(myMap);
+
+      let marker = L.marker([this.doctorGet.doctorLongitude, this.doctorGet.doctorLongitude]).addTo(myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Dr. " + this.doctorGet.doctorFirstName + " " + this.doctorGet.doctorLastName + "</b>").openPopup();
+    }
+  }
+
+  updateMyPosition() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.doctorService.updatePositionBySecureLogin(localStorage.getItem('secureLogin'), position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+        res => {
+          if (res) {
+            if (!this.position) {
+              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
+                res => {
+                  if (res) {
+                    this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
+                      timeOut: 3500,
+                      positionClass: 'toast-bottom-left'
+                    });
+                    this.doctorGet.doctorLatitude = position.coords.latitude.toString();
+                    this.doctorGet.doctorLongitude = position.coords.longitude.toString();
+                    this.setDoctorPosition();
+                  }
+                },
+                err => {
+                  this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+                    timeOut: 3500,
+                    positionClass: 'toast-bottom-left'
+                  });
+                }
+              );
+            }else{
+              this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
+                timeOut: 3500,
+                positionClass: 'toast-bottom-left'
+              });
+              this.doctorGet.doctorLatitude = position.coords.latitude.toString();
+              this.doctorGet.doctorLongitude = position.coords.longitude.toString();
+              this.setDoctorPosition();
+            }
+          }
+        }
+      );
+    });
+  }
+
   getDoctorInfo() {
     this.doctorService.getDoctorInfo(this.secureLogin).subscribe(
       res => {
         if (res) {
           this.doctorGet = res;
+          this.getMyNotifications(this.doctorGet.userId);
+          this.setDoctorPosition();
           this.getPatientNumber(this.currentDate, 'today');
           this.getTomorrowAppPatientByDate(true);
           if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
@@ -171,6 +248,20 @@ export class DoctorComponent implements OnInit {
       },
       err => {
         this.router.navigate(['/acceuil']);
+      }
+    );
+  }
+
+  getMyNotifications(userId: number) {
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+      res => {
+        let notifications: NotificationGet[] = [];
+        notifications = res;
+        for (let notification of notifications) {
+          this.headerService.addNotification(notification);
+          if(notification.notificationType=='setYourGeoLocation')
+            this.geoNotId=notification.notificationId;
+        }
       }
     );
   }
@@ -1064,7 +1155,6 @@ export class DoctorComponent implements OnInit {
             this.getPatientNumber(tomorrow, 'tomorrow');
           }
           for (let tomorrowApp of tomorrowAppointments) {
-            console.log(tomorrowApp);
             this.docTomorrowAppointments.push(tomorrowApp);
             this.getPatientInfo(tomorrowApp.patientId, tomorrowApp.patientTurn, 'tomorrow');
             this.getPatientProfileImage(tomorrowApp.patientId, tomorrowApp.patientTurn, 'tomorrow');
@@ -1243,7 +1333,6 @@ export class DoctorComponent implements OnInit {
   }
 
   getMedicalProfileDiseases(id: number, patientKey: number, status: string, page: number) {
-    console.log('id: ' + id + ' patientKey: ' + patientKey + ' status: ' + status + ' page: ' + page);
     this.patientService.getPatientMedicalProfileDeseasesByMedicalProfileId(id, page, 3).subscribe(
       res => {
         let response: medicalProfileDiseaseGet[] = [];
@@ -1264,11 +1353,8 @@ export class DoctorComponent implements OnInit {
         else if (status == 'tomorrow') {
           this.tomorrowMedicalProfileDiseasePage[patientKey] += 1;
           for (let dis of response) {
-            console.log(dis);
             dis.showFullInfo = false;
             this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease.push(dis);
-            console.log('pat key ' + this.tomorrowPatientKey);
-            console.log('app ' + this.docTomorrowAppointments[this.tomorrowPatientKey]);
             this.getPatientPrescriptionByDoctorIdPatientIdAndDate(this.docTomorrowAppointments[this.tomorrowPatientKey].patientId, dis.medicalProfileDiseaseDiagnoseDay.slice(0, 10), this.tomorrowPatientMedicalProfileGet[patientKey].medicalProfileDisease.length, 'tomorrow');
           }
           if (response.length == 3)
@@ -1622,7 +1708,6 @@ export class DoctorComponent implements OnInit {
   }
 
   getDoctorFullInfo(doctorId: number, diseaseKey: number, status: string) {
-    console.log(status);
     if (status == 'current' && this.doctorInfoForMedicalProfileDis[diseaseKey])
       this.currentPatientMedicalProfile[this.doctorGet.currentPatient - 1].medicalProfileDisease[diseaseKey].showFullInfo = true;
     else if (status == 'today' && this.doctorInfoForMedicalProfileDis[diseaseKey])

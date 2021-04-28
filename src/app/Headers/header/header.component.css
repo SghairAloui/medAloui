@@ -240,6 +240,53 @@ html,body{
 }
 
 /*login header*/
+.notificationIcon{
+    position: relative;
+    width: fit-content;
+}
+.faBellMenuIcon{
+    font-size: 25px;
+}
+.notification{
+    position: relative;
+    margin: 5px;
+    padding: 5px;
+    line-height: 15pt;
+    text-align: center;
+    border: 1px solid var(--notificationBorderColor);
+    background-color: var(--notificationBackgroundColor);
+    border-radius: 5px;
+    color: var(--notificationTextColor);
+}
+.newNotification{
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f39c12;
+    right: 16px;
+}
+.notificationIcons{
+    display: flex;
+    justify-content: space-between;
+    margin: 3px;
+    padding: 3px;
+}
+.fa-map-marked-alt{
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 5px;
+}
+.fa-times{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+}
+.fa-bell,.fa-bell-slash,.fa-trash-alt{
+    cursor: pointer;
+}
 .loginHeader .parentHeader{
     top: 0;
     position: fixed;

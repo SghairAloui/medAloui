@@ -15,4 +15,6 @@ export interface DoctorGet{
     appointmentApproximateDuration:number;
     appointmentPrice:number;
     currentPatient:number;
+    doctorLatitude:string;
+    doctorLongitude:string;
 }

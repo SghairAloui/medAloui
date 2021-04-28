@@ -483,5 +483,15 @@
     "commentAdded":"Comment added",
     "enterCommentFirst":"Enter comment first",
     "allCommentLoaded":"All comment loaded",
-    "loadMoreComment":"Load more comment"
+    "loadMoreComment":"Load more comment",
+    "noPositoin":"Note: You need to update your working position so that users can find you by GPS",
+    "updateMyPosition":"update my position",
+    "setYourGeoLocation":"Note: Users cannot find you by GPS until you update your location",
+    "time":"Time",
+    "myPosition":"My position",
+    "helloIm":"Hello I'm",
+    "noPositionSaved":"No saved position yet",
+    "updatePos":"Update position now",
+    "position":"Position",
+    "positionUpdated":"Position updated"
 }

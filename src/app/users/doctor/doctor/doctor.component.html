@@ -17,52 +17,80 @@
             <div *ngIf="container=='profile'">
                 <section id="generalInfoSection">
                     <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                    <div class="sectionContainer" *ngIf="generalInfo=='show'">
-                        <div class="doctorName">Dr.{{doctorGet.doctorFirstName}} <span
-                                class="last">{{doctorGet.doctorLastName}}</span></div>
-                        <i class="fas fa-user"></i> {{doctorGet.userUsername}}
-                        <div class="imgContainer">
-                            <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                            <div class="editImage">
-                                <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                </ng-template>
-                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                <div class="centerChangeText">{{'changeImage'|translate}}</div>
+                    <div class="newSectionContainer" *ngIf="generalInfo=='show'">
+                        <div class="sectionContainerTopGreen"></div>
+                        <div>
+                            <div class="imgContainer">
+                                <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                                <div class="editImage">
+                                    <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                    </ng-template>
+                                    <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                    <div class="centerChangeText">{{'changeImage'|translate}}</div>
+                                </div>
+                                <div class="strok">
+                                    <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                                </div>
                             </div>
-                            <div class="strok">
-                                <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                            <div *ngIf="doctorGet.doctorStatus=='approved'" class="verified">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="doctorGeneralInfo">
+                                <div class="doctorName">Dr. {{doctorGet.doctorFirstName}} <span
+                                        class="last">{{doctorGet.doctorLastName}}</span></div>
+                                <i class="fas fa-user"></i> {{doctorGet.userUsername}}
                             </div>
                         </div>
+                        <button class="iconButton" (click)="generalInfo='edit';initializeEditLabel();"><i
+                                class="far fa-edit"></i></button>
                         <div class="infoGrid">
                             <div class="infoContainer">
-                                <div class="infoIcon"><i class="fas fa-venus-mars"></i></div>
-                                <div class="info">
-                                    <div *ngIf="doctorGet.doctorGender=='male'">
-                                        {{'male'|translate}}
+                                <div class="userInfoContainer">
+                                    <div class="userInfoContainerTitle">
+                                        <div class="userInfoContainerTitleIcon"><i class="fas fa-venus-mars"></i></div>
+                                        <div class="userInfoContainerTitleValue">
+                                            {{'gender'|translate}}
+                                        </div>
                                     </div>
-                                    <div *ngIf="doctorGet.doctorGender=='female'">
-                                        {{'female'|translate}}
+                                    <div class="userInfoContainerValue">
+                                        <div *ngIf="doctorGet.doctorGender=='male'">
+                                            {{'male'|translate}}
+                                        </div>
+                                        <div *ngIf="doctorGet.doctorGender=='female'">
+                                            {{'female'|translate}}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="infoTitle">{{'gender'|translate}}</div>
                             </div>
                             <div class="infoContainer">
-                                <div class="infoIcon"><i class="fas fa-birthday-cake"></i></div>
-                                <div class="info">
-                                    {{doctorGet.doctorBirthDay}}
+                                <div class="userInfoContainer">
+                                    <div class="userInfoContainerTitle">
+                                        <div class="userInfoContainerTitleIcon"><i class="fas fa-birthday-cake"></i>
+                                        </div>
+                                        <div class="userInfoContainerTitleValue">
+                                            {{'birthday'|translate}}
+                                        </div>
+                                    </div>
+                                    <div class="userInfoContainerValue">
+                                        {{doctorGet.doctorBirthDay}}
+                                    </div>
                                 </div>
-                                <div class="infoTitle">{{'birthday'|translate}}</div>
                             </div>
                             <div class="infoContainer">
-                                <div class="infoIcon"><i class="fas fa-map-marked-alt"></i></div>
-                                <div class="info">
-                                    {{doctorGet.userCity}}
+                                <div class="userInfoContainer">
+                                    <div class="userInfoContainerTitle">
+                                        <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                                        </div>
+                                        <div class="userInfoContainerTitleValue">
+                                            {{'city'|translate}}
+                                        </div>
+                                    </div>
+                                    <div class="userInfoContainerValue">
+                                        {{doctorGet.userCity}}
+                                    </div>
                                 </div>
-                                <div class="infoTitle">{{'city'|translate}}</div>
                             </div>
                         </div>
-                        <button class="emptyBtn"
-                            (click)="generalInfo='edit';initializeEditLabel();">{{'edit'|translate}}</button>
                     </div>
                     <div class="sectionContainer" *ngIf="generalInfo=='edit'">
                         <div *ngIf="editGeneralInformation; then editGeneralInfo else editSecureInfo"></div>
@@ -505,69 +533,140 @@
                 </div>
                 <div *ngIf="doctorGet.doctorStatus=='approved'">
                     <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
-                    <div class="sectionContainer pending">
-                        <div *ngIf="doctorSettings; then showDoctorSettings else editDoctorSettings"></div>
-                        <ng-template #showDoctorSettings>
-                            <div class="infoGridTowColumn">
-                                <div class="infoContainer backgroundColor">
-                                    <div class="infoTitle">{{'maxPatientPerDay'|translate}}</div>
-                                    <div class="info">
-                                        {{doctorGet.maxPatientPerDay}}
+                    <div *ngIf="doctorSettings; then showDoctorSettings else editDoctorSettings"></div>
+                    <ng-template #showDoctorSettings>
+                        <drag-scroll scrollbar-hidden="true" style="height: auto;width: auto;"
+                            class="userInfoContainers" #userInfoContainers>
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-hospital-user"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'patients'|translate}}
                                     </div>
                                 </div>
-                                <div class="infoContainer">
-                                    <div class="infoContainer backgroundColor">
-                                        <div class="infoTitle">{{'startTime'|translate}}</div>
-                                        <div class="info">
-                                            {{doctorGet.startTime}}
-                                        </div>
-                                    </div>
+                                <div class="userInfoContainerValue">
+                                    {{doctorGet.maxPatientPerDay}} {{'patients'|translate}}
                                 </div>
-                                <div class="infoContainer backgroundColor">
-                                    <div class="infoTitle">{{'appointmentPrice'|translate}}</div>
-                                    <div class="info">
-                                        {{doctorGet.appointmentPrice}}
-                                    </div>
-                                </div>
-                                <div class="infoContainer">
-                                    <div class="infoContainer backgroundColor">
-                                        <div class="infoTitle">{{'AppointmentTime'|translate}}</div>
-                                        <div class="info">
-                                            {{doctorGet.appointmentApproximateDuration}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="infoContainer">
-                                    <div class="infoContainer backgroundColor">
-                                        <div class="infoTitle">{{'exactAdress'|translate}}</div>
-                                        <div class="info">
-                                            <div class="verticalCenter">
-                                                <div class="center">{{doctorGet.exactAddress}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="infoContainer">
-                                    <div class="infoContainer backgroundColor">
-                                        <div class="infoTitle">{{'workDaysShow'|translate}}</div>
-                                        <div class="info">
-                                            <span *ngIf="Mon" class="dayContainer">{{'Mon'|translate}}</span>
-                                            <span *ngIf="Tue" class="dayContainer">{{'Tue'|translate}}</span>
-                                            <span *ngIf="Wed" class="dayContainer">{{'Wed'|translate}}</span>
-                                            <span *ngIf="Thu" class="dayContainer">{{'Thu'|translate}}</span>
-                                            <span *ngIf="Fri" class="dayContainer">{{'Fri'|translate}}</span>
-                                            <span *ngIf="Sat" class="dayContainer">{{'Sat'|translate}}</span>
-                                            <span *ngIf="Sun" class="dayContainer">{{'Sun'|translate}}</span>
-                                        </div>
-                                    </div>
+                                <div class="userInfoContainerSecondValue">
+                                    <div class="userInfoContainerSecondValuePoint"></div>
+                                    <div class="userInfoContainerSecondValueText">{{'maxPatientPerDay'|translate}}</div>
                                 </div>
                             </div>
-                            <button class="emptyBtn centerBtn" (click)="doctorSettings=false;"> {{'edit'|translate}}
-                            </button>
-                        </ng-template>
-                        <ng-template #editDoctorSettings>
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="far fa-clock"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'time'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{doctorGet.startTime}}
+                                </div>
+                                <div class="userInfoContainerSecondValue">
+                                    <div class="userInfoContainerSecondValuePoint"></div>
+                                    <div class="userInfoContainerSecondValueText">{{'startTime'|translate}}</div>
+                                </div>
+                            </div>
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-hand-holding-usd"></i>
+                                    </div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'price'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{doctorGet.appointmentPrice}} Dt
+                                </div>
+                                <div class="userInfoContainerSecondValue">
+                                    <div class="userInfoContainerSecondValuePoint"></div>
+                                    <div class="userInfoContainerSecondValueText">{{'appointmentPrice'|translate}}</div>
+                                </div>
+                            </div>
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-user-clock"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'time'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{doctorGet.appointmentApproximateDuration}} Minute
+                                </div>
+                                <div class="userInfoContainerSecondValue">
+                                    <div class="userInfoContainerSecondValuePoint"></div>
+                                    <div class="userInfoContainerSecondValueText">{{'AppointmentTime'|translate}}</div>
+                                </div>
+                            </div>
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i></div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'address'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{doctorGet.userCity}}
+                                </div>
+                                <div class="userInfoContainerSecondValue">
+                                    <div class="userInfoContainerSecondValuePoint"></div>
+                                    <div class="userInfoContainerSecondValueText">{{doctorGet.exactAddress}}</div>
+                                </div>
+                            </div>
+                        </drag-scroll>
+                        <div class="workDayLineTilte">
+                            <i class="fas fa-briefcase"></i> <span
+                                class="workDayLineTilteValue">{{'workDaysShow'|translate}}</span>
+                        </div>
+                        <drag-scroll scrollbar-hidden="true" style="height: auto;" class="workDaysLine">
+                            <div class="workDaysLineFirstCircle"></div>
+                            <div class="workDaysLineFirst"></div>
+                            <div *ngIf="Mon" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Mon" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'mon'|translate}}</div>
+                            </div>
+                            <div *ngIf="Tue" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Tue" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'tue'|translate}}</div>
+                            </div>
+                            <div *ngIf="Wed" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Wed" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'wed'|translate}}</div>
+                            </div>
+                            <div *ngIf="Thu" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Thu" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'thu'|translate}}</div>
+                            </div>
+                            <div *ngIf="Fri" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Fri" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'fri'|translate}}</div>
+                            </div>
+                            <div *ngIf="Sat" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Sat" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineBetween">
+                                <div>{{'sat'|translate}}</div>
+                            </div>
+                            <div *ngIf="Sun" class="workDaysLineWorkCircle"></div>
+                            <div *ngIf="!Sun" class="workDaysLineDisabledWorkCircle"></div>
+                            <div class="workDaysLineFirst">
+                                <div>{{'sun'|translate}}</div>
+                            </div>
+                            <div class="workDaysLineEndCircle"></div>
+                            <div style="opacity: 0;" class="workDaysLineWorkCircle"></div>
+                        </drag-scroll>
+                        <button class="iconButton" style="margin-bottom: 20px;" (click)="doctorSettings=false;">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </ng-template>
+                    <ng-template #editDoctorSettings>
+                        <div class="sectionContainer">
                             <div class="infoGridTowColumn">
-                                <div class="infoContainer">
+                                <div class="infoContainer" style="box-shadow: none;">
                                     <div class="formDiv">
                                         <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
                                             name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
@@ -578,7 +677,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="infoContainer">
+                                <div class="infoContainer" style="box-shadow: none;">
                                     <div class="formDiv">
                                         <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
                                             name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
@@ -682,8 +781,20 @@
                                     (click)="ckeckFormAndUpdate('update');doctorSettings=true;disabledUpdateBtn=true"
                                     [disabled]="disabledUpdateBtn">{{'update'|translate}}</button>
                             </div>
-                        </ng-template>
-                    </div>
+                        </div>
+                    </ng-template>
+                    <section id="myPositionSection">
+                        <div class="sectionTitle">{{'myPosition'|translate}}</div>
+                        <div *ngIf="position" class="myMap">
+                            <div *ngIf="position" id="map"></div>
+                        </div>
+                        <div *ngIf="!position" class="noPosition">
+                            {{'noPositionSaved'|translate}} <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <button class="emptyBtn" style="margin-bottom: 15px;" (click)="updateMyPosition()">
+                            {{'updateMyPosition'|translate}}
+                        </button>
+                    </section>
                 </div>
                 <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'">
                     <section id="reVerifySection">

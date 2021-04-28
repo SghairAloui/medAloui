@@ -9,7 +9,7 @@ html,body{
 .light-theme{
     --background-color: #F0F2F5;
     --text-color: #000;
-    --box-color: #fff;
+    --box-color: rgb(250, 250, 250);
     --box-shadow: 0px 0px 25px  rgba(92, 99, 105,.2);
     --Black-text:#000;
     --gray-text:#4d4d4d;
@@ -26,6 +26,15 @@ html,body{
     --arrowNavigationHover:#1c5047;
     --box-color2:white;
     --grayBackground:rgb(250, 250, 250);
+    --notificationBackgroundColor:#ebf7ee;
+    --notificationBorderColor:#c6e8cf;
+    --notificationTextColor:#333c48;
+    --userInfoContainerBackground:#f9fafc;
+    --userInfoContainerShadow:0px 0px 10px rgba(0, 0, 0, 0.15);
+    --userInfoContainerTitleColor:#838a99;
+    --userInfoContainerValueColor:#1a1a1a;
+    --disabledWorkCircle:#838a99;
+    --dayColor:#555d6e;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -47,6 +56,15 @@ html,body{
     --arrowNavigationHover:#fff;
     --box-color2:#18191a;
     --grayBackground:rgb(44, 45, 48);
+    --notificationBackgroundColor:#308a7b17;
+    --notificationBorderColor:#308a7b;
+    --notificationTextColor:white;
+    --userInfoContainerBackground:#2b2a2a;
+    --userInfoContainerShadow:none;
+    --userInfoContainerTitleColor:#d5d6d8;
+    --userInfoContainerValueColor:#fffafa;
+    --disabledWorkCircle:#e0e0e0;
+    --dayColor:#c5c9d3;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -358,6 +376,7 @@ input[disabled]{
     transition: all .3s ease-in-out;
 }
 .sectionTitle{
+    margin-left: 30px;
     padding-top: 5%;
     font-size: 2.5rem;
     padding-bottom: 10px;
@@ -514,17 +533,6 @@ input[disabled]{
     border: 5px solid #308a7b;
     border-radius: 50%;
     overflow:hidden;
-}
-.imgContainer .strok{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    border-radius: 50%;
-    border:4px solid var(--box-color);
-    transition: all .3s ease-in-out;
 }
 .imgContainer .strok{
     cursor: pointer;
