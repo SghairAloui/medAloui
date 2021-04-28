@@ -352,3 +352,22 @@ html,body{
     margin-top: auto;
     margin-bottom: auto;
 }
+.myMap{
+    position: relative;
+    height: 60vh;
+    width: 95%;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--infoBox);
+}
+#map{
+    height: 100%;
+    width: 100%;
+}
+.noPosition{
+    font-size: 20px;
+    width: fit-content;
+    margin: 15px auto;
+}

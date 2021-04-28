@@ -154,7 +154,7 @@ export class DoctorComponent implements OnInit {
     if (!navigator.geolocation) {
       console.log('not supported');
     }
-    if (this.doctorGet.doctorLongitude && this.doctorGet.doctorLongitude) {
+    if (this.doctorGet.doctorLatitude && this.doctorGet.doctorLongitude) {
       this.position = true;
       let container = document.getElementById('map');
       while (!container) {

@@ -345,6 +345,19 @@
                         </div>
                     </div>
                 </div>
+
+                <section  id="myPositionSection">
+                    <div class="sectionTitle">{{'myPosition'|translate}}</div>
+                    <div *ngIf="position" class="myMap">
+                        <div *ngIf="position" id="map"></div>
+                    </div>
+                    <div *ngIf="!position" class="noPosition">
+                        {{'noPositionSaved'|translate}} <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <button class="emptyBtn" style="margin-bottom: 15px;" (click)="updateMyPosition()">
+                        {{'updateMyPosition'|translate}}
+                    </button>
+                </section>
             </section>
         </div>
     </div>

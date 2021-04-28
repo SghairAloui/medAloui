@@ -4,5 +4,6 @@ export interface PharmacyGet{
     pharmacyFullName:string;
     userCity:string;
     pharmacyStatus:string;
-
+    pharmacyLatitude:string;
+    pharmacyLongitude:string;
 }

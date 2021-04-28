@@ -493,5 +493,6 @@
     "noPositionSaved":"No saved position yet",
     "updatePos":"Update position now",
     "position":"Position",
-    "positionUpdated":"Position updated"
+    "positionUpdated":"Position updated",
+    "noNotification":"No notifications"
 }

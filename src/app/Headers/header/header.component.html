@@ -272,31 +272,6 @@
         </header>
         <header class="headerChild">
             <nav class="navItem">
-                <div *ngIf="parentHeader=='notification'">
-                    <div *ngFor="let notif of notifications | keyvalue | slice:1:notifications.length" class="notification">
-                        <div *ngIf="notif.value.notificationType=='setYourGeoLocation'">
-                            <div>
-                                <i class="fas fa-map-marked-alt"></i>
-                            </div>
-                            {{'setYourGeoLocation'|translate}}
-                            <div (click)="updateDocPosClick()" class="textLien">
-                                {{'updatePos'|translate}} ?
-                            </div>
-                            <div class="notificationIcons">
-                                <span *ngIf="notif.value.unread==true" (click)="changeUnreadNotification(notif.key)">
-                                    <i class="fas fa-bell-slash"></i>
-                                </span>
-                                <span *ngIf="notif.value.unread==false" (click)="changeUnreadNotification(notif.key)">
-                                    <i class="fas fa-bell"></i>
-                                </span>
-                                <i class="fas fa-trash-alt"></i>
-                            </div>
-                            <span (click)="closeNotification(notif.key)">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
                 <div *ngIf="parentHeader=='patient'">
                     <ul>
                         <li><a>{{'todayPatient'|translate}}</a></li>
@@ -347,7 +322,13 @@
 
     <div *ngIf="role=='pharmacy'" class="loginHeader">
         <header class="parentHeader">
-            <a><strong class="headerTitle">Health Care</strong></a>
+            <div>
+                <li (click)="parentHeader='notification';" class="notificationIcon">
+                    <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
+                    <a><i class="fas fa-bell faBellMenuIcon"></i></a>
+                </li>
+                <a><strong class="headerTitle">Health Care</strong></a>
+            </div>
             <nav>
                 <ul class="navItem">
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
@@ -390,6 +371,42 @@
                             </label>
                         </li>
                     </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div *ngIf="parentHeader=='notification'" class="loginHeader">
+        <header class="headerChild">
+            <nav class="navItem">
+                <div>
+                    <div *ngIf="notifications.length == 1" class="noNotification">
+                        {{'noNotification'|translate}}
+                    </div>
+                    <div *ngFor="let notif of notifications | keyvalue | slice:1:notifications.length"
+                        class="notification">
+                        <div *ngIf="notif.value.notificationType=='setYourGeoLocation'">
+                            <div>
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            {{'setYourGeoLocation'|translate}}
+                            <div (click)="updatePosClick()" class="textLien">
+                                {{'updatePos'|translate}} ?
+                            </div>
+                            <div class="notificationIcons">
+                                <span *ngIf="notif.value.unread==true" (click)="changeUnreadNotification(notif.key)">
+                                    <i class="fas fa-bell-slash"></i>
+                                </span>
+                                <span *ngIf="notif.value.unread==false" (click)="changeUnreadNotification(notif.key)">
+                                    <i class="fas fa-bell"></i>
+                                </span>
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                            <span (click)="closeNotification(notif.key)">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </header>

@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
+import { NotificationGet } from 'src/model/NotificationGet';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
@@ -14,6 +16,8 @@ import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../pharmacy.service';
+
+declare const L: any;
 
 @Component({
   selector: 'app-pharmacy',
@@ -28,7 +32,8 @@ export class PharmacyComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,
-    private doctorService: DoctorService) { }
+    private doctorService: DoctorService,
+    private notificationService:NotificationService) { }
   pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin;
   secureLoginString: SecureLoginString;
   re = /^[A-Za-z-' ']+$/;
@@ -68,6 +73,10 @@ export class PharmacyComponent implements OnInit {
   nightPh: boolean = false; dayPh: boolean = false; accountType: boolean = false;
   myMedicamentNumber: number = 0; savingExcelFile: boolean = false;
   medicamentName:string;myMedicaments:MedicamentStockGet[]=[];
+  notificationPage:number=0;
+  geoNotId:number=0;
+  position:boolean=false;
+  
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -132,6 +141,21 @@ export class PharmacyComponent implements OnInit {
     }
   }
 
+  getMyNotifications(userId: number) {
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+      res => {
+        console.log(res);
+        let notifications: NotificationGet[] = [];
+        notifications = res;
+        for (let notification of notifications) {
+          this.headerService.addNotification(notification);
+          if(notification.notificationType=='setYourGeoLocation')
+            this.geoNotId=notification.notificationId;
+        }
+      }
+    );
+  }
+
   getUserInfo() {
     this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.pharmacyService.getPharmacyInfo(this.secureLoginString).subscribe(
@@ -139,6 +163,8 @@ export class PharmacyComponent implements OnInit {
         if (res) {
           this.pharmacyGet = res;
           this.headerService.setHeader('pharmacy');
+          this.getMyNotifications(this.pharmacyGet.userId);
+          this.setPharmacyPosition();
           this.getStockNumberByPharmacyId();
           this.getImage();
           this.intializeEdit();
@@ -159,6 +185,73 @@ export class PharmacyComponent implements OnInit {
         this.router.navigate(['/acceuil']);
       }
     );
+  }
+
+  async setPharmacyPosition() {
+    if (!navigator.geolocation) {
+      console.log('not supported');
+    }
+    if (this.pharmacyGet.pharmacyLatitude && this.pharmacyGet.pharmacyLongitude) {
+      this.position = true;
+      let container = document.getElementById('map');
+      while (!container) {
+        container = document.getElementById('map');
+        await this.sleep(500);
+      }
+      let myMap = L.map('map').setView([this.pharmacyGet.pharmacyLatitude, this.pharmacyGet.pharmacyLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(myMap);
+
+      let marker = L.marker([this.pharmacyGet.pharmacyLongitude, this.pharmacyGet.pharmacyLongitude]).addTo(myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.pharmacyGet.pharmacyFullName  + "</b>").openPopup();
+    }
+  }
+
+  updateMyPosition() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.pharmacyService.updatePositionBySecureLogin(localStorage.getItem('secureLogin'), position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+        res => {
+          if (res) {
+            if (!this.position) {
+              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
+                res => {
+                  if (res) {
+                    this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
+                      timeOut: 3500,
+                      positionClass: 'toast-bottom-left'
+                    });
+                    this.pharmacyGet.pharmacyLatitude = position.coords.latitude.toString();
+                    this.pharmacyGet.pharmacyLongitude = position.coords.longitude.toString();
+                    this.setPharmacyPosition();
+                  }
+                },
+                err => {
+                  this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+                    timeOut: 3500,
+                    positionClass: 'toast-bottom-left'
+                  });
+                }
+              );
+            }else{
+              this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
+                timeOut: 3500,
+                positionClass: 'toast-bottom-left'
+              });
+              this.pharmacyGet.pharmacyLatitude = position.coords.latitude.toString();
+              this.pharmacyGet.pharmacyLongitude = position.coords.longitude.toString();
+              this.setPharmacyPosition();
+            }
+          }
+        }
+      );
+    });
   }
 
   updateUsername() {

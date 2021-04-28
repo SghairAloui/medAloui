@@ -83,7 +83,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
   ],
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
-    AdminComponent,DoctorComponent,SpecialityService,AppointmentService,UserService,
+    AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,
     NotificationService,authInterceptorProviders
   ],

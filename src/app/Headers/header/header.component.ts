@@ -7,6 +7,7 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
 import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
+import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { AppComponent } from '../../app.component'
 import { HeaderService } from './header.service';
@@ -27,6 +28,7 @@ export class HeaderComponent implements OnInit {
     private patientComp: PatientComponent,
     private doctorComp: DoctorComponent,
     private adminComp: AdminComponent,
+    private pharmacyComp: PharmacyComponent,
     private headerService: HeaderService,
     private notificationService: NotificationService) {
     translate.addLangs(['en', 'fr']);
@@ -253,13 +255,6 @@ export class HeaderComponent implements OnInit {
     this.doctorComp.container = containerName;
     this.parentHeader = containerName;
   }
-  async updateDocPosClick(){
-    if(this.doctorComp.container != 'profile'){
-      this.doctorComp.container = 'profile';
-      await this.sleep(500);
-    }
-    document.getElementById("myPositionSection").scrollIntoView({behavior:'smooth'});
-  }
   //doctor header
 
   //admin header
@@ -314,6 +309,15 @@ export class HeaderComponent implements OnInit {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
+  }
+
+  async updatePosClick(){
+    if(this.parentHeader != 'profile'){
+      this.doctorComp.container = 'profile';
+      this.pharmacyComp.container = 'profile';
+      await this.sleep(500);
+    }
+    document.getElementById("myPositionSection").scrollIntoView({behavior:'smooth'});
   }
 
 }

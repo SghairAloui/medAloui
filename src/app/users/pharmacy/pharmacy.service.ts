@@ -83,4 +83,8 @@ export class PharmacyService {
   public deleteByMedicamentStockId(stockId: number) {
     return this.http.delete<boolean>(MEDSTOCK_API + 'deleteByMedicamentStockId/' + stockId, httpOptions);
   }
+
+  public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
+    return this.http.post<boolean>(PHARMACY_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
+  }
 }

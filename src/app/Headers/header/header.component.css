@@ -258,6 +258,12 @@ html,body{
     border-radius: 5px;
     color: var(--notificationTextColor);
 }
+.noNotification{
+    color: var(--notificationTextColor);
+    font-weight: 600;
+    margin: auto;
+    width: fit-content;
+}
 .newNotification{
     position: absolute;
     width: 7px;
