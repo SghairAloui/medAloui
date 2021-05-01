@@ -494,5 +494,11 @@
     "updatePos":"Update position now",
     "position":"Position",
     "positionUpdated":"Position updated",
-    "noNotification":"No notifications"
+    "noNotification":"No notifications",
+    "findPharmacyThatContainYourMedicaments":"Find the nearest pharmacies that conatain your medicaments",
+    "deviceDontSupportGeoLocation":"Device don't support GeoLocation",
+    "noPharmacyFound":"No pharmacy found !",
+    "loadMorePharmacies":"Load more pharmacies",
+    "noMorePharmacies":"No more pharmacies",
+    "choosePharmacy":"Choose pharmacy"
 }

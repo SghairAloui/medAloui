@@ -1,17 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
-import { HeaderComponent } from 'src/app/Headers/header/header.component';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { AppointmentGet } from 'src/model/AppointmentGet';
-import { doctor } from 'src/model/Doctor';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
@@ -19,6 +16,7 @@ import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
+import { PharmacyGet } from 'src/model/PharmacyGet';
 import { prescriptionGet } from 'src/model/prescriptionGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
@@ -26,7 +24,10 @@ import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
+import { PharmacyService } from '../../pharmacy/pharmacy.service';
 import { PatientService } from './patient.service';
+
+declare const L: any;
 
 @Component({
   selector: 'app-patient',
@@ -54,6 +55,7 @@ export class PatientComponent implements OnInit {
   appointmentDay: number;
   appointmentDate: string;
   appointmentPage: number = 0;
+  prescriptionPharmacies: PharmacyGet[] = [];
 
   constructor(private patientService: PatientService,
     private translate: TranslateService,
@@ -63,8 +65,9 @@ export class PatientComponent implements OnInit {
     private appointmentService: AppointmentService,
     private userService: UserService,
     private prescriptionService: PrescriptionService,
-    private headerService:HeaderService,
-    private notificationService:NotificationService) { }
+    private headerService: HeaderService,
+    private notificationService: NotificationService,
+    private pharmacyService: PharmacyService) { }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -113,7 +116,15 @@ export class PatientComponent implements OnInit {
   medicalProfileDiseaseInfo: string = 'info';
   loadDoctorInfoForMedicalProfileDis: boolean[] = [];
   loadMoreDis: boolean;
-  notificationPage:number=0;
+  notificationPage: number = 0;
+  showAllDisease: boolean = false;
+  presKey: number;
+  prescription: string = 'all';
+  presPresKey: number;
+  pharmacyPage: number = 0;
+  loadMorePharmacies: boolean;
+  pharmacyKey: number;
+  loadingPh:boolean;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
@@ -978,12 +989,13 @@ export class PatientComponent implements OnInit {
     this.doctorService.GetDoctorInfoById(docId).subscribe(
       res => {
         if (status == 'prescription') {
+          this.presPresKey = patientKey;
           this.prescriptions[patientKey].prescriptiondoctor = res;
-          this.prescriptions[patientKey].fullData = true;
+          this.prescription = 'prescription';
         }
         if (status == 'disease') {
           this.disPrescriptions[patientKey].prescriptiondoctor = res;
-          this.disPrescriptions[patientKey].fullData = true;
+          this.showAllDisease = true;
           this.patientMedicalProfile.medicalProfileDisease[patientKey].showFullInfo = true;
         }
         this.getDocProfileImgForPres(docId, patientKey, status);
@@ -1038,12 +1050,13 @@ export class PatientComponent implements OnInit {
     this.prescriptionService.getPrescriptionByDoctorIdPatientIdAndDate(docId, this.patientGet.userId, date.slice(0, 10)).subscribe(
       res => {
         if (res) {
+          this.presKey = presKey;
           this.disPrescriptions[presKey] = res;
-          this.disPrescriptions[presKey].fullData = false;
           this.patientMedicalProfile.medicalProfileDisease[presKey].showFullInfo = false;
           this.getPrescriptionMedicamentsByPrescriptionId(this.disPrescriptions[presKey].prescriptionId, presKey, status);
           this.getDoctorInfoForPresById(this.disPrescriptions[presKey].doctorId, presKey, 'disease');
         } else {
+          this.presKey = presKey;
           let pres: prescriptionGet;
           pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null };
           this.disPrescriptions[presKey] = pres;
@@ -1051,6 +1064,69 @@ export class PatientComponent implements OnInit {
         }
       }
     );
+  }
+
+  searchPharmaciesByMedicaments(firstTime: boolean) {
+    this.loadingPh=true;
+    if (!navigator.geolocation) {
+      this.toastr.warning(this.translate.instant('deviceDontSupportGeoLocation'), this.translate.instant('position'), {
+        timeOut: 3500,
+        positionClass: 'toast-bottom-left'
+      });
+    } else {
+      if ((firstTime && this.pharmacyPage == 0) || !firstTime) {
+        let meds: string[] = this.prescriptions[this.presPresKey].medicament.map((meds) => meds.medicamentName);
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.pharmacyService.searchPharmaciesByMedicaments(meds, position.coords.latitude.toString(), position.coords.longitude.toString(), 0, this.pharmacyPage, 4).subscribe(
+            res => {
+              let pharmacies: PharmacyGet[] = res;
+              for (let pharmacy of pharmacies) {
+                pharmacy.distance = pharmacy.distance.slice(0, (pharmacy.distance.indexOf('.') + 2));
+                this.prescriptionPharmacies.push(pharmacy);
+              }
+              this.prescription = 'pharmacies';
+
+              this.pharmacyPage += 1;
+
+              if (pharmacies.length == 4)
+                this.loadMorePharmacies = true;
+              else
+                this.loadMorePharmacies = false;
+              this.loadingPh=false;
+            }
+          );
+        });
+      }else{
+        this.prescription = 'pharmacies';
+        this.loadingPh=false;
+      }
+    }
+  }
+
+  async openPharmacyMap(pharmacyKey: number) {
+    this.prescription = 'map';
+    this.pharmacyKey = pharmacyKey;
+
+    let phMap = document.getElementById("pharmacyMap");
+
+    while (!phMap) {
+      await this.sleep(500);
+      phMap = document.getElementById("pharmacyMap");
+    }
+
+    let pharmacyMap = L.map('pharmacyMap').setView([this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude], 13);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzA5eW96bDBkbHoybnFzeHVzajdoMDAifQ.d02E0EqNAcX4gKuNcPNsCQ', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: 'your.mapbox.access.token'
+    }).addTo(pharmacyMap);
+
+    let marker = L.marker([this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude]).addTo(pharmacyMap);
+    marker.bindPopup(this.translate.instant('helloIm') + "<br><b>Ph. " + this.prescriptionPharmacies[pharmacyKey].pharmacyFullName + "</b>").openPopup();
   }
 
 }

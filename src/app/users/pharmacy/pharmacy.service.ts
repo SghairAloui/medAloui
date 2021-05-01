@@ -87,4 +87,8 @@ export class PharmacyService {
   public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
     return this.http.post<boolean>(PHARMACY_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
   }
+
+  public searchPharmaciesByMedicaments(medicamentsName:string[],userLatitude:string,userLongitude:string,searchRaduis:number,page:number,size:number){
+    return this.http.post<PharmacyGet []>(PHARMACY_API+'findPharmacyByPrescriptonMedicamentAndGeoLocation',{medicamentsName,userLatitude,userLongitude,searchRaduis,page,size},httpOptions);
+  }
 }

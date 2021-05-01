@@ -594,7 +594,7 @@ export class PharmacyComponent implements OnInit {
       res=>{
         let response:MedicamentStockGet[]=[];
         response=res;
-        console.log(response);
+        this.myMedicaments=[];
         for(let med of response){
           med.deleted=false;
           this.myMedicaments.push(med);

@@ -6,4 +6,7 @@ export interface PharmacyGet{
     pharmacyStatus:string;
     pharmacyLatitude:string;
     pharmacyLongitude:string;
+    pharmacyExactAddress:string;
+    distance:string;
+    pharmacyType:string;
 }

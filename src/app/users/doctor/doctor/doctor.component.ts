@@ -21,7 +21,6 @@ import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
-import { medNameAndTraitmentPer } from 'src/model/medNameAndTraitmentPer';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { prescriptionGet } from 'src/model/prescriptionGet';
