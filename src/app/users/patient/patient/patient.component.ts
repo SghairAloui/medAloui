@@ -1127,6 +1127,15 @@ export class PatientComponent implements OnInit {
 
     let marker = L.marker([this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude]).addTo(pharmacyMap);
     marker.bindPopup(this.translate.instant('helloIm') + "<br><b>Ph. " + this.prescriptionPharmacies[pharmacyKey].pharmacyFullName + "</b>").openPopup();
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude)
+        ]
+      }).addTo(pharmacyMap);
+    });
+    
   }
 
 }
