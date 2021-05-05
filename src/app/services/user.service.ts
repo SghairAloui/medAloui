@@ -34,4 +34,12 @@ export class UserService {
   public getUserFullNameById(docId:number) {
     return this.http.get<FirstAndLastNameGet>(USER_API + 'getUserFullNameById/'+docId, httpOptions);
   }
+
+  checkVerifacationCode(userEmail:string,verificationCode:number){
+    return this.http.post<boolean>(USER_API + 'checkVerifacationCode',{userEmail,verificationCode},httpOptions);
+  }
+
+  updateUserStatusByEmail(email:string,status:string){
+    return this.http.post<boolean>(USER_API + 'updateUserStatusByEmail',{email,status},httpOptions);
+  }
 }

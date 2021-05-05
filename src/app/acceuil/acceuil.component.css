@@ -102,6 +102,7 @@ html,body{
     transform: translateX(-50%);
     box-shadow: var(--box-shadow);
     transition: all .3s ease-in-out;
+    overflow: hidden;
 }
 #connexionImg{
     border-bottom-left-radius: 20px;

@@ -7,4 +7,5 @@ export interface PatientGet{
     patientBirthDay:string;
     patientGender:string;
     medicalProfileId:number;
+    patientStatus:string;
 }

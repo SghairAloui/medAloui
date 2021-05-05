@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -124,12 +124,48 @@ export class PatientComponent implements OnInit {
   pharmacyPage: number = 0;
   loadMorePharmacies: boolean;
   pharmacyKey: number;
-  loadingPh:boolean;
+  loadingPh: boolean;
+  notVerified: boolean;
+  field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
+  isVerificationCode: boolean;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
     this.patientInfo = false;
     this.getUserInfo();
+  }
+
+  @ViewChild('1') field1Input: ElementRef;
+  @ViewChild('2') field2Input: ElementRef;
+  @ViewChild('3') field3Input: ElementRef;
+  @ViewChild('4') field4Input: ElementRef;
+  @ViewChild('5') field5Input: ElementRef;
+
+  field1Keyup() {
+    if (this.field1Code.length == 1)
+      this.field2Input.nativeElement.focus();
+  }
+  field2Keyup() {
+    if (this.field2Code.length == 1)
+      this.field3Input.nativeElement.focus();
+    else
+      this.field1Input.nativeElement.focus();
+  }
+  field3Keyup() {
+    if (this.field3Code.length == 1)
+      this.field4Input.nativeElement.focus();
+    else
+      this.field2Input.nativeElement.focus();
+  }
+  field4Keyup() {
+    if (this.field4Code.length == 1)
+      this.field5Input.nativeElement.focus();
+    else
+      this.field3Input.nativeElement.focus();
+  }
+  field5Keyup() {
+    if (this.field5Code.length == 0)
+    this.field4Input.nativeElement.focus();
   }
 
   checkForm() {
@@ -175,16 +211,21 @@ export class PatientComponent implements OnInit {
       res => {
         if (res) {
           this.patientGet = res;
-          this.headerService.setHeader('patient');
-          this.getMyNotifications(this.patientGet.userId);
-          this.getImage();
-          this.getPatientMedicalProfile();
-          this.getAppointments();
-          this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, 'pending', this.pendingPrescriptionPage, 'prescription');
-          this.intializeEdit();
-          this.patientInfo = true;
-          localStorage.setItem('id', this.patientGet.userId + '')
-
+          console.log(this.patientGet.patientStatus);
+          if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000)
+            this.notVerified = true;
+          else {
+            this.notVerified = false;
+            this.headerService.setHeader('patient');
+            this.getMyNotifications(this.patientGet.userId);
+            this.getImage();
+            this.getPatientMedicalProfile();
+            this.getAppointments();
+            this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, 'pending', this.pendingPrescriptionPage, 'prescription');
+            this.intializeEdit();
+            this.patientInfo = true;
+            localStorage.setItem('id', this.patientGet.userId + '')
+          }
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -200,7 +241,6 @@ export class PatientComponent implements OnInit {
   getMyNotifications(userId: number) {
     this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
       res => {
-        console.log(res);
         let notifications: NotificationGet[] = [];
         notifications = res;
         for (let notification of notifications) {
@@ -1067,7 +1107,7 @@ export class PatientComponent implements OnInit {
   }
 
   searchPharmaciesByMedicaments(firstTime: boolean) {
-    this.loadingPh=true;
+    this.loadingPh = true;
     if (!navigator.geolocation) {
       this.toastr.warning(this.translate.instant('deviceDontSupportGeoLocation'), this.translate.instant('position'), {
         timeOut: 3500,
@@ -1092,13 +1132,13 @@ export class PatientComponent implements OnInit {
                 this.loadMorePharmacies = true;
               else
                 this.loadMorePharmacies = false;
-              this.loadingPh=false;
+              this.loadingPh = false;
             }
           );
         });
-      }else{
+      } else {
         this.prescription = 'pharmacies';
-        this.loadingPh=false;
+        this.loadingPh = false;
       }
     }
   }
@@ -1135,7 +1175,42 @@ export class PatientComponent implements OnInit {
         ]
       }).addTo(pharmacyMap);
     });
-    
+  }
+
+  checkVerificationCode() {
+    let code: number = parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code + this.field5Code);
+    if (code) {
+      this.userService.checkVerifacationCode(this.patientGet.userUsername, code).subscribe(
+        res => {
+          if (res == true) {
+            this.updateStatusByEmail();
+          }
+          else
+            this.isVerificationCode = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.isVerificationCode = false;
+    }
+  }
+
+  updateStatusByEmail() {
+    this.userService.updateUserStatusByEmail(this.patientGet.userUsername, 'approved').subscribe(
+      res=>{
+        if(res){
+          this.toastr.success(this.translate.instant('accountVerified'), this.translate.instant('verified'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+          this.ngOnInit();
+        }
+      }
+    );
   }
 
 }

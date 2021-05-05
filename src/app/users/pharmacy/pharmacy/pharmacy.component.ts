@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
-import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OneStringPost } from 'src/model/OneStringPost';
@@ -33,7 +32,7 @@ export class PharmacyComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private doctorService: DoctorService,
-    private notificationService:NotificationService) { }
+    private notificationService: NotificationService) { }
   pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin;
   secureLoginString: SecureLoginString;
   re = /^[A-Za-z-' ']+$/;
@@ -72,11 +71,14 @@ export class PharmacyComponent implements OnInit {
   exactAddress: string; exactAddressInformation: string; invalidExactAddress: boolean = false;
   nightPh: boolean = false; dayPh: boolean = false; accountType: boolean = false;
   myMedicamentNumber: number = 0; savingExcelFile: boolean = false;
-  medicamentName:string;myMedicaments:MedicamentStockGet[]=[];
-  notificationPage:number=0;
-  geoNotId:number=0;
-  position:boolean=false;
-  
+  medicamentName: string; myMedicaments: MedicamentStockGet[] = [];
+  notificationPage: number = 0;
+  geoNotId: number = 0;
+  position: boolean = false;
+  notVerified: boolean;
+  field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
+  isVerificationCode: boolean;
+
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -149,8 +151,8 @@ export class PharmacyComponent implements OnInit {
         notifications = res;
         for (let notification of notifications) {
           this.headerService.addNotification(notification);
-          if(notification.notificationType=='setYourGeoLocation')
-            this.geoNotId=notification.notificationId;
+          if (notification.notificationType == 'setYourGeoLocation')
+            this.geoNotId = notification.notificationId;
         }
       }
     );
@@ -162,22 +164,27 @@ export class PharmacyComponent implements OnInit {
       res => {
         if (res) {
           this.pharmacyGet = res;
-          this.headerService.setHeader('pharmacy');
-          this.getMyNotifications(this.pharmacyGet.userId);
-          this.setPharmacyPosition();
-          this.getStockNumberByPharmacyId();
-          this.getImage();
-          this.intializeEdit();
-          if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
-            this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
-            this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
-            this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
-            this.exactAddressInformation = this.translate.instant('exactAddress');
+          if (parseInt(this.pharmacyGet.pharmacyStatus) <= 99999 && parseInt(this.pharmacyGet.pharmacyStatus) >= 10000)
+            this.notVerified = true;
+          else {
+            this.notVerified = false;
+            this.headerService.setHeader('pharmacy');
+            this.getMyNotifications(this.pharmacyGet.userId);
+            this.setPharmacyPosition();
+            this.getStockNumberByPharmacyId();
+            this.getImage();
+            this.intializeEdit();
+            if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
+              this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
+              this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
+              this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
+              this.exactAddressInformation = this.translate.instant('exactAddress');
+            }
+            if (this.pharmacyGet.pharmacyStatus == 'disapprovedPermanently')
+              this.deleteByUserId();
+            this.pharmacyInfo = true;
+            localStorage.setItem('id', this.pharmacyGet.userId + '');
           }
-          if (this.pharmacyGet.pharmacyStatus == 'disapprovedPermanently')
-            this.deleteByUserId();
-          this.pharmacyInfo = true;
-          localStorage.setItem('id', this.pharmacyGet.userId + '');
         } else
           this.router.navigate(['/acceuil']);
       },
@@ -210,7 +217,7 @@ export class PharmacyComponent implements OnInit {
       }).addTo(myMap);
 
       let marker = L.marker([this.pharmacyGet.pharmacyLatitude, this.pharmacyGet.pharmacyLongitude]).addTo(myMap);
-      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.pharmacyGet.pharmacyFullName  + "</b>").openPopup();
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.pharmacyGet.pharmacyFullName + "</b>").openPopup();
     }
   }
 
@@ -239,7 +246,7 @@ export class PharmacyComponent implements OnInit {
                   });
                 }
               );
-            }else{
+            } else {
               this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
                 timeOut: 3500,
                 positionClass: 'toast-bottom-left'
@@ -587,33 +594,102 @@ export class PharmacyComponent implements OnInit {
     );
   }
 
-  searchMedByNameAndPharmacyId(){
-    let medSearch:string='%'+this.medicamentName.split(' ').join('% %')+'%';
+  searchMedByNameAndPharmacyId() {
+    let medSearch: string = '%' + this.medicamentName.split(' ').join('% %') + '%';
     console.log(medSearch);
-    this.pharmacyService.searchMedByNameAndPharmacyId(this.pharmacyGet.userId,medSearch).subscribe(
-      res=>{
-        let response:MedicamentStockGet[]=[];
-        response=res;
-        this.myMedicaments=[];
-        for(let med of response){
-          med.deleted=false;
+    this.pharmacyService.searchMedByNameAndPharmacyId(this.pharmacyGet.userId, medSearch).subscribe(
+      res => {
+        let response: MedicamentStockGet[] = [];
+        response = res;
+        this.myMedicaments = [];
+        for (let med of response) {
+          med.deleted = false;
           this.myMedicaments.push(med);
         }
       }
     );
   }
 
-  deleteByMedicamentStockId(stockId:number,medKey:number){
+  deleteByMedicamentStockId(stockId: number, medKey: number) {
     this.pharmacyService.deleteByMedicamentStockId(stockId).subscribe(
-      res=>{
-        if(res){
+      res => {
+        if (res) {
           this.toastr.success(this.translate.instant('stockDeleted'), this.translate.instant('info'), {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
           });
-          this.myMedicaments[medKey].deleted=true;
+          this.myMedicaments[medKey].deleted = true;
         }
       }
     );
+  }
+
+  checkVerificationCode() {
+    let code: number = parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code + this.field5Code);
+    if (code) {
+      this.userService.checkVerifacationCode(this.pharmacyGet.userUsername, code).subscribe(
+        res => {
+          if (res == true) {
+            this.updateStatusByEmail();
+          }
+          else
+            this.isVerificationCode = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.isVerificationCode = false;
+    }
+  }
+
+  updateStatusByEmail() {
+    this.userService.updateUserStatusByEmail(this.pharmacyGet.userUsername, 'notApproved').subscribe(
+      res => {
+        if (res) {
+          this.toastr.success(this.translate.instant('accountVerified'), this.translate.instant('verified'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+          this.ngOnInit();
+        }
+      }
+    );
+  }
+
+  @ViewChild('1') field1Input: ElementRef;
+  @ViewChild('2') field2Input: ElementRef;
+  @ViewChild('3') field3Input: ElementRef;
+  @ViewChild('4') field4Input: ElementRef;
+  @ViewChild('5') field5Input: ElementRef;
+
+  field1Keyup() {
+    if (this.field1Code.length == 1)
+      this.field2Input.nativeElement.focus();
+  }
+  field2Keyup() {
+    if (this.field2Code.length == 1)
+      this.field3Input.nativeElement.focus();
+    else
+      this.field1Input.nativeElement.focus();
+  }
+  field3Keyup() {
+    if (this.field3Code.length == 1)
+      this.field4Input.nativeElement.focus();
+    else
+      this.field2Input.nativeElement.focus();
+  }
+  field4Keyup() {
+    if (this.field4Code.length == 1)
+      this.field5Input.nativeElement.focus();
+    else
+      this.field3Input.nativeElement.focus();
+  }
+  field5Keyup() {
+    if (this.field5Code.length == 0)
+    this.field4Input.nativeElement.focus();
   }
 }

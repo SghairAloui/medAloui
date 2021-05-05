@@ -1,24 +1,24 @@
 .container{
+    position: relative;
     background-color: var(--box-color);
     transition: all .3s ease-in-out;
 }
 .userCreated{
     position: relative;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
     font-weight: 600;
     color: var(--gray-text);
     transition: all .3s ease-in-out;
 }
-.fa-check-circle{
-    position: absolute;
+.fa-check-circle,.fa-user-check{
+    position: relative;
     color: #308a7b;
     font-size: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 30px;
+    margin: 7px auto;
+    width: fit-content;
 }
 .btn-outline-primary:hover{
     background-color: #308a7b;
@@ -173,13 +173,74 @@
     left: 100%;
     margin-left: 15px;
 }
+
+.inputVerificationCode{
+    margin: 15px auto;
+    width: fit-content;
+}
+.verficationCodeNumber {
+    margin: 3px 10px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid #308a7b;
+    outline: #308a7b;
+    background: var(--box-color);
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+    color: #308a7b;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 0px 0px 5px #308a7b46;
+    transition: .3s ease-in-out;
+}
+.invalidVerificationCode .verficationCodeNumber{
+    border: 1px solid red;
+    outline: red;
+    color: red;
+    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.2);
+}
+.invalidText{
+    color: red;
+    font-size: 10px;
+    margin: 5px 0px;
+}
+@media screen and (max-width: 1100px){
+    .verficationCodeNumber{
+        width: 40px;
+        height: 40px;
+        margin: 3px 5px;
+        box-shadow: 0px 0px 5px #308a7b28;
+    }
+}
+@media screen and (max-width: 1000px){
+    .verficationCodeNumber{
+        width: 45px;
+        height: 45px;
+        margin: 3px 7px;
+        box-shadow: 0px 0px 5px #308a7b3b;
+    }
+}
 @media screen and (max-width: 800px){
     .formNavigateBackButton,.formNavigateNextButton{
         width: 45%;
+    }
+    .verficationCodeNumber{
+        width: 40px;
+        height: 40px;
+        margin: 3px 5px;
+        box-shadow: 0px 0px 5px #308a7b28;
     }
 }
 @media screen and (max-width: 700px){
     .formNavigateBackButton,.formNavigateNextButton{
         width: 40%;
+    }
+    .verficationCodeNumber{
+        width: 35px;
+        height: 35px;
+        margin: 3px 5px;
+        box-shadow: 0px 0px 5px #308a7b28;
     }
 }

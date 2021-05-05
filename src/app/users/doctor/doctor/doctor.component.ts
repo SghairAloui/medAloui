@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -136,7 +136,10 @@ export class DoctorComponent implements OnInit {
   todayPatientMedicalProfileId: number = 0;
   notificationPage: number = 0;
   position: boolean = false;
-  geoNotId:number=0;
+  geoNotId: number = 0;
+  notVerified: boolean;
+  field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
+  isVerificationCode: boolean;
 
 
   ngOnInit(): void {
@@ -201,7 +204,7 @@ export class DoctorComponent implements OnInit {
                   });
                 }
               );
-            }else{
+            } else {
               this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
                 timeOut: 3500,
                 positionClass: 'toast-bottom-left'
@@ -221,26 +224,31 @@ export class DoctorComponent implements OnInit {
       res => {
         if (res) {
           this.doctorGet = res;
-          this.getMyNotifications(this.doctorGet.userId);
-          this.setDoctorPosition();
-          this.getPatientNumber(this.currentDate, 'today');
-          this.getTomorrowAppPatientByDate(true);
-          if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
-            this.deleteAccount();
-            this.accountDeleted = true;
-          } else {
-            this.docInfo = true;
-            this.getDoctorSpecialities();
-            localStorage.setItem('id', this.doctorGet.userId.toString());
-            if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
-              this.checkDocDocument(this.doctorGet.userId + "doctorCinPic");
-              this.checkDocDocument(this.doctorGet.userId + "doctorMedicalClinicPic");
-              this.checkDocDocument(this.doctorGet.userId + "doctorMedicalSpecialty");
+          if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000)
+            this.notVerified = true;
+          else {
+            this.notVerified = false;
+            this.getMyNotifications(this.doctorGet.userId);
+            this.setDoctorPosition();
+            this.getPatientNumber(this.currentDate, 'today');
+            this.getTomorrowAppPatientByDate(true);
+            if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
+              this.deleteAccount();
+              this.accountDeleted = true;
+            } else {
+              this.docInfo = true;
+              this.getDoctorSpecialities();
+              localStorage.setItem('id', this.doctorGet.userId.toString());
+              if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
+                this.checkDocDocument(this.doctorGet.userId + "doctorCinPic");
+                this.checkDocDocument(this.doctorGet.userId + "doctorMedicalClinicPic");
+                this.checkDocDocument(this.doctorGet.userId + "doctorMedicalSpecialty");
+              }
+              this.getImage(this.doctorGet.userId + "doctorProfilePic");
+              this.intializeEdit();
+              this.initializeAccountSettings();
+              this.initializeEditAccountSettigns();
             }
-            this.getImage(this.doctorGet.userId + "doctorProfilePic");
-            this.intializeEdit();
-            this.initializeAccountSettings();
-            this.initializeEditAccountSettigns();
           }
         } else
           this.router.navigate(['/acceuil']);
@@ -258,8 +266,8 @@ export class DoctorComponent implements OnInit {
         notifications = res;
         for (let notification of notifications) {
           this.headerService.addNotification(notification);
-          if(notification.notificationType=='setYourGeoLocation')
-            this.geoNotId=notification.notificationId;
+          if (notification.notificationType == 'setYourGeoLocation')
+            this.geoNotId = notification.notificationId;
         }
       }
     );
@@ -863,26 +871,28 @@ export class DoctorComponent implements OnInit {
   }
 
   initializeEditAccountSettigns() {
-    this.startTime = this.doctorGet.startTime.toString();
-    this.exactAdress = this.doctorGet.exactAddress;
-    this.maxPatientPerDay = this.doctorGet.maxPatientPerDay.toString();
-    this.appointmentApproximateDuration = this.doctorGet.appointmentApproximateDuration.toString();
-    this.appointmentPrice = this.doctorGet.appointmentPrice.toString();
-    if (this.doctorGet.workDays != null) {
-      if (this.doctorGet.workDays.indexOf('Mon') != -1)
-        this.Mon = true;
-      if (this.doctorGet.workDays.indexOf('Tue') != -1)
-        this.Tue = true;
-      if (this.doctorGet.workDays.indexOf('Wed') != -1)
-        this.Wed = true;
-      if (this.doctorGet.workDays.indexOf('Thu') != -1)
-        this.Thu = true;
-      if (this.doctorGet.workDays.indexOf('Fri') != -1)
-        this.Fri = true;
-      if (this.doctorGet.workDays.indexOf('Sat') != -1)
-        this.Sat = true;
-      if (this.doctorGet.workDays.indexOf('Sun') != -1)
-        this.Sun = true;
+    if (this.doctorGet.startTime && this.doctorGet.maxPatientPerDay && this.doctorGet.appointmentPrice) {
+      this.startTime = this.doctorGet.startTime.toString();
+      this.exactAdress = this.doctorGet.exactAddress;
+      this.maxPatientPerDay = this.doctorGet.maxPatientPerDay.toString();
+      this.appointmentApproximateDuration = this.doctorGet.appointmentApproximateDuration.toString();
+      this.appointmentPrice = this.doctorGet.appointmentPrice.toString();
+      if (this.doctorGet.workDays != null) {
+        if (this.doctorGet.workDays.indexOf('Mon') != -1)
+          this.Mon = true;
+        if (this.doctorGet.workDays.indexOf('Tue') != -1)
+          this.Tue = true;
+        if (this.doctorGet.workDays.indexOf('Wed') != -1)
+          this.Wed = true;
+        if (this.doctorGet.workDays.indexOf('Thu') != -1)
+          this.Thu = true;
+        if (this.doctorGet.workDays.indexOf('Fri') != -1)
+          this.Fri = true;
+        if (this.doctorGet.workDays.indexOf('Sat') != -1)
+          this.Sat = true;
+        if (this.doctorGet.workDays.indexOf('Sun') != -1)
+          this.Sun = true;
+      }
     }
   }
 
@@ -1746,6 +1756,75 @@ export class DoctorComponent implements OnInit {
           this.tomorrowPatientMedicalProfileGet[this.tomorrowPatientKey].medicalProfileDisease[diseaseKey].showFullInfo = true;
       }
     );
+  }
+
+  checkVerificationCode() {
+    let code: number = parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code + this.field5Code);
+    if (code) {
+      this.userService.checkVerifacationCode(this.doctorGet.userUsername, code).subscribe(
+        res => {
+          if (res == true) {
+            this.updateStatusByEmail();
+          }
+          else
+            this.isVerificationCode = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.isVerificationCode = false;
+    }
+  }
+
+  updateStatusByEmail() {
+    this.userService.updateUserStatusByEmail(this.doctorGet.userUsername, 'notApproved').subscribe(
+      res => {
+        if (res) {
+          this.toastr.success(this.translate.instant('accountVerified'), this.translate.instant('verified'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+          this.ngOnInit();
+        }
+      }
+    );
+  }
+
+  @ViewChild('1') field1Input: ElementRef;
+  @ViewChild('2') field2Input: ElementRef;
+  @ViewChild('3') field3Input: ElementRef;
+  @ViewChild('4') field4Input: ElementRef;
+  @ViewChild('5') field5Input: ElementRef;
+
+  field1Keyup() {
+    if (this.field1Code.length == 1)
+      this.field2Input.nativeElement.focus();
+  }
+  field2Keyup() {
+    if (this.field2Code.length == 1)
+      this.field3Input.nativeElement.focus();
+    else
+      this.field1Input.nativeElement.focus();
+  }
+  field3Keyup() {
+    if (this.field3Code.length == 1)
+      this.field4Input.nativeElement.focus();
+    else
+      this.field2Input.nativeElement.focus();
+  }
+  field4Keyup() {
+    if (this.field4Code.length == 1)
+      this.field5Input.nativeElement.focus();
+    else
+      this.field3Input.nativeElement.focus();
+  }
+  field5Keyup() {
+    if (this.field5Code.length == 0)
+    this.field4Input.nativeElement.focus();
   }
 
 }

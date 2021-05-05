@@ -781,3 +781,66 @@ html,body{
         transform: scale(1);
     }
 }
+
+.accountNotVerified{
+    padding: 15px;
+    margin:auto;
+    text-align: center;
+    max-width: 80%;
+}
+
+.fa-user-lock{
+    position: relative;
+    font-size: 50px;
+    margin-top: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+.inputVerificationCode{
+    margin: 15px auto;
+    width: fit-content;
+}
+.verficationCodeNumber {
+    margin: 3px 10px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid #308a7b;
+    outline: #308a7b;
+    background: var(--box-color);
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+    color: #308a7b;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 0px 0px 5px #308a7b46;
+    transition: .3s ease-in-out;
+}
+.invalidVerificationCode .verficationCodeNumber{
+    border: 1px solid red;
+    outline: red;
+    color: red;
+    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.2);
+}
+.invalidText{
+    color: red;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.notVerified{
+    position: absolute;
+    width: 40%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    padding-bottom: 40px;
+}
+.notVerified .fullyBtnSmall{
+    width: 50%;
+    margin-left:50%;
+    transform: translateX(-50%);
+}

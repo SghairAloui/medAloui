@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -49,19 +49,20 @@ export class SignUpFormComponent implements OnInit {
   usernameExist: string = "null";
   showForm: boolean = false;
   formInfo: string = 'false';
+  field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
+  isVerificationCode: boolean;
+  creatingUser: boolean = false;
 
-
-  isSuccessful = false;
-  isSignUpFailed = false;
   errorMessage = '';
   cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
 
-
   ngOnInit(): void {
   }
+
   openSignIn() {
     this.outPutOpenSignIn.emit(false);
   }
+
   checkAdress() {
     let lowerCaseAdress: string = this.adress.toLowerCase();
     this.adress = this.adress.replace('é', 'e');
@@ -78,6 +79,7 @@ export class SignUpFormComponent implements OnInit {
       }
     }
   }
+
   checkFirstName() {
     if (this.firstName.length < 3) {
       this.invalidFirstNameVariable = true;
@@ -93,6 +95,7 @@ export class SignUpFormComponent implements OnInit {
       }
     }
   }
+
   checkPharmacyNameAndUserName() {
     this.checkAdress();
     if (this.pharmacyName.length < 3) {
@@ -108,21 +111,21 @@ export class SignUpFormComponent implements OnInit {
         this.pharmacyNameInformation = this.translate.instant('pharmacyNameAlpha');
       }
     }
-    if (this.userName.length < 6) {
+    if (!this.userName) {
       this.invalidUserNameVariable = true;
       this.userNameNameInformation = this.translate.instant('userNameNameUnder3');
     } else {
-      if (this.userName.indexOf(' ') !== -1) {
+      let validMail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+      if (validMail.test(this.userName)) {
+        this.checkIfUserNameExist(this.userName, 'pharmacy');
+      }
+      else {
         this.invalidUserNameVariable = true;
         this.userNameNameInformation = this.translate.instant('userNameNoSpace');
       }
-      else {
-        this.invalidUserNameVariable = false;
-        this.userNameNameInformation = this.translate.instant('pharmacyUserName');
-      }
     }
-    this.checkIfUserNameExist(this.userName, 'pharmacy');
   }
+
   checkLastName() {
     if (this.lastName.length < 3) {
       this.invalidLastNameVariable = true;
@@ -138,21 +141,23 @@ export class SignUpFormComponent implements OnInit {
       }
     }
   }
+
   checkMail() {
-    if (this.mail.length < 6) {
+    let validMail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    if (!this.mail.length) {
       this.invalidMailVariable = true;
       this.mailInformation = this.translate.instant('mailApha');
     } else {
-      if (this.mail.indexOf(' ') !== -1) {
+      if (validMail.test(this.mail)) {
+        this.checkIfUserNameExist(this.mail, 'normalAccount');
+      }
+      else {
         this.invalidMailVariable = true;
         this.mailInformation = this.translate.instant('enterValidMail');
       }
-      else {
-        this.invalidMailVariable = false;
-        this.mailInformation = this.translate.instant('mail');
-      }
     }
   }
+
   checkGenderAndAdress() {
     this.checkAdress();
     if (this.maleCheckBox == true || this.femaleCheckBox == true)
@@ -162,6 +167,7 @@ export class SignUpFormComponent implements OnInit {
     if (this.invalidAdressVariable == false && this.checkBoxInvaledInfoVriable == false)
       this.formInfo = 'password';
   }
+
   checkPassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -182,12 +188,13 @@ export class SignUpFormComponent implements OnInit {
     if (this.invalidPasswordVariable == false && this.invalidPasswordRepeatVariable == false)
       this.saveNewUser();
   }
+
   checkEmailAndNameForm() {
     this.checkMail();
     this.checkFirstName();
     this.checkLastName();
-    this.checkIfUserNameExist(this.mail, 'normalAccount');
   }
+
   checkBirthday() {
     this.formInfo = 'GeneralInfo';
     if ((parseInt(this.day) <= 31 && parseInt(this.day) > 0) && (this.nb.test(this.day) && this.day.length == 2)) {
@@ -219,6 +226,7 @@ export class SignUpFormComponent implements OnInit {
     } else
       this.formInfo = 'GeneralInfo';
   }
+
   checkIfUserNameExist(username: string, accountType: string) {
     this.userService.checkIfUsernameExists(username.toLowerCase()).subscribe(
       res => {
@@ -249,7 +257,9 @@ export class SignUpFormComponent implements OnInit {
       }
     );
   }
+
   saveNewUser() {
+    this.creatingUser = true;
     let roleUserList = new Set();
     roleUserList.add(this.roleUser)
 
@@ -260,23 +270,101 @@ export class SignUpFormComponent implements OnInit {
     else
       gender = 'female';
     let username: string;
-    if (this.roleUser=='PHARMACIST_ROLE')
+    if (this.roleUser == 'PHARMACIST_ROLE')
       username = this.userName;
     else
       username = this.mail;
     this.authService.register(username.toLowerCase(), this.password, this.roleUser, this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.pharmacyName.toLowerCase(), this.adress.toLowerCase(), gender, birthday).subscribe(
       data => {
-        console.log(data);
-        this.isSuccessful = true;
-        this.isSignUpFailed = false;
-        this.formInfo = data.message;
+        this.creatingUser = false;
+        this.formInfo = 'verification';
       },
       err => {
         this.errorMessage = err.error.message;
-        this.isSignUpFailed = true;
       }
     );
   }
 
+  checkVerifacationCode() {
+    let mail: string;
+    if (this.userType == 'client' || this.userType == 'doctor')
+      mail = this.mail;
+    else
+      mail = this.userName;
+    let code: number = parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code + this.field5Code);
+    if (code) {
+      this.userService.checkVerifacationCode(mail, code).subscribe(
+        res => {
+          if (res == true) {
+            this.updateStatusByEmail();
+          }
+          else
+            this.isVerificationCode = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    } else {
+      this.isVerificationCode = false;
+    }
+  }
+
+  updateStatusByEmail() {
+    let mail: string;
+    if (this.userType == 'client' || this.userType == 'doctor')
+      mail = this.mail;
+    else
+      mail = this.userName;
+    let status: string;
+    if (this.userType == 'client')
+      status = 'approved'
+    if (this.userType == 'pharmacy')
+      status = 'notApproved'
+    if (this.userType == 'doctor')
+      status = 'notApproved'
+    this.userService.updateUserStatusByEmail(mail, status).subscribe(
+      res => {
+        if (res) {
+          this.formInfo = 'validated';
+        }
+      }
+    );
+  }
+
+  @ViewChild('1') field1Input: ElementRef;
+  @ViewChild('2') field2Input: ElementRef;
+  @ViewChild('3') field3Input: ElementRef;
+  @ViewChild('4') field4Input: ElementRef;
+  @ViewChild('5') field5Input: ElementRef;
+
+  field1Keyup() {
+    if (this.field1Code.length == 1)
+      this.field2Input.nativeElement.focus();
+  }
+  field2Keyup() {
+    if (this.field2Code.length == 1)
+      this.field3Input.nativeElement.focus();
+    else
+      this.field1Input.nativeElement.focus();
+  }
+  field3Keyup() {
+    if (this.field3Code.length == 1)
+      this.field4Input.nativeElement.focus();
+    else
+      this.field2Input.nativeElement.focus();
+  }
+  field4Keyup() {
+    if (this.field4Code.length == 1)
+      this.field5Input.nativeElement.focus();
+    else
+      this.field3Input.nativeElement.focus();
+  }
+  field5Keyup() {
+    if (this.field5Code.length == 0)
+      this.field4Input.nativeElement.focus();
+  }
 
 }
