@@ -278,88 +278,90 @@
                 </div>
             </div>
             <div *ngIf="formInfo=='password'">
-                <div *ngIf="creatingUser==true" class="loading">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="formInfoTitle">
+                    <i class="fas fa-unlock"></i> {{'password'|translate}}
                 </div>
-                <div *ngIf="creatingUser==false">
-                    <div class="formInfoTitle">
-                        <i class="fas fa-unlock"></i> {{'password'|translate}}
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
+                        [(ngModel)]="password"
+                        (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                        class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordInfromation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                        name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                        (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
+                        class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordRepeatInfromation}}
+                    </label>
+                </div>
+                <div class="formNavigateButtons">
+                    <div class="formNavigateNextButton">
+                        <button *ngIf="creatingUser==false" (click)="checkPassword()" type="submit"
+                            class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">
+                            {{'signUp'|translate}} <i class="fas fa-chevron-circle-right"
+                                style="margin: 4px;"></i></button>
+                        <button *ngIf="creatingUser==true" disabled class="fullyBtnSmall" style="position: relative;">
+                            <div class="loading">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
                     </div>
-                    <div class="formDiv">
-                        <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
-                            [(ngModel)]="password"
-                            (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{passwordInfromation}}
-                        </label>
-                    </div>
-                    <div class="formDiv">
-                        <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                            name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                            (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{passwordRepeatInfromation}}
-                        </label>
-                    </div>
-                    <div class="formNavigateButtons">
-                        <div class="formNavigateNextButton">
-                            <button (click)="checkPassword()" type="submit" class="fullyBtnSmall"
-                                style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i
-                                    class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-                        </div>
-                        <div class="formNavigateBackButton">
-                            <button (click)="formInfo='GeneralInfo'" type="submit" class="fullyBtnSmall"
-                                style="display: flex; justify-content: space-between; "><i
-                                    class="fas fa-chevron-circle-left " style="margin: 4px;"></i>
-                                {{'goBack'|translate}}</button>
-                        </div>
+                    <div class="formNavigateBackButton">
+                        <button (click)="formInfo='GeneralInfo'" type="submit" class="fullyBtnSmall"
+                            style="display: flex; justify-content: space-between; "><i
+                                class="fas fa-chevron-circle-left " style="margin: 4px;"></i>
+                            {{'goBack'|translate}}</button>
                     </div>
                 </div>
             </div>
             <div *ngIf="formInfo=='pharmacyPassword'">
-                <div *ngIf="creatingUser==true" class="loading">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="formInfoTitle">
+                    <i class="fas fa-unlock"></i> {{'password'|translate}}
                 </div>
-                <div *ngIf="creatingUser==false">
-                    <div class="formInfoTitle">
-                        <i class="fas fa-unlock"></i> {{'password'|translate}}
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
+                        [(ngModel)]="password"
+                        (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                        class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordInfromation}}
+                    </label>
+                </div>
+                <div class="formDiv">
+                    <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                        name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                        (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
+                        class="formInput" placeholder=" ">
+                    <label for="" class="formLabel">
+                        {{passwordRepeatInfromation}}
+                    </label>
+                </div>
+                <div class="formNavigateButtons">
+                    <div class="formNavigateNextButton">
+                        <button *ngIf="creatingUser==false" (click)="checkPassword()" type="submit"
+                            class="fullyBtnSmall" style="display: flex; justify-content: space-between; ">
+                            {{'signUp'|translate}} <i class="fas fa-chevron-circle-right"
+                                style="margin: 4px;"></i></button>
+                        <button *ngIf="creatingUser==true" disabled class="fullyBtnSmall" style="position: relative;">
+                            <div class="loading">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
                     </div>
-                    <div class="formDiv">
-                        <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
-                            [(ngModel)]="password"
-                            (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{passwordInfromation}}
-                        </label>
-                    </div>
-                    <div class="formDiv">
-                        <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                            name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                            (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false"
-                            class="formInput" placeholder=" ">
-                        <label for="" class="formLabel">
-                            {{passwordRepeatInfromation}}
-                        </label>
-                    </div>
-                    <div class="formNavigateButtons">
-                        <div class="formNavigateNextButton">
-                            <button (click)="checkPassword()" type="submit" class="fullyBtnSmall"
-                                style="display: flex; justify-content: space-between; ">{{'signUp'|translate}} <i
-                                    class="fas fa-chevron-circle-right" style="margin: 4px;"></i></button>
-                        </div>
-                        <div class="formNavigateBackButton">
-                            <button (click)="formInfo='pharmacy'" type="submit" class="fullyBtnSmall"
-                                style="display: flex; justify-content: space-between; "><i
-                                    class="fas fa-chevron-circle-left " style="margin: 4px;"></i>
-                                {{'goBack'|translate}}</button>
-                        </div>
+                    <div class="formNavigateBackButton">
+                        <button (click)="formInfo='pharmacy'" type="submit" class="fullyBtnSmall"
+                            style="display: flex; justify-content: space-between; "><i
+                                class="fas fa-chevron-circle-left " style="margin: 4px;"></i>
+                            {{'goBack'|translate}}</button>
                     </div>
                 </div>
             </div>

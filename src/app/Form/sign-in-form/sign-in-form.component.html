@@ -8,32 +8,31 @@
 <body>
   <div class="container">
     <form>
-      <div *ngIf="waitOppeningAcc; then showLoading else showSignIn"></div>
-      <ng-template #showLoading>
-        <div class="loading">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </ng-template>
-      <ng-template #showSignIn>
-        <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
-        <div class="formDiv">
-          <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username"
-            (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
-          <label for="username" class="formLabel">{{emailAddressInfo}}</label>
-        </div>
-        <div class="formDiv">
-          <input type="password" [class.labelInvalidInfo]="InvalidInfo" name="password" [(ngModel)]="password"
-            id="password" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
-          <label for="password" class="formLabel">{{passwordInfo}}</label>
-        </div>
-        <div class="centerButtons">
-          <button type="submit" class="fullyBtn" (click)="onSubmit()">{{'signIn'|translate}}</button>
-          <div class="strike"><span>{{'or'|translate}}</span></div>
-          <button type="submit" class="emptyBtn" (click)="openSignUp()">{{'signUp'|translate}}</button>
-        </div>
-      </ng-template>
+      <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
+      <div class="formDiv">
+        <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username"
+          (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+        <label for="username" class="formLabel">{{emailAddressInfo}}</label>
+      </div>
+      <div class="formDiv">
+        <input type="password" [class.labelInvalidInfo]="InvalidInfo" name="password" [(ngModel)]="password"
+          id="password" (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">
+        <label for="password" class="formLabel">{{passwordInfo}}</label>
+      </div>
+      <div class="centerButtons">
+        <button class="fullyBtn" style="position: relative;" [disabled]="waitOppeningAcc==true" (click)="onSubmit()">
+          <div *ngIf="waitOppeningAcc==true" class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span *ngIf="waitOppeningAcc==false">
+            {{'signIn'|translate}}
+          </span>
+        </button>
+        <div class="strike"><span>{{'or'|translate}}</span></div>
+        <button type="submit" class="emptyBtn" (click)="openSignUp()">{{'signUp'|translate}}</button>
+      </div>
     </form>
   </div>
 </body>

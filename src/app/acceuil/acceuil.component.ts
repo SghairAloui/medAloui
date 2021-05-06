@@ -486,4 +486,8 @@ export class AcceuilComponent implements OnInit {
       this.slectedDay = true;
   }
 
+  redirectToForgotPassword(){
+    this.router.navigate(['/forgotPassword']);
+  }
+
 }

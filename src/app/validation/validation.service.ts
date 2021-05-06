@@ -18,4 +18,8 @@ export class ValidationService {
   public addValidation(validationPost:ValidationPost){
     return this.http.post<boolean>(VALIDATION_API + 'add', validationPost,httpOptions);
   }
+
+  public checkIfUserValidated(email:string){
+    return this.http.get<boolean>(VALIDATION_API + 'checkIfUserValidated/'+email,httpOptions);
+  }
 }

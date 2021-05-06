@@ -42,4 +42,8 @@ export class UserService {
   updateUserStatusByEmail(email:string,status:string){
     return this.http.post<boolean>(USER_API + 'updateUserStatusByEmail',{email,status},httpOptions);
   }
+
+  updateUserPasswordByEmail(email:string,password:string){
+    return this.http.post<boolean>(USER_API + 'updateUserPasswordByEmail',{email,password},httpOptions);
+  }
 }

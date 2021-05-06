@@ -42,6 +42,8 @@ import { QuestionService } from './services/question.service';
 import { DoctorDiseaseComponent } from './users/doctor/doctor-disease/doctor-disease.component';
 import { NotificationService } from './services/notification.service';
 import { DragScrollModule } from 'ngx-drag-scroll';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { EmailService } from './services/email.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,8 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     AdminPharmacyComponent,
     AdminDiseaseComponent,
     PatientDiseaseComponent,
-    DoctorDiseaseComponent
+    DoctorDiseaseComponent,
+    ForgetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +87,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
-    MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,
+    MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,EmailService,
     NotificationService,authInterceptorProviders
   ],
   bootstrap: [AppComponent]

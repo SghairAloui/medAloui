@@ -507,5 +507,14 @@
     "accountNotVerified":"Your account has not yet been verified, please enter the verification code that was sent to your mailbox so that you can access it.",
     "enterVerificationCode":"Enter verification code",
     "verified":"Verified",
-    "accountVerified":"Account verified"
+    "accountVerified":"Account verified",
+    "forgotPassword":"Forgot password",
+    "enterYoulMail":"Enter your mail",
+    "email":"Email",
+    "sendCode":"Send code",
+    "invalidEmail":"Invalid email",
+    "noAccountWithEmail":"There is no account with this email",
+    "passwordDontMatch":"Password don't match",
+    "passwordUpdated":"Congratulations, your password has been successfully updated",
+    "setNewPassword":"Set new password"
 }

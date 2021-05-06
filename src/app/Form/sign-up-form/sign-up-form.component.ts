@@ -261,7 +261,7 @@ export class SignUpFormComponent implements OnInit {
   saveNewUser() {
     this.creatingUser = true;
     let roleUserList = new Set();
-    roleUserList.add(this.roleUser)
+    roleUserList.add(this.roleUser);
 
     let birthday: string = this.day + '/' + this.month + '/' + this.year;
     let gender: string;
