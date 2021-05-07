@@ -659,11 +659,16 @@ html,body{
     background: var(--background-color);
     color: #308a7b;
     transition: .3s ease-in-out;
-
 }
 .spanButton:hover{
     background-color: #308a7b;
     color: white;
+}
+.content .formDiv .mesure:hover{
+    color: white;
+}
+.content .formDiv .mesure{
+    color: #308a7b;
 }
 .medicamentNameClass{
     font-family: Arial, Helvetica, sans-serif;
@@ -743,18 +748,17 @@ html,body{
     padding: 0px 5px;
     margin: 0px 15px;
 }
-.diseaseContainer{
-    position: relative;
-    margin-top: 15px;
-    font-family: Arial, Helvetica, sans-serif;
-    position: relative;
-    width: 95%;
-    margin-left: 2.5%;
-    border: 2px solid #308a7b;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+.diseasesContainerTitle{
+    font-size: 25px;
+    width: fit-content;
+    font-weight: 600;
+    color: var(--userInfoContainerValueColor);
+    margin: 5px auto;
+}
+.diseasesContainerTitleLine{
+    width: 120%;
+    margin-left: -10%;
+    border-bottom: 2px solid #308a7b;
 }
 .diseaseContainerDate{
     width: 100%;
@@ -855,6 +859,7 @@ html,body{
     border-radius: 5px;
     padding: 2px 5px;
     margin: 3px 5px;
+    color: white;
 }
 .diseaseDocName,.docDiseaseGeneralInfo{
     position: relative;
@@ -867,6 +872,8 @@ html,body{
     position: relative;
     display: inline-block;
     width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .greenLine{
     border-top: 1px solid #308a7b;
@@ -888,6 +895,8 @@ html,body{
     padding:0px 15px;
 }
 .userInfoContainer{
+    overflow: hidden;
+    position: relative;
     flex: 0 0 auto;
     display: inline-block;
     background-color: var(--userInfoContainerBackground);
@@ -924,7 +933,7 @@ html,body{
     color: var(--userInfoContainerValueColor);
     text-transform: capitalize;
 }
-.fa-birthday-cake,.fa-venus-mars,.userInfoContainer .fa-hospital-user,.userInfoContainer .fa-clock,.userInfoContainer .fa-hand-holding-usd,.userInfoContainer .fa-user-clock,.fa-map-marked-alt{
+#profile .fa-birthday-cake,#profile .fa-venus-mars,#profile .userInfoContainer .fa-hospital-user,#profile .userInfoContainer .fa-clock,#profile .userInfoContainer .fa-hand-holding-usd,#profile .userInfoContainer .fa-user-clock,#profile .fa-map-marked-alt{
     position: absolute;
     font-size: 20px;
     padding: 8px;
@@ -932,27 +941,27 @@ html,body{
     width: 36px;
     height: 36px;
 }
-.fa-venus-mars{
+#profile .fa-venus-mars{
     color: #fd7e14;
     background-color: #fd7e1428;
 }
-.userInfoContainer .fa-hospital-user{
+#profile .userInfoContainer .fa-hospital-user{
     color: #308a7b;
     background-color: #308a7b28;
 }
-.userInfoContainer .fa-clock{
+#profile .userInfoContainer .fa-clock{
     color: #9983ea;
     background-color: #9983ea28;
 }
-.userInfoContainer .fa-hand-holding-usd{
+#profile .userInfoContainer .fa-hand-holding-usd{
     color: #fcb63e;
     background-color: #ffc15528;
 }
-.userInfoContainer .fa-user-clock,.fa-birthday-cake{
+#profile .userInfoContainer .fa-user-clock,#profile .fa-birthday-cake{
     color: #08a0f7;
     background-color: #08a0f728;
 }
-.fa-map-marked-alt{
+#profile .fa-map-marked-alt{
     color: #fa676a;
     background-color: #fa676a28;
 }
@@ -992,7 +1001,7 @@ html,body{
     margin-top: 18px;
     transform: translateY(-50%);
 }
-.fa-briefcase{
+#profile .fa-briefcase{
     position: absolute;
     font-size: 20px;
     padding: 8px;
@@ -1155,4 +1164,35 @@ html,body{
     width: 50%;
     margin-left:50%;
     transform: translateX(-50%);
+}
+.fa-bacterium{
+    color: #08a0f7;
+    background-color: #08a0f728;
+}
+#profile .fa-venus-mars,.fa-search{
+    color: #fd7e14;
+    background-color: #fd7e1428;
+}
+.fa-bacterium,.fa-search{
+    position: absolute;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
+.userInfoContainerHover{
+    transition: .3s ease-in-out;
+}
+.userInfoContainerHover:hover{
+    cursor: pointer;
+    transform: scale(1.02);
+}
+.userInfoContainerHover .userInfoContainerValue{
+    padding: 10px 0px;
+}
+#todayDiseaseFullInfo .fullyBtnSmall{
+    width: fit-content;
+    padding: 2px 15px;
+    margin-left: 25px;
 }

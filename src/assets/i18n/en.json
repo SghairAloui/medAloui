@@ -391,7 +391,7 @@
     "passwordChanged":"Password changed you need to re authenticate",
     "confirmChange":"Confirm change",
     "changeUsername":"Change username",
-    "noteChangerPassOrUsername":"Note: after changing your username or password you will logged out to re authenticate",
+    "noteChangerPassOrUsername":"Note: after changing your password you will logged out to re authenticate",
     "chooseCity":"Choose city",
     "chooseSpecialityandCity":"Choose an appropriate specialty and city",
     "loadMoreDoc":"Load more doctors",
@@ -429,7 +429,7 @@
     "loadMoreDiagnose":"Load more diagnose",
     "allDiseasesLoaded":"All diseases loaded",
     "diagNotNull":"Confirm or cancel your diagnose",
-    "allPatientDiagnosedClickTo":"All patient diagnosed click to confirm you have completed today's appointments",
+    "allPatientDiagnosedClickTo":"All patient diagnosed click to confirm that you have completed today's appointments",
     "todayPatientDiagnosed":"All today's patient diagnosed",
     "loadMorePrescription":"Load more prescription",
     "allPrescriptionLoaded":"All prescription loaded",
@@ -516,5 +516,7 @@
     "noAccountWithEmail":"There is no account with this email",
     "passwordDontMatch":"Password don't match",
     "passwordUpdated":"Congratulations, your password has been successfully updated",
-    "setNewPassword":"Set new password"
+    "setNewPassword":"Set new password",
+    "questions":"Questions",
+    "allQuestions":"All questions"
 }

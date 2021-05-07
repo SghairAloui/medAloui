@@ -38,7 +38,7 @@
         </div>
         <div *ngIf="docInfo">
             <div class="doctorContainer">
-                <div *ngIf="container=='profile'">
+                <div *ngIf="container=='profile'" id="profile">
                     <section id="generalInfoSection">
                         <div class="sectionTitle">{{'generalInfo'|translate}}</div>
                         <div class="newSectionContainer" *ngIf="generalInfo=='show'">
@@ -256,8 +256,6 @@
                                 </div>
                                 <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick()">
                                     {{'changePassword'|translate}} ?</div>
-                                <div class="textLien" style="padding-left: 50px;" (click)="changeUsernameClick()">
-                                    {{'changeUsername'|translate}} ?</div>
                                 <div class="buttons">
                                     <button class="fullyBtn"
                                         (click)="generalInfo='show';toGeneralInfoSection();">{{'goBack'|translate}}</button>
@@ -960,10 +958,8 @@
                                 </div>
                                 <div *ngIf="toadyAppointmentPatientInfo.length != 0">
                                     <div *ngIf="docTodayAppointments[0].appointmentStatus=='completed'">
-                                        <div class="sectionContainer">
-                                            <div style="padding: 10px; text-align: center;">
-                                                {{'todayPatientDiagnosed'|translate}}
-                                            </div>
+                                        <div style="padding: 10px; text-align: center;">
+                                            {{'todayPatientDiagnosed'|translate}}
                                         </div>
                                     </div>
                                     <div *ngIf="docTodayAppointments[0].appointmentStatus=='pending'">
@@ -1020,206 +1016,244 @@
                                                                 <div class="infoTitle">{{'weight'|translate}}</div>
                                                             </div>
                                                         </div>
-                                                        <div class="diseasesContainer">
-                                                            <div class="title"> {{'diseases'|translate}} </div>
-                                                            <div class="content">
-                                                                <div
-                                                                    *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length == 0">
-                                                                    {{'notDiagnosedYet'|translate}}
-                                                                </div>
-                                                                <div
-                                                                    *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length != 0">
-                                                                    <div *ngFor="let dis of todayPatientMedicalProfileGet[patientKey].medicalProfileDisease | keyvalue"
-                                                                        class="diseaseContainer">
-                                                                        <div *ngIf="dis.value.showFullInfo==false && !loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                            class="showDoctorinfo"
-                                                                            (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'today')">
-                                                                            <span class="showDoctorinfoCentred">
-                                                                                {{'showDocInfo'|translate}}
-                                                                            </span>
+                                                        <div class="diseasesContainerTitle">
+                                                            <span *ngIf="!todayDiseaseFullInfo">
+                                                                {{'diseases'|translate}}
+                                                            </span>
+                                                            <span *ngIf="todayDiseaseFullInfo">
+                                                                {{todayPatientMedicalProfileGet[patientKey].medicalProfileDisease[todayDiseaseKey].medicalProfileDiseaseName}}
+                                                            </span>
+                                                            <div class="diseasesContainerTitleLine"></div>
+                                                        </div>
+
+                                                        <div class="content">
+                                                            <div style="width: fit-content;margin: 5px auto;"
+                                                                *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length == 0">
+                                                                {{'notDiagnosedYet'|translate}}
+                                                            </div>
+
+                                                            <div *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length != 0 && !todayDiseaseFullInfo"
+                                                                class="userInfoContainers"
+                                                                style="display: inline-block; cursor: pointer;">
+
+                                                                <div *ngFor="let dis of todayPatientMedicalProfileGet[patientKey].medicalProfileDisease | keyvalue"
+                                                                    class="userInfoContainer userInfoContainerHover"
+                                                                    (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'today')">
+
+                                                                    <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
+                                                                        class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
+                                                                        <div class="loading">
+                                                                            <span></span>
+                                                                            <span></span>
+                                                                            <span></span>
                                                                         </div>
-                                                                        <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                            class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
-                                                                            <div class="loading">
-                                                                                <span></span>
-                                                                                <span></span>
-                                                                                <span></span>
-                                                                            </div>
+                                                                    </div>
+                                                                    <div class="userInfoContainerTitle">
+                                                                        <div class="userInfoContainerTitleIcon"><i
+                                                                                class="fas fa-bacterium"></i>
                                                                         </div>
-                                                                        <div class="diseaseContainerDate">
+                                                                        <div class="userInfoContainerTitleValue">
+                                                                            {{'disease'|translate}}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="userInfoContainerValue">
+                                                                        {{dis.value.medicalProfileDiseaseName}}
+                                                                    </div>
+                                                                    <div class="userInfoContainerSecondValue">
+                                                                        <div class="userInfoContainerSecondValuePoint">
+                                                                        </div>
+                                                                        <div class="userInfoContainerSecondValueText">
                                                                             {{dis.value.medicalProfileDiseaseDiagnoseDay}}
                                                                         </div>
-                                                                        <div *ngIf="dis.value.showFullInfo==true"
-                                                                            (click)="dis.value.showFullInfo=false">
-                                                                            <div class="diseaseDocInfo">
-                                                                                <div
-                                                                                    class="docProfileImgForMedicalProfileDis">
-                                                                                    <div
-                                                                                        *ngIf="doctorProfileImgForMedicalProfileDis[dis.key]; then showDocProfileImg else showDocDefaultImg">
-                                                                                    </div>
-                                                                                    <ng-template #showDocProfileImg><img
-                                                                                            [src]="doctorProfileImgForMedicalProfileDis[dis.key]"
-                                                                                            class="profileImg">
-                                                                                    </ng-template>
-                                                                                    <ng-template #showDocDefaultImg><i
-                                                                                            class="fas fa-user-tie userTie75"></i>
-                                                                                    </ng-template>
-                                                                                </div>
-                                                                                <div class="diseaseDocName">
-                                                                                    Dr.<span
-                                                                                        style="text-transform: capitalize;">
-                                                                                        {{doctorInfoForMedicalProfileDis[dis.key].doctorFirstName}}</span>
-                                                                                    <span
-                                                                                        style="text-transform: uppercase;">
-                                                                                        {{doctorInfoForMedicalProfileDis[dis.key].doctorLastName}}</span><br>
-                                                                                    <div
-                                                                                        *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate !=0">
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 0.5">
-                                                                                            <i
-                                                                                                class="fas fa-star-half-alt"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1.5">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i
-                                                                                                class="fas fa-star-half-alt"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2.5">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i
-                                                                                                class="fas fa-star-half-alt"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3.5">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i
-                                                                                                class="fas fa-star-half-alt"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="far fa-star"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4.5">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i
-                                                                                                class="fas fa-star-half-alt"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 5">
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                            <i class="fas fa-star"></i>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="docDiseaseGeneralInfo">
-                                                                                    <div
-                                                                                        class="diseaseName newDiseaseNameMargin">
-                                                                                        <i
-                                                                                            class="fas fa-venus-mars"></i>
-                                                                                        <span class="disease">
-                                                                                            {{doctorInfoForMedicalProfileDis[dis.key].doctorGender}}
-                                                                                        </span>
-                                                                                    </div><br>
-                                                                                    <div
-                                                                                        class="diseaseName newDiseaseNameMargin">
-                                                                                        <i
-                                                                                            class="fas fa-map-marked-alt"></i>
-                                                                                        <span class="disease">
-                                                                                            {{doctorInfoForMedicalProfileDis[dis.key].userCity}}
-                                                                                        </span>
-                                                                                    </div>
-                                                                                </div><br>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="userInfoContainers"
+                                                                    style="display: inline-block; cursor: pointer;">
+                                                                    <div class="userInfoContainer"
+                                                                        [class.userInfoContainerHover]="todayLoadMoreDiagnose"
+                                                                        (click)="getMedicalProfileDiseases(todayPatientMedicalProfileId,patientKey,'today',todayMedicalProfileDiseasePage[patientKey])">
+                                                                        <div class="userInfoContainerTitle">
+                                                                            <div class="userInfoContainerTitleIcon"><i
+                                                                                    class="fas fa-search"></i>
                                                                             </div>
-                                                                            <div class="medicalProfileDiseasePrescription"
-                                                                                *ngIf="todayMedicalProfilePrescription[dis.key]">
-                                                                                {{'prescription'|translate}}
-                                                                                <hr class="greenLine">
-                                                                                <span
-                                                                                    *ngFor="let med of todayMedicalProfilePrescription[dis.key].medicament">
-                                                                                    <span
-                                                                                        class="greenContainer">{{med.medicamentName}}
-                                                                                        |
-                                                                                        {{med.treatmentPeriode}}</span>
-                                                                                </span>
+                                                                            <div class="userInfoContainerTitleValue">
+                                                                                {{'search'|translate}}
                                                                             </div>
-                                                                            <hr>
                                                                         </div>
-                                                                        <div class="diseaseName">
-                                                                            {{'disease'|translate}}
-                                                                            <span class="disease">
-                                                                                {{dis.value.medicalProfileDiseaseName}}
+                                                                        <div class="userInfoContainerValue"
+                                                                            style="padding: 10px 0px;">
+                                                                            <span *ngIf="!todayLoadMoreDiagnose">
+                                                                                <i class="fas fa-times"></i>
+                                                                            </span>
+                                                                            <span *ngIf="todayLoadMoreDiagnose">
+                                                                                <i class="fas fa-plus"></i>
                                                                             </span>
                                                                         </div>
-                                                                        <div *ngIf="dis.value.showFullInfo==true && dis.value.medicalProfileDiseaseDiagnose"
-                                                                            class="diseaseDiagnose">
-                                                                            {{dis.value.medicalProfileDiseaseDiagnose}}
+                                                                        <div class="userInfoContainerSecondValue">
+                                                                            <div
+                                                                                class="userInfoContainerSecondValuePoint">
+                                                                            </div>
+                                                                            <div
+                                                                                class="userInfoContainerSecondValueText">
+                                                                                <span *ngIf="!todayLoadMoreDiagnose">
+                                                                                    {{'allDiseasesLoaded'|translate}}
+                                                                                </span>
+                                                                                <span *ngIf="todayLoadMoreDiagnose">
+                                                                                    {{'loadMoreDiagnose'|translate}}
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div *ngIf="todayLoadMoreDiagnose"
-                                                                        class="loadMoreDiagnoses"
-                                                                        (click)="getMedicalProfileDiseases(todayPatientMedicalProfileId,patientKey,'today',todayMedicalProfileDiseasePage[patientKey])">
-                                                                        <div class="loadMoreDiagnosesText">
-                                                                            {{'loadMoreDiagnose'|translate}}</div>
-                                                                        <i
-                                                                            class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
-                                                                    </div>
-                                                                    <div *ngIf="!todayLoadMoreDiagnose"
-                                                                        class="loadMoreDiagnoses">
-                                                                        {{'allDiseasesLoaded'|translate}}
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div *ngIf="todayDiseaseFullInfo" id="todayDiseaseFullInfo">
+                                                                <div class="diseaseDocInfo">
+                                                                    <div class="docProfileImgForMedicalProfileDis">
+                                                                        <div
+                                                                            *ngIf="doctorProfileImgForMedicalProfileDis[todayDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
+                                                                        </div>
+                                                                        <ng-template #showDocProfileImg><img
+                                                                                [src]="doctorProfileImgForMedicalProfileDis[todayDiseaseKey]"
+                                                                                class="profileImg">
+                                                                        </ng-template>
+                                                                        <ng-template #showDocDefaultImg><i
+                                                                                class="fas fa-user-tie userTie75"></i>
+                                                                        </ng-template>
+                                                                    </div>
+                                                                    <div class="diseaseDocName">
+                                                                        Dr.<span style="text-transform: capitalize;">
+                                                                            {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorFirstName}}</span>
+                                                                        <span style="text-transform: uppercase;">
+                                                                            {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorLastName}}</span><br>
+                                                                        <div
+                                                                            *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate !=0">
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 0.5">
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 1">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 1.5">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 2">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 2.5">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 3">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 3.5">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 4">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="far fa-star"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 4.5">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                            </div>
+                                                                            <div
+                                                                                *ngIf="doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorRate == 5">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="docDiseaseGeneralInfo">
+                                                                        <div class="diseaseName newDiseaseNameMargin">
+                                                                            <i class="fas fa-venus-mars"></i>
+                                                                            <span class="disease">
+                                                                                {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorGender}}
+                                                                            </span>
+                                                                        </div><br>
+                                                                        <div class="diseaseName newDiseaseNameMargin">
+                                                                            <i class="fas fa-map-marked-alt"></i>
+                                                                            <span class="disease">
+                                                                                {{doctorInfoForMedicalProfileDis[todayDiseaseKey].userCity}}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="medicalProfileDiseasePrescription"
+                                                                    *ngIf="todayMedicalProfilePrescription[todayDiseaseKey]">
+                                                                    <div style="margin: 0px auto;width: fit-content;">
+                                                                        {{'prescription'|translate}}
+                                                                    </div>
+                                                                    <hr class="greenLine">
+                                                                    <div style="margin: 0px auto;width: fit-content;">
+                                                                        <span
+                                                                            *ngFor="let med of todayMedicalProfilePrescription[todayDiseaseKey].medicament">
+                                                                            <span
+                                                                                class="greenContainer">{{med.medicamentName}}
+                                                                                |
+                                                                                {{med.treatmentPeriode}}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease[todayDiseaseKey].medicalProfileDiseaseDiagnose"
+                                                                    class="diseaseDiagnose">
+                                                                    {{todayPatientMedicalProfileGet[patientKey].medicalProfileDisease[todayDiseaseKey].medicalProfileDiseaseDiagnose}}
+                                                                </div>
+                                                                <button class="fullyBtnSmall"
+                                                                    (click)="todayDiseaseFullInfo=false;">
+                                                                    {{'goBack'|translate}}
+                                                                </button>
+                                                            </div>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1339,192 +1373,243 @@
                                                     <div class="infoTitle">{{'weight'|translate}}</div>
                                                 </div>
                                             </div>
-                                            <div class="diseasesContainer">
-                                                <div class="title"> {{'diseases'|translate}} </div>
-                                                <div class="content">
-                                                    <div
-                                                        *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length == 0">
-                                                        {{'notDiagnosedYet'|translate}}
-                                                    </div>
-                                                    <div
-                                                        *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length != 0">
-                                                        <div *ngFor="let dis of currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease | keyvalue"
-                                                            class="diseaseContainer">
-                                                            <div *ngIf="dis.value.showFullInfo==false && !loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                class="showDoctorinfo"
-                                                                (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'current')">
-                                                                <span class="showDoctorinfoCentred">
-                                                                    {{'showDocInfo'|translate}}
-                                                                </span>
+
+                                            <div class="diseasesContainerTitle">
+                                                <span *ngIf="!currentDiseaseFullInfo">
+                                                    {{'diseases'|translate}}
+                                                </span>
+                                                <span *ngIf="currentDiseaseFullInfo">
+                                                    {{currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease[currentDiseaseKey].medicalProfileDiseaseName}}
+                                                </span>
+                                                <div class="diseasesContainerTitleLine"></div>
+                                            </div>
+
+                                            <div class="content">
+
+                                                <div style="width: fit-content;margin: 5px auto;"
+                                                    *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length == 0">
+                                                    {{'notDiagnosedYet'|translate}}
+                                                </div>
+
+                                                <div *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length != 0 && !currentDiseaseFullInfo"
+                                                    class="userInfoContainers"
+                                                    style="display: inline-block; cursor: pointer;">
+
+                                                    <div *ngFor="let dis of currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease | keyvalue"
+                                                        class="userInfoContainer userInfoContainerHover"
+                                                        (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'current')">
+
+                                                        <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
+                                                            class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
+                                                            <div class="loading">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
                                                             </div>
-                                                            <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
-                                                                <div class="loading">
-                                                                    <span></span>
-                                                                    <span></span>
-                                                                    <span></span>
-                                                                </div>
+                                                        </div>
+                                                        <div class="userInfoContainerTitle">
+                                                            <div class="userInfoContainerTitleIcon"><i
+                                                                    class="fas fa-bacterium"></i>
                                                             </div>
-                                                            <div class="diseaseContainerDate">
+                                                            <div class="userInfoContainerTitleValue">
+                                                                {{'disease'|translate}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="userInfoContainerValue">
+                                                            {{dis.value.medicalProfileDiseaseName}}
+                                                        </div>
+                                                        <div class="userInfoContainerSecondValue">
+                                                            <div class="userInfoContainerSecondValuePoint">
+                                                            </div>
+                                                            <div class="userInfoContainerSecondValueText">
                                                                 {{dis.value.medicalProfileDiseaseDiagnoseDay}}
                                                             </div>
-                                                            <div *ngIf="dis.value.showFullInfo==true"
-                                                                (click)="dis.value.showFullInfo=false">
-                                                                <div class="diseaseDocInfo">
-                                                                    <div class="docProfileImgForMedicalProfileDis">
-                                                                        <div
-                                                                            *ngIf="doctorProfileImgForMedicalProfileDis[dis.key]; then showDocProfileImg else showDocDefaultImg">
-                                                                        </div>
-                                                                        <ng-template #showDocProfileImg><img
-                                                                                [src]="doctorProfileImgForMedicalProfileDis[dis.key]"
-                                                                                class="profileImg">
-                                                                        </ng-template>
-                                                                        <ng-template #showDocDefaultImg><i
-                                                                                class="fas fa-user-tie userTie75"></i>
-                                                                        </ng-template>
-                                                                    </div>
-                                                                    <div class="diseaseDocName">
-                                                                        Dr.<span style="text-transform: capitalize;">
-                                                                            {{doctorInfoForMedicalProfileDis[dis.key].doctorFirstName}}</span>
-                                                                        <span style="text-transform: uppercase;">
-                                                                            {{doctorInfoForMedicalProfileDis[dis.key].doctorLastName}}</span><br>
-                                                                        <div
-                                                                            *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate !=0">
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 0.5">
-                                                                                <i class="fas fa-star-half-alt"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1.5">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star-half-alt"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2.5">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star-half-alt"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3.5">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star-half-alt"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="far fa-star"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4.5">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star-half-alt"></i>
-                                                                            </div>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 5">
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                                <i class="fas fa-star"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="docDiseaseGeneralInfo">
-                                                                        <div class="diseaseName newDiseaseNameMargin">
-                                                                            <i class="fas fa-venus-mars"></i>
-                                                                            <span class="disease">
-                                                                                {{doctorInfoForMedicalProfileDis[dis.key].doctorGender}}
-                                                                            </span>
-                                                                        </div><br>
-                                                                        <div class="diseaseName newDiseaseNameMargin">
-                                                                            <i class="fas fa-map-marked-alt"></i>
-                                                                            <span class="disease">
-                                                                                {{doctorInfoForMedicalProfileDis[dis.key].userCity}}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div><br>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="userInfoContainers"
+                                                        style="display: inline-block; cursor: pointer;">
+                                                        <div class="userInfoContainer"
+                                                            [class.userInfoContainerHover]="loadMoreDiagnose"
+                                                            (click)="getMedicalProfileDiseases(currentPatientInfo[doctorGet.currentPatient-1].medicalProfileId,doctorGet.currentPatient,'currentPatient',cuurentMedicalProfileDiseasePage)">
+                                                            <div class="userInfoContainerTitle">
+                                                                <div class="userInfoContainerTitleIcon"><i
+                                                                        class="fas fa-search"></i>
                                                                 </div>
-                                                                <div class="medicalProfileDiseasePrescription"
-                                                                    *ngIf="currentMedicalProfilePrescription[dis.key]">
-                                                                    {{'prescription'|translate}}
-                                                                    <hr class="greenLine">
-                                                                    <span
-                                                                        *ngFor="let med of currentMedicalProfilePrescription[dis.key].medicament">
-                                                                        <span
-                                                                            class="greenContainer">{{med.medicamentName}}
-                                                                            | {{med.treatmentPeriode}}</span>
-                                                                    </span>
+                                                                <div class="userInfoContainerTitleValue">
+                                                                    {{'search'|translate}}
                                                                 </div>
-                                                                <hr>
                                                             </div>
-                                                            <div class="diseaseName">
-                                                                {{'disease'|translate}}
-                                                                <span class="disease">
-                                                                    {{dis.value.medicalProfileDiseaseName}}
+                                                            <div class="userInfoContainerValue"
+                                                                style="padding: 10px 0px;">
+                                                                <span *ngIf="!loadMoreDiagnose">
+                                                                    <i class="fas fa-times"></i>
+                                                                </span>
+                                                                <span *ngIf="loadMoreDiagnose">
+                                                                    <i class="fas fa-plus"></i>
                                                                 </span>
                                                             </div>
-                                                            <div *ngIf="dis.value.showFullInfo==true && dis.value.medicalProfileDiseaseDiagnose"
-                                                                class="diseaseDiagnose">
-                                                                {{dis.value.medicalProfileDiseaseDiagnose}}
+                                                            <div class="userInfoContainerSecondValue">
+                                                                <div class="userInfoContainerSecondValuePoint">
+                                                                </div>
+                                                                <div class="userInfoContainerSecondValueText">
+                                                                    <span *ngIf="!loadMoreDiagnose">
+                                                                        {{'allDiseasesLoaded'|translate}}
+                                                                    </span>
+                                                                    <span *ngIf="loadMoreDiagnose">
+                                                                        {{'loadMoreDiagnose'|translate}}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div *ngIf="loadMoreDiagnose" class="loadMoreDiagnoses"
-                                                            (click)="getMedicalProfileDiseases(currentPatientInfo[doctorGet.currentPatient-1].medicalProfileId,doctorGet.currentPatient,'currentPatient',cuurentMedicalProfileDiseasePage)">
-                                                            <div class="loadMoreDiagnosesText">
-                                                                {{'loadMoreDiagnose'|translate}}</div>
-                                                            <i
-                                                                class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
-                                                        </div>
-                                                        <div *ngIf="!loadMoreDiagnose"
-                                                            class="loadMoreDiagnoses defaultCursor">
-                                                            {{'allDiseasesLoaded'|translate}}
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div *ngIf="currentDiseaseFullInfo" id="todayDiseaseFullInfo">
+                                                    <div class="diseaseDocInfo">
+                                                        <div class="docProfileImgForMedicalProfileDis">
+                                                            <div
+                                                                *ngIf="doctorProfileImgForMedicalProfileDis[currentDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
+                                                            </div>
+                                                            <ng-template #showDocProfileImg><img
+                                                                    [src]="doctorProfileImgForMedicalProfileDis[currentDiseaseKey]"
+                                                                    class="profileImg">
+                                                            </ng-template>
+                                                            <ng-template #showDocDefaultImg><i
+                                                                    class="fas fa-user-tie userTie75"></i>
+                                                            </ng-template>
+                                                        </div>
+                                                        <div class="diseaseDocName">
+                                                            Dr.<span style="text-transform: capitalize;">
+                                                                {{doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorFirstName}}</span>
+                                                            <span style="text-transform: uppercase;">
+                                                                {{doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorLastName}}</span><br>
+                                                            <div
+                                                                *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate !=0">
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 0.5">
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 1">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 1.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 2">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 2.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 3">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 3.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 4">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="far fa-star"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 4.5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star-half-alt"></i>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorRate == 5">
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                    <i class="fas fa-star"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="docDiseaseGeneralInfo">
+                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                <i class="fas fa-venus-mars"></i>
+                                                                <span class="disease">
+                                                                    {{doctorInfoForMedicalProfileDis[currentDiseaseKey].doctorGender}}
+                                                                </span>
+                                                            </div><br>
+                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                <i class="fas fa-map-marked-alt"></i>
+                                                                <span class="disease">
+                                                                    {{doctorInfoForMedicalProfileDis[currentDiseaseKey].userCity}}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="medicalProfileDiseasePrescription"
+                                                        *ngIf="currentMedicalProfilePrescription[currentDiseaseKey]">
+                                                        <div style="margin: 0px auto;width: fit-content;">
+                                                            {{'prescription'|translate}}
+                                                        </div>
+                                                        <hr class="greenLine">
+                                                        <div style="margin: 0px auto;width: fit-content;">
+                                                            <span
+                                                                *ngFor="let med of currentMedicalProfilePrescription[currentDiseaseKey].medicament">
+                                                                <span class="greenContainer">{{med.medicamentName}}
+                                                                    |
+                                                                    {{med.treatmentPeriode}}</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease[currentDiseaseKey].medicalProfileDiseaseDiagnose"
+                                                        class="diseaseDiagnose">
+                                                        {{currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease[currentDiseaseKey].medicalProfileDiseaseDiagnose}}
+                                                    </div>
+                                                    <button class="fullyBtnSmall"
+                                                        (click)="currentDiseaseFullInfo=false;">
+                                                        {{'goBack'|translate}}
+                                                    </button>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1719,10 +1804,10 @@
                                         {{'confirm'|translate}}
                                     </div>
                                 </div>
-                                <span *ngIf="todayPatientNumber == (doctorGet.currentPatient)"
-                                    style="padding-left: 15px;">
+                                <div *ngIf="todayPatientNumber == (doctorGet.currentPatient)"
+                                    style="padding-left: 15px;padding-top: 15px;">
                                     {{'allPatientDiagnosedClickTo'|translate}}
-                                </span>
+                                </div>
                             </section>
                         </div>
                     </section>
@@ -1788,195 +1873,242 @@
                                                         <div class="infoTitle">{{'weight'|translate}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="diseasesContainer">
-                                                    <div class="title"> {{'diseases'|translate}} </div>
-                                                    <div class="content">
-                                                        <div
-                                                            *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length == 0">
-                                                            {{'notDiagnosedYet'|translate}}
-                                                        </div>
-                                                        <div
-                                                            *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length != 0">
-                                                            <div *ngFor="let dis of tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease | keyvalue"
-                                                                class="diseaseContainer">
-                                                                <div *ngIf="dis.value.showFullInfo==false && !loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                    class="showDoctorinfo"
-                                                                    (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'tomorrow')">
-                                                                    <span class="showDoctorinfoCentred">
-                                                                        {{'showDocInfo'|translate}}
-                                                                    </span>
+
+                                                <div class="diseasesContainerTitle">
+                                                    <span *ngIf="!tomorrowDiseaseFullInfo">
+                                                        {{'diseases'|translate}}
+                                                    </span>
+                                                    <span *ngIf="tomorrowDiseaseFullInfo">
+                                                        {{tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease[tomorrowDiseaseKey].medicalProfileDiseaseName}}
+                                                    </span>
+                                                    <div class="diseasesContainerTitleLine"></div>
+                                                </div>
+
+                                                <div class="content">
+                                                    <div style="width: fit-content;margin: 5px auto;"
+                                                        *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length == 0">
+                                                        {{'notDiagnosedYet'|translate}}
+                                                    </div>
+
+                                                    <div *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length != 0 && !tomorrowDiseaseFullInfo"
+                                                        class="userInfoContainers"
+                                                        style="display: inline-block; cursor: pointer;">
+
+                                                        <div *ngFor="let dis of tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease | keyvalue"
+                                                            class="userInfoContainer userInfoContainerHover"
+                                                            (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'tomorrow')">
+
+                                                            <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
+                                                                class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
+                                                                <div class="loading">
+                                                                    <span></span>
+                                                                    <span></span>
+                                                                    <span></span>
                                                                 </div>
-                                                                <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
-                                                                    class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
-                                                                    <div class="loading">
-                                                                        <span></span>
-                                                                        <span></span>
-                                                                        <span></span>
-                                                                    </div>
+                                                            </div>
+                                                            <div class="userInfoContainerTitle">
+                                                                <div class="userInfoContainerTitleIcon"><i
+                                                                        class="fas fa-bacterium"></i>
                                                                 </div>
-                                                                <div class="diseaseContainerDate">
+                                                                <div class="userInfoContainerTitleValue">
+                                                                    {{'disease'|translate}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="userInfoContainerValue">
+                                                                {{dis.value.medicalProfileDiseaseName}}
+                                                            </div>
+                                                            <div class="userInfoContainerSecondValue">
+                                                                <div class="userInfoContainerSecondValuePoint">
+                                                                </div>
+                                                                <div class="userInfoContainerSecondValueText">
                                                                     {{dis.value.medicalProfileDiseaseDiagnoseDay}}
                                                                 </div>
-                                                                <div *ngIf="dis.value.showFullInfo==true"
-                                                                    (click)="dis.value.showFullInfo=false">
-                                                                    <div class="diseaseDocInfo">
-                                                                        <div class="docProfileImgForMedicalProfileDis">
-                                                                            <div
-                                                                                *ngIf="doctorProfileImgForMedicalProfileDis[dis.key]; then showDocProfileImg else showDocDefaultImg">
-                                                                            </div>
-                                                                            <ng-template #showDocProfileImg><img
-                                                                                    [src]="doctorProfileImgForMedicalProfileDis[dis.key]"
-                                                                                    class="profileImg">
-                                                                            </ng-template>
-                                                                            <ng-template #showDocDefaultImg><i
-                                                                                    class="fas fa-user-tie userTie75"></i>
-                                                                            </ng-template>
-                                                                        </div>
-                                                                        <div class="diseaseDocName">
-                                                                            Dr.<span
-                                                                                style="text-transform: capitalize;">
-                                                                                {{doctorInfoForMedicalProfileDis[dis.key].doctorFirstName}}</span>
-                                                                            <span style="text-transform: uppercase;">
-                                                                                {{doctorInfoForMedicalProfileDis[dis.key].doctorLastName}}</span><br>
-                                                                            <div
-                                                                                *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate !=0">
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 0.5">
-                                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 1.5">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 2.5">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 3.5">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="far fa-star"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 4.5">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                    *ngIf="doctorInfoForMedicalProfileDis[dis.key].doctorRate == 5">
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                    <i class="fas fa-star"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="docDiseaseGeneralInfo">
-                                                                            <div
-                                                                                class="diseaseName newDiseaseNameMargin">
-                                                                                <i class="fas fa-venus-mars"></i>
-                                                                                <span class="disease">
-                                                                                    {{doctorInfoForMedicalProfileDis[dis.key].doctorGender}}
-                                                                                </span>
-                                                                            </div><br>
-                                                                            <div
-                                                                                class="diseaseName newDiseaseNameMargin">
-                                                                                <i class="fas fa-map-marked-alt"></i>
-                                                                                <span class="disease">
-                                                                                    {{doctorInfoForMedicalProfileDis[dis.key].userCity}}
-                                                                                </span>
-                                                                            </div>
-                                                                        </div><br>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="userInfoContainers"
+                                                            style="display: inline-block; cursor: pointer;">
+                                                            <div class="userInfoContainer"
+                                                                [class.userInfoContainerHover]="todayLoadMoreDiagnose"
+                                                                (click)="getMedicalProfileDiseases(tomorrowPatientMedicalProfileId,tomorrowPatientKey,'tomorrow',tomorrowMedicalProfileDiseasePage[tomorrowPatientKey])">
+                                                                <div class="userInfoContainerTitle">
+                                                                    <div class="userInfoContainerTitleIcon"><i
+                                                                            class="fas fa-search"></i>
                                                                     </div>
-                                                                    <div class="medicalProfileDiseasePrescription"
-                                                                        *ngIf="tomorrowMedicalProfilePrescription[dis.key]">
-                                                                        {{'prescription'|translate}}
-                                                                        <hr class="greenLine">
-                                                                        <span
-                                                                            *ngFor="let med of tomorrowMedicalProfilePrescription[dis.key].medicament">
-                                                                            <span
-                                                                                class="greenContainer">{{med.medicamentName}}
-                                                                                | {{med.treatmentPeriode}}</span>
-                                                                        </span>
+                                                                    <div class="userInfoContainerTitleValue">
+                                                                        {{'search'|translate}}
                                                                     </div>
-                                                                    <hr>
                                                                 </div>
-                                                                <div class="diseaseName">
-                                                                    {{'disease'|translate}}
-                                                                    <span class="disease">
-                                                                        {{dis.value.medicalProfileDiseaseName}}
+                                                                <div class="userInfoContainerValue"
+                                                                    style="padding: 10px 0px;">
+                                                                    <span *ngIf="!todayLoadMoreDiagnose">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </span>
+                                                                    <span *ngIf="todayLoadMoreDiagnose">
+                                                                        <i class="fas fa-plus"></i>
                                                                     </span>
                                                                 </div>
-                                                                <div *ngIf="dis.value.showFullInfo==true && dis.value.medicalProfileDiseaseDiagnose"
-                                                                    class="diseaseDiagnose">
-                                                                    {{dis.value.medicalProfileDiseaseDiagnose}}
+                                                                <div class="userInfoContainerSecondValue">
+                                                                    <div class="userInfoContainerSecondValuePoint">
+                                                                    </div>
+                                                                    <div class="userInfoContainerSecondValueText">
+                                                                        <span *ngIf="!todayLoadMoreDiagnose">
+                                                                            {{'allDiseasesLoaded'|translate}}
+                                                                        </span>
+                                                                        <span *ngIf="todayLoadMoreDiagnose">
+                                                                            {{'loadMoreDiagnose'|translate}}
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div *ngIf="todayLoadMoreDiagnose" class="loadMoreDiagnoses"
-                                                                (click)="getMedicalProfileDiseases(todayPatientMedicalProfileId,patientKey,'today',todayMedicalProfileDiseasePage[patientKey])">
-                                                                <div class="loadMoreDiagnosesText">
-                                                                    {{'loadMoreDiagnose'|translate}}</div>
-                                                                <i
-                                                                    class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
-                                                            </div>
-                                                            <div *ngIf="!todayLoadMoreDiagnose"
-                                                                class="loadMoreDiagnoses">
-                                                                {{'allDiseasesLoaded'|translate}}
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div *ngIf="tomorrowDiseaseFullInfo" id="todayDiseaseFullInfo">
+                                                        <div class="diseaseDocInfo">
+                                                            <div class="docProfileImgForMedicalProfileDis">
+                                                                <div
+                                                                    *ngIf="doctorProfileImgForMedicalProfileDis[tomorrowDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
+                                                                </div>
+                                                                <ng-template #showDocProfileImg><img
+                                                                        [src]="doctorProfileImgForMedicalProfileDis[tomorrowDiseaseKey]"
+                                                                        class="profileImg">
+                                                                </ng-template>
+                                                                <ng-template #showDocDefaultImg><i
+                                                                        class="fas fa-user-tie userTie75"></i>
+                                                                </ng-template>
+                                                            </div>
+                                                            <div class="diseaseDocName">
+                                                                Dr.<span style="text-transform: capitalize;">
+                                                                    {{doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorFirstName}}</span>
+                                                                <span style="text-transform: uppercase;">
+                                                                    {{doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorLastName}}</span><br>
+                                                                <div
+                                                                    *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate !=0">
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 0.5">
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 1">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 1.5">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 2">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 2.5">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 3">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 3.5">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 4">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="far fa-star"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 4.5">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorRate == 5">
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                        <i class="fas fa-star"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="docDiseaseGeneralInfo">
+                                                                <div class="diseaseName newDiseaseNameMargin">
+                                                                    <i class="fas fa-venus-mars"></i>
+                                                                    <span class="disease">
+                                                                        {{doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].doctorGender}}
+                                                                    </span>
+                                                                </div><br>
+                                                                <div class="diseaseName newDiseaseNameMargin">
+                                                                    <i class="fas fa-map-marked-alt"></i>
+                                                                    <span class="disease">
+                                                                        {{doctorInfoForMedicalProfileDis[tomorrowDiseaseKey].userCity}}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="medicalProfileDiseasePrescription"
+                                                            *ngIf="tomorrowMedicalProfilePrescription[tomorrowDiseaseKey]">
+                                                            <div style="margin: 0px auto;width: fit-content;">
+                                                                {{'prescription'|translate}}
+                                                            </div>
+                                                            <hr class="greenLine">
+                                                            <div style="margin: 0px auto;width: fit-content;">
+                                                                <span
+                                                                    *ngFor="let med of tomorrowMedicalProfilePrescription[tomorrowDiseaseKey].medicament">
+                                                                    <span class="greenContainer">{{med.medicamentName}}
+                                                                        |
+                                                                        {{med.treatmentPeriode}}</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease[tomorrowDiseaseKey].medicalProfileDiseaseDiagnose"
+                                                            class="diseaseDiagnose">
+                                                            {{tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease[tomorrowDiseaseKey].medicalProfileDiseaseDiagnose}}
+                                                        </div>
+                                                        <button class="fullyBtnSmall"
+                                                            (click)="tomorrowDiseaseFullInfo=false;">
+                                                            {{'goBack'|translate}}
+                                                        </button>
+                                                    </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

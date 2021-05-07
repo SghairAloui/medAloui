@@ -18,7 +18,7 @@
                 <ul class="navItem">
                     <li (click)="toAcceuilSection()"><a class="menuHoverEffect">{{'home'|translate}}</a></li>
                     <li (click)="toDoctocSection()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
-                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect">{{'questions'|translate}}</a></li>
                     <li (click)="toAboutSection()"><a class="menuHoverEffect">{{'aboutUs'|translate}}</a></li>
                     <li id="settignsLi" (click)="settingsBoxUnder700=true;closeMenu()">
                         <label for="displaySettingsBox"><a class="menuHoverEffect"
@@ -110,7 +110,7 @@
                 <ul class="navItem">
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
                     <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
-                    <li (click)="diseaseClick()"><a class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                    <li (click)="diseaseClick()"><a class="menuHoverEffect">{{'questions'|translate}}</a></li>
                     <li (click)="doctorClick()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
                     <li (click)="profileCLick()"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
@@ -269,7 +269,7 @@
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
                     <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
                     <li (click)="openContainerToDoctor('disease');"><a
-                            class="menuHoverEffect">{{'diseases'|translate}}</a></li>
+                            class="menuHoverEffect">{{'questions'|translate}}</a></li>
                     <li (click)="openContainerToDoctor('patient');"><a
                             class="menuHoverEffect">{{'myPatients'|translate}}</a></li>
                     <li (click)="openContainerToDoctor('profile');"><a><i class="fas fa-user-circle"></i></a></li>
@@ -292,7 +292,7 @@
                 </div>
                 <div *ngIf="parentHeader=='disease'">
                     <ul>
-                        <li><a>{{'addDisease'|translate}}</a></li>
+                        <li><a>{{'allQuestions'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='settings'" class="settingItems">

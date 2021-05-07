@@ -392,7 +392,7 @@
     "passwordChanged":"Le mot de passe a changé, vous devez vous authentifier de nouveau",
     "confirmChange":"Confirmer le changement",
     "changeUsername":"Changer le nom d'utilisateur",
-    "noteChangerPassOrUsername":"Remarque: après avoir changé votre nom d'utilisateur ou votre mot de passe, vous serez déconnecté pour vous authentifier",
+    "noteChangerPassOrUsername":"Remarque: après avoir changé votre mot de passe, vous serez déconnecté pour vous authentifier",
     "chooseCity":"Choisissez la ville",
     "chooseSpecialityandCity":"Choisissez une spécialité et une ville appropriées",
     "loadMoreDoc":"Charger plus de médecins",

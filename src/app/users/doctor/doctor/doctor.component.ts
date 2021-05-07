@@ -134,13 +134,19 @@ export class DoctorComponent implements OnInit {
   todayMedicalProfilePrescription: prescriptionGet[] = [];
   tomorrowMedicalProfilePrescription: prescriptionGet[] = [];
   todayPatientMedicalProfileId: number = 0;
+  tomorrowPatientMedicalProfileId: number = 0;
   notificationPage: number = 0;
   position: boolean = false;
   geoNotId: number = 0;
   notVerified: boolean;
   field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
   isVerificationCode: boolean;
-
+  todayDiseaseKey: number;
+  todayDiseaseFullInfo: boolean = false;
+  tomorrowDiseaseKey: number;
+  tomorrowDiseaseFullInfo: boolean = false;
+  currentDiseaseKey: number;
+  currentDiseaseFullInfo: boolean = false;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -174,7 +180,7 @@ export class DoctorComponent implements OnInit {
         accessToken: 'your.mapbox.access.token'
       }).addTo(myMap);
 
-      let marker = L.marker([this.doctorGet.doctorLongitude, this.doctorGet.doctorLongitude]).addTo(myMap);
+      let marker = L.marker([this.doctorGet.doctorLatitude, this.doctorGet.doctorLongitude]).addTo(myMap);
       marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Dr. " + this.doctorGet.doctorFirstName + " " + this.doctorGet.doctorLastName + "</b>").openPopup();
     }
   }
@@ -1233,6 +1239,7 @@ export class DoctorComponent implements OnInit {
 
   showFullPatientTomorrowInfo(medicalProfileId: number, patientKey: number) {
     this.tomorrowPatientKey = patientKey;
+    this.tomorrowPatientMedicalProfileId = medicalProfileId;
     if (this.tomorrowPatientMedicalProfileGet[patientKey] == null) {
       this.patientService.getPatientMedicalProfileByMedicalProfileId(medicalProfileId).subscribe(
         res => {
@@ -1717,16 +1724,28 @@ export class DoctorComponent implements OnInit {
   }
 
   getDoctorFullInfo(doctorId: number, diseaseKey: number, status: string) {
-    if (status == 'current' && this.doctorInfoForMedicalProfileDis[diseaseKey])
-      this.currentPatientMedicalProfile[this.doctorGet.currentPatient - 1].medicalProfileDisease[diseaseKey].showFullInfo = true;
-    else if (status == 'today' && this.doctorInfoForMedicalProfileDis[diseaseKey])
-      this.todayPatientMedicalProfileGet[this.patientKey].medicalProfileDisease[diseaseKey].showFullInfo = true;
-    else if (status == 'tomorrow' && this.doctorInfoForMedicalProfileDis[diseaseKey])
-      this.tomorrowPatientMedicalProfileGet[this.tomorrowPatientKey].medicalProfileDisease[diseaseKey].showFullInfo = true;
+    if (status == 'current' && this.doctorInfoForMedicalProfileDis[diseaseKey]) {
+      this.currentDiseaseKey = diseaseKey;
+      this.currentDiseaseFullInfo = true;
+    }
+    else if (status == 'today' && this.doctorInfoForMedicalProfileDis[diseaseKey]) {
+      this.todayDiseaseKey = diseaseKey;
+      this.todayDiseaseFullInfo = true;
+    }
+    else if (status == 'tomorrow' && this.doctorInfoForMedicalProfileDis[diseaseKey]) {
+      this.tomorrowDiseaseKey = diseaseKey;
+      this.tomorrowDiseaseFullInfo = true;
+    }
     else {
       this.loadDoctorInfoForMedicalProfileDis[diseaseKey] = true;
       this.doctorService.GetDoctorInfoById(doctorId).subscribe(
         res => {
+          if (status == 'today')
+            this.todayDiseaseKey = diseaseKey;
+          else if (status == 'tomorrow')
+            this.tomorrowDiseaseKey = diseaseKey;
+          else if (status == 'current')
+            this.currentDiseaseKey = diseaseKey;
           this.doctorInfoForMedicalProfileDis[diseaseKey] = res;
           this.getDoctorProfileImage(doctorId, diseaseKey, status);
         }
@@ -1749,11 +1768,11 @@ export class DoctorComponent implements OnInit {
           this.doctorProfileImgForMedicalProfileDis[diseaseKey] = false;
         this.loadDoctorInfoForMedicalProfileDis[diseaseKey] = false;
         if (status == 'current')
-          this.currentPatientMedicalProfile[this.doctorGet.currentPatient - 1].medicalProfileDisease[diseaseKey].showFullInfo = true;
+          this.currentDiseaseFullInfo = true;
         else if (status == 'today')
-          this.todayPatientMedicalProfileGet[this.patientKey].medicalProfileDisease[diseaseKey].showFullInfo = true;
+          this.todayDiseaseFullInfo = true;
         else if (status == 'tomorrow')
-          this.tomorrowPatientMedicalProfileGet[this.tomorrowPatientKey].medicalProfileDisease[diseaseKey].showFullInfo = true;
+          this.tomorrowDiseaseFullInfo = true;
       }
     );
   }
@@ -1824,7 +1843,7 @@ export class DoctorComponent implements OnInit {
   }
   field5Keyup() {
     if (this.field5Code.length == 0)
-    this.field4Input.nativeElement.focus();
+      this.field4Input.nativeElement.focus();
   }
 
 }
