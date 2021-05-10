@@ -44,6 +44,7 @@ import { NotificationService } from './services/notification.service';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { EmailService } from './services/email.service';
+import { ConversationService } from './services/conversation.service';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,7 @@ import { EmailService } from './services/email.service';
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,EmailService,
-    NotificationService,authInterceptorProviders
+    NotificationService,ConversationService,authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

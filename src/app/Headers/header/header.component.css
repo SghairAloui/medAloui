@@ -240,6 +240,51 @@ html,body{
 }
 
 /*login header*/
+.messageCircle{
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 4px;
+    background-color: var(--userInfoContainerTitleColor);
+    border-radius: 50%;
+}
+.lastMessageContent{
+    position: relative;
+    font-weight: 500;
+    padding: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--userInfoContainerTitleColor);
+}
+.messageUsername{
+    display: table-cell;
+    padding-left: 10px;
+    font-weight: 600;
+}
+.messageUserImgContainer{
+    position: relative;
+    display: table-cell;
+    border: 1px solid #308a7b;
+    height: 50px;
+    width: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.message{
+    width: 100%;
+    display: table;
+    margin: 10px 0px;
+    padding: 5px;
+    line-height: 15pt;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.message:hover{
+    background-color: #308a7b44;
+}
 .notificationIcon{
     position: relative;
     width: fit-content;
@@ -263,6 +308,7 @@ html,body{
     font-weight: 600;
     margin: auto;
     width: fit-content;
+    cursor: default;
 }
 .newNotification{
     position: absolute;

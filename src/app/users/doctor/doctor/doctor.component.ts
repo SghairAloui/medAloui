@@ -1,10 +1,11 @@
 import { formatDate } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderService } from 'src/app/Headers/header/header.service';
+import { ConversationService } from 'src/app/services/conversation.service';
 import { MedicamentService } from 'src/app/services/medicament.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
@@ -12,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
 import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
+import { ConversationGet } from 'src/model/ConversationGet';
 import { dignoses } from 'src/model/dignoses';
 import { doctor } from 'src/model/Doctor';
 import { DoctorGet } from 'src/model/Doctorget';
@@ -21,8 +23,10 @@ import { FiveStringsPost } from 'src/model/FiveStringsPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
+import { MessageGet } from 'src/model/MessageGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OneStringPost } from 'src/model/OneStringPost';
+import { OpenConversation } from 'src/model/OpenConversation';
 import { prescriptionGet } from 'src/model/prescriptionGet';
 import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 import { SecureLoginString } from 'src/model/SecureLoginString';
@@ -77,7 +81,8 @@ export class DoctorComponent implements OnInit {
     private medicamentService: MedicamentService,
     private prescriptionService: PrescriptionService,
     private headerService: HeaderService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private conversationService: ConversationService) { }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -147,6 +152,9 @@ export class DoctorComponent implements OnInit {
   tomorrowDiseaseFullInfo: boolean = false;
   currentDiseaseKey: number;
   currentDiseaseFullInfo: boolean = false;
+  conversationPage: number = 0;
+  openConversation: OpenConversation;
+  message: string;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -1844,6 +1852,80 @@ export class DoctorComponent implements OnInit {
   field5Keyup() {
     if (this.field5Code.length == 0)
       this.field4Input.nativeElement.focus();
+  }
+
+  openMessages() {
+    this.conversationService.getConversationByUserId(this.doctorGet.userId, this.conversationPage, 10).subscribe(
+      res => {
+        let conversations: ConversationGet[] = res;
+        for (let conver of conversations) {
+          if (conver.message_content.length >= 10)
+            conver.message_content = conver.message_content.slice(0, 7) + '...';
+          let imageName: string;
+          if (conver.user_type == 'doctor')
+            imageName = conver.recipient + 'doctorProfilePic';
+          else if (conver.user_type == 'patient')
+            imageName = conver.recipient + 'patientProfilePic';
+          else if (conver.user_type == 'pharmacist')
+            imageName = conver.recipient + 'pharmacyProfilePic';
+          this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
+            res => {
+              if (res != null) {
+                let retrieveResonse: any = res;
+                let base64Data: any = retrieveResonse.picByte;
+                let retrievedImage: any = 'data:image/jpeg;base64,' + base64Data;
+                conver.recipientImg = retrievedImage;
+              } else
+                conver.recipientImg = false;
+            }
+          );
+          this.headerService.addConversation(conver);
+        }
+        if (conversations.length == 10)
+          this.headerService.setLoadMoreConversation(true);
+        else
+          this.headerService.setLoadMoreConversation(false);
+        this.headerService.setParentHeader('message');
+      }
+    );
+  }
+
+  openFullConversation(conver: OpenConversation) {
+    this.openConversation = conver;
+    this.getConversationMessages();
+  }
+
+  getConversationMessages() {
+    this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+      res => {
+        let messages: MessageGet[] = res;
+        for (let message of messages)
+          this.openConversation.messages.push(message);
+        console.clear();
+      }
+    );
+  }
+
+  @HostListener('scroll', ['$event'])
+  conversationsScroll(event) {
+    if (document.getElementById("messagesContainer").scrollTop <= 50) {
+      this.getConversationMessages();
+    }
+  }
+
+  sendMessage() {
+    if (this.message && this.message.length != 0) {
+      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+        res => {
+          if (res) {
+            let message: MessageGet = { messageContent: this.message, senderId: this.doctorGet.userId, recipientId: this.openConversation.userId }
+            this.openConversation.messages.push(message);
+            this.message = '';
+            console.clear();
+          }
+        }
+      );
+    }
   }
 
 }

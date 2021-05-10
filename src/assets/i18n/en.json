@@ -518,5 +518,10 @@
     "passwordUpdated":"Congratulations, your password has been successfully updated",
     "setNewPassword":"Set new password",
     "questions":"Questions",
-    "allQuestions":"All questions"
+    "allQuestions":"All questions",
+    "sendMessage":"Send message",
+    "youHaveNoConversation":"You have no conversation",
+    "muniteAgo":"Mn ago",
+    "noMoreConversation":"No more conversations",
+    "message...":"Message..."
 }

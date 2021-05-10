@@ -37,6 +37,45 @@
             </div>
         </div>
         <div *ngIf="docInfo">
+            <div class="messagesIcon" (click)="openMessages()">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div *ngIf="openConversation">
+                <div *ngIf="openConversation.openFullConver==false" class="smallMessagesContainer" (click)="openConversation.openFullConver=true">
+                    <div class="messageUsername">
+                        {{openConversation.username}}
+                    </div>
+                    <div class="messageCloseIcon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div *ngIf="openConversation.openFullConver==true" class="messagesConatiner">
+                    <div class="messagesContainerHeader" (click)="openConversation.openFullConver=false">
+                        <div class="messageUsername">
+                            {{openConversation.username}}
+                        </div>
+                        <div class="messageCloseIcon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="messagesContainerBody" #messagesContainer id="messagesContainer" [scrollTop]="messagesContainer.scrollHeight">
+                        <div *ngFor="let message of openConversation.messages">
+                            <div *ngIf="message.senderId==doctorGet.userId" class="senderMessageContainer">
+                                {{message.messageContent}}
+                            </div>
+                            <div *ngIf="message.senderId!=doctorGet.userId" class="recipientMessageContainer">
+                                {{message.messageContent}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="messagesContainerFooter">
+                        <input type="text" name="message" [(ngModel)]="message" placeholder="{{'message...'|translate}}" class="messageInput">
+                        <span (click)="sendMessage()">
+                            <i class="fas fa-paper-plane sendMessageIcon"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div class="doctorContainer">
                 <div *ngIf="container=='profile'" id="profile">
                     <section id="generalInfoSection">
@@ -989,6 +1028,9 @@
                                                     {{toadyAppointmentPatientInfo[patientKey].patientGender}}</span>
                                                 <span class="info"><i class="fas fa-birthday-cake"></i>
                                                     {{toadyAppointmentPatientInfo[patientKey].patientBirthDay}}</span>
+                                                <span class="info sendMessageBtn"><i class="fas fa-envelope"></i>
+                                                    {{'sendMessage'|translate}}
+                                                </span>
                                             </div>
                                             <div class="patientMedicalProfile">
                                                 <div class="tilte"> {{'medicalProfile'|translate}} </div>

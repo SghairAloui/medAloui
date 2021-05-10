@@ -8,7 +8,9 @@ import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
 import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
+import { ConversationGet } from 'src/model/ConversationGet';
 import { NotificationGet } from 'src/model/NotificationGet';
+import { OpenConversation } from 'src/model/OpenConversation';
 import { AppComponent } from '../../app.component'
 import { HeaderService } from './header.service';
 
@@ -36,10 +38,25 @@ export class HeaderComponent implements OnInit {
   }
 
   notifications: NotificationGet[] = [];
+  conversations: ConversationGet[] = [];
   unreadNotifications: number = 0;
+  loadMoreConversation: boolean;
 
 
   ngOnInit(): void {
+
+    this.headerService.conversation$.subscribe(
+      (message) => {
+        this.conversations.push(message);
+      }
+    );
+
+    this.headerService.loadMoreConversation$.subscribe(
+      (message) => {
+        this.loadMoreConversation = message;
+      }
+    );
+
     this.headerService.notification$.subscribe(
       (message) => {
         let notification: NotificationGet = message;
@@ -79,6 +96,15 @@ export class HeaderComponent implements OnInit {
     this.headerService.header$.subscribe(
       (message) => {
         this.role = message;
+      }
+    );
+
+    this.headerService.parentHeader$.subscribe(
+      (message) => {
+        if (message)
+          this.parentHeader = message;
+        else
+          this.parentHeader = 'profile';
       }
     );
   }
@@ -311,13 +337,80 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  async updatePosClick(){
-    if(this.parentHeader != 'profile'){
+  async updatePosClick() {
+    if (this.parentHeader != 'profile') {
       this.doctorComp.container = 'profile';
       this.pharmacyComp.container = 'profile';
       await this.sleep(500);
     }
-    document.getElementById("myPositionSection").scrollIntoView({behavior:'smooth'});
+    document.getElementById("myPositionSection").scrollIntoView({ behavior: 'smooth' });
   }
 
+  getPassedTime(date: string): string {
+    let time: string = '';
+    time += date.slice(0, 10).split('/').join('-') + 'T' + date.slice(11, date.length);
+    let timeBetween = new Date(new Date().valueOf() - new Date(time).valueOf());
+    let clockTime: string = this.convertMillisecondsToDigitalClock(timeBetween).clock;
+    if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) == 0)
+      time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 3)) + ' ' + this.translate.instant('muniteAgo');
+    else if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) >= 1 && parseInt(clockTime.slice(0, clockTime.indexOf(':'))) <= 24)
+      time = date.slice(11, 16);
+    else {
+      let day: number = Math.ceil(parseInt(clockTime.slice(0, clockTime.indexOf(':'))) / 24);
+      let daysNameEn: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      let daysName: string[] = [this.translate.instant('sun')
+        , this.translate.instant('mon')
+        , this.translate.instant('tue')
+        , this.translate.instant('wed')
+        , this.translate.instant('thu')
+        , this.translate.instant('fri')
+        , this.translate.instant('sat')];
+      if (day <= 7) {
+        time = daysName[daysNameEn.indexOf(new Date(time).toString().slice(0, 3))];
+      }
+      else {
+        time = this.translate.instant(new Date(time).toString().slice(4, 7).toLocaleLowerCase()) + new Date(time).toString().slice(7, 10);
+      }
+
+    }
+    return time;
+  }
+
+  convertMillisecondsToDigitalClock(ms) {
+    let hours = Math.floor(ms / 3600000), // 1 Hour = 36000 Milliseconds
+      minutes = Math.floor((ms % 3600000) / 60000), // 1 Minutes = 60000 Milliseconds
+      seconds = Math.floor(((ms % 360000) % 60000) / 1000) // 1 Second = 1000 Milliseconds
+    return {
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+      clock: hours + ":" + minutes + ":" + seconds
+    };
+  }
+
+  @HostListener('scroll', ['$event'])
+  conversationsScroll(event) {
+    if (this.loadMoreConversation == true) {
+      let pos = document.getElementById("conversationsScroll").scrollTop + document.getElementById("conversationsScroll").offsetHeight + 1;
+      let max = document.getElementById("conversationsScroll").scrollHeight;
+      if (max <= pos) {
+        this.doctorComp.openMessages();
+      }
+    }
+  }
+
+  openConversation(converKey: number) {
+    let lastName: string = '';
+    if (this.conversations[converKey].last_name != null)
+      lastName = this.conversations[converKey].last_name;
+    let openConver: OpenConversation = {
+      conversationId: this.conversations[converKey].conversation_id,
+      username: this.conversations[converKey].first_name + ' ' + lastName,
+      messagePage:0,
+      messages: [],
+      openFullConver: true,
+      userId:this.conversations[converKey].recipient
+    };
+    this.doctorComp.openFullConversation(openConver);
+  }
 }

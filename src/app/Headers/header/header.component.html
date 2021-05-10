@@ -417,6 +417,58 @@
             </nav>
         </header>
     </div>
+
+    <div *ngIf="parentHeader=='message'" class="loginHeader">
+        <div class="headerChild" style="overflow-y: scroll;" (scroll)="conversationsScroll($event)"
+            id="conversationsScroll">
+            <nav class="navItem">
+                <div style="margin-bottom: 20px;">
+                    <div *ngIf="conversations.length == 1" class="noNotification">
+                        {{'youHaveNoConversation'|translate}}
+                    </div>
+                    <div *ngFor="let conver of conversations | keyvalue | slice:1:conversations.length" class="message"
+                        (click)="openConversation(conver.key)">
+                        <div class="messageUserImgContainer">
+                            <div *ngIf="conver.value.recipientImg">
+                                <img [src]="conver.value.recipientImg"
+                                    style="height: 50px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                            </div>
+                            <div *ngIf="conver.value.recipientImg==false">
+                                <i class="fas fa-user-tie" style="font-size: 45px;bottom: 0px;position: absolute;"></i>
+                            </div>
+                        </div>
+                        <div class="messageUsername">
+                            <span style="text-transform: capitalize;">
+                                {{conver.value.first_name}}
+                            </span>
+                            <span style="text-transform: uppercase;">
+                                {{conver.value.last_name}}
+                            </span>
+                            <div class="lastMessageContent">
+                                <span style="margin-right: 3px;">
+                                    {{conver.value.message_content}}
+                                </span>
+                                <div class="messageCircle"></div>
+                                <span style="margin-left: 10px;">
+                                    {{getPassedTime(conver.value.last_update_date)}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="loadMoreConversation==false && conversations.length != 1" class="noNotification">
+                        {{'noMoreConversation'|translate}}
+                    </div>
+                    <div *ngIf="loadMoreConversation==true && conversations.length != 1">
+                        <div class="loading">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
 </body>
 
 </html>
