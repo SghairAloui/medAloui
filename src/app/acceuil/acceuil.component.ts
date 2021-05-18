@@ -135,7 +135,7 @@ export class AcceuilComponent implements OnInit {
   
   getDocProfileImage(docId: number, index: number) {
     let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
-    this.patientService.getDoctorPofilePhoto(docId + 'doctorProfilePic').subscribe(
+    this.patientService.getDoctorPofilePhoto(docId + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;

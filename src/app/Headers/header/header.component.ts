@@ -2,13 +2,16 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
 import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
+import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
 import { ConversationGet } from 'src/model/ConversationGet';
+import { MessageGet } from 'src/model/MessageGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { AppComponent } from '../../app.component'
@@ -32,7 +35,9 @@ export class HeaderComponent implements OnInit {
     private adminComp: AdminComponent,
     private pharmacyComp: PharmacyComponent,
     private headerService: HeaderService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private conversationService: ConversationService,
+    private doctorService: DoctorService) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -41,19 +46,88 @@ export class HeaderComponent implements OnInit {
   conversations: ConversationGet[] = [];
   unreadNotifications: number = 0;
   loadMoreConversation: boolean;
-
+  message: MessageGet;
 
   ngOnInit(): void {
 
     this.headerService.conversation$.subscribe(
       (message) => {
-        this.conversations.push(message);
+        let conversation: ConversationGet = message;
+        let convExist: boolean = false;
+        for (let conver of this.conversations) {
+          if (conver.conversation_id == conversation.conversation_id) {
+            convExist = true;
+            break;
+          }
+        }
+        if (convExist == false) {
+          if (conversation.order == 'end')
+            this.conversations.push(message);
+          else if (conversation.order == 'start') {
+            this.conversations.unshift(message);
+          }
+        }
       }
     );
 
     this.headerService.loadMoreConversation$.subscribe(
       (message) => {
         this.loadMoreConversation = message;
+      }
+    );
+
+    this.headerService.firstConversation$.subscribe(
+      (message) => {
+        if (message > 0) {
+          let i: number = 0;
+          let convFound = false;
+          for (let conv of this.conversations) {
+            if (conv.conversation_id == message) {
+              let toTopConv: ConversationGet = this.conversations[i];
+              this.conversations.splice(i, 1);
+              this.conversations.unshift(toTopConv);
+              convFound = true;
+              break;
+            }
+            i += 1;
+          }
+          if (convFound == false) {
+            this.conversationService.getConversationByid(message, this.doctorComp.doctorGet.userId).subscribe(
+              res => {
+                let conv: ConversationGet = res;
+                let retrieveResonse: any;
+                let base64Data: any;
+                let retrievedImage: any;
+                this.doctorService.getDoctorPofilePhoto(conv.recipient + 'profilePic').subscribe(
+                  res => {
+                    if (res != null) {
+                      retrieveResonse = res;
+                      base64Data = retrieveResonse.picByte;
+                      retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+                      conv.recipientImg = retrievedImage;
+                    } else
+                      conv.recipientImg = false;
+                  }
+                );
+                this.conversations.unshift(conv);
+              }
+            );
+          }
+        }
+      }
+    );
+
+    this.headerService.message$.subscribe(
+      (message) => {
+        this.message = message;
+        if (this.message.messageContent) {
+          this.conversations.forEach((conver, index) => {
+            if (conver.conversation_id == this.message.conversationId) {
+              this.conversations[index].message_content = this.message.messageContent;
+              this.conversations[index].last_update_date = this.message.messageDate;
+            }
+          });
+        }
       }
     );
 
@@ -351,8 +425,12 @@ export class HeaderComponent implements OnInit {
     time += date.slice(0, 10).split('/').join('-') + 'T' + date.slice(11, date.length);
     let timeBetween = new Date(new Date().valueOf() - new Date(time).valueOf());
     let clockTime: string = this.convertMillisecondsToDigitalClock(timeBetween).clock;
-    if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) == 0)
-      time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 3)) + ' ' + this.translate.instant('muniteAgo');
+    if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) == 0) {
+      if (clockTime.slice((clockTime.indexOf(':') + 2), (clockTime.indexOf(':') + 3)) == ':')
+        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 2)) + ' ' + this.translate.instant('muniteAgo');
+      else
+        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 3)) + ' ' + this.translate.instant('muniteAgo');
+    }
     else if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) >= 1 && parseInt(clockTime.slice(0, clockTime.indexOf(':'))) <= 24)
       time = date.slice(11, 16);
     else {
@@ -391,9 +469,10 @@ export class HeaderComponent implements OnInit {
   @HostListener('scroll', ['$event'])
   conversationsScroll(event) {
     if (this.loadMoreConversation == true) {
-      let pos = document.getElementById("conversationsScroll").scrollTop + document.getElementById("conversationsScroll").offsetHeight + 1;
+      let pos = document.getElementById("conversationsScroll").scrollTop + document.getElementById("conversationsScroll").offsetHeight;
       let max = document.getElementById("conversationsScroll").scrollHeight;
-      if (max <= pos) {
+      if (((max - 10) <= pos) && this.loadMoreConversation == true) {
+        this.loadMoreConversation = false;
         this.doctorComp.openMessages();
       }
     }
@@ -406,11 +485,18 @@ export class HeaderComponent implements OnInit {
     let openConver: OpenConversation = {
       conversationId: this.conversations[converKey].conversation_id,
       username: this.conversations[converKey].first_name + ' ' + lastName,
-      messagePage:0,
+      messagePage: 0,
       messages: [],
       openFullConver: true,
-      userId:this.conversations[converKey].recipient
+      userId: this.conversations[converKey].recipient,
+      userImg: this.conversations[converKey].recipientImg
     };
     this.doctorComp.openFullConversation(openConver);
+    this.conversationService.readConversationById(this.conversations[converKey].conversation_id).subscribe(
+      res=>{
+        if(res)
+          this.conversations[converKey].is_unread=false;
+      }
+    );
   }
 }

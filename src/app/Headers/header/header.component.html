@@ -423,42 +423,49 @@
             id="conversationsScroll">
             <nav class="navItem">
                 <div style="margin-bottom: 20px;">
-                    <div *ngIf="conversations.length == 1" class="noNotification">
+                    <div *ngIf="conversations.length == 0" class="noNotification">
                         {{'youHaveNoConversation'|translate}}
                     </div>
-                    <div *ngFor="let conver of conversations | keyvalue | slice:1:conversations.length" class="message"
-                        (click)="openConversation(conver.key)">
+                    <div *ngFor="let conver of conversations ; let i=index" class="message"
+                        (click)="openConversation(i)">
                         <div class="messageUserImgContainer">
-                            <div *ngIf="conver.value.recipientImg">
-                                <img [src]="conver.value.recipientImg"
+                            <div *ngIf="conver.recipientImg">
+                                <img [src]="conver.recipientImg"
                                     style="height: 50px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
                             </div>
-                            <div *ngIf="conver.value.recipientImg==false">
+                            <div *ngIf="conver.recipientImg==false">
                                 <i class="fas fa-user-tie" style="font-size: 45px;bottom: 0px;position: absolute;"></i>
                             </div>
                         </div>
                         <div class="messageUsername">
-                            <span style="text-transform: capitalize;">
-                                {{conver.value.first_name}}
-                            </span>
-                            <span style="text-transform: uppercase;">
-                                {{conver.value.last_name}}
-                            </span>
-                            <div class="lastMessageContent">
-                                <span style="margin-right: 3px;">
-                                    {{conver.value.message_content}}
+                            <div
+                                [class.unreadMessage]="conver.is_unread==true && conver.last_message_sender_id != doctorComp.doctorGet.userId">
+                                <span style="text-transform: capitalize;">
+                                    {{conver.first_name}}
                                 </span>
-                                <div class="messageCircle"></div>
-                                <span style="margin-left: 10px;">
-                                    {{getPassedTime(conver.value.last_update_date)}}
+                                <span style="text-transform: uppercase;">
+                                    {{conver.last_name}}
                                 </span>
+                                <div class="lastMessageContent">
+                                    <div style="margin-right: 3px;" *ngIf="!conver.message_content">
+                                        {{'noMessages'|translate}}
+                                    </div>
+                                    <span *ngIf="conver.message_content" style="margin-right: 3px;">
+                                        {{conver.message_content}}
+                                    </span>
+                                    <div *ngIf="conver.message_content" class="messageCircle"></div>
+                                    <span *ngIf="conver.message_content" style="margin-left: 10px;">
+                                        {{getPassedTime(conver.last_update_date)}}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="loadMoreConversation==false && conversations.length != 1" class="noNotification">
+                    <div *ngIf="loadMoreConversation==false && conversations.length != 0" class="noNotification">
                         {{'noMoreConversation'|translate}}
                     </div>
-                    <div *ngIf="loadMoreConversation==true && conversations.length != 1">
+                    <div *ngIf="loadMoreConversation==true && conversations.length != 0"
+                        style="position: relative; padding-bottom: 25px;">
                         <div class="loading">
                             <span></span>
                             <span></span>

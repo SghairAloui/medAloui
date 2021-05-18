@@ -9,4 +9,7 @@ export interface ConversationGet{
     recipientImg:any;
     user_type:string;
     message_content:string;
+    order:string;
+    is_unread:boolean;
+    last_message_sender_id:number;
 }

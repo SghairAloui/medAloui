@@ -7,4 +7,5 @@ export interface OpenConversation{
     messagePage:number;
     openFullConver:boolean;
     userId:number;
+    userImg:any;
 }

@@ -183,7 +183,7 @@ export class PatientDoctorComponent implements OnInit {
 
   getDocProfileImage(docId: number, index: number) {
     let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
-    this.patientService.getDoctorPofilePhoto(docId + 'doctorProfilePic').subscribe(
+    this.patientService.getDoctorPofilePhoto(docId + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;
@@ -518,7 +518,7 @@ export class PatientDoctorComponent implements OnInit {
 
   getTopRatedDocProfileImage(docId: number, index: number) {
     let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
-    this.patientService.getDoctorPofilePhoto(docId + 'doctorProfilePic').subscribe(
+    this.patientService.getDoctorPofilePhoto(docId + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;

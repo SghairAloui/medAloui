@@ -615,7 +615,7 @@ export class PatientComponent implements OnInit {
   onUpload() {
     if (this.patientGet.userId == parseInt(localStorage.getItem('id'))) {
       const uploadImageData = new FormData();
-      uploadImageData.append('imageFile', this.selectedFile, this.patientGet.userId + "patientProfilePic");
+      uploadImageData.append('imageFile', this.selectedFile, this.patientGet.userId + "profilePic");
       this.patientService.updatePatientProfilePhoto(uploadImageData).subscribe(
         res => {
           if (res == 'imageUpdated')
@@ -661,7 +661,7 @@ export class PatientComponent implements OnInit {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
-    this.patientService.getDoctorPofilePhoto(id + 'doctorProfilePic').subscribe(
+    this.patientService.getDoctorPofilePhoto(id + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;
@@ -1047,7 +1047,7 @@ export class PatientComponent implements OnInit {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
-    this.patientService.getDoctorPofilePhoto(id + 'doctorProfilePic').subscribe(
+    this.patientService.getDoctorPofilePhoto(id + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;

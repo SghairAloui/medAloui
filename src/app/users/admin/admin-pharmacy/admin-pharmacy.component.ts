@@ -42,7 +42,7 @@ export class AdminPharmacyComponent implements OnInit {
           pharmacy.currentDoc = 'cin';
           console.log(pharmacy);
           this.pendingPharmacies.push(pharmacy);
-          this.getImageByName(pharmacy.userId + 'pharmacyProfilePic', 'profile', this.pendingPharmacies.length);
+          this.getImageByName(pharmacy.userId + 'profilePic', 'profile', this.pendingPharmacies.length);
           this.getImageByName(pharmacy.userId + 'pharmacyCinPic', 'cin', this.pendingPharmacies.length);
           this.getImageByName(pharmacy.userId + 'pharmacyOwnershipPic', 'appartment', this.pendingPharmacies.length);
           this.getImageByName(pharmacy.userId + 'pharmacySpecialty', 'specialty', this.pendingPharmacies.length);

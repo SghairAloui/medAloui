@@ -10,9 +10,11 @@ import { MedicamentService } from 'src/app/services/medicament.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
+import { WebSocketService } from 'src/app/services/web-socket.service';
 import { SpecialityService } from 'src/app/speciality/speciality.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
 import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
+import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { dignoses } from 'src/model/dignoses';
 import { doctor } from 'src/model/Doctor';
@@ -31,6 +33,7 @@ import { prescriptionGet } from 'src/model/prescriptionGet';
 import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { SpecialityGet } from 'src/model/SpecialityGet';
+import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { PatientService } from '../../patient/patient/patient.service';
@@ -82,7 +85,34 @@ export class DoctorComponent implements OnInit {
     private prescriptionService: PrescriptionService,
     private headerService: HeaderService,
     private notificationService: NotificationService,
-    private conversationService: ConversationService) { }
+    private conversationService: ConversationService,
+    private webSocketService: WebSocketService) {
+    // Open connection with server socket
+    let stompClient = this.webSocketService.connect();
+    stompClient.connect({}, frame => {
+
+      // Subscribe to notification topic
+      stompClient.subscribe('/topic/message/' + this.doctorGet.userId, async message => {
+
+        let msg: MessageGet = JSON.parse(message.body);
+        if (this.openConversation) {
+          this.openConversation.messages.push(msg);
+          await this.sleep(1);
+          this.scrollToBottomMessages();
+          this.messageSound();
+          this.headerService.newMessage(msg);
+          this.headerService.setFirstConversation(msg.conversationId);
+        } else {
+          this.toastr.info(this.translate.instant('newMessage'), this.translate.instant('Notification'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.notificationSound();
+          this.headerService.setFirstConversation(msg.conversationId);
+        }
+      })
+    });
+  }
   invalidAppointmentPrice: boolean; invalidAppointmentApproximateDuration: boolean; invalidExactAdress: boolean; invalidStartTime: boolean; invalidMaxPatientPerDay: boolean; invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   appointmentApproximateDurationInformation: string; appointmentPriceInformation: string; exactAdressInformation: string; startTimeInformation: string; maxPatientPerDayInformation: string; passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
   appointmentApproximateDuration: string; appointmentPrice: string; exactAdress: string; startTime: string; maxPatientPerDay: string; firstName: string; lastName: string; mail: string; day: string; month: string; year: string; adress: string; password: string; passwordRepeat: string;
@@ -155,6 +185,8 @@ export class DoctorComponent implements OnInit {
   conversationPage: number = 0;
   openConversation: OpenConversation;
   message: string;
+  @ViewChild('messagesContainer') private messagesContainer: ElementRef;
+  loadMoreMessage: boolean = true;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -164,6 +196,14 @@ export class DoctorComponent implements OnInit {
     this.docInfo = false;
     this.getDoctorInfo();
     this.getAllSpecialities();
+  }
+
+  scrollToBottomMessages(): void {
+    this.messagesContainer.nativeElement.scroll({
+      top: this.messagesContainer.nativeElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   async setDoctorPosition() {
@@ -258,7 +298,7 @@ export class DoctorComponent implements OnInit {
                 this.checkDocDocument(this.doctorGet.userId + "doctorMedicalClinicPic");
                 this.checkDocDocument(this.doctorGet.userId + "doctorMedicalSpecialty");
               }
-              this.getImage(this.doctorGet.userId + "doctorProfilePic");
+              this.getImage(this.doctorGet.userId + "profilePic");
               this.intializeEdit();
               this.initializeAccountSettings();
               this.initializeEditAccountSettigns();
@@ -723,7 +763,7 @@ export class DoctorComponent implements OnInit {
 
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(this.doctorGet.userId + "doctorProfilePic");
+    this.onUpload(this.doctorGet.userId + "profilePic");
   }
 
   onUpload(imageName: string) {
@@ -752,7 +792,7 @@ export class DoctorComponent implements OnInit {
 
   getImage(imageName: string) {
     if (this.doctorGet.userId == parseInt(localStorage.getItem('id'))) {
-      if (imageName == this.doctorGet.userId + "doctorProfilePic") {
+      if (imageName == this.doctorGet.userId + "profilePic") {
         this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
           res => {
             if (res != null) {
@@ -1277,8 +1317,10 @@ export class DoctorComponent implements OnInit {
         if (res) {
           if (status == 'today') {
             this.toadyAppointmentPatientInfo[patientTurn - 1] = res;
+            this.toadyAppointmentPatientInfo[patientTurn - 1].userId = patientId;
           } else if (status == 'tomorrow') {
             this.tomorrowAppointmentPatientInfo[patientTurn - 1] = res;
+            this.tomorrowAppointmentPatientInfo[patientTurn - 1].userId = patientId;
           }
         }
       });
@@ -1288,7 +1330,7 @@ export class DoctorComponent implements OnInit {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
-    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
+    this.doctorService.getDoctorPofilePhoto(id + 'profilePic').subscribe(
       res => {
         if (status == 'today') {
           if (res != null) {
@@ -1488,7 +1530,7 @@ export class DoctorComponent implements OnInit {
 
   getCurrentPatientProfileImg(id: number, patientTurn: number) {
     let retrieveResonse: any; let base64Data: any; let retrievedImage: any;
-    this.doctorService.getDoctorPofilePhoto(id + 'patientProfilePic').subscribe(
+    this.doctorService.getDoctorPofilePhoto(id + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;
@@ -1765,7 +1807,7 @@ export class DoctorComponent implements OnInit {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
-    this.doctorService.getDoctorPofilePhoto(doctorId + 'doctorProfilePic').subscribe(
+    this.doctorService.getDoctorPofilePhoto(doctorId + 'profilePic').subscribe(
       res => {
         if (res != null) {
           retrieveResonse = res;
@@ -1862,12 +1904,7 @@ export class DoctorComponent implements OnInit {
           if (conver.message_content.length >= 10)
             conver.message_content = conver.message_content.slice(0, 7) + '...';
           let imageName: string;
-          if (conver.user_type == 'doctor')
-            imageName = conver.recipient + 'doctorProfilePic';
-          else if (conver.user_type == 'patient')
-            imageName = conver.recipient + 'patientProfilePic';
-          else if (conver.user_type == 'pharmacist')
-            imageName = conver.recipient + 'pharmacyProfilePic';
+          imageName = conver.recipient + 'profilePic';
           this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
             res => {
               if (res != null) {
@@ -1879,6 +1916,7 @@ export class DoctorComponent implements OnInit {
                 conver.recipientImg = false;
             }
           );
+          conver.order = 'end';
           this.headerService.addConversation(conver);
         }
         if (conversations.length == 10)
@@ -1886,46 +1924,133 @@ export class DoctorComponent implements OnInit {
         else
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
+        this.conversationPage+=1;
       }
     );
   }
 
   openFullConversation(conver: OpenConversation) {
     this.openConversation = conver;
-    this.getConversationMessages();
+    this.getConversationMessages(true);
   }
 
-  getConversationMessages() {
+  getConversationMessages(firstTime: boolean) {
     this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
-      res => {
+      async res => {
         let messages: MessageGet[] = res;
         for (let message of messages)
-          this.openConversation.messages.push(message);
-        console.clear();
+          this.openConversation.messages.unshift(message);
+        if (firstTime) {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+        }
+        else {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scroll({
+            top: document.getElementById(messages[0].messageDate).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top + 10,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }
+        if (messages.length == 20)
+          this.loadMoreMessage = true;
+        else
+          this.loadMoreMessage = false;
+        this.openConversation.messagePage += 1;
       }
     );
   }
 
   @HostListener('scroll', ['$event'])
-  conversationsScroll(event) {
-    if (document.getElementById("messagesContainer").scrollTop <= 50) {
-      this.getConversationMessages();
+  messagesScroll(event) {
+    if (document.getElementById("messagesContainer").scrollTop < 10 && this.loadMoreMessage == true) {
+      this.loadMoreMessage = false;
+      this.getConversationMessages(false);
     }
   }
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
       this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
-        res => {
-          if (res) {
-            let message: MessageGet = { messageContent: this.message, senderId: this.doctorGet.userId, recipientId: this.openConversation.userId }
+        async res => {
+          let response: StringGet = res;
+          if (response.string.length != 0) {
+            if (this.message.length > 10)
+              this.message = this.message.slice(0, 7) + '...';
+            let message: MessageGet = { messageContent: this.message, senderId: this.doctorGet.userId, recipientId: this.openConversation.userId, messageDate: response.string, conversationId: this.openConversation.conversationId }
             this.openConversation.messages.push(message);
+            this.headerService.newMessage(message);
             this.message = '';
-            console.clear();
+            await this.sleep(1);
+            this.scrollToBottomMessages();
+            this.headerService.setFirstConversation(this.openConversation.conversationId);
           }
         }
       );
     }
   }
 
+  messageSound() {
+    let audio = new Audio();
+    audio.src = "../../../../assets/sounds/messageSound.wav";
+    audio.load();
+    audio.play();
+  }
+
+  notificationSound() {
+    let audio = new Audio();
+    audio.src = "../../../../assets/sounds/notificationSound.wav";
+    audio.load();
+    audio.play();
+  }
+
+  startConversation(userId: number, firstName: string, lastName: string) {
+    this.conversationService.addConversation(this.doctorGet.userId, userId).subscribe(
+      res => {
+        let conversation: Conversation = res;
+        let conv: ConversationGet = {
+          recipient: userId,
+          open_date: conversation.openDate,
+          last_name: lastName,
+          conversation_id: conversation.conversationId,
+          last_update_date: conversation.openDate,
+          first_name: firstName,
+          conversation_status: 'open',
+          recipientImg: false,
+          user_type: '',
+          message_content: conversation.messageContent,
+          order: 'start',
+          is_unread:false,
+          last_message_sender_id:0
+        }
+        let retrieveResonse: any;
+        let base64Data: any;
+        let retrievedImage: any;
+        this.doctorService.getDoctorPofilePhoto(userId + 'profilePic').subscribe(
+          res => {
+            if (res != null) {
+              retrieveResonse = res;
+              base64Data = retrieveResonse.picByte;
+              retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+              conv.recipientImg = retrievedImage;
+            }
+          }
+        );
+        this.headerService.addConversation(conv);
+        this.loadMoreMessage = false;
+        this.headerService.setParentHeader('message');
+
+        let openConver: OpenConversation = {
+          conversationId: conv.conversation_id,
+          username: firstName + ' ' + lastName.toUpperCase(),
+          messagePage: 0,
+          messages: [],
+          openFullConver: true,
+          userId: conv.recipient,
+          userImg: conv.recipientImg
+        };
+        this.openFullConversation(openConver);
+      }
+    );
+  }
 }

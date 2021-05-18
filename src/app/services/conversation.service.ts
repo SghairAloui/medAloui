@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { MessageGet } from 'src/model/MessageGet';
+import { StringGet } from 'src/model/StringGet';
 
 const CONVERSATION_API = 'http://localhost:8080/api/conversation/';
 const MESSAGE_API = 'http://localhost:8080/api/message/';
@@ -20,12 +22,24 @@ export class ConversationService {
   public getConversationByUserId (userId:number,page:number,size:number){
     return this.http.post<ConversationGet []>(CONVERSATION_API + 'getConversationByUserId',{userId,page,size},httpOptions);
   }
+  
+  public addConversation (openedBy:number,openedTo:number){
+    return this.http.post<Conversation>(CONVERSATION_API + 'add',{openedTo,openedBy},httpOptions);
+  }
 
   public getMessagesByConversationId (id:number,page:number,size:number){
     return this.http.post<MessageGet []>(MESSAGE_API + 'getMessagesByConversationId',{id,page,size},httpOptions);
   }
 
   public sendMessage (senderId:number,recipientId:number,messageContent:string,conversationId:number){
-    return this.http.post<boolean>(MESSAGE_API + 'add',{senderId,recipientId,messageContent,conversationId},httpOptions);
+    return this.http.post<StringGet>(MESSAGE_API + 'add',{senderId,recipientId,messageContent,conversationId},httpOptions);
+  }
+
+  public getConversationByid (conversationId:number,userid:number){
+    return this.http.get<ConversationGet>(CONVERSATION_API + 'getConversationByid/'+conversationId+'/'+userid,httpOptions);
+  }
+
+  public readConversationById (conversationId:number){
+    return this.http.get<boolean>(CONVERSATION_API + 'readConversationById/'+conversationId,httpOptions);
   }
 }

@@ -523,5 +523,7 @@
     "youHaveNoConversation":"You have no conversation",
     "muniteAgo":"Mn ago",
     "noMoreConversation":"No more conversations",
-    "message...":"Message..."
+    "message...":"Message...",
+    "newMessage":"New message",
+    "noMessages":"No messages"
 }

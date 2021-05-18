@@ -412,7 +412,7 @@ export class PharmacyComponent implements OnInit {
 
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    this.onUpload(this.pharmacyGet.userId + "pharmacyProfilePic");
+    this.onUpload(this.pharmacyGet.userId + "profilePic");
     this.getImage();
   }
 
@@ -442,7 +442,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   getImage() {
-    this.pharmacyService.getPharmacyPofilePhoto(this.pharmacyGet.userId + "pharmacyProfilePic").subscribe(
+    this.pharmacyService.getPharmacyPofilePhoto(this.pharmacyGet.userId + "profilePic").subscribe(
       res => {
         if (res != null) {
           this.retrieveResonse = res;

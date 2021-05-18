@@ -37,4 +37,16 @@ export class HeaderService {
   setLoadMoreConversation(data:any){
     this.loadMoreConversation.next(data);
   }
+
+  private message = new BehaviorSubject<any>({});
+  message$ = this.message.asObservable();
+  newMessage(data:{}){
+    this.message.next(data);
+  }
+
+  private firstConversation: Subject<number>= new BehaviorSubject<any>("");
+  firstConversation$ = this.firstConversation.asObservable();
+  setFirstConversation(data:any){
+    this.firstConversation.next(data);
+  }
 }

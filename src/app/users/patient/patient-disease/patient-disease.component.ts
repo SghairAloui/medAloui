@@ -129,7 +129,7 @@ export class PatientDiseaseComponent implements OnInit {
           this.questions.push(ques);
           this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
           this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
-          this.getCommentPosterProfileImg(ques.postBy+'patientProfilePic',(this.questions.length-1),0,'question');
+          this.getCommentPosterProfileImg(ques.postBy+'profilePic',(this.questions.length-1),0,'question');
         }
         this.questionPage += 1;
         if (questions.length == 4)
@@ -175,11 +175,11 @@ export class PatientDiseaseComponent implements OnInit {
         let name: FirstAndLastNameGet = res;
         if (name.doctor_first_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Dr. ' + name.doctor_first_name + ' ' + name.doctor_last_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId + 'doctorProfilePic', questionKey, commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey,'comment');
         }
         else if (name.pharmacy_full_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Ph. ' + name.pharmacy_full_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId + 'pharmacistProfilePic', questionKey, commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey,'comment');
         }
       }
     );

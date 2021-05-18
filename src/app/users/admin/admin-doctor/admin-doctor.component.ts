@@ -74,7 +74,7 @@ export class AdminDoctorComponent implements OnInit {
   }
 
   checkDocImg(doctorId: number, index: number) {
-    this.getProfileImage(doctorId + 'doctorProfilePic', doctorId, index);
+    this.getProfileImage(doctorId + 'profilePic', doctorId, index);
   }
 
   getProfileImage(imageName: string, doctorId: number, index: number) {

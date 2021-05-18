@@ -32,6 +32,8 @@ html,body{
     --userInfoContainerBackground:#f9fafc;
     --userInfoContainerShadow:0px 0px 10px rgba(0, 0, 0, 0.15);
     --userInfoContainerTitleColor:#838a99;
+    --messageRead:#383838;
+    --messageUnread:black;
     --userInfoContainerValueColor:#1a1a1a;
     --disabledWorkCircle:#838a99;
     --dayColor:#555d6e;
@@ -63,6 +65,8 @@ html,body{
     --userInfoContainerBackground:#2b2a2a;
     --userInfoContainerShadow:none;
     --userInfoContainerTitleColor:#d5d6d8;
+    --messageRead:#cccccc;
+    --messageUnread:white;
     --userInfoContainerValueColor:#fffafa;
     --disabledWorkCircle:#e0e0e0;
     --dayColor:#c5c9d3;
@@ -226,6 +230,207 @@ input[disabled]{
     }
 }
 
+
+/* message */
+.messagesContainer .messageLoading{
+    position: relative;
+}
+.messagesContainer .messageLoading div:nth-child(1){
+    animation-name: LoadingMessages;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.3s;
+    width: 100px;
+    height: 30px;
+    margin-left: 3px;
+    margin-top: 5px;
+    border-radius: 15px;
+    background-color: #a5b6b3;
+}
+.messagesContainer .messageLoading div:nth-child(2){
+    animation-name: LoadingMessages;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.6s;
+    background-color: #308a7b;
+    width: 120px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: 3px;
+    margin-top: 5px;
+    border-radius: 15px;
+}
+@keyframes LoadingMessages{
+    50%{
+        opacity: 0;
+        transform: scale(0.98);
+    }
+}
+.messagesContainer .messageUsernameImgContainer{
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 10px auto;
+    border: 1px solid #308a7b;
+    border-radius: 50%;
+    overflow:hidden;
+}
+.messagesContainer .messageUsernameContainer{
+    width: fit-content;
+    margin: 10px auto; 
+    text-align: center; 
+    text-transform: capitalize; 
+    font-weight: 600;
+    color: var(--gray-text);
+    transition: .3s ease-in-out;
+}
+.messagesContainer .sendMessageBtn{
+    transition: .3s ease-in-out;
+}
+.messagesContainer .sendMessageBtn:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.messagesIcon{
+    position: fixed;
+    color: white;
+    background-color: #308a7b;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    right: 20px;
+    bottom: 20px;
+    z-index:1001;
+    box-shadow: 0px 0px 7px #308a7ba9;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+.messagesIcon:hover{
+    transform: scale(1.05);
+}
+.messagesIcon .fa-envelope{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 25px;
+}
+.messagesContainer .smallMessagesContainer{
+    z-index: 1001;
+    position: fixed;
+    right: 80px;
+    bottom: 0px;
+    width: 250px;
+    height: 35px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #308a7b;
+    display: flex;
+    justify-content: space-between;
+}
+.messagesContainer .messagesConatiner{
+    z-index: 1001;
+    position: fixed;
+    right: 80px;
+    bottom: 0px;
+    width: 300px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+    height: 400px;
+    box-shadow: var(--infoBox);
+}
+.messagesContainer .messagesContainerHeader{
+    top: 0px;
+    position: relative;
+    width: 300px;
+    height: 35px;
+    background-color: #308a7b;
+    display: flex;
+    justify-content: space-between;
+}
+.messagesContainer .messagesContainerBody{
+    top: 0px;
+    padding: 10px 3px;
+    position: relative;
+    width: 300px;
+    height: 320px;
+    background-color: var(--box-color);
+    overflow-y: auto;
+}
+.messagesContainer .messagesContainerFooter{
+    top: 0px;
+    position: relative;
+    background-color: var(--box-color);
+    width: 300px;
+    height: 45px;
+    padding: 3px;
+}
+.messagesContainer .messageUsername{
+    margin-left: 10px;
+    margin-top: 16px;
+    transform: translateY(-50%);
+    color: white;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.messagesContainer .messageCloseIcon{
+    position: relative;
+    margin-right: 10px;
+    margin-top: 16px;
+    transform: translateY(-50%);
+    color: white;
+    text-transform: capitalize;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.messagesContainer .messageCloseIcon:hover{
+    color: #dfdfdff3;
+}
+.messagesContainer .sendMessageIcon{
+    margin-left: 7px;
+    color: #308a7b;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.messagesContainer .sendMessageIcon:hover{
+    transform: scale(1.2);
+}
+.messagesContainer .messageInput{
+    border: 1px solid #308a7b;
+    width: 250px;
+    margin: 5px;
+    border-radius: 4px;
+    padding-left: 10px;
+    outline: #308a7b;
+    background: transparent;
+}
+.messagesContainer .senderMessageContainer{
+    background-color: #308a7b;
+    padding: 5px 10px;
+    width: fit-content;
+    max-width: 250px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto; 
+    margin-right: 3px;
+    border-radius: 15px;
+    color: white;
+}
+.messagesContainer .recipientMessageContainer{
+    background-color: #a5b6b3;
+    padding: 5px 10px;
+    width: fit-content;
+    max-width: 250px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    border-radius: 15px;
+    color: white;
+}
+/* message */
 
 /*search doctor*/
 .searchedDocGrid{
