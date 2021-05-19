@@ -8,4 +8,6 @@ export interface OpenConversation{
     openFullConver:boolean;
     userId:number;
     userImg:any;
+    isUnread:boolean;
+    lastMessageSenderId:number;
 }

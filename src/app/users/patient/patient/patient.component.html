@@ -32,6 +32,71 @@
     <div *ngIf="!notVerified">
         <app-header></app-header>
         <div class="patientContainer">
+            <div class="messagesIcon" (click)="openMessages()">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div *ngIf="openConversation" class="messagesContainer">
+                <div *ngIf="openConversation.openFullConver==false" class="smallMessagesContainer"
+                    (click)="openConversation.openFullConver=true">
+                    <div class="messageUsername">
+                        {{openConversation.username}}
+                    </div>
+                    <div class="messageCloseIcon" (click)="openConversation=null">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div *ngIf="openConversation.openFullConver==true" class="messagesConatiner">
+                    <div class="messagesContainerHeader" (click)="openConversation.openFullConver=false">
+                        <div class="messageUsername">
+                            {{openConversation.username}}
+                        </div>
+                        <div class="messageCloseIcon" (click)="openConversation=null">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
+                        (scroll)="messagesScroll($event)" (click)="readConversation()">
+                        <div *ngIf="loadMoreMessage" class="messageLoading">
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div *ngIf="!loadMoreMessage">
+                            <div class="messageUsernameImgContainer">
+                                <div *ngIf="openConversation.userImg">
+                                    <img [src]="openConversation.userImg"
+                                        style="height: 70px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                </div>
+                                <div *ngIf="openConversation.userImg==false">
+                                    <i class="fas fa-user-tie"
+                                        style="font-size: 60px;bottom: 0px;position: absolute;"></i>
+                                </div>
+                            </div>
+                            <div class="messageUsernameContainer"> {{openConversation.username}} </div>
+                        </div>
+                        <div *ngFor="let message of openConversation.messages">
+                            <div *ngIf="message.senderId==patientGet.userId && message.messageContent.length != 0"
+                                id="{{message.messageDate}}" class="senderMessageContainer">
+                                {{message.messageContent}}
+                            </div>
+                            <div *ngIf="message.senderId!=patientGet.userId && message.messageContent.length != 0"
+                                (keyup.enter)="sendMessage()" id="{{message.messageDate}}"
+                                class="recipientMessageContainer">
+                                {{message.messageContent}}
+                            </div>
+                        </div>
+                        <div class="seenMessage" *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == patientGet.userId">
+                            {{'seen'|translate}} <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="messagesContainerFooter" (click)="readConversation()">
+                        <input type="text" name="message" [(ngModel)]="message" placeholder="{{'message...'|translate}}"
+                            class="messageInput">
+                        <span (click)="sendMessage()">
+                            <i class="fas fa-paper-plane sendMessageIcon"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div *ngIf="container=='profile' && patientInfo">
                 <section id="generalInfoSection">
                     <div class="sectionTitle">{{'generalInfo'|translate}}</div>

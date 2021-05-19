@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
-                        (scroll)="messagesScroll($event)">
+                        (scroll)="messagesScroll($event)" (click)="readConversation()">
                         <div *ngIf="loadMoreMessage" class="messageLoading">
                             <div></div>
                             <div></div>
@@ -89,8 +89,11 @@
                                 {{message.messageContent}}
                             </div>
                         </div>
+                        <div class="seenMessage" *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == doctorGet.userId">
+                            {{'seen'|translate}} <i class="fas fa-check"></i>
+                        </div>
                     </div>
-                    <div class="messagesContainerFooter">
+                    <div class="messagesContainerFooter" (click)="readConversation()">
                         <input type="text" name="message" [(ngModel)]="message" placeholder="{{'message...'|translate}}"
                             class="messageInput">
                         <span (click)="sendMessage()">

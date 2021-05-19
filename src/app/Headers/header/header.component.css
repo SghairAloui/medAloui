@@ -229,20 +229,48 @@ html,body{
     height: 50px;
   }
 ::-webkit-scrollbar-thumb {
-    background: #ffffff;
+    background: #91bdb5;
     border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #91bdb5;
+    background: #4dbeac;
+    cursor: pointer;
 }
 .homeHeader #displayMenu, .homeHeader #displayMenuLabel{
     display: none;
 }
 
 /*login header*/
-.unreadMessage{
-    font-weight: 600;
-    color: var(--messageUnread);
+.seenMessageConv{
+    color: var(--userInfoContainerTitleColor);
+    font-size: 12px;
+    margin: 6px auto;
+    text-align: center;
+    font-weight: 500;
+}
+.messageTime{
+    margin: 0px auto;
+    width: fit-content;
+    color: var(--userInfoContainerTitleColor);
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.newMessageDot{
+    position: absolute;
+    top: 0px;
+    right: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f39c12;
+}
+.newMessage{
+    position: relative;
+    color: #308a7b;
+    margin-top: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
 }
 .messageCircle{
     display: inline-block;
@@ -257,12 +285,16 @@ html,body{
 .lastMessageContent{
     position: relative;
     padding: 5px;
+    font-weight: 500;
+    color: var(--userInfoContainerTitleColor);
     font-family: Arial, Helvetica, sans-serif;
 }
 .messageUsername{
-    display: table-cell;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     padding-left: 10px;
-    color: var(--messageRead);
+    font-weight: 600;
 }
 .messageUserImgContainer{
     position: relative;

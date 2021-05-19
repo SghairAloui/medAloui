@@ -525,5 +525,7 @@
     "noMoreConversation":"No more conversations",
     "message...":"Message...",
     "newMessage":"New message",
-    "noMessages":"No messages"
+    "noMessages":"No messages",
+    "seen":"Seen",
+    "you":"You"
 }

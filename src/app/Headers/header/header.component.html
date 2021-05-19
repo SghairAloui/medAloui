@@ -438,25 +438,38 @@
                             </div>
                         </div>
                         <div class="messageUsername">
-                            <div
-                                [class.unreadMessage]="conver.is_unread==true && conver.last_message_sender_id != doctorComp.doctorGet.userId">
+                            <div>
                                 <span style="text-transform: capitalize;">
                                     {{conver.first_name}}
                                 </span>
                                 <span style="text-transform: uppercase;">
                                     {{conver.last_name}}
                                 </span>
-                                <div class="lastMessageContent">
-                                    <div style="margin-right: 3px;" *ngIf="!conver.message_content">
-                                        {{'noMessages'|translate}}
-                                    </div>
-                                    <span *ngIf="conver.message_content" style="margin-right: 3px;">
+                                <div class="lastMessageContent" style="margin-right: 3px;"
+                                    *ngIf="!conver.message_content">
+                                    {{'noMessages'|translate}}
+                                </div>
+                                <div class="lastMessageContent" *ngIf="conver.message_content"
+                                    style="margin-right: 3px;">
+                                    <span *ngIf="conver.last_message_sender_id == userId">
+                                        {{'you'|translate}}:
+                                    </span>
+                                    <span>
                                         {{conver.message_content}}
                                     </span>
-                                    <div *ngIf="conver.message_content" class="messageCircle"></div>
-                                    <span *ngIf="conver.message_content" style="margin-left: 10px;">
-                                        {{getPassedTime(conver.last_update_date)}}
-                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div *ngIf="conver.message_content" class="messageTime">
+                                    {{getPassedTime(conver.last_update_date)}}
+                                </div>
+                                <div *ngIf="conver.is_unread==true && conver.last_message_sender_id != userId" class="newMessage">
+                                    <div class="newMessageDot"></div>
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div *ngIf="conver.is_unread==false && conver.last_message_sender_id == userId" class="seenMessageConv">
+                                    {{'seen'|translate}}
                                 </div>
                             </div>
                         </div>

@@ -1,25 +1,32 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderService } from 'src/app/Headers/header/header.service';
+import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
+import { WebSocketService } from 'src/app/services/web-socket.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { AppointmentGet } from 'src/model/AppointmentGet';
+import { ConversationGet } from 'src/model/ConversationGet';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
+import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
+import { MessageGet } from 'src/model/MessageGet';
 import { NotificationGet } from 'src/model/NotificationGet';
+import { OpenConversation } from 'src/model/OpenConversation';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { prescriptionGet } from 'src/model/prescriptionGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
+import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
@@ -67,7 +74,46 @@ export class PatientComponent implements OnInit {
     private prescriptionService: PrescriptionService,
     private headerService: HeaderService,
     private notificationService: NotificationService,
-    private pharmacyService: PharmacyService) { }
+    private pharmacyService: PharmacyService,
+    private conversationService: ConversationService,
+    private webSocketService: WebSocketService) {
+    let stompClient = this.webSocketService.connect();
+    stompClient.connect({}, frame => {
+
+      // Subscribe to notification topic
+      stompClient.subscribe('/topic/message/' + this.patientGet.userId, async message => {
+        let not = JSON.parse(message.body);
+        if (not > 0) {
+          if (this.openConversation.conversationId == not)
+            this.openConversation.isUnread = false;
+          let data: IdAndBoolean = { id: not, boolean: false, lastMessageSenderId: 0 };
+          this.headerService.setReadConversation(data);
+          this.scrollToBottomMessages();
+        } else {
+          let msg: MessageGet = not;
+          if (this.openConversation && this.openConversation.conversationId == msg.conversationId) {
+            this.openConversation.isUnread = true;
+            this.openConversation.lastMessageSenderId = msg.senderId;
+            this.openConversation.messages.push(msg);
+            await this.sleep(1);
+            this.scrollToBottomMessages();
+            this.messageSound();
+            this.headerService.newMessage(msg);
+            this.headerService.setFirstConversation(msg.conversationId);
+          } else {
+            this.toastr.info(this.translate.instant('newMessage'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.notificationSound();
+            this.headerService.setFirstConversation(msg.conversationId);
+            let data: IdAndBoolean = { id: msg.conversationId, boolean: true, lastMessageSenderId: msg.senderId };
+            this.headerService.setReadConversation(data);
+          }
+        }
+      })
+    });
+  }
   patientPostWithSecureLogin: PatientPostWithSecureLogin;
   stringAndTwoDoublePost: StringAndTwoDoublePost;
   re = /^[A-Za-z]+$/;
@@ -128,6 +174,11 @@ export class PatientComponent implements OnInit {
   notVerified: boolean;
   field1Code: string; field2Code: string; field3Code: string; field4Code: string; field5Code: string;
   isVerificationCode: boolean;
+  conversationPage: number = 0;
+  openConversation: OpenConversation;
+  @ViewChild('messagesContainer') private messagesContainer: ElementRef;
+  loadMoreMessage: boolean = true;
+  loadingMessages: boolean = false;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
@@ -165,7 +216,7 @@ export class PatientComponent implements OnInit {
   }
   field5Keyup() {
     if (this.field5Code.length == 0)
-    this.field4Input.nativeElement.focus();
+      this.field4Input.nativeElement.focus();
   }
 
   checkForm() {
@@ -1201,8 +1252,8 @@ export class PatientComponent implements OnInit {
 
   updateStatusByEmail() {
     this.userService.updateUserStatusByEmail(this.patientGet.userUsername, 'approved').subscribe(
-      res=>{
-        if(res){
+      res => {
+        if (res) {
           this.toastr.success(this.translate.instant('accountVerified'), this.translate.instant('verified'), {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
@@ -1213,4 +1264,142 @@ export class PatientComponent implements OnInit {
     );
   }
 
+  openMessages() {
+    this.conversationService.getConversationByUserId(this.patientGet.userId, this.conversationPage, 10).subscribe(
+      res => {
+        let conversations: ConversationGet[] = res;
+        for (let conver of conversations) {
+          if (conver.message_content.length >= 10)
+            conver.message_content = conver.message_content.slice(0, 7) + '...';
+          let imageName: string;
+          imageName = conver.recipient + 'profilePic';
+          this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
+            res => {
+              if (res != null) {
+                let retrieveResonse: any = res;
+                let base64Data: any = retrieveResonse.picByte;
+                let retrievedImage: any = 'data:image/jpeg;base64,' + base64Data;
+                conver.recipientImg = retrievedImage;
+              } else
+                conver.recipientImg = false;
+            }
+          );
+          conver.order = 'end';
+          this.headerService.addConversation(conver);
+        }
+        if (conversations.length == 10)
+          this.headerService.setLoadMoreConversation(true);
+        else
+          this.headerService.setLoadMoreConversation(false);
+        this.headerService.setParentHeader('message');
+        this.conversationPage += 1;
+      }
+    );
+  }
+
+  openFullConversation(conver: OpenConversation) {
+    if (!this.openConversation || this.openConversation.conversationId != conver.conversationId) {
+      this.openConversation = conver;
+      this.getConversationMessages(true);
+    }
+  }
+
+  getConversationMessages(firstTime: boolean) {
+    this.loadingMessages = true;
+    if (this.loadMoreMessage == true) {
+      this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+        async res => {
+          let messages: MessageGet[] = res;
+          for (let message of messages)
+            this.openConversation.messages.unshift(message);
+          if (firstTime) {
+            await this.sleep(1);
+            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+          }
+          else {
+            await this.sleep(1);
+            this.messagesContainer.nativeElement.scroll({
+              top: document.getElementById(messages[0].messageDate).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top + 10,
+              left: 0,
+              behavior: 'smooth'
+            });
+          }
+          if (messages.length == 20)
+            this.loadMoreMessage = true;
+          else
+            this.loadMoreMessage = false;
+          this.openConversation.messagePage += 1;
+          this.loadingMessages = false;
+        }
+      );
+    }
+  }
+
+  @HostListener('scroll', ['$event'])
+  messagesScroll(event) {
+    if (document.getElementById("messagesContainer").scrollTop < 10 && this.loadMoreMessage == true && this.loadingMessages == false) {
+      this.loadMoreMessage = false;
+      this.getConversationMessages(false);
+    }
+  }
+
+  sendMessage() {
+    if (this.message && this.message.length != 0) {
+      this.conversationService.sendMessage(this.patientGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+        async res => {
+          let response: StringGet = res;
+          if (response.string.length != 0) {
+            if (this.message.length > 10)
+              this.message = this.message.slice(0, 7) + '...';
+            let message: MessageGet = { messageContent: this.message, senderId: this.patientGet.userId, recipientId: this.openConversation.userId, messageDate: response.string, conversationId: this.openConversation.conversationId }
+            this.openConversation.messages.push(message);
+            this.headerService.newMessage(message);
+            this.message = '';
+            await this.sleep(1);
+            this.scrollToBottomMessages();
+            this.headerService.setFirstConversation(this.openConversation.conversationId);
+            this.openConversation.isUnread = true;
+            let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: true, lastMessageSenderId: this.patientGet.userId };
+            this.headerService.setReadConversation(data);
+            this.openConversation.lastMessageSenderId = this.patientGet.userId;
+          }
+        }
+      );
+    }
+  }
+
+  scrollToBottomMessages(): void {
+    this.messagesContainer.nativeElement.scroll({
+      top: this.messagesContainer.nativeElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  messageSound() {
+    let audio = new Audio();
+    audio.src = "../../../../assets/sounds/messageSound.wav";
+    audio.load();
+    audio.play();
+  }
+
+  notificationSound() {
+    let audio = new Audio();
+    audio.src = "../../../../assets/sounds/notificationSound.wav";
+    audio.load();
+    audio.play();
+  }
+
+  readConversation() {
+    if (this.openConversation.isUnread == true) {
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+        res => {
+          if (res)
+            this.openConversation.isUnread = false;
+          let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
+          this.headerService.setReadConversation(data);
+        }
+      );
+    }
+  }
 }

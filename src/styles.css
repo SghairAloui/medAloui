@@ -232,6 +232,13 @@ input[disabled]{
 
 
 /* message */
+.seenMessage{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: 5px;
+    color: gray;
+    font-size: 10px;
+}
 .messagesContainer .messageLoading{
     position: relative;
 }

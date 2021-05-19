@@ -22,6 +22,7 @@ import { DoctorGet } from 'src/model/Doctorget';
 import { DoctorPostWithSecureLogin } from 'src/model/DoctorPostWithSecureLogin';
 import { DoctorSettingsPost } from 'src/model/DoctorSettingsPost';
 import { FiveStringsPost } from 'src/model/FiveStringsPost';
+import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
@@ -93,22 +94,34 @@ export class DoctorComponent implements OnInit {
 
       // Subscribe to notification topic
       stompClient.subscribe('/topic/message/' + this.doctorGet.userId, async message => {
-
-        let msg: MessageGet = JSON.parse(message.body);
-        if (this.openConversation) {
-          this.openConversation.messages.push(msg);
-          await this.sleep(1);
+        let not = JSON.parse(message.body);
+        if (not > 0) {
+          if (this.openConversation.conversationId == not)
+            this.openConversation.isUnread = false;
+          let data: IdAndBoolean = { id: not, boolean: false, lastMessageSenderId: 0 };
+          this.headerService.setReadConversation(data);
           this.scrollToBottomMessages();
-          this.messageSound();
-          this.headerService.newMessage(msg);
-          this.headerService.setFirstConversation(msg.conversationId);
         } else {
-          this.toastr.info(this.translate.instant('newMessage'), this.translate.instant('Notification'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-          this.notificationSound();
-          this.headerService.setFirstConversation(msg.conversationId);
+          let msg: MessageGet = not;
+          if (this.openConversation.conversationId == msg.conversationId) {
+            this.openConversation.isUnread = true;
+            this.openConversation.lastMessageSenderId = msg.senderId;
+            this.openConversation.messages.push(msg);
+            await this.sleep(1);
+            this.scrollToBottomMessages();
+            this.messageSound();
+            this.headerService.newMessage(msg);
+            this.headerService.setFirstConversation(msg.conversationId);
+          } else {
+            this.toastr.info(this.translate.instant('newMessage'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.notificationSound();
+            this.headerService.setFirstConversation(msg.conversationId);
+            let data: IdAndBoolean = { id: msg.conversationId, boolean: true, lastMessageSenderId: msg.senderId };
+            this.headerService.setReadConversation(data);
+          }
         }
       })
     });
@@ -187,6 +200,7 @@ export class DoctorComponent implements OnInit {
   message: string;
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   loadMoreMessage: boolean = true;
+  loadingMessages:boolean = false;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -1924,49 +1938,54 @@ export class DoctorComponent implements OnInit {
         else
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
-        this.conversationPage+=1;
+        this.conversationPage += 1;
       }
     );
   }
 
   openFullConversation(conver: OpenConversation) {
-    this.openConversation = conver;
-    this.getConversationMessages(true);
+    if (!this.openConversation || this.openConversation.conversationId != conver.conversationId) {
+      this.loadMoreMessage = true;
+      this.openConversation = conver;
+      this.getConversationMessages(true);
+    }
   }
 
   getConversationMessages(firstTime: boolean) {
-    this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
-      async res => {
-        let messages: MessageGet[] = res;
-        for (let message of messages)
-          this.openConversation.messages.unshift(message);
-        if (firstTime) {
-          await this.sleep(1);
-          this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+    this.loadingMessages=true;
+    if (this.loadMoreMessage == true) {
+      this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+        async res => {
+          let messages: MessageGet[] = res;
+          for (let message of messages)
+            this.openConversation.messages.unshift(message);
+          if (firstTime == true) {
+            await this.sleep(1);
+            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+          }
+          else if (firstTime == false) {
+            await this.sleep(1);
+            this.messagesContainer.nativeElement.scroll({
+              top: document.getElementById(messages[0].messageDate).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top + 10,
+              left: 0,
+              behavior: 'smooth'
+            });
+          }
+          if (messages.length == 20)
+            this.loadMoreMessage = true;
+          else
+            this.loadMoreMessage = false;
+          this.openConversation.messagePage += 1;
+          this.loadingMessages=false;
         }
-        else {
-          await this.sleep(1);
-          this.messagesContainer.nativeElement.scroll({
-            top: document.getElementById(messages[0].messageDate).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top + 10,
-            left: 0,
-            behavior: 'smooth'
-          });
-        }
-        if (messages.length == 20)
-          this.loadMoreMessage = true;
-        else
-          this.loadMoreMessage = false;
-        this.openConversation.messagePage += 1;
-      }
-    );
+      );
+    }
   }
 
   @HostListener('scroll', ['$event'])
   messagesScroll(event) {
-    if (document.getElementById("messagesContainer").scrollTop < 10 && this.loadMoreMessage == true) {
-      this.loadMoreMessage = false;
+    if (document.getElementById("messagesContainer").scrollTop < 10 && this.loadMoreMessage == true && this.loadingMessages == false) 
       this.getConversationMessages(false);
-    }
   }
 
   sendMessage() {
@@ -1984,6 +2003,10 @@ export class DoctorComponent implements OnInit {
             await this.sleep(1);
             this.scrollToBottomMessages();
             this.headerService.setFirstConversation(this.openConversation.conversationId);
+            this.openConversation.isUnread = true;
+            let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: true, lastMessageSenderId: this.doctorGet.userId };
+            this.headerService.setReadConversation(data);
+            this.openConversation.lastMessageSenderId = this.doctorGet.userId;
           }
         }
       );
@@ -2020,8 +2043,8 @@ export class DoctorComponent implements OnInit {
           user_type: '',
           message_content: conversation.messageContent,
           order: 'start',
-          is_unread:false,
-          last_message_sender_id:0
+          is_unread: false,
+          last_message_sender_id: 0
         }
         let retrieveResonse: any;
         let base64Data: any;
@@ -2047,10 +2070,25 @@ export class DoctorComponent implements OnInit {
           messages: [],
           openFullConver: true,
           userId: conv.recipient,
-          userImg: conv.recipientImg
+          userImg: conv.recipientImg,
+          isUnread: conv.is_unread,
+          lastMessageSenderId: conv.last_message_sender_id
         };
         this.openFullConversation(openConver);
       }
     );
+  }
+
+  readConversation() {
+    if (this.openConversation.isUnread == true) {
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+        res => {
+          if (res)
+            this.openConversation.isUnread = false;
+          let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
+          this.headerService.setReadConversation(data);
+        }
+      );
+    }
   }
 }

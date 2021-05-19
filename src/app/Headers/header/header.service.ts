@@ -49,4 +49,10 @@ export class HeaderService {
   setFirstConversation(data:any){
     this.firstConversation.next(data);
   }
+
+  private readConversation= new BehaviorSubject<any>({});
+  readConversation$ = this.readConversation.asObservable();
+  setReadConversation(data:{}){
+    this.readConversation.next(data);
+  }
 }

@@ -39,7 +39,7 @@ export class ConversationService {
     return this.http.get<ConversationGet>(CONVERSATION_API + 'getConversationByid/'+conversationId+'/'+userid,httpOptions);
   }
 
-  public readConversationById (conversationId:number){
-    return this.http.get<boolean>(CONVERSATION_API + 'readConversationById/'+conversationId,httpOptions);
+  public readConversationById (conversationId:number,userId:number){
+    return this.http.get<boolean>(CONVERSATION_API + 'readConversationById/'+conversationId+'/'+userId,httpOptions);
   }
 }

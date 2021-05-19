@@ -11,6 +11,7 @@ import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
 import { ConversationGet } from 'src/model/ConversationGet';
+import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
@@ -47,6 +48,7 @@ export class HeaderComponent implements OnInit {
   unreadNotifications: number = 0;
   loadMoreConversation: boolean;
   message: MessageGet;
+  userId: number = 0;
 
   ngOnInit(): void {
 
@@ -84,6 +86,7 @@ export class HeaderComponent implements OnInit {
           for (let conv of this.conversations) {
             if (conv.conversation_id == message) {
               let toTopConv: ConversationGet = this.conversations[i];
+              toTopConv.is_unread = true;
               this.conversations.splice(i, 1);
               this.conversations.unshift(toTopConv);
               convFound = true;
@@ -125,8 +128,26 @@ export class HeaderComponent implements OnInit {
             if (conver.conversation_id == this.message.conversationId) {
               this.conversations[index].message_content = this.message.messageContent;
               this.conversations[index].last_update_date = this.message.messageDate;
+              this.conversations[index].is_unread = true;
+              this.conversations[index].last_message_sender_id = this.message.senderId;
             }
           });
+        }
+      }
+    );
+
+    this.headerService.readConversation$.subscribe(
+      (message) => {
+        let i: number = 0;
+        let data:IdAndBoolean = message;
+        for (let conv of this.conversations) {
+          if (conv.conversation_id == data.id) {
+            this.conversations[i].is_unread = data.boolean;
+            if(data.lastMessageSenderId != 0)
+            this.conversations[i].last_message_sender_id = data.lastMessageSenderId;
+            break;
+          }
+          i += 1;
         }
       }
     );
@@ -170,6 +191,14 @@ export class HeaderComponent implements OnInit {
     this.headerService.header$.subscribe(
       (message) => {
         this.role = message;
+        if (this.role == 'doctor')
+          this.userId = this.doctorComp.doctorGet.userId
+        else if (this.role == 'patient')
+          this.userId = this.patientComp.patientGet.userId
+        else if (this.role == 'pharmacy')
+          this.userId = this.pharmacyComp.pharmacyGet.userId
+        else if (this.role == 'admin')
+          this.userId = this.adminComp.adminGet.userId
       }
     );
 
@@ -473,7 +502,10 @@ export class HeaderComponent implements OnInit {
       let max = document.getElementById("conversationsScroll").scrollHeight;
       if (((max - 10) <= pos) && this.loadMoreConversation == true) {
         this.loadMoreConversation = false;
-        this.doctorComp.openMessages();
+        if (this.role == 'doctor')
+          this.doctorComp.openMessages();
+        else if (this.role == 'patient')
+          this.patientComp.openMessages();
       }
     }
   }
@@ -489,13 +521,18 @@ export class HeaderComponent implements OnInit {
       messages: [],
       openFullConver: true,
       userId: this.conversations[converKey].recipient,
-      userImg: this.conversations[converKey].recipientImg
+      userImg: this.conversations[converKey].recipientImg,
+      isUnread: this.conversations[converKey].is_unread,
+      lastMessageSenderId: this.conversations[converKey].last_message_sender_id
     };
-    this.doctorComp.openFullConversation(openConver);
-    this.conversationService.readConversationById(this.conversations[converKey].conversation_id).subscribe(
-      res=>{
-        if(res)
-          this.conversations[converKey].is_unread=false;
+    if (this.role == 'doctor')
+      this.doctorComp.openFullConversation(openConver);
+    else if (this.role == 'patient')
+      this.patientComp.openFullConversation(openConver);
+    this.conversationService.readConversationById(this.conversations[converKey].conversation_id, this.conversations[converKey].recipient).subscribe(
+      res => {
+        if (res)
+          this.conversations[converKey].is_unread = false;
       }
     );
   }
