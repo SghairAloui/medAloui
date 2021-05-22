@@ -38,6 +38,17 @@ html,body{
     --disabledWorkCircle:#838a99;
     --dayColor:#555d6e;
     --worldMapImgOpacity:0.6;
+    --messageBackgroundColor: #eaebf0;
+    --messageSenderBackgroundColor: #d1d3e4;
+    --messageSenderColor:#2c3247;
+    --messageRecipientColor:#3e4251;
+    --messageRecipientBackgroundColor:white;
+    --toastrBackgroundColor: white;
+    --toastrMessageColor: #9c9ea3;
+    --toastrTitleColorSuccess: #2e323c;
+    --toastrTitleColorError: #2e323c;
+    --toastrTitleColorWarning: #2e323c;
+    --toastrTitleColorInfo: #2e323c;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -71,6 +82,17 @@ html,body{
     --disabledWorkCircle:#e0e0e0;
     --dayColor:#c5c9d3;
     --worldMapImgOpacity:0.2;
+    --messageBackgroundColor: #3d3c40;
+    --messageSenderBackgroundColor: #d1d3e4;
+    --messageSenderColor:#2c3247;
+    --messageRecipientColor:white;
+    --messageRecipientBackgroundColor:#575f5d;
+    --toastrBackgroundColor: #121214;
+    --toastrMessageColor: #c4c4c4;
+    --toastrTitleColorSuccess: #51A351;
+    --toastrTitleColorError: #BD362F;
+    --toastrTitleColorWarning: #F89406;
+    --toastrTitleColorInfo: #007bc2;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -229,9 +251,174 @@ input[disabled]{
         transform: scale(0.7) translateY(5px);
     }
 }
+/* toastr */
 
+#toast-container>.toast-info,#toast-container>.toast-success,#toast-container>.toast-warning,#toast-container>.toast-error {
+    background-color: var(--toastrBackgroundColor) !important;
+    border-radius: 10px !important;
+    color: var(--toastrMessageColor) !important;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2) !important;
+}
+#toast-container>.toast-info{
+    border-left: 4px solid #007bc2;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='rgb(0,123,194)' d='M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z'/%3E%3C/svg%3E") !important;
+}
+#toast-container>.toast-success{
+    border-left: 4px solid #51A351;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='rgb(81,163,81)' d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z'/%3E%3C/svg%3E") !important;
+}
+#toast-container>.toast-warning{
+    border-left: 4px solid #F89406;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' width='576' height='512'%3E%3Cpath fill='rgb(248,148,6)' d='M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z'/%3E%3C/svg%3E") !important;
+}
+#toast-container>.toast-error{
+    border-left: 4px solid #BD362F;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' width='576' height='512'%3E%3Cpath fill='rgb(189,54,47)' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z'/%3E%3C/svg%3E") !important;
+}
+#toast-container>.toast-info .toast-title{
+    color: var(--toastrTitleColorInfo) !important;
+}
+#toast-container>.toast-success .toast-title{
+    color: var(--toastrTitleColorSuccess) !important;
+}
+#toast-container>.toast-warning .toast-title{
+    color: var(--toastrTitleColorWarning) !important;
+}
+#toast-container>.toast-error .toast-title{
+    color: var(--toastrTitleColorError) !important;
+}
+.ngx-toastr {
+    width: fit-content !important;
+    max-width: 400px !important;
+    min-width: 250px !important;
+}  
+/* toastr */
 
 /* message */
+.smallConvNewMessageDot{
+    z-index: 1001;
+    width: 10px;
+    height: 10px;
+    background-color: #ff9100;
+    border-radius: 50%;
+    position: fixed;
+    right: 55px;
+}
+.smallMessagesContainer .smallConvNewMessageDot{
+    bottom: 115px;
+}
+.smallMessagesContainer1 .smallConvNewMessageDot{
+    bottom: 180px;
+}
+.smallMessagesContainer2 .smallConvNewMessageDot{
+    bottom: 245px;
+}
+.smallMessagesContainer .smallMessagesContainerClose .fa-times,.smallMessagesContainer1 .smallMessagesContainerClose .fa-times,.smallMessagesContainer2 .smallMessagesContainerClose .fa-times{
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+.messagesContainer .smallMessagesContainer .smallMessagesContainerImg,.messagesContainer .smallMessagesContainer1 .smallMessagesContainerImg,.messagesContainer .smallMessagesContainer2 .smallMessagesContainerImg{
+    z-index: 1001;
+    position: fixed;
+    width: 45px;
+    height: 45px;
+    right: 20px;
+    border: 1px solid #308a7b;
+    background-color: var(--background-color);
+    border-radius: 50%;
+    overflow: hidden;
+}
+.messagesContainer .smallMessagesContainer .smallMessagesContainerImg{
+    bottom: 85px;
+}
+.messagesContainer .smallMessagesContainer1 .smallMessagesContainerImg{
+    bottom: 150px;
+}
+.messagesContainer .smallMessagesContainer2 .smallMessagesContainerImg{
+    bottom: 215px;
+}
+.smallMessagesContainer .smallMessagesContainerClose,.smallMessagesContainer1 .smallMessagesContainerClose,.smallMessagesContainer2 .smallMessagesContainerClose{
+    display: none;
+    cursor: pointer;
+    z-index: 1001;
+    position: fixed;
+    right: 17px;
+    color: white;
+    background-color: rgb(255, 78, 78);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transition: .2s ease-in-out;
+}
+.smallMessagesContainer .smallMessagesContainerClose{
+    bottom: 115px;
+}
+.smallMessagesContainer1 .smallMessagesContainerClose{
+    bottom: 180px;
+}
+.smallMessagesContainer2 .smallMessagesContainerClose{
+    bottom: 245px;
+}
+.smallMessagesContainer .smallMessagesContainerClose:hover,.smallMessagesContainer1 .smallMessagesContainerClose:hover,.smallMessagesContainer2 .smallMessagesContainerClose:hover{
+    background-color: red;
+}
+.smallMessagesContainer:hover .smallMessagesContainerUsername,.smallMessagesContainer:hover .smallMessagesContainerClose,.smallMessagesContainer1:hover .smallMessagesContainerUsername,.smallMessagesContainer1:hover .smallMessagesContainerClose,.smallMessagesContainer2:hover .smallMessagesContainerUsername,.smallMessagesContainer2:hover .smallMessagesContainerClose{
+    display: block;
+}
+.smallMessagesContainer .smallMessagesContainerUsername,.smallMessagesContainer1 .smallMessagesContainerUsername,.smallMessagesContainer2 .smallMessagesContainerUsername{
+    display: none;
+    background-color: var(--messageSenderColor);
+    color: var(--messageBackgroundColor);
+    padding: 2px 5px;
+    border-radius: 5px;
+    z-index: 1001;
+    position: fixed;
+    text-transform: capitalize;
+    right: 70px;
+    transform: translateY(+50%);
+}
+.smallMessagesContainer .smallMessagesContainerUsername{
+    bottom: 107px;
+}
+.smallMessagesContainer1 .smallMessagesContainerUsername{
+    bottom: 172px;
+}
+.smallMessagesContainer2 .smallMessagesContainerUsername{
+    bottom: 237px;
+}
+.sendRequestClosedMessage{
+    width: fit-content;
+    margin-bottom: 5px;
+}
+.convClosed{
+    text-align: center;
+    margin: 0px auto;
+}
+.sendMessageIconBtn:hover{
+    transform: scale(1.05);
+}
+.sendMessageIconBtn .fa-envelope{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 25px;
+}
+.sendMessageIconBtn{
+    position: relative;
+    color: white;
+    background-color: #308a7b;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
 .seenMessage{
     width: fit-content;
     margin-left: auto;
@@ -253,7 +440,7 @@ input[disabled]{
     margin-left: 3px;
     margin-top: 5px;
     border-radius: 15px;
-    background-color: #a5b6b3;
+    background-color: var(--messageRecipientBackgroundColor);
 }
 .messagesContainer .messageLoading div:nth-child(2){
     animation-name: LoadingMessages;
@@ -261,7 +448,7 @@ input[disabled]{
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
     animation-delay: 0.6s;
-    background-color: #308a7b;
+    background-color: var(--messageSenderBackgroundColor);
     width: 120px;
     height: 30px;
     margin-left: auto;
@@ -279,7 +466,10 @@ input[disabled]{
     position: relative;
     width: 70px;
     height: 70px;
-    margin: 10px auto;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
     border: 1px solid #308a7b;
     border-radius: 50%;
     overflow:hidden;
@@ -324,19 +514,6 @@ input[disabled]{
     transform: translate(-50%,-50%);
     font-size: 25px;
 }
-.messagesContainer .smallMessagesContainer{
-    z-index: 1001;
-    position: fixed;
-    right: 80px;
-    bottom: 0px;
-    width: 250px;
-    height: 35px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    background-color: #308a7b;
-    display: flex;
-    justify-content: space-between;
-}
 .messagesContainer .messagesConatiner{
     z-index: 1001;
     position: fixed;
@@ -351,35 +528,70 @@ input[disabled]{
 }
 .messagesContainer .messagesContainerHeader{
     top: 0px;
-    position: relative;
+    position: absolute;
     width: 300px;
     height: 35px;
-    background-color: #308a7b;
+    background-color: #aecaaa71;
+    backdrop-filter: blur(3px);
+    color: var(--messageRecipientColor);
+    z-index: 1100;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid var(--messageBackgroundColor);
 }
+.messagesContainer .messagesContainerBody::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.messagesContainer .messagesContainerBody::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+.messagesContainer .messagesContainerBody::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #cfd1db;
+}
+.messagesContainer .messagesContainerBody::-webkit-scrollbar-button {
+    height: 50px;
+  }
 .messagesContainer .messagesContainerBody{
     top: 0px;
     padding: 10px 3px;
     position: relative;
     width: 300px;
-    height: 320px;
-    background-color: var(--box-color);
+    height: 400px;
+    background-color: var(--messageBackgroundColor);
+    overflow-y: auto;
+    padding-bottom:50px;
+}
+.messagesContainer .messagesContainerBodyClosed{
+    top: 0px;
+    padding: 10px 3px;
+    position: relative;
+    width: 300px;
+    height: 400px;
+    background-color: var(--messageBackgroundColor);
     overflow-y: auto;
 }
 .messagesContainer .messagesContainerFooter{
-    top: 0px;
-    position: relative;
-    background-color: var(--box-color);
-    width: 300px;
-    height: 45px;
+    bottom: 0px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.644);
+    backdrop-filter: blur(4px);
+    border-radius:5px;
+    margin: 4px 5px;
+    width: 290px;
+    height: 40px;
     padding: 3px;
 }
 .messagesContainer .messageUsername{
     margin-left: 10px;
     margin-top: 16px;
     transform: translateY(-50%);
-    color: white;
     font-weight: 600;
     text-transform: capitalize;
 }
@@ -388,13 +600,14 @@ input[disabled]{
     margin-right: 10px;
     margin-top: 16px;
     transform: translateY(-50%);
-    color: white;
     text-transform: capitalize;
-    transition: .3s ease-in-out;
     cursor: pointer;
 }
-.messagesContainer .messageCloseIcon:hover{
-    color: #dfdfdff3;
+.messagesContainer .messageCloseIcon span{
+    transition: .3s ease-in-out;
+}
+.messagesContainer .messageCloseIcon span:hover{
+    color: #1a7465;
 }
 .messagesContainer .sendMessageIcon{
     margin-left: 7px;
@@ -406,28 +619,28 @@ input[disabled]{
     transform: scale(1.2);
 }
 .messagesContainer .messageInput{
-    border: 1px solid #308a7b;
+    border: none;
     width: 250px;
     margin: 5px;
     border-radius: 4px;
     padding-left: 10px;
-    outline: #308a7b;
+    outline: none;
     background: transparent;
 }
 .messagesContainer .senderMessageContainer{
-    background-color: #308a7b;
+    background-color: var(--messageSenderBackgroundColor);
     padding: 5px 10px;
     width: fit-content;
     max-width: 250px;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: auto; 
-    margin-right: 3px;
+    margin-right: 5px;
     border-radius: 15px;
-    color: white;
+    color: var(--messageSenderColor);
 }
 .messagesContainer .recipientMessageContainer{
-    background-color: #a5b6b3;
+    background-color: var(--messageRecipientBackgroundColor);
     padding: 5px 10px;
     width: fit-content;
     max-width: 250px;
@@ -435,7 +648,7 @@ input[disabled]{
     margin-bottom: 5px;
     margin-left: 3px;
     border-radius: 15px;
-    color: white;
+    color: var(--messageRecipientColor);
 }
 /* message */
 

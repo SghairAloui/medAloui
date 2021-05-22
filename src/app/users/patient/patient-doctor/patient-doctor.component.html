@@ -289,6 +289,9 @@
                                         {{'dt'|translate}}
                                     </div>
                                 </div>
+                                <div class="sendMessageIconBtn" (click)="startConversation(searchedDoc[selectedDoctorKey].userId,searchedDoc[selectedDoctorKey].doctorFirstName,searchedDoc[selectedDoctorKey].doctorLastName)">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
                             </div>
                             <div class="doctorAppointmentContainer">
                                 <div class="appointmentTitle">{{'appointment'|translate}}</div>

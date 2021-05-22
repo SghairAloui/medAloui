@@ -12,4 +12,5 @@ export interface ConversationGet{
     order:string;
     is_unread:boolean;
     last_message_sender_id:number;
+    status_updated_by:number;
 }

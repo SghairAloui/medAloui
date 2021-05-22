@@ -100,7 +100,7 @@
     <div *ngIf="role=='patient'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';" class="notificationIcon">
+                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -258,7 +258,7 @@
     <div *ngIf="role=='doctor'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';" class="notificationIcon">
+                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -329,7 +329,7 @@
     <div *ngIf="role=='pharmacy'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';" class="notificationIcon">
+                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -383,15 +383,16 @@
     </div>
 
     <div *ngIf="parentHeader=='notification'" class="loginHeader">
-        <header class="headerChild">
+        <header class="headerChild" style="overflow-y: scroll;" (scroll)="notificationsScroll($event)" id="notificationsScroll" #notificationsScrollEL>
             <nav class="navItem">
                 <div>
-                    <div *ngIf="notifications.length == 1" class="noNotification">
+                    <div *ngIf="notifications.length == 0" class="noNotification">
                         {{'noNotification'|translate}}
                     </div>
-                    <div *ngFor="let notif of notifications | keyvalue | slice:1:notifications.length"
-                        class="notification">
-                        <div *ngIf="notif.value.notificationType=='setYourGeoLocation'">
+                    <div *ngFor="let notif of notifications ;let i=index"
+                        class="notification" id="notification{{i}}">
+                        {{i}}
+                        <div *ngIf="notif.notificationType=='setYourGeoLocation'">
                             <div>
                                 <i class="fas fa-map-marked-alt"></i>
                             </div>
@@ -399,19 +400,65 @@
                             <div (click)="updatePosClick()" class="textLien">
                                 {{'updatePos'|translate}} ?
                             </div>
-                            <div class="notificationIcons">
-                                <span *ngIf="notif.value.unread==true" (click)="changeUnreadNotification(notif.key)">
-                                    <i class="fas fa-bell-slash"></i>
-                                </span>
-                                <span *ngIf="notif.value.unread==false" (click)="changeUnreadNotification(notif.key)">
-                                    <i class="fas fa-bell"></i>
-                                </span>
-                                <i class="fas fa-trash-alt"></i>
+                        </div>
+                        <div
+                            *ngIf="notif.notificationType=='conversationopen' || notif.notificationType=='conversationclose'">
+                            <div *ngIf="notif.notificationType=='conversationopen'">
+                                <i class="fas fa-unlock"></i>
                             </div>
-                            <span (click)="closeNotification(notif.key)">
-                                <i class="fas fa-times"></i>
+                            <div *ngIf="notif.notificationType=='conversationclose'">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div *ngIf="notif.notificationType=='conversationopen'" style="margin: 5px;">
+                                <span style="text-transform: capitalize;">
+                                    {{notif.name}}
+                                </span> {{'openConversation'|translate}}
+                            </div>
+                            <div *ngIf="notif.notificationType=='conversationclose'" style="margin: 5px;">
+                                <span style="text-transform: capitalize;">
+                                    {{notif.name}}
+                                </span>
+                                {{'closeConversation'|translate}}
+                            </div>
+                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien" style="text-transform: capitalize;">
+                                {{'openConversation'|translate}} ?
+                            </div>
+                        </div>
+                        <div *ngIf="notif.notificationType=='openConversationRequest'">
+                            <div>
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <span style="text-transform: capitalize;">
+                                {{notif.name}}
+                            </span> {{'sentYouReq'|translate}}
+                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien">
+                                {{'showConversation'|translate}} ?
+                            </div>
+                        </div>
+                        <div class="notificationIcons">
+                            <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">
+                                <i class="fas fa-bell-slash"></i>
+                            </span>
+                            <span *ngIf="notif.isUnread==false" (click)="changeUnreadNotification(i)">
+                                <i class="fas fa-bell"></i>
+                            </span>
+                            <span (click)="deleteNotificationById(i)">
+                                <i class="fas fa-trash-alt"></i>
                             </span>
                         </div>
+                        <span (click)="closeNotification(i)">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    </div>
+                    <div *ngIf="loadMoreNotification==true" style="position: relative; height: 65px;">
+                        <div class="loading">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div *ngIf="loadMoreNotification==false && notifications.length != 0" style="margin: 10px auto; text-align: center;padding-bottom: 15px;">
+                        {{'allNotLoaded'|translate}}
                     </div>
                 </div>
             </nav>
@@ -420,7 +467,7 @@
 
     <div *ngIf="parentHeader=='message'" class="loginHeader">
         <div class="headerChild" style="overflow-y: scroll;" (scroll)="conversationsScroll($event)"
-            id="conversationsScroll">
+            id="conversationsScroll" #conversationsScrollEl>
             <nav class="navItem">
                 <div style="margin-bottom: 20px;">
                     <div *ngIf="conversations.length == 0" class="noNotification">
@@ -464,11 +511,13 @@
                                 <div *ngIf="conver.message_content" class="messageTime">
                                     {{getPassedTime(conver.last_update_date)}}
                                 </div>
-                                <div *ngIf="conver.is_unread==true && conver.last_message_sender_id != userId" class="newMessage">
+                                <div *ngIf="conver.is_unread==true && conver.last_message_sender_id != userId"
+                                    class="newMessage">
                                     <div class="newMessageDot"></div>
                                     <i class="fas fa-envelope"></i>
                                 </div>
-                                <div *ngIf="conver.is_unread==false && conver.last_message_sender_id == userId" class="seenMessageConv">
+                                <div *ngIf="conver.is_unread==false && conver.last_message_sender_id == userId"
+                                    class="seenMessageConv">
                                     {{'seen'|translate}}
                                 </div>
                             </div>

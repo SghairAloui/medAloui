@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -47,8 +47,15 @@ export class HeaderComponent implements OnInit {
   conversations: ConversationGet[] = [];
   unreadNotifications: number = 0;
   loadMoreConversation: boolean;
+  loadMoreNotification: boolean;
   message: MessageGet;
   userId: number = 0;
+  loadingNotification: boolean = false;
+  notificationScroll: number = 0;
+  conversationScroll: number = 0;
+
+  @ViewChild('notificationsScrollEL') private notificationsScrollEl: ElementRef;
+  @ViewChild('conversationsScrollEl') private conversationsScrollEl: ElementRef;
 
   ngOnInit(): void {
 
@@ -73,8 +80,19 @@ export class HeaderComponent implements OnInit {
     );
 
     this.headerService.loadMoreConversation$.subscribe(
-      (message) => {
+      async (message) => {
         this.loadMoreConversation = message;
+        await this.sleep(1);
+        this.conversationsScrollEl.nativeElement.scrollTop = this.conversationScroll;
+      }
+    );
+
+    this.headerService.loadMoreNotification$.subscribe(
+      async (message) => {
+        this.loadMoreNotification = message;
+        await this.sleep(1);
+        this.notificationsScrollEl.nativeElement.scrollTop = this.notificationScroll;
+        this.loadingNotification = false;
       }
     );
 
@@ -95,26 +113,7 @@ export class HeaderComponent implements OnInit {
             i += 1;
           }
           if (convFound == false) {
-            this.conversationService.getConversationByid(message, this.doctorComp.doctorGet.userId).subscribe(
-              res => {
-                let conv: ConversationGet = res;
-                let retrieveResonse: any;
-                let base64Data: any;
-                let retrievedImage: any;
-                this.doctorService.getDoctorPofilePhoto(conv.recipient + 'profilePic').subscribe(
-                  res => {
-                    if (res != null) {
-                      retrieveResonse = res;
-                      base64Data = retrieveResonse.picByte;
-                      retrievedImage = 'data:image/jpeg;base64,' + base64Data;
-                      conv.recipientImg = retrievedImage;
-                    } else
-                      conv.recipientImg = false;
-                  }
-                );
-                this.conversations.unshift(conv);
-              }
-            );
+            this.getConversationByid(message, true);
           }
         }
       }
@@ -139,12 +138,12 @@ export class HeaderComponent implements OnInit {
     this.headerService.readConversation$.subscribe(
       (message) => {
         let i: number = 0;
-        let data:IdAndBoolean = message;
+        let data: IdAndBoolean = message;
         for (let conv of this.conversations) {
           if (conv.conversation_id == data.id) {
             this.conversations[i].is_unread = data.boolean;
-            if(data.lastMessageSenderId != 0)
-            this.conversations[i].last_message_sender_id = data.lastMessageSenderId;
+            if (data.lastMessageSenderId != 0)
+              this.conversations[i].last_message_sender_id = data.lastMessageSenderId;
             break;
           }
           i += 1;
@@ -155,9 +154,14 @@ export class HeaderComponent implements OnInit {
     this.headerService.notification$.subscribe(
       (message) => {
         let notification: NotificationGet = message;
-        if (notification.unread)
-          this.unreadNotifications += 1;
-        this.notifications.push(message);
+        if (notification.notificationType) {
+          if (notification.isUnread == true)
+            this.unreadNotifications += 1;
+          if (notification.order == 'start')
+            this.notifications.unshift(message);
+          else if (notification.order == 'end')
+            this.notifications.push(message);
+        }
       }
     );
 
@@ -275,7 +279,7 @@ export class HeaderComponent implements OnInit {
     if (localStorage.getItem("lang") == 'en')
       this.toastr.info(this.translate.instant('langToEn'), this.translate.instant('Language'), {
         timeOut: 2500,
-        positionClass: 'toast-bottom-left',
+        positionClass: 'toast-bottom-left'
 
       });
     else if (localStorage.getItem("lang") == 'fr')
@@ -403,6 +407,7 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem("secureLogin", "");
     localStorage.setItem("id", "");
     localStorage.setItem("secureLoginType", "");
+    this.parentHeader = '';
     this.router.navigate(['/acceuil']);
   }
 
@@ -411,22 +416,22 @@ export class HeaderComponent implements OnInit {
   }
 
   closeNotification(notificationKey) {
-    if (this.notifications[notificationKey].unread)
+    if (this.notifications[notificationKey].isUnread == true)
       this.unreadNotifications -= 1;
     this.notifications.splice(notificationKey, 1);
   }
 
   changeUnreadNotification(notificationKey: number) {
     let newUnread: boolean;
-    if (this.notifications[notificationKey].unread)
+    if (this.notifications[notificationKey].isUnread == true)
       newUnread = false;
     else
       newUnread = true;
     this.notificationService.changeUnreadNotification(this.notifications[notificationKey].notificationId, newUnread).subscribe(
       res => {
         if (res)
-          this.notifications[notificationKey].unread = newUnread;
-        if (newUnread)
+          this.notifications[notificationKey].isUnread = newUnread;
+        if (newUnread == true)
           this.unreadNotifications += 1;
         else
           this.unreadNotifications -= 1;
@@ -502,10 +507,13 @@ export class HeaderComponent implements OnInit {
       let max = document.getElementById("conversationsScroll").scrollHeight;
       if (((max - 10) <= pos) && this.loadMoreConversation == true) {
         this.loadMoreConversation = false;
+        this.conversationScroll = document.getElementById("conversationsScroll").scrollTop;
         if (this.role == 'doctor')
           this.doctorComp.openMessages();
         else if (this.role == 'patient')
           this.patientComp.openMessages();
+        else if (this.role == 'pharmacy')
+          this.pharmacyComp.openMessages();
       }
     }
   }
@@ -519,16 +527,20 @@ export class HeaderComponent implements OnInit {
       username: this.conversations[converKey].first_name + ' ' + lastName,
       messagePage: 0,
       messages: [],
-      openFullConver: true,
       userId: this.conversations[converKey].recipient,
       userImg: this.conversations[converKey].recipientImg,
       isUnread: this.conversations[converKey].is_unread,
-      lastMessageSenderId: this.conversations[converKey].last_message_sender_id
+      lastMessageSenderId: this.conversations[converKey].last_message_sender_id,
+      conversationStatus: this.conversations[converKey].conversation_status,
+      loadMoreMessage: true,
+      statusUpdatedBy: this.conversations[converKey].status_updated_by
     };
     if (this.role == 'doctor')
       this.doctorComp.openFullConversation(openConver);
     else if (this.role == 'patient')
       this.patientComp.openFullConversation(openConver);
+    else if (this.role == 'pharmacy')
+      this.pharmacyComp.openFullConversation(openConver);
     this.conversationService.readConversationById(this.conversations[converKey].conversation_id, this.conversations[converKey].recipient).subscribe(
       res => {
         if (res)
@@ -536,4 +548,95 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
+
+  getConversationByid(convId: number, openConv: boolean) {
+    this.conversationService.getConversationByid(convId, this.userId).subscribe(
+      res => {
+        let conv: ConversationGet = res;
+        let retrieveResonse: any;
+        let base64Data: any;
+        let retrievedImage: any;
+        this.doctorService.getDoctorPofilePhoto(conv.recipient + 'profilePic').subscribe(
+          res => {
+            if (res != null) {
+              retrieveResonse = res;
+              base64Data = retrieveResonse.picByte;
+              retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+              conv.recipientImg = retrievedImage;
+            } else
+              conv.recipientImg = false;
+
+            if (openConv)
+              this.conversations.unshift(conv);
+            else {
+              let openConver: OpenConversation = {
+                conversationId: conv.conversation_id,
+                username: conv.first_name + ' ' + conv.last_name,
+                messagePage: 0,
+                messages: [],
+                userId: conv.recipient,
+                userImg: conv.recipientImg,
+                isUnread: conv.is_unread,
+                lastMessageSenderId: conv.last_message_sender_id,
+                conversationStatus: conv.conversation_status,
+                loadMoreMessage: true,
+                statusUpdatedBy: conv.status_updated_by
+              };
+              if (this.role == 'doctor')
+                this.doctorComp.openFullConversation(openConver);
+              else if (this.role == 'patient')
+                this.patientComp.openFullConversation(openConver);
+              else if (this.role == 'pharmacy')
+                this.pharmacyComp.openFullConversation(openConver);
+            }
+          }
+        );
+      }
+    );
+  }
+
+  deleteNotificationById(notifKey: number) {
+    this.notificationService.deleteNotificationById(this.notifications[notifKey].notificationId).subscribe(
+      res => {
+        if (res) {
+          if (this.notifications[notifKey].isUnread == true)
+            this.unreadNotifications -= 1;
+          this.notifications.splice(notifKey, 1);
+          if (this.notifications.length <= 6 && this.loadMoreNotification == true) {
+            if (this.role == 'doctor')
+              this.doctorComp.getMyNotifications(this.userId);
+            else if (this.role == 'patient')
+              this.patientComp.getMyNotifications(this.userId);
+            else if (this.role == 'pharmacy')
+              this.pharmacyComp.getMyNotifications(this.userId);
+          }
+        }
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  @HostListener('scroll', ['$event'])
+  notificationsScroll(event) {
+    if (this.loadMoreNotification == true && this.loadingNotification == false) {
+      let pos = document.getElementById("notificationsScroll").scrollTop + document.getElementById("notificationsScroll").offsetHeight;
+      let max = document.getElementById("notificationsScroll").scrollHeight;
+      if (((max - 10) <= pos) && this.loadMoreNotification == true) {
+        this.notificationScroll = document.getElementById("notificationsScroll").scrollTop;
+        this.loadingNotification = true;
+        if (this.role == 'doctor')
+          this.doctorComp.getMyNotifications(this.userId);
+        else if (this.role == 'patient')
+          this.patientComp.getMyNotifications(this.userId);
+        else if (this.role == 'pharmacy')
+          this.pharmacyComp.getMyNotifications(this.userId);
+      }
+    }
+  }
+
 }

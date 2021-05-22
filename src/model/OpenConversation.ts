@@ -5,9 +5,11 @@ export interface OpenConversation{
     username:string;
     messages:MessageGet [];
     messagePage:number;
-    openFullConver:boolean;
     userId:number;
     userImg:any;
     isUnread:boolean;
     lastMessageSenderId:number;
+    conversationStatus:string;
+    loadMoreMessage:boolean;
+    statusUpdatedBy:number;
 }

@@ -42,4 +42,8 @@ export class ConversationService {
   public readConversationById (conversationId:number,userId:number){
     return this.http.get<boolean>(CONVERSATION_API + 'readConversationById/'+conversationId+'/'+userId,httpOptions);
   }
+
+  public updateConversationStatusById (id:number,status:string,changedBy:number,changedTo:number){
+    return this.http.post<boolean>(CONVERSATION_API + 'updateConversationStatusById',{id,status,changedBy,changedTo},httpOptions);
+  }
 }

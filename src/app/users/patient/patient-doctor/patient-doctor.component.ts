@@ -15,6 +15,7 @@ import { PatientService } from '../patient/patient.service';
 import { DoctorGet } from 'src/model/Doctorget';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
+import { ConversationService } from 'src/app/services/conversation.service';
 
 @Component({
   selector: 'app-patient-doctor',
@@ -29,7 +30,8 @@ export class PatientDoctorComponent implements OnInit {
     private specialityService: SpecialityService,
     private appointmentService: AppointmentService,
     private patientComponent: PatientComponent,
-    private patientService: PatientService) { }
+    private patientService: PatientService,
+    private conversationService:ConversationService) { }
   medicalFilePapers: string = 'info'; losingTime: string = 'info'; appOrganize: string = 'info';
   slectedDay: boolean = true;
   monthDays: any[] = [];
@@ -532,5 +534,7 @@ export class PatientDoctorComponent implements OnInit {
     );
   }
 
-
+  startConversation(recipientId:number, firstName: string, lastName: string){
+    this.patientComponent.startConversation(recipientId,firstName,lastName);
+  }
 }

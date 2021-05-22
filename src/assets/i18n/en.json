@@ -527,5 +527,19 @@
     "newMessage":"New message",
     "noMessages":"No messages",
     "seen":"Seen",
-    "you":"You"
+    "you":"You",
+    "convClosed":"Conversation closed",
+    "sendRequestTo":"you can send request to",
+    "toOpenThisConv":"to open this conversation",
+    "sendRequest":"Send request",
+    "byYou":"by you",
+    "open":"Open",
+    "closeConversation":"close conversation",
+    "openConversation":"open conversation",
+    "requestSnet":"Request sent",
+    "sentYouReq":"sent you request to open conversation",
+    "showConversation":"show conversation",
+    "by":"by",
+    "byDefault":"by default",
+    "allNotLoaded":"All notification loaded"
 }

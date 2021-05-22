@@ -26,4 +26,8 @@ export class NotificationService {
   public deleteNotificationById(id:number){
     return this.http.delete<boolean>(NOTIFICATION_API+'deleteNotificationById/'+id,httpOptions);
   }
+
+  public sentOpenConversationRequest(senderId:number,recipientId:number,conversationId:number){
+    return this.http.post<boolean>(NOTIFICATION_API+'sentOpenConversationRequest',{senderId,recipientId,conversationId},httpOptions);
+  }
 }

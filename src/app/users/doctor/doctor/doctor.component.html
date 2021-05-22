@@ -40,32 +40,64 @@
             <div class="messagesIcon" (click)="openMessages()">
                 <i class="fas fa-envelope"></i>
             </div>
-            <div *ngIf="openConversation" class="messagesContainer">
-                <div *ngIf="openConversation.openFullConver==false" class="smallMessagesContainer"
-                    (click)="openConversation.openFullConver=true">
-                    <div class="messageUsername">
-                        {{openConversation.username}}
-                    </div>
-                    <div class="messageCloseIcon" (click)="openConversation=null">
-                        <i class="fas fa-times"></i>
+            <div class="messagesContainer">
+                <div *ngFor="let smallConv of smallConversations; let i=index">
+                    <div [class.smallMessagesContainer]="i==0" [class.smallMessagesContainer1]="i==1"
+                        [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
+                        <div class="smallMessagesContainerImg">
+                            <div *ngIf="smallConv.userImg">
+                                <img [src]="smallConv.userImg"
+                                    style="height: 45px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                            </div>
+                            <div *ngIf="smallConv.userImg==false">
+                                <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
+                            </div>
+                        </div>
+                        <div class="smallMessagesContainerUsername">
+                            {{smallConv.username}}
+                        </div>
+                        <div class="smallMessagesContainerClose" (click)="closeSmallConv(i)">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div *ngIf="smallConv.isUnread==true && smallConv.lastMessageSenderId != doctorGet.userId"
+                            class="smallConvNewMessageDot"></div>
                     </div>
                 </div>
-                <div *ngIf="openConversation.openFullConver==true" class="messagesConatiner">
-                    <div class="messagesContainerHeader" (click)="openConversation.openFullConver=false">
+                <div *ngIf="openConversation" class="messagesConatiner">
+                    <div class="messagesContainerHeader">
                         <div class="messageUsername">
                             {{openConversation.username}}
                         </div>
-                        <div class="messageCloseIcon" (click)="openConversation=null">
-                            <i class="fas fa-times"></i>
+                        <div class="messageCloseIcon">
+                            <span (click)="restoreConversation()" style="margin-right: 10px;">
+                                <i class="fas fa-window-restore"></i>
+                            </span>
+                            <span
+                                *ngIf="openConversation.conversationStatus == 'close' && (openConversation.statusUpdatedBy == doctorGet.userId || openConversation.statusUpdatedBy == 0)"
+                                style="margin-right: 10px;"
+                                (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
+                                <i class="fas fa-lock-open"></i>
+                            </span>
+                            <span
+                                *ngIf="openConversation.conversationStatus == 'open' && (openConversation.statusUpdatedBy == doctorGet.userId || openConversation.statusUpdatedBy == 0)"
+                                style="margin-right: 10px;"
+                                (click)="updateConversationStatusById(openConversation.conversationId,'close',openConversation.userId)">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <span (click)="openConversation=null">
+                                <i class="fas fa-times"></i>
+                            </span>
                         </div>
                     </div>
                     <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
-                        (scroll)="messagesScroll($event)" (click)="readConversation()">
-                        <div *ngIf="loadMoreMessage" class="messageLoading">
+                        (scroll)="messagesScroll($event)"
+                        (click)="readConversation(openConversation.lastMessageSenderId)"
+                        [class.messagesContainerBodyClosed]="openConversation.conversationStatus == 'close'">
+                        <div *ngIf="openConversation.loadMoreMessage" class="messageLoading">
                             <div></div>
                             <div></div>
                         </div>
-                        <div *ngIf="!loadMoreMessage">
+                        <div *ngIf="!openConversation.loadMoreMessage">
                             <div class="messageUsernameImgContainer">
                                 <div *ngIf="openConversation.userImg">
                                     <img [src]="openConversation.userImg"
@@ -78,9 +110,9 @@
                             </div>
                             <div class="messageUsernameContainer"> {{openConversation.username}} </div>
                         </div>
-                        <div *ngFor="let message of openConversation.messages">
+                        <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
                             <div *ngIf="message.senderId==doctorGet.userId && message.messageContent.length != 0"
-                                id="{{message.messageDate}}" class="senderMessageContainer">
+                                 class="senderMessageContainer">
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=doctorGet.userId && message.messageContent.length != 0"
@@ -89,13 +121,33 @@
                                 {{message.messageContent}}
                             </div>
                         </div>
-                        <div class="seenMessage" *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == doctorGet.userId">
+                        <div class="seenMessage"
+                            *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == doctorGet.userId">
                             {{'seen'|translate}} <i class="fas fa-check"></i>
                         </div>
+                        <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
+                            <div *ngIf="openConversation.statusUpdatedBy == doctorGet.userId" style="margin: 5px auto;">
+                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}} </span>
+                            </div>
+                            <div *ngIf="openConversation.statusUpdatedBy != doctorGet.userId" style="margin: 5px auto;">
+                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}} {{openConversation.username}} </span>
+                            </div>
+                            <button *ngIf="openConversation.statusUpdatedBy == doctorGet.userId || openConversation.statusUpdatedBy == 0"
+                                class="fullyBtnSmall sendRequestClosedMessage"
+                                (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
+                                {{'open'|translate}}
+                            </button>
+                            <div class="convClosed">
+                                <i class="fas fa-lock" style="margin-left: 5px;"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="messagesContainerFooter" (click)="readConversation()">
-                        <input type="text" name="message" [(ngModel)]="message" placeholder="{{'message...'|translate}}"
-                            class="messageInput">
+                    <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
+                        (click)="readConversation(openConversation.lastMessageSenderId)">
+                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                            placeholder="{{'message...'|translate}}" class="messageInput">
                         <span (click)="sendMessage()">
                             <i class="fas fa-paper-plane sendMessageIcon"></i>
                         </span>

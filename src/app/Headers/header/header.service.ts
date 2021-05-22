@@ -38,6 +38,12 @@ export class HeaderService {
     this.loadMoreConversation.next(data);
   }
 
+  private loadMoreNotification: Subject<boolean>= new BehaviorSubject<any>("");
+  loadMoreNotification$ = this.loadMoreNotification.asObservable();
+  setLoadMoreNotification(data:any){
+    this.loadMoreNotification.next(data);
+  }
+
   private message = new BehaviorSubject<any>({});
   message$ = this.message.asObservable();
   newMessage(data:{}){

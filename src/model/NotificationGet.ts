@@ -3,7 +3,9 @@ export interface NotificationGet{
     notificationType:string;
     senderId:number;
     recipientId:number;
-    unread:boolean;
+    isUnread:boolean;
     notificationParameter:string;
     timeSent:string;
+    name:string;
+    order:string;
 }

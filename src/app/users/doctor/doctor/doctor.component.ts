@@ -37,6 +37,7 @@ import { SpecialityGet } from 'src/model/SpecialityGet';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
 
@@ -90,38 +91,100 @@ export class DoctorComponent implements OnInit {
     private webSocketService: WebSocketService) {
     // Open connection with server socket
     let stompClient = this.webSocketService.connect();
-    stompClient.connect({}, frame => {
+    stompClient.connect({}, async frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/topic/message/' + this.doctorGet.userId, async message => {
-        let not = JSON.parse(message.body);
-        if (not > 0) {
-          if (this.openConversation.conversationId == not)
+      stompClient.subscribe('/topic/notification/' + this.doctorGet.userId, async message => {
+        let not: WebSocketNotification = JSON.parse(message.body);
+        if (not.type == 'seen') {
+          if (this.openConversation.conversationId == parseInt(not.data))
             this.openConversation.isUnread = false;
-          let data: IdAndBoolean = { id: not, boolean: false, lastMessageSenderId: 0 };
+          let data: IdAndBoolean = { id: parseInt(not.data), boolean: false, lastMessageSenderId: 0 };
           this.headerService.setReadConversation(data);
           this.scrollToBottomMessages();
-        } else {
-          let msg: MessageGet = not;
-          if (this.openConversation.conversationId == msg.conversationId) {
+        } else if (not.type == 'message') {
+          if (this.openConversation && this.openConversation.conversationId == not.message.conversationId) {
             this.openConversation.isUnread = true;
-            this.openConversation.lastMessageSenderId = msg.senderId;
-            this.openConversation.messages.push(msg);
+            this.openConversation.lastMessageSenderId = not.message.senderId;
+            this.openConversation.messages.push(not.message);
             await this.sleep(1);
             this.scrollToBottomMessages();
             this.messageSound();
-            this.headerService.newMessage(msg);
-            this.headerService.setFirstConversation(msg.conversationId);
-          } else {
+            this.headerService.newMessage(not.message);
+            this.headerService.setFirstConversation(not.message.conversationId);
+          }
+          else {
+            let i: number = 0;
+            for (let conv of this.smallConversations) {
+              if (conv.conversationId == not.message.conversationId) {
+                this.smallConversations[i].isUnread = true;
+                this.smallConversations[i].lastMessageSenderId = not.message.senderId;
+              }
+              i += 1;
+            }
             this.toastr.info(this.translate.instant('newMessage'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
             this.notificationSound();
-            this.headerService.setFirstConversation(msg.conversationId);
-            let data: IdAndBoolean = { id: msg.conversationId, boolean: true, lastMessageSenderId: msg.senderId };
+            this.headerService.setFirstConversation(not.message.conversationId);
+            let data: IdAndBoolean = { id: not.message.conversationId, boolean: true, lastMessageSenderId: not.message.senderId };
             this.headerService.setReadConversation(data);
+            this.headerService.newMessage(not.message);
           }
+        } else if (not.type == 'notification') {
+          not.notification.order = 'start';
+          if (not.notification.notificationType == 'openConversationRequest') {
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('sentYouReq')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'conversationclose') {
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('closeConversation')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+
+            if (this.openConversation && parseInt(not.notification.notificationParameter) == this.openConversation.conversationId) {
+              this.openConversation.conversationStatus = 'close';
+              this.openConversation.statusUpdatedBy = not.notification.senderId;
+            } else if (this.smallConversations) {
+              let i: number = 0;
+              for (let conv of this.smallConversations) {
+                if (conv.conversationId == parseInt(not.notification.notificationParameter)) {
+                  this.smallConversations[i].conversationStatus = 'close';
+                  this.smallConversations[i].statusUpdatedBy = not.notification.senderId;
+                  break;
+                }
+                i = +1;
+              }
+            }
+
+          } else if (not.notification.notificationType == 'conversationopen') {
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('openConversation')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+
+            if (this.openConversation && parseInt(not.notification.notificationParameter) == this.openConversation.conversationId) {
+              this.openConversation.conversationStatus = 'open';
+              this.openConversation.statusUpdatedBy = 0;
+            } else if (this.smallConversations) {
+              let i: number = 0;
+              for (let conv of this.smallConversations) {
+                if (conv.conversationId == parseInt(not.notification.notificationParameter)) {
+                  this.smallConversations[i].conversationStatus = 'open';
+                  this.smallConversations[i].statusUpdatedBy = 0;
+                  break;
+                }
+                i = +1;
+              }
+            }
+
+          }
+          not.notification.name = not.data;
+          this.headerService.addNotification(not.notification);
+          this.notificationSound();
         }
       })
     });
@@ -197,10 +260,12 @@ export class DoctorComponent implements OnInit {
   currentDiseaseFullInfo: boolean = false;
   conversationPage: number = 0;
   openConversation: OpenConversation;
+  smallConversations: OpenConversation[] = [];
   message: string;
+
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
-  loadMoreMessage: boolean = true;
-  loadingMessages:boolean = false;
+  loadingMessages: boolean = false;
+  closeGetMessage:boolean=false;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -328,15 +393,21 @@ export class DoctorComponent implements OnInit {
   }
 
   getMyNotifications(userId: number) {
-    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 6).subscribe(
       res => {
         let notifications: NotificationGet[] = [];
         notifications = res;
         for (let notification of notifications) {
+          notification.order = 'end';
           this.headerService.addNotification(notification);
           if (notification.notificationType == 'setYourGeoLocation')
             this.geoNotId = notification.notificationId;
         }
+        if (notifications.length == 6)
+          this.headerService.setLoadMoreNotification(true);
+        else
+          this.headerService.setLoadMoreNotification(false);
+        this.notificationPage += 1;
       }
     );
   }
@@ -1945,15 +2016,27 @@ export class DoctorComponent implements OnInit {
 
   openFullConversation(conver: OpenConversation) {
     if (!this.openConversation || this.openConversation.conversationId != conver.conversationId) {
-      this.loadMoreMessage = true;
+      if (this.openConversation)
+        this.restoreConversation();
       this.openConversation = conver;
+      if (this.openConversation.isUnread == true)
+        this.readConversation(this.openConversation.lastMessageSenderId);
       this.getConversationMessages(true);
+      let i: number = 0;
+      for (let conv of this.smallConversations) {
+        if (conv.conversationId == this.openConversation.conversationId) {
+          this.smallConversations.splice(i, 1);
+          break;
+        }
+        i = +1;
+      }
     }
   }
 
   getConversationMessages(firstTime: boolean) {
-    this.loadingMessages=true;
-    if (this.loadMoreMessage == true) {
+    this.loadingMessages = true;
+    if (this.openConversation.loadMoreMessage == true && this.closeGetMessage == false) {
+      this.closeGetMessage=true;
       this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
         async res => {
           let messages: MessageGet[] = res;
@@ -1966,17 +2049,17 @@ export class DoctorComponent implements OnInit {
           else if (firstTime == false) {
             await this.sleep(1);
             this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById(messages[0].messageDate).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top + 10,
-              left: 0,
-              behavior: 'smooth'
+              top: document.getElementById("message"+messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+              left: 0
             });
           }
           if (messages.length == 20)
-            this.loadMoreMessage = true;
+            this.openConversation.loadMoreMessage = true;
           else
-            this.loadMoreMessage = false;
+            this.openConversation.loadMoreMessage = false;
           this.openConversation.messagePage += 1;
-          this.loadingMessages=false;
+          this.loadingMessages = false;
+          this.closeGetMessage=false;
         }
       );
     }
@@ -1984,7 +2067,7 @@ export class DoctorComponent implements OnInit {
 
   @HostListener('scroll', ['$event'])
   messagesScroll(event) {
-    if (document.getElementById("messagesContainer").scrollTop < 10 && this.loadMoreMessage == true && this.loadingMessages == false) 
+    if (document.getElementById("messagesContainer").scrollTop < 10 && this.openConversation.loadMoreMessage == true && this.loadingMessages == false)
       this.getConversationMessages(false);
   }
 
@@ -2038,13 +2121,14 @@ export class DoctorComponent implements OnInit {
           conversation_id: conversation.conversationId,
           last_update_date: conversation.openDate,
           first_name: firstName,
-          conversation_status: 'open',
+          conversation_status: conversation.conversationStatus,
           recipientImg: false,
           user_type: '',
           message_content: conversation.messageContent,
           order: 'start',
           is_unread: false,
-          last_message_sender_id: 0
+          last_message_sender_id: 0,
+          status_updated_by: conversation.statusUpdatedBy
         }
         let retrieveResonse: any;
         let base64Data: any;
@@ -2056,11 +2140,11 @@ export class DoctorComponent implements OnInit {
               base64Data = retrieveResonse.picByte;
               retrievedImage = 'data:image/jpeg;base64,' + base64Data;
               conv.recipientImg = retrievedImage;
-            }
+            } else
+              conv.recipientImg = false;
           }
         );
         this.headerService.addConversation(conv);
-        this.loadMoreMessage = false;
         this.headerService.setParentHeader('message');
 
         let openConver: OpenConversation = {
@@ -2068,19 +2152,21 @@ export class DoctorComponent implements OnInit {
           username: firstName + ' ' + lastName.toUpperCase(),
           messagePage: 0,
           messages: [],
-          openFullConver: true,
           userId: conv.recipient,
           userImg: conv.recipientImg,
           isUnread: conv.is_unread,
-          lastMessageSenderId: conv.last_message_sender_id
+          lastMessageSenderId: conv.last_message_sender_id,
+          conversationStatus: conv.conversation_status,
+          loadMoreMessage: true,
+          statusUpdatedBy: conv.status_updated_by
         };
         this.openFullConversation(openConver);
       }
     );
   }
 
-  readConversation() {
-    if (this.openConversation.isUnread == true) {
+  readConversation(lastSenderId: number) {
+    if (this.openConversation.isUnread == true && lastSenderId != this.doctorGet.userId) {
       this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
           if (res)
@@ -2090,5 +2176,60 @@ export class DoctorComponent implements OnInit {
         }
       );
     }
+  }
+
+  updateConversationStatusById(conversationId: number, status: string, userId: number) {
+    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId).subscribe(
+      res => {
+        if (res) {
+          this.openConversation.conversationStatus = status;
+          if (status == 'close')
+            this.openConversation.statusUpdatedBy = this.doctorGet.userId;
+        }
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  async showFullconv(convKey: number) {
+    this.openConversation = this.smallConversations[convKey];
+    this.smallConversations.splice(convKey, 1);
+    await this.sleep(1);
+    this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+    if (this.openConversation.isUnread == true)
+      this.readConversation(this.openConversation.lastMessageSenderId);
+  }
+
+  restoreConversation() {
+    let convFound: boolean = false;
+    let i: number = 0;
+    for (let conv of this.smallConversations) {
+      if (conv.conversationId == this.openConversation.conversationId) {
+        convFound = true;
+        break;
+      }
+      i += 1;
+    }
+    if (convFound == false) {
+      if (this.smallConversations.length == 3)
+        this.smallConversations.splice(0, 1);
+      this.smallConversations.push(this.openConversation);
+    } else {
+      let newOrdConv: OpenConversation = this.smallConversations[i];
+      this.smallConversations.splice(i, 1);
+      this.smallConversations.push(newOrdConv);
+    }
+    this.openConversation = null;
+  }
+
+  closeSmallConv(convKey: number) {
+    this.smallConversations.splice(convKey, 1);
+    if (this.smallConversations[convKey].conversationId == this.openConversation.conversationId)
+      this.openConversation = null;
   }
 }
