@@ -39,13 +39,13 @@
                         </div>
                         <div class="questionWithPosterInfo">
                             <div class="posterInfo">
-                                <div *ngIf="ques.posterImageProfile" class="posterImageProfileContainer" (click)="doctorComponent.startConversation(ques.postBy,ques.userFullName,'')">
+                                <div *ngIf="ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'')">
                                     <img [src]="ques.posterImageProfile" class="posterImageProfile">
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
                                     </div>
                                 </div>
-                                <div *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer" (click)="doctorComponent.startConversation(ques.postBy,ques.userFullName,'')">
+                                <div *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'')">
                                     <i class="fas fa-user-tie userTiePoster"></i>
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
@@ -92,7 +92,7 @@
                             </div>
                             <div class="commentText">
                                 <div class="commentPostBy">
-                                {{comment.commentPostBy}} <span *ngIf="comment.postedBy != doctorComponent.doctorGet.userId" style="color: #308a7b; margin-left: 10px;" (click)="doctorComponent.startConversation(comment.postedBy,comment.commentPostBy,'')"><i class="fas fa-envelope"></i></span>
+                                {{comment.commentPostBy}} <span *ngIf="comment.postedBy != pharmacyComponent.pharmacyGet.userId" style="color: #308a7b; margin-left: 10px;" (click)="pharmacyComponent.startConversation(comment.postedBy,comment.commentPostBy,'')"><i class="fas fa-envelope"></i></span>
                                 </div>
                                 <div>
                                     {{comment.comment}}

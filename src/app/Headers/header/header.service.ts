@@ -61,4 +61,10 @@ export class HeaderService {
   setReadConversation(data:{}){
     this.readConversation.next(data);
   }
+
+  private searchUser: Subject<boolean>= new BehaviorSubject<any>("");
+  searchUser$ = this.searchUser.asObservable();
+  searchUserNow(data:boolean){
+    this.searchUser.next(data);
+  }
 }

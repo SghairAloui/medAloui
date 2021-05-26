@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { UserSearchGet } from 'src/model/UserSearchGet';
 
 const USER_API = 'http://localhost:8080/api/user/';
 
@@ -46,4 +47,9 @@ export class UserService {
   updateUserPasswordByEmail(email:string,password:string){
     return this.http.post<boolean>(USER_API + 'updateUserPasswordByEmail',{email,password},httpOptions);
   }
+
+  searchUsersByName(string:string,page:number,size:number){
+    return this.http.post<UserSearchGet []>(USER_API + 'searchUsersByName',{string,page,size},httpOptions);
+  }
+  
 }

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { UserService } from 'src/app/services/user.service';
 import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
 import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
 import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
@@ -15,6 +16,7 @@ import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
+import { UserSearchGet } from 'src/model/UserSearchGet';
 import { AppComponent } from '../../app.component'
 import { HeaderService } from './header.service';
 
@@ -38,7 +40,8 @@ export class HeaderComponent implements OnInit {
     private headerService: HeaderService,
     private notificationService: NotificationService,
     private conversationService: ConversationService,
-    private doctorService: DoctorService) {
+    private doctorService: DoctorService,
+    private userService: UserService) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -53,6 +56,10 @@ export class HeaderComponent implements OnInit {
   loadingNotification: boolean = false;
   notificationScroll: number = 0;
   conversationScroll: number = 0;
+  search: string;
+  currentSearch: string;
+  searchPage: number = 0;
+  searchingUsers: boolean = false;
 
   @ViewChild('notificationsScrollEL') private notificationsScrollEl: ElementRef;
   @ViewChild('conversationsScrollEl') private conversationsScrollEl: ElementRef;
@@ -63,6 +70,7 @@ export class HeaderComponent implements OnInit {
       (message) => {
         let conversation: ConversationGet = message;
         let convExist: boolean = false;
+        console.log(this.userId);
         for (let conver of this.conversations) {
           if (conver.conversation_id == conversation.conversation_id) {
             convExist = true;
@@ -84,6 +92,13 @@ export class HeaderComponent implements OnInit {
         this.loadMoreConversation = message;
         await this.sleep(1);
         this.conversationsScrollEl.nativeElement.scrollTop = this.conversationScroll;
+      }
+    );
+
+    this.headerService.searchUser$.subscribe(
+      async (message) => {
+        if (message == true)
+          this.searchUsersByName(false);
       }
     );
 
@@ -401,13 +416,16 @@ export class HeaderComponent implements OnInit {
   toMyMedicamentsInfoSection() {
     document.getElementById("myMedicamentsSection").scrollIntoView({ behavior: "smooth" });
   }
+  openContainerToPharmacy(containerName: string) {
+    this.pharmacyComp.container = containerName;
+    this.parentHeader = containerName;
+  }
   //pharmacy header
 
   logOut() {
     localStorage.setItem("secureLogin", "");
     localStorage.setItem("id", "");
     localStorage.setItem("secureLoginType", "");
-    this.parentHeader = '';
     this.router.navigate(['/acceuil']);
   }
 
@@ -541,12 +559,6 @@ export class HeaderComponent implements OnInit {
       this.patientComp.openFullConversation(openConver);
     else if (this.role == 'pharmacy')
       this.pharmacyComp.openFullConversation(openConver);
-    this.conversationService.readConversationById(this.conversations[converKey].conversation_id, this.conversations[converKey].recipient).subscribe(
-      res => {
-        if (res)
-          this.conversations[converKey].is_unread = false;
-      }
-    );
   }
 
   getConversationByid(convId: number, openConv: boolean) {
@@ -637,6 +649,78 @@ export class HeaderComponent implements OnInit {
           this.pharmacyComp.getMyNotifications(this.userId);
       }
     }
+  }
+
+  searchUsersByName(firstTime: boolean) {
+    this.searchingUsers = true;
+    if (firstTime && this.role == 'doctor')
+      this.doctorComp.searchedUsers = [];
+    else if (firstTime && this.role == 'patient')
+      this.patientComp.searchedUsers = [];
+    else if (firstTime && this.role == 'pharmacy')
+      this.pharmacyComp.searchedUsers = [];
+    if (firstTime)
+      this.searchPage = 0;
+    if (firstTime)
+      this.currentSearch = '%' + this.search.split(' ').join('% %') + '%';
+    this.userService.searchUsersByName(this.currentSearch, this.searchPage, 6).subscribe(
+      async res => {
+        let searchedUsers: UserSearchGet[] = res;
+        let retrieveResonse: any;
+        let base64Data: any;
+        let retrievedImage: any;
+        for (let user of searchedUsers) {
+          user.startingConversation = false;
+          this.doctorService.getDoctorPofilePhoto(user.userId + 'profilePic').subscribe(
+            res => {
+              if (res != null) {
+                retrieveResonse = res;
+                base64Data = retrieveResonse.picByte;
+                retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+                user.userImg = retrievedImage;
+              } else
+                user.userImg = false;
+            }
+          );
+          if (this.role == 'doctor')
+            this.doctorComp.searchedUsers.push(user);
+          else if (this.role == 'patient')
+            this.patientComp.searchedUsers.push(user);
+          else if (this.role == 'pharmacy')
+            this.pharmacyComp.searchedUsers.push(user);
+        }
+        this.search = '';
+        if (searchedUsers.length == 6) {
+          if (this.role == 'doctor')
+            this.doctorComp.loadMoreUsers = true;
+          else if (this.role == 'patient')
+            this.patientComp.loadMoreUsers = true;
+          else if (this.role == 'pharmacy')
+            this.pharmacyComp.loadMoreUsers = true;
+        } else {
+          if (this.role == 'doctor')
+            this.doctorComp.loadMoreUsers = false;
+          else if (this.role == 'patient')
+            this.patientComp.loadMoreUsers = false;
+          else if (this.role == 'pharmacy')
+            this.pharmacyComp.loadMoreUsers = false;
+        }
+        this.searchPage += 1;
+        this.searchingUsers = false;
+        if (this.searchPage == 1) {
+          await this.sleep(1);
+          window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }
+      }, err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      });
   }
 
 }

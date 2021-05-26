@@ -7,18 +7,17 @@ import { CommentGet } from 'src/model/CommentGet';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { QuestionGet } from 'src/model/QuestionGet';
 import { PatientService } from '../../patient/patient/patient.service';
-import { DoctorComponent } from '../doctor/doctor.component';
-import { DoctorService } from '../doctor/doctor.service';
+import { PharmacyComponent } from '../pharmacy/pharmacy.component';
 
 @Component({
-  selector: 'app-doctor-disease',
-  templateUrl: './doctor-disease.component.html',
-  styleUrls: ['./doctor-disease.component.css']
+  selector: 'app-pharmacy-disease',
+  templateUrl: './pharmacy-disease.component.html',
+  styleUrls: ['./pharmacy-disease.component.css']
 })
-export class DoctorDiseaseComponent implements OnInit {
+export class PharmacyDiseaseComponent implements OnInit {
 
   constructor(private questionService: QuestionService,
-    private doctorComponent: DoctorComponent,
+    private pharmacyComponent: PharmacyComponent,
     private translate: TranslateService,
     private toastr: ToastrService,
     private patientService: PatientService,
@@ -127,7 +126,7 @@ export class DoctorDiseaseComponent implements OnInit {
   }
 
   addPointToComment(commentId: number, questionKey: number,commentKey:number) {
-    this.questionService.addPointToPost(commentId, this.doctorComponent.doctorGet.userId,'comment').subscribe(
+    this.questionService.addPointToPost(commentId, this.pharmacyComponent.pharmacyGet.userId,'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointAdded'), this.translate.instant('point'), {
@@ -152,7 +151,7 @@ export class DoctorDiseaseComponent implements OnInit {
   }
 
   deletePointFromComment(questionId: number, questionKey: number,commentKey:number) {
-    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.doctorComponent.doctorGet.userId,'comment').subscribe(
+    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.pharmacyComponent.pharmacyGet.userId,'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointDeleted'), this.translate.instant('point'), {
@@ -196,10 +195,10 @@ export class DoctorDiseaseComponent implements OnInit {
       });
     }
     else {
-      this.questionService.addComment(questionId, this.doctorComponent.doctorGet.userId, this.questions[questionKey].doctorComment).subscribe(
+      this.questionService.addComment(questionId, this.pharmacyComponent.pharmacyGet.userId, this.questions[questionKey].doctorComment).subscribe(
         res => {
           if (res) {
-            let comment: CommentGet={commentId:res,commentPostDate:'', comment : this.questions[questionKey].doctorComment,postedBy : this.doctorComponent.doctorGet.userId,postId:this.questions[questionKey].questionId,commentPoints:0,commentPostBy:'Dr. '+this.doctorComponent.doctorGet.doctorFirstName + ' ' + this.doctorComponent.doctorGet.doctorLastName.toUpperCase(),posterProfileImage:this.doctorComponent.retrievedImage};
+            let comment: CommentGet={commentId:res,commentPostDate:'', comment : this.questions[questionKey].doctorComment,postedBy : this.pharmacyComponent.pharmacyGet.userId,postId:this.questions[questionKey].questionId,commentPoints:0,commentPostBy:'Ph. '+this.pharmacyComponent.pharmacyGet.pharmacyFullName,posterProfileImage:this.pharmacyComponent.retrievedImage};
             this.toastr.success(this.translate.instant('commentAdded'), this.translate.instant('comment'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
@@ -217,4 +216,5 @@ export class DoctorDiseaseComponent implements OnInit {
       );
     }
   }
+
 }

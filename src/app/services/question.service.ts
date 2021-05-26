@@ -42,4 +42,8 @@ export class QuestionService {
   public addComment(postId:number,postedBy:number,comment:string){
     return this.http.post<number>(COMMENT_API + 'add',{postId,postedBy,comment},httpOptions);
   }
+
+  public getQuestionsByUserId(id:number,page:number,size:number){
+    return this.http.post<QuestionGet []>(QUESTION_API + 'getQuestionsByUserId',{id,page,size},httpOptions);
+  }
 }

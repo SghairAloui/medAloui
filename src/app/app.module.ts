@@ -46,6 +46,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { EmailService } from './services/email.service';
 import { ConversationService } from './services/conversation.service';
 import { WebSocketService } from './services/web-socket.service';
+import { PharmacyDiseaseComponent } from './users/pharmacy/pharmacy-disease/pharmacy-disease.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { WebSocketService } from './services/web-socket.service';
     AdminDiseaseComponent,
     PatientDiseaseComponent,
     DoctorDiseaseComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+    PharmacyDiseaseComponent
   ],
   imports: [
     BrowserModule,

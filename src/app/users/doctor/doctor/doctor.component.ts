@@ -37,6 +37,7 @@ import { SpecialityGet } from 'src/model/SpecialityGet';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
@@ -262,10 +263,14 @@ export class DoctorComponent implements OnInit {
   openConversation: OpenConversation;
   smallConversations: OpenConversation[] = [];
   message: string;
+  searchedUsers: UserSearchGet[] = [];
+  loadMoreUsers: boolean;
+  selectedUser: UserSearchGet;
+  myMap;
+  loadingMessages: boolean = false;
+  closeGetMessage: boolean = false;
 
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
-  loadingMessages: boolean = false;
-  closeGetMessage:boolean=false;
 
   ngOnInit(): void {
     this.headerService.setHeader('doctor');
@@ -2036,7 +2041,7 @@ export class DoctorComponent implements OnInit {
   getConversationMessages(firstTime: boolean) {
     this.loadingMessages = true;
     if (this.openConversation.loadMoreMessage == true && this.closeGetMessage == false) {
-      this.closeGetMessage=true;
+      this.closeGetMessage = true;
       this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
         async res => {
           let messages: MessageGet[] = res;
@@ -2049,7 +2054,7 @@ export class DoctorComponent implements OnInit {
           else if (firstTime == false) {
             await this.sleep(1);
             this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message"+messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
               left: 0
             });
           }
@@ -2059,7 +2064,7 @@ export class DoctorComponent implements OnInit {
             this.openConversation.loadMoreMessage = false;
           this.openConversation.messagePage += 1;
           this.loadingMessages = false;
-          this.closeGetMessage=false;
+          this.closeGetMessage = false;
         }
       );
     }
@@ -2110,7 +2115,9 @@ export class DoctorComponent implements OnInit {
     audio.play();
   }
 
-  startConversation(userId: number, firstName: string, lastName: string) {
+  startConversation(userId: number, firstName: string, lastName: string, key: number) {
+    if (key != 0)
+      this.searchedUsers[key].startingConversation = true;
     this.conversationService.addConversation(this.doctorGet.userId, userId).subscribe(
       res => {
         let conversation: Conversation = res;
@@ -2161,6 +2168,8 @@ export class DoctorComponent implements OnInit {
           statusUpdatedBy: conv.status_updated_by
         };
         this.openFullConversation(openConver);
+        if (key != 0)
+          this.searchedUsers[key].startingConversation = false;
       }
     );
   }
@@ -2231,5 +2240,75 @@ export class DoctorComponent implements OnInit {
     this.smallConversations.splice(convKey, 1);
     if (this.smallConversations[convKey].conversationId == this.openConversation.conversationId)
       this.openConversation = null;
+  }
+
+  findMoreUser() {
+    this.headerService.searchUserNow(true);
+  }
+
+  showUserFullInfo(userKey: number, firstTime: boolean) {
+    this.selectedUser = this.searchedUsers[userKey];
+    if (this.searchedUsers[userKey].userType == 'doctor' || this.searchedUsers[userKey].userType == 'pharmacist')
+      this.setSelectedUserPosition();
+    else if (this.searchedUsers[userKey].userType == 'patient') {
+      if (firstTime)
+        this.selectedUser.patientAppPage = 0;
+      this.getAppointmentByDoctorIdAndPatientId();
+    }
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  async setSelectedUserPosition() {
+    if (this.selectedUser.userLatitude.length != 0 && this.selectedUser.userLongitude.length != 0) {
+      let container = document.getElementById('selectedUserMap');
+      while (!container) {
+        container = document.getElementById('selectedUserMap');
+        await this.sleep(500);
+      }
+      this.myMap = L.map('selectedUserMap').setView([this.selectedUser.userLatitude, this.selectedUser.userLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(this.myMap);
+
+      let marker = L.marker([this.selectedUser.userLatitude, this.selectedUser.userLongitude]).addTo(this.myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> " + this.selectedUser.userFullName + "</b>").openPopup();
+    }
+  }
+
+  addMapRoute() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
+        ]
+      }).addTo(this.myMap);
+    });
+  }
+
+  getAppointmentByDoctorIdAndPatientId() {
+    if (!this.selectedUser.patientAppPage)
+      this.selectedUser.patientAppPage = 0;
+    this.appointmentService.getAppointmentByDoctorIdAndPatientId(this.selectedUser.userId, this.doctorGet.userId, this.selectedUser.patientAppPage, 4).subscribe(
+      res => {
+        let app: AppointmentGet[] = res;
+        this.selectedUser.patientAppointment = res;
+        if (app.length == 4)
+          this.selectedUser.loadMoreApp = true;
+        else
+          this.selectedUser.loadMoreApp = false;
+        this.selectedUser.patientAppPage += 1;
+      }
+    );
   }
 }

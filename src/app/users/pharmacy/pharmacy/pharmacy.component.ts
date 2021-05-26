@@ -21,6 +21,7 @@ import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../pharmacy.service';
@@ -196,6 +197,10 @@ export class PharmacyComponent implements OnInit {
 
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   loadingMessages: boolean = false;
+  searchedUsers: UserSearchGet[] = [];
+  loadMoreUsers: boolean;
+  selectedUser: UserSearchGet;
+  myMap;
 
 
   ngOnInit(): void {
@@ -727,7 +732,6 @@ export class PharmacyComponent implements OnInit {
 
   searchMedByNameAndPharmacyId() {
     let medSearch: string = '%' + this.medicamentName.split(' ').join('% %') + '%';
-    console.log(medSearch);
     this.pharmacyService.searchMedByNameAndPharmacyId(this.pharmacyGet.userId, medSearch).subscribe(
       res => {
         let response: MedicamentStockGet[] = [];
@@ -960,7 +964,7 @@ export class PharmacyComponent implements OnInit {
           else if (firstTime == false) {
             await this.sleep(1);
             this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message"+messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
               left: 0
             });
           }
@@ -1074,4 +1078,63 @@ export class PharmacyComponent implements OnInit {
       }
     );
   }
+
+  findMoreUser() {
+    this.headerService.searchUserNow(true);
+  }
+
+  showUserFullInfo(userKey: number) {
+    this.selectedUser = this.searchedUsers[userKey];
+    if (this.searchedUsers[userKey].userType == 'doctor' || this.searchedUsers[userKey].userType == 'pharmacist')
+      this.setSelectedUserPosition();
+    else {
+
+    }
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  async setSelectedUserPosition() {
+    if (this.selectedUser.userLatitude.length != 0 && this.selectedUser.userLongitude.length != 0) {
+      let container = document.getElementById('selectedUserMap');
+      while (!container) {
+        container = document.getElementById('selectedUserMap');
+        await this.sleep(500);
+      }
+      this.myMap = L.map('selectedUserMap').setView([this.selectedUser.userLatitude, this.selectedUser.userLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(this.myMap);
+
+      let marker = L.marker([this.selectedUser.userLatitude, this.selectedUser.userLongitude]).addTo(this.myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> " + this.selectedUser.userFullName + "</b>").openPopup();
+    }
+  }
+
+  addMapRoute() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
+        ]
+      }).addTo(this.myMap);
+    }, function (e) {
+      console.log(e.message);
+    }, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    });
+  }
+
 }

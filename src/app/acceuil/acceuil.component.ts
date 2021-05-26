@@ -91,6 +91,7 @@ export class AcceuilComponent implements OnInit {
 
   ngOnInit(): void {
     this.headerService.setHeader('home');
+    this.headerService.setParentHeader('');
     this.cities = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
     this.appointment = true;
     this.getAllSpecialities();

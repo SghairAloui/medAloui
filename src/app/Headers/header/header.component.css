@@ -197,7 +197,7 @@ html,body{
     transition: all 0.3s ease 0s;
 }
 .homeHeader button:hover{
-    border: 2px solid #3f9788;
+    border: 2px solid #3f9788 ;
     color: #3f9788;
 }
 .homeHeader .menuHoverEffect::after{
@@ -241,6 +241,20 @@ html,body{
 }
 
 /*login header*/
+.iconMenu{
+    margin: 0px 5px;
+    transition: .3s ease-in-out;
+}
+.iconMenu:hover{
+    background-color: #308a7bbd;
+    color: white;
+    border-radius: 5px;
+}
+.selectedIconMenu{
+    background-color: #308a7b;
+    color: white;
+    border-radius: 5px;
+}
 .seenMessageConv{
     color: var(--userInfoContainerTitleColor);
     font-size: 12px;

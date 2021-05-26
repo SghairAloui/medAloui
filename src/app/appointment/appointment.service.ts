@@ -48,4 +48,8 @@ export class AppointmentService {
   public changeAppointmentStatusById(integer:number,string:string){
     return this.http.post<boolean>(APPOINTMENT_API + "changeAppointmentStatusById",{integer,string},httpOptions);
   }
+
+  public getAppointmentByDoctorIdAndPatientId(userId:number,doctorId:number,page:number,size:number){
+    return this.http.post<AppointmentGet []>(APPOINTMENT_API + 'getAppointmentByDoctorIdAndPatientId',{userId,page,doctorId,size},httpOptions)
+  }
 }

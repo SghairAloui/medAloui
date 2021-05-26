@@ -36,7 +36,176 @@
                 {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
             </div>
         </div>
-        <div *ngIf="docInfo">
+        <div *ngIf="docInfo" id="searchedUsersSection">
+            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" style="padding-top: 25px;">
+                <div *ngIf="!selectedUser">
+                    <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i,true)">
+                        <div *ngIf="user.userId != doctorGet.userId" class="searchedUser">
+                            <div class="searchedUserProfilePic">
+                                <img *ngIf="user.userImg" style="height:100%; position: absolute;bottom: 0px;"
+                                    [src]="user.userImg">
+                                <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="searchedUserInfo">
+                                {{user.userFullName}}
+                                <div class="searchedUserType">
+                                    <span *ngIf="user.userType=='doctor'">
+                                        {{'doctor'|translate}}
+                                    </span>
+                                    <span *ngIf="user.userType=='patient'">
+                                        {{'patient'|translate}}
+                                    </span>
+                                    <span *ngIf="user.userType=='pharmacist'">
+                                        {{'pharmacy'|translate}}
+                                    </span>
+                                </div>
+                                <div *ngIf="user.userGender.length != 0" class="searchedUserGender">
+                                    <i class="fas fa-venus-mars"></i>
+                                    <span *ngIf="user.userGender == 'male'">
+                                        {{'male'|translate}}
+                                    </span>
+                                    <span *ngIf="user.userGender == 'female'">
+                                        {{'female'|translate}}
+                                    </span>
+                                </div>
+                                <div *ngIf="user.pharmacyType && user.pharmacyType.length != 0"
+                                    class="searchedUserGender">
+                                    <i class="fas fa-clock"></i>
+                                    <span *ngIf="user.pharmacyType == 'day'">
+                                        {{'day'|translate}}
+                                    </span>
+                                    <span *ngIf="user.pharmacyType == 'night'">
+                                        {{'night'|translate}}
+                                    </span>
+                                </div>
+                                <div class="searchedUserExactAddress">
+                                    <i class="fas fa-map-marker-alt"></i> {{user.userCity}}
+                                    <span *ngIf="user.userExactAddress && user.userExactAddress.length != 0">
+                                        - {{user.userExactAddress}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="searchedUserSendMessage"
+                                (click)="startConversation(user.userId,user.userFullName,'',i)">
+                                <i class="fas fa-envelope"
+                                    [class.loadingMessages]="user.startingConversation==true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: fit-content;margin: 10px auto;">
+                        <span *ngIf="loadMoreUsers == true" class="searchBtnOptions" (click)="findMoreUser()">
+                            {{'findMore'|translate}}
+                        </span>
+                        <span class="searchBtnOptions" (click)="searchedUsers=[]">
+                            {{'closeSearch'|translate}}
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="selectedUser" class="selectedUserContainer">
+                    <div class="selectedUserGoBack" (click)="selectedUser=null">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div class="selectedUserFirstHalfInfo">
+                        <div class="selectedUserImgprofileContainer">
+                            <img *ngIf="selectedUser.userImg" style="height:100%; position: absolute;bottom: 0px;"
+                                [src]="selectedUser.userImg">
+                            <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
+                                class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="selectedUserInfo">
+                            <div class="selectedUserUsername">
+                                {{selectedUser.userFullName}}
+                            </div>
+                            <div style="border-left: 1px solid #308a7b;margin-left:5px;padding-left:10px;">
+                                <div *ngIf="selectedUser.pharmacyType && selectedUser.pharmacyType.length != 0">
+                                    <i class="fas fa-clock"></i>
+                                    <span *ngIf="selectedUser.pharmacyType == 'day'">
+                                        {{'day'|translate}}
+                                    </span>
+                                    <span *ngIf="selectedUser.pharmacyType == 'night'">
+                                        {{'night'|translate}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-map-marker-alt"></i> {{selectedUser.userCity}}
+                                    <span
+                                        *ngIf="selectedUser.userExactAddress && selectedUser.userExactAddress.length != 0">
+                                        - {{selectedUser.userExactAddress}}
+                                    </span>
+                                </div>
+                                <div *ngIf="selectedUser.userGender.length != 0">
+                                    <i class="fas fa-venus-mars"></i>
+                                    <span *ngIf="selectedUser.userGender == 'male'">
+                                        {{'male'|translate}}
+                                    </span>
+                                    <span *ngIf="selectedUser.userGender == 'female'">
+                                        {{'female'|translate}}
+                                    </span>
+                                </div>
+                                <div *ngIf="selectedUser.userBirthDay.length != 0">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    {{selectedUser.userBirthDay}}
+                                </div>
+                                <div *ngIf="selectedUser.userType == 'doctor'" class="selectedUserDoctorAppInfo">
+                                    <span *ngIf="selectedUser.startTime.length != 0">
+                                        <i class="fas fa-business-time"></i>
+                                        {{selectedUser.startTime}}
+                                    </span>
+                                    <span *ngIf="selectedUser.appPrice != 0">
+                                        <i class="fas fa-coins"></i>
+                                        {{selectedUser.appPrice}} Dt
+                                    </span>
+                                    <span *ngIf="selectedUser.appApproxDuration!= 0">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        {{selectedUser.appApproxDuration}} Munite
+                                    </span>
+                                </div>
+                            </div>
+                            <button class="fullyBtnSmall" (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
+                                style="width: fit-content;margin: 10px auto; margin-left: 50%; transform: translateX(-50%);">
+                                {{'message'|translate}}
+                            </button>
+                        </div>
+                        <div style="width: fit-content; margin: 5px auto;">
+                            <button (click)="addMapRoute()" style="width: fit-content;" class="emptyBtn" *ngIf="(selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist')
+                         && selectedUser.userLatitude && selectedUser.userLongitude">
+                                {{'showRoute'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="selectedUserSecondHalfInfo">
+                        <div *ngIf="selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist'">
+                            <div id="selectedUserMap">
+                                <div *ngIf="selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
+                                    class="userDontSetPos">
+                                    {{'loadingMap'|translate}}
+                                </div>
+                                <div class="userDontSetPos"
+                                    *ngIf="selectedUser.userLatitude.length==0 && selectedUser.userLongitude.length==0">
+                                    {{selectedUser.userFullName}} {{'heHasNotSetHerPositionYet'|translate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="selectedUser.userType == 'patient' && selectedUser.patientAppointment">
+                            <div style="font-weight: 600;margin: 7px auto;text-align: center;">
+                                {{'appointments'|translate}}
+                            </div>
+                            <div style="margin: 7px auto;text-align: center;"
+                                *ngIf="selectedUser.patientAppointment.length == 0">
+                                {{'youHaveNoAppWithThisPat'|translate}}
+                            </div>
+                            <div *ngIf="selectedUser.patientAppointment.length != 0" class="selectedUserApp">
+                                <div *ngFor="let app of selectedUser.patientAppointment" class="selectedUserAppDate">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <div>
+                                        {{app.appointmentDate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="messagesIcon" (click)="openMessages()">
                 <i class="fas fa-envelope"></i>
             </div>
@@ -112,7 +281,7 @@
                         </div>
                         <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
                             <div *ngIf="message.senderId==doctorGet.userId && message.messageContent.length != 0"
-                                 class="senderMessageContainer">
+                                class="senderMessageContainer">
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=doctorGet.userId && message.messageContent.length != 0"
@@ -127,14 +296,21 @@
                         </div>
                         <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
                             <div *ngIf="openConversation.statusUpdatedBy == doctorGet.userId" style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}} </span>
+                                {{'convClosed'|translate}} <span
+                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                    {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}}
+                                </span>
                             </div>
                             <div *ngIf="openConversation.statusUpdatedBy != doctorGet.userId" style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}} {{openConversation.username}} </span>
+                                {{'convClosed'|translate}} <span
+                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                    {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}}
+                                    {{openConversation.username}} </span>
                             </div>
-                            <button *ngIf="openConversation.statusUpdatedBy == doctorGet.userId || openConversation.statusUpdatedBy == 0"
+                            <button
+                                *ngIf="openConversation.statusUpdatedBy == doctorGet.userId || openConversation.statusUpdatedBy == 0"
                                 class="fullyBtnSmall sendRequestClosedMessage"
                                 (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
                                 {{'open'|translate}}
@@ -1107,7 +1283,7 @@
                                                 <span class="info"><i class="fas fa-birthday-cake"></i>
                                                     {{toadyAppointmentPatientInfo[patientKey].patientBirthDay}}</span>
                                                 <span class="info sendMessageBtn"
-                                                    (click)="startConversation(toadyAppointmentPatientInfo[patientKey].userId,toadyAppointmentPatientInfo[patientKey].patientFirstName,toadyAppointmentPatientInfo[patientKey].patientLastName)"><i
+                                                    (click)="startConversation(toadyAppointmentPatientInfo[patientKey].userId,toadyAppointmentPatientInfo[patientKey].patientFirstName,toadyAppointmentPatientInfo[patientKey].patientLastName,0)"><i
                                                         class="fas fa-envelope"></i>
                                                     {{'sendMessage'|translate}}
                                                 </span>
@@ -1970,7 +2146,7 @@
                                         <span class="info"><i class="fas fa-birthday-cake"></i>
                                             {{tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientBirthDay}}</span>
                                         <span class="info sendMessageBtn"
-                                            (click)="startConversation(tomorrowAppointmentPatientInfo[tomorrowPatientKey].userId,tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientFirstName,tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientLastName)"><i
+                                            (click)="startConversation(tomorrowAppointmentPatientInfo[tomorrowPatientKey].userId,tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientFirstName,tomorrowAppointmentPatientInfo[tomorrowPatientKey].patientLastName,0)"><i
                                                 class="fas fa-envelope"></i>
                                             {{'sendMessage'|translate}}
                                         </span>
@@ -2291,6 +2467,17 @@
                                         </div>
                                     </div>
                                 </ng-template>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="findPatientSection">
+                        <div class="sectionTitle">{{'findPatient'|translate}}</div>
+                        <div class="sectionContainer">
+                            <div class="searchBox">
+                                <input class="searchText" type="text" name="" placeholder="{{'search'|translate}}">
+                                <a class="searchBtn">
+                                    <i class="fas fa-search-location"></i>
+                                </a>
                             </div>
                         </div>
                     </section>

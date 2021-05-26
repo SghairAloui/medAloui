@@ -7,6 +7,7 @@ import { HeaderService } from 'src/app/Headers/header/header.service';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
+import { QuestionService } from 'src/app/services/question.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
@@ -25,12 +26,14 @@ import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { prescriptionGet } from 'src/model/prescriptionGet';
+import { QuestionGet } from 'src/model/QuestionGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
+import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../../pharmacy/pharmacy.service';
@@ -78,7 +81,8 @@ export class PatientComponent implements OnInit {
     private notificationService: NotificationService,
     private pharmacyService: PharmacyService,
     private conversationService: ConversationService,
-    private webSocketService: WebSocketService) {
+    private webSocketService: WebSocketService,
+    private questionService: QuestionService) {
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
@@ -238,6 +242,10 @@ export class PatientComponent implements OnInit {
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   smallConversations: OpenConversation[] = [];
   loadingMessages: boolean = false;
+  searchedUsers: UserSearchGet[] = [];
+  loadMoreUsers: boolean;
+  selectedUser: UserSearchGet;
+  myMap;
 
   ngOnInit(): void {
     this.showUpdateCalendar = [false];
@@ -1397,7 +1405,7 @@ export class PatientComponent implements OnInit {
           else {
             await this.sleep(1);
             this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message"+messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
               left: 0
             });
           }
@@ -1586,6 +1594,76 @@ export class PatientComponent implements OnInit {
           timeOut: 3500,
           positionClass: 'toast-bottom-left'
         });
+      }
+    );
+  }
+
+  findMoreUser() {
+    this.headerService.searchUserNow(true);
+  }
+
+  showUserFullInfo(userKey: number) {
+    this.selectedUser = this.searchedUsers[userKey];
+    if (this.searchedUsers[userKey].userType == 'doctor' || this.searchedUsers[userKey].userType == 'pharmacist')
+      this.setSelectedUserPosition();
+    else {
+      this.selectedUser.patientQuestionsPage=0;
+      this.selectedUser.patientQuestions = [];
+      this.getPatientQuestionsById(this.selectedUser.userId, this.selectedUser.patientQuestionsPage);
+    }
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  async setSelectedUserPosition() {
+    if (this.selectedUser.userLatitude.length != 0 && this.selectedUser.userLongitude.length != 0) {
+      let container = document.getElementById('selectedUserMap');
+      while (!container) {
+        container = document.getElementById('selectedUserMap');
+        await this.sleep(500);
+      }
+      this.myMap = L.map('selectedUserMap').setView([this.selectedUser.userLatitude, this.selectedUser.userLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(this.myMap);
+
+      let marker = L.marker([this.selectedUser.userLatitude, this.selectedUser.userLongitude]).addTo(this.myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> " + this.selectedUser.userFullName + "</b>").openPopup();
+    }
+  }
+
+  addMapRoute() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
+        ]
+      }).addTo(this.myMap);
+    });
+  }
+
+  getPatientQuestionsById(userId: number, pageNumber: number) {
+    this.questionService.getQuestionsByUserId(userId, pageNumber, 4).subscribe(
+      res => {
+        let questions: QuestionGet[] = res;
+        for (let ques of questions){
+          this.selectedUser.patientQuestions.push(ques);
+        }
+        if (questions.length == 4)
+          this.selectedUser.loadMoreQuestion = true;
+        else
+          this.selectedUser.loadMoreQuestion = false;
+        this.selectedUser.patientQuestionsPage+=1;
       }
     );
   }

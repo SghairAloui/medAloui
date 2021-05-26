@@ -541,5 +541,13 @@
     "showConversation":"show conversation",
     "by":"by",
     "byDefault":"by default",
-    "allNotLoaded":"All notification loaded"
+    "allNotLoaded":"All notification loaded",
+    "findMore":"Find more",
+    "closeSearch":"Close search",
+    "showRoute":"Show route",
+    "heHasNotSetHerPositionYet":"he has not set her position yet",
+    "loadingMap":"Loading map...",
+    "youHaveNoAppWithThisPat":"You have no appointment with this patient",
+    "appointments":"Appointments",
+    "haveNoquestion":"didn't post any question yet"
 }

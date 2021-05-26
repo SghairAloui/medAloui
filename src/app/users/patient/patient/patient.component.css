@@ -594,6 +594,16 @@ html,body{
     color: #fd7e14;
     background-color: #fd7e1428;
 }
+#searchedUsersContainer .fa-venus-mars,#searchedUsersContainer .fa-birthday-cake{
+    position: relative;
+    font-size: 12px;
+    padding: 0px;
+    border-radius: 0px;
+    width: 12px;
+    height: 12px;
+    background-color: transparent;
+    color: var(--gray-text);
+}
 .fa-weight,.fa-clinic-medical{
     color: #9983ea;
     background-color: #9983ea28;
@@ -843,4 +853,40 @@ html,body{
     width: 50%;
     margin-left:50%;
     transform: translateX(-50%);
+}
+.searchedUserQuestionContainer{
+    background-color: var(--box-color2);
+    box-shadow: var(--infoBox);
+    color: var(--gray-text);
+    padding: 5px 10px;
+    margin: 10px 15px;
+    border-radius: 8px;
+}
+.searchedUserQuestionContainerQuestion{
+    display: flex;
+    color: var(--text-color);
+    margin: 10px 5px;
+}
+.searchedUserQuestionContainerQuestion div:nth-child(1){
+    min-width: max-content;
+    border-right: 1px solid var(--gray-text);
+    padding-right: 10px;
+}
+.searchedUserQuestionContainerQuestion div:nth-child(2){
+    flex-grow: 1;
+    margin-left: 10px;
+}
+.searchedUserQuestionContainerQuestionPostTime{
+    display: flex;
+    justify-content: space-between;
+}
+.searchedUserLoadMoreQuestions{
+    margin: 5px auto;
+    width: fit-content;
+    font-size: 30px;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+.searchedUserLoadMoreQuestions:hover{
+    transform: scale(1.1);
 }

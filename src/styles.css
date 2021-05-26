@@ -49,6 +49,11 @@ html,body{
     --toastrTitleColorError: #2e323c;
     --toastrTitleColorWarning: #2e323c;
     --toastrTitleColorInfo: #2e323c;
+    --searchedUsersBackgroundColor: white;
+    --searchedUsersSendMessageBackgroundColor: #e6e6e7;
+    --searchedUsersSendMessageColor: #2f303a;
+    --smallMessageUsernameColor:#eaebf0;
+    --smallMessageUsernameBackgroundColor:#2c3247;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -93,6 +98,11 @@ html,body{
     --toastrTitleColorError: #BD362F;
     --toastrTitleColorWarning: #F89406;
     --toastrTitleColorInfo: #007bc2;
+    --searchedUsersBackgroundColor: #242526;
+    --searchedUsersSendMessageBackgroundColor: #3a3b3c;
+    --searchedUsersSendMessageColor: white;
+    --smallMessageUsernameColor:#2c3247;
+    --smallMessageUsernameBackgroundColor:#adadad;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -368,8 +378,8 @@ input[disabled]{
 }
 .smallMessagesContainer .smallMessagesContainerUsername,.smallMessagesContainer1 .smallMessagesContainerUsername,.smallMessagesContainer2 .smallMessagesContainerUsername{
     display: none;
-    background-color: var(--messageSenderColor);
-    color: var(--messageBackgroundColor);
+    background-color: var(--smallMessageUsernameBackgroundColor);
+    color: var(--smallMessageUsernameColor);
     padding: 2px 5px;
     border-radius: 5px;
     z-index: 1001;
@@ -1308,4 +1318,264 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
 }
 .notApprovedDocGrid .fullyBtn{
     width: 35%;
+}
+
+.searchBox{
+    position: absolute;
+    background: #308a7b;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 40px;
+    padding: 12px;
+}
+.searchBox:hover > .searchText{
+    width: 240px;
+    padding: 0 6px;
+    padding-right: 40px;
+}
+.searchBox:hover > .searchBtn{
+    background: white;
+    color: #308a7b;
+}
+.searchBtn{
+    position: absolute;
+    margin-top: -8px;
+    margin-left: 5px;
+    color: white;
+    right: 5px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #308a7b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+    cursor: pointer;
+}
+.searchText::placeholder{
+    color: white;
+}
+.searchText{
+    border: none;
+    background: none;
+    outline: none;
+    float: left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    transition: .4s;
+    line-height: 18px;
+    width: 0px;
+}
+.searchText:disabled{
+    background: rgb(182, 166, 166);
+    outline: none;
+    border: none;
+}
+.searchingUsers{
+    background: rgb(182, 166, 166);
+}
+.searchingUsers > .searchText{
+    width: 240px;
+}
+.searchingUsers > .searchBtn{
+    background: white;
+    color: #308a7b;
+}
+.searchingUsers > .searchBtn .fa-search{
+    animation-name: searchingUsers;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+@keyframes searchingUsers{
+    50%{
+        transform: scale(0.7);
+    }
+}
+.searchedUser{
+    width: 80%;
+    margin: 20px 0px;
+    margin-left: 10%;
+    position: relative;
+    padding: 10px 20px;
+    background-color: var(--searchedUsersBackgroundColor);
+    box-shadow: var(--infoBox);
+    border-radius: 10px;
+}
+.searchedUserProfilePic{
+    display: inline-block;
+    position: relative;
+    border: 1px solid #308a7b;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.searchedUserInfo{
+    margin: 0px 15px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    text-transform: capitalize;
+    font-size: 15px;
+    font-weight: 600;
+}
+.searchedUserType{
+    color: gray;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+.searchedUserSendMessage{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: var(--searchedUsersSendMessageBackgroundColor);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.searchedUserSendMessage .fa-envelope{
+    color: var(--searchedUsersSendMessageColor);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 20px;
+    transform: translate(-50%,-50%);
+}
+.searchedUserExactAddress, .searchedUserGender{
+    margin: 2px 0px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.searchBtnOptions{
+    background-color: var(--searchedUsersBackgroundColor);
+    padding: 3px 7px;
+    border-radius: 5px;
+    margin: 5px 10px;
+    cursor: pointer;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+.loadingMessages{
+    animation-name: LoadingMessages;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+.selectedUserImgprofileContainer{
+    display: inline-block;
+    position: relative;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 1px solid #308a7b;
+    overflow: hidden;
+    margin: 20px;
+    margin-right: 0px;
+}
+.selectedUserInfo{
+    display: inline-block;
+    vertical-align: top;
+    margin: 20px;
+    text-transform: capitalize;
+    color: var(--gray-text);
+    font-size: 12px;
+}
+.selectedUserInfo div{
+    margin: 3px 0px;
+}
+.selectedUserUsername{
+    font-weight: 600; 
+    font-size: 35px; 
+    color: var(--messageRecipientColor);
+}
+.selectedUserContainer{
+    position: relative;
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--box-color);
+    overflow: hidden;
+}
+.selectedUserGoBack{
+    z-index: 1;
+    position: absolute;
+    background-color: #308a7b;
+    width: 30px;
+    height: 30px;
+    top: 0px;
+    left: 0px;
+    color: white;
+    border-bottom-right-radius: 15px;
+    cursor: pointer;
+}
+.selectedUserGoBack .fa-arrow-left{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.selectedUserContainer .selectedUserFirstHalfInfo{
+    position: relative;
+    margin-top: 15px;
+    min-width:max-content;
+}
+.selectedUserContainer .selectedUserSecondHalfInfo{
+    position: relative;
+    margin-top: 15px;
+    margin: auto;
+    flex-grow: 1;
+}
+#selectedUserMap{
+    width: 400px;
+    height: 300px;
+    margin:auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.15);
+}
+.userDontSetPos{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    max-width: 350px;
+}
+.selectedUserApp{
+    position: relative;
+    width: fit-content;
+    margin: 5px auto;
+}
+.selectedUserAppDate{
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    background-color: white;
+    color: #308a7b;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding-left: 5px;
+    overflow: hidden;
+    max-height: 26px;
+    margin: 5px 10px;
+}
+.selectedUserAppDate div{
+    display: inline-block;
+    margin-left: 5px;
+    height: 100%;
+    background-color: #308a7b;
+    color: white;
+    padding: 1px 5px;
+}
+.selectedUserDoctorAppInfo span{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
 }

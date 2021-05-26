@@ -108,10 +108,21 @@
             </div>
             <nav>
                 <ul class="navItem">
-                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
-                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
-                    <li (click)="diseaseClick()"><a class="menuHoverEffect">{{'questions'|translate}}</a></li>
-                    <li (click)="doctorClick()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
+                    <div class="searchBox" [class.searchingUsers]="searchingUsers">
+                        <input class="searchText" [disabled]="searchingUsers" type="text" name="search" (keyup.enter)="searchUsersByName(true)" [(ngModel)]="search" placeholder="{{'search'|translate}}">
+                        <a class="searchBtn" (click)="searchUsersByName(true)">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </div>
+                    <li class="iconMenu"></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'" (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'" (click)="diseaseClick()"><i
+                                class="fas fa-question"></i></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='doctor'" (click)="doctorClick()"><i class="fas fa-user-md"></i></li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="navItem">
                     <li (click)="profileCLick()"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
             </nav>
@@ -167,6 +178,9 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
+                        <button class="emptyBtn"
+                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                            (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
             </nav>
@@ -266,12 +280,22 @@
             </div>
             <nav>
                 <ul class="navItem">
-                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
-                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
-                    <li (click)="openContainerToDoctor('disease');"><a
-                            class="menuHoverEffect">{{'questions'|translate}}</a></li>
-                    <li (click)="openContainerToDoctor('patient');"><a
-                            class="menuHoverEffect">{{'myPatients'|translate}}</a></li>
+                    <div class="searchBox" [class.searchingUsers]="searchingUsers">
+                        <input class="searchText" [disabled]="searchingUsers" type="text" name="search" (keyup.enter)="searchUsersByName(true)" [(ngModel)]="search" placeholder="{{'search'|translate}}">
+                        <a class="searchBtn" (click)="searchUsersByName(true)">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </div>
+                    <li class="iconMenu"></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'" (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'" (click)="openContainerToDoctor('disease');"><i
+                                class="fas fa-question"></i></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='patient'" (click)="openContainerToDoctor('patient');"><i
+                                class="fas fa-hospital-user"></i></li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="navItem">
                     <li (click)="openContainerToDoctor('profile');"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
             </nav>
@@ -320,6 +344,9 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
+                        <button class="emptyBtn"
+                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                            (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
             </nav>
@@ -337,8 +364,20 @@
             </div>
             <nav>
                 <ul class="navItem">
-                    <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
-                    <li (click)="parentHeader='settings'"><a class="menuHoverEffect">{{'settings'|translate}}</a></li>
+                    <div class="searchBox" [class.searchingUsers]="searchingUsers">
+                        <input class="searchText" [disabled]="searchingUsers" type="text" name="search" (keyup.enter)="searchUsersByName(true)" [(ngModel)]="search" placeholder="{{'search'|translate}}">
+                        <a class="searchBtn" (click)="searchUsersByName(true)">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </div>
+                    <li class="iconMenu"></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'" (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'" (click)="openContainerToPharmacy('disease');"><i
+                                class="fas fa-question"></i></li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="navItem">
                     <li (click)="openContainerToDoctor('profile');"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
             </nav>
@@ -376,22 +415,24 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
+                        <button class="emptyBtn"
+                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                            (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
             </nav>
         </header>
     </div>
 
-    <div *ngIf="parentHeader=='notification'" class="loginHeader">
-        <header class="headerChild" style="overflow-y: scroll;" (scroll)="notificationsScroll($event)" id="notificationsScroll" #notificationsScrollEL>
+    <div *ngIf="parentHeader=='notification'" id="" class="loginHeader">
+        <header class="headerChild" style="overflow-y: scroll;" (scroll)="notificationsScroll($event)"
+            id="notificationsScroll" #notificationsScrollEL>
             <nav class="navItem">
                 <div>
                     <div *ngIf="notifications.length == 0" class="noNotification">
                         {{'noNotification'|translate}}
                     </div>
-                    <div *ngFor="let notif of notifications ;let i=index"
-                        class="notification" id="notification{{i}}">
-                        {{i}}
+                    <div *ngFor="let notif of notifications ;let i=index" class="notification" id="notification{{i}}">
                         <div *ngIf="notif.notificationType=='setYourGeoLocation'">
                             <div>
                                 <i class="fas fa-map-marked-alt"></i>
@@ -420,7 +461,8 @@
                                 </span>
                                 {{'closeConversation'|translate}}
                             </div>
-                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien" style="text-transform: capitalize;">
+                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien"
+                                style="text-transform: capitalize;">
                                 {{'openConversation'|translate}} ?
                             </div>
                         </div>
@@ -457,7 +499,8 @@
                             <span></span>
                         </div>
                     </div>
-                    <div *ngIf="loadMoreNotification==false && notifications.length != 0" style="margin: 10px auto; text-align: center;padding-bottom: 15px;">
+                    <div *ngIf="loadMoreNotification==false && notifications.length != 0"
+                        style="margin: 10px auto; text-align: center;padding-bottom: 15px;">
                         {{'allNotLoaded'|translate}}
                     </div>
                 </div>
