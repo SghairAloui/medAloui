@@ -549,5 +549,12 @@
     "loadingMap":"Loading map...",
     "youHaveNoAppWithThisPat":"You have no appointment with this patient",
     "appointments":"Appointments",
-    "haveNoquestion":"didn't post any question yet"
+    "haveNoquestion":"didn't post any question yet",
+    "yourAppWithDoctor":"Your appointment with",
+    "comeClose":"come close",
+    "currentTurn":"Current patient turn",
+    "delayTolastTurn":"Postpone patient to last turn",
+    "postponeTheAppTo":"Postpone the aapointment to",
+    "postponeTheApp":"Postpone the aapointment",
+    "yourNewTurn":"Your new turn"
 }

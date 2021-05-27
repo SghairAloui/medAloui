@@ -52,4 +52,8 @@ export class AppointmentService {
   public getAppointmentByDoctorIdAndPatientId(userId:number,doctorId:number,page:number,size:number){
     return this.http.post<AppointmentGet []>(APPOINTMENT_API + 'getAppointmentByDoctorIdAndPatientId',{userId,page,doctorId,size},httpOptions)
   }
+
+  public delayAppointmentByAppId(doctorId:number, userId:number,appointmentId:number, allPatientNumber:number, patientTurn:number){
+    return this.http.post<boolean>(APPOINTMENT_API + "delayAppointmentByAppId",{doctorId,userId,appointmentId,allPatientNumber,patientTurn},httpOptions);
+  }
 }

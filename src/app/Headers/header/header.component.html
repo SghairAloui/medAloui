@@ -477,6 +477,36 @@
                                 {{'showConversation'|translate}} ?
                             </div>
                         </div>
+                        <div
+                            *ngIf="notif.notificationType=='patientTurnClose'">
+                            <div>
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                            <div style="margin: 5px;"> 
+                                {{'yourAppWithDoctor'|translate}}
+                                <span style="text-transform: capitalize;">
+                                     {{notif.name}} 
+                                </span> 
+                                {{'comeClose'|translate}}
+                            </div>
+                            <div>
+                                {{'currentTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
+                            </div>
+                        </div>
+                        <div
+                            *ngIf="notif.notificationType=='delayPatientTurn'">
+                            <div>
+                                <i class="fas fa-hourglass-end"></i>
+                            </div>
+                            <div style="margin: 5px;"> 
+                                <span style="text-transform: capitalize;">
+                                    {{notif.name}} 
+                                </span>{{'postponeTheApp'|translate}}
+                            </div>
+                            <div>
+                                {{'yourNewTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
+                            </div>
+                        </div>
                         <div class="notificationIcons">
                             <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">
                                 <i class="fas fa-bell-slash"></i>

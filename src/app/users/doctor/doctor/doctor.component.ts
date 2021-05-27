@@ -1557,34 +1557,74 @@ export class DoctorComponent implements OnInit {
         patientTurn = 0;
       else
         patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
-      this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn).subscribe(
-        res => {
-          if (res) {
-            if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])
-              this.changeAppointmentStatusById(this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1].appointmentId, 'completed');
-            this.cuurentMedicalProfileDiseasePage = 0;
-            let nextPatient: number = parseInt(patientTurn.toString()) + 1;
-            this.doctorGet.currentPatient = patientTurn;
-            if (this.currentPatientInfo[patientTurn - 1] == null)
-              this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn, firsttime);
-            if (nextPatient <= this.todayPatientNumber) {
+      if (firsttime == false) {
+        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber).subscribe(
+          res => {
+            if (res) {
+              if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])
+                this.changeAppointmentStatusById(this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1].appointmentId, 'completed');
               this.cuurentMedicalProfileDiseasePage = 0;
-              this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient, false);
+              let nextPatient: number = parseInt(patientTurn.toString()) + 1;
+              this.doctorGet.currentPatient = patientTurn;
+              if (this.currentPatientInfo[patientTurn - 1] == null)
+                this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn, firsttime);
+              if (nextPatient <= this.todayPatientNumber) {
+                this.cuurentMedicalProfileDiseasePage = 0;
+                this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient, false);
+              } else {
+                let data: AppointmentGet = {
+                  appointmentId: null,
+                  appointmentDate: null,
+                  appointmentStatus: 'completed',
+                  doctorId: null,
+                  patientId: null,
+                  patientTurn: null
+                };
+                this.docTodayAppointments = [];
+                this.docTodayAppointments.push(data);
+                this.toadyAppointmentPatientInfo.push(null);
+              }
+              this.prescriptionAddedToCurrentPatient = 0;
+              this.diagnoseAddedToCurrentPatient = 0;
+              this.medicaments = [];
+              this.diagnoses = [];
+              document.getElementById("currentPatientSection").scrollIntoView({ behavior: "smooth" });
             }
-            this.prescriptionAddedToCurrentPatient = 0;
-            this.diagnoseAddedToCurrentPatient = 0;
-            this.medicaments = [];
-            this.diagnoses = [];
-            document.getElementById("currentPatientSection").scrollIntoView({ behavior: "smooth" });
+          },
+          err => {
+            this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
+        );
+      } else {
+        this.cuurentMedicalProfileDiseasePage = 0;
+        let nextPatient: number = parseInt(patientTurn.toString()) + 1;
+        this.doctorGet.currentPatient = patientTurn;
+        this.getAppPatientInfoByDoctorIdTurnAndDate(patientTurn, firsttime);
+        if (nextPatient <= this.todayPatientNumber) {
+          this.cuurentMedicalProfileDiseasePage = 0;
+          this.getAppPatientInfoByDoctorIdTurnAndDate(nextPatient, false);
+        } else {
+          let data: AppointmentGet = {
+            appointmentId: null,
+            appointmentDate: null,
+            appointmentStatus: 'completed',
+            doctorId: null,
+            patientId: null,
+            patientTurn: null
+          };
+          this.docTodayAppointments = [];
+          this.docTodayAppointments.push(data);
+          this.toadyAppointmentPatientInfo.push(null);
         }
-      );
+        this.prescriptionAddedToCurrentPatient = 0;
+        this.diagnoseAddedToCurrentPatient = 0;
+        this.medicaments = [];
+        this.diagnoses = [];
+        document.getElementById("currentPatientSection").scrollIntoView({ behavior: "smooth" });
+      }
     }
   }
 
@@ -2308,6 +2348,17 @@ export class DoctorComponent implements OnInit {
         else
           this.selectedUser.loadMoreApp = false;
         this.selectedUser.patientAppPage += 1;
+      }
+    );
+  }
+
+  delayToLastTurn(userId: number, appointmentId: number) {
+    console.log(userId + ' ' + appointmentId + ' ' + this.todayPatientNumber, + ' ' + parseInt(this.doctorGet.currentPatient + ""))
+    this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + "")).subscribe(
+      res => {
+        if (res) {
+          this.getPatientByTurn(true);
+        }
       }
     );
   }

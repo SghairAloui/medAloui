@@ -147,8 +147,7 @@ export class PatientComponent implements OnInit {
               }
             }
 
-          }
-          else if (not.notification.notificationType == 'conversationopen') {
+          } else if (not.notification.notificationType == 'conversationopen') {
             this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('openConversation')), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
@@ -169,6 +168,16 @@ export class PatientComponent implements OnInit {
               }
             }
 
+          } else if (not.notification.notificationType == 'patientTurnClose'){
+            this.toastr.info(this.translate.instant(this.translate.instant('yourAppWithDoctor') + ' ' +not.data + ' ' + this.translate.instant('comeClose')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'delayPatientTurn'){
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('postponeTheAppTo') +' '+not.notification.notificationParameter), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
           not.notification.name = not.data;
           this.headerService.addNotification(not.notification);

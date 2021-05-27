@@ -501,6 +501,7 @@ html,body{
     text-align: center;
 }
 .nextPatient{
+    display: inline-block;
     position: relative;
     width: 40%;
     transition: .3s ease-in-out;

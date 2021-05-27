@@ -372,7 +372,7 @@ html,body{
     margin: 3px;
     padding: 3px;
 }
-.fa-map-marked-alt,.fa-unlock,.fa-lock,.fa-comment{
+.fa-map-marked-alt,.fa-unlock,.fa-lock,.fa-comment,.fa-user-clock,.fa-hourglass-end{
     font-size: 30px;
     margin-left: auto;
     margin-right: auto;
@@ -556,7 +556,13 @@ html,body{
 .loginHeader .fa-sun{
     color: #f39c12;
 }
-
+.notifCurrentPatientTurn{
+    background-color: #308a7b;
+    padding: 2px 6px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+}
 @media screen and (max-width: 1000px){
     .homeHeader header{
         font-size: 14px;
