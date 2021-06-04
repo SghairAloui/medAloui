@@ -177,12 +177,12 @@
                     <div class="selectedUserSecondHalfInfo">
                         <div *ngIf="selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist'">
                             <div id="selectedUserMap">
-                                <div *ngIf="selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
+                                <div *ngIf=" selectedUser.userLatitude && selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
                                     class="userDontSetPos">
                                     {{'loadingMap'|translate}}
                                 </div>
                                 <div class="userDontSetPos"
-                                    *ngIf="selectedUser.userLatitude.length==0 && selectedUser.userLongitude.length==0">
+                                    *ngIf=" selectedUser.userLatitude && selectedUser.userLatitude.length==0 && selectedUser.userLongitude.length==0">
                                     {{selectedUser.userFullName}} {{'heHasNotSetHerPositionYet'|translate}}
                                 </div>
                             </div>
