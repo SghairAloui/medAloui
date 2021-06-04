@@ -172,6 +172,7 @@ export class HeaderComponent implements OnInit {
       (message) => {
         let notification: NotificationGet = message;
         if (notification.notificationType) {
+          this.allNotIsRead=false;
           if (notification.isUnread == true)
             this.unreadNotifications += 1;
           if (notification.order == 'start')
@@ -242,6 +243,7 @@ export class HeaderComponent implements OnInit {
   headerOnScrollVariable = false;
   parentHeader: string = 'profile';
   role: any = this.headerService.header$;
+  allNotIsRead:boolean=false;
 
 
   //Home header

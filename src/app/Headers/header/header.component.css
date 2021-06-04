@@ -265,6 +265,7 @@ html,body{
 .messageTime{
     margin: 0px auto;
     width: fit-content;
+    text-align: center;
     color: var(--userInfoContainerTitleColor);
     font-size: 13px;
     font-family: Arial, Helvetica, sans-serif;
@@ -310,14 +311,19 @@ html,body{
     padding-left: 10px;
     font-weight: 600;
 }
-.messageUserImgContainer{
+.messageUserImgContainerTableCell{
     position: relative;
     display: table-cell;
-    border: 1px solid #308a7b;
     height: 50px;
     width: 50px;
-    max-width: 50px;
-    max-height: 50px;
+}
+.messageUserImgContainer{
+    position: absolute;
+    border: 1px solid #308a7b;
+    max-width: 50px  !important;
+    max-height: 50px !important;
+    width: 50px  !important;
+    height: 50px !important;
     border-radius: 50%;
     overflow: hidden;
 }

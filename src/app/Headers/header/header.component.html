@@ -99,8 +99,8 @@
     <div *ngIf="role=='patient'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
-                    <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
+                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                    <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
                 <a><strong class="headerTitle">Health Care</strong></a>
@@ -269,8 +269,8 @@
     <div *ngIf="role=='doctor'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
-                    <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
+                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                    <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
                 <a><strong class="headerTitle">Health Care</strong></a>
@@ -355,8 +355,8 @@
     <div *ngIf="role=='pharmacy'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';unreadNotifications=0" class="notificationIcon">
-                    <span *ngIf="unreadNotifications!=0" class="newNotification"></span>
+                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                    <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
                 <a><strong class="headerTitle">Health Care</strong></a>
@@ -571,13 +571,15 @@
                     </div>
                     <div *ngFor="let conver of conversations ; let i=index" class="message"
                         (click)="openConversation(i)">
-                        <div class="messageUserImgContainer">
-                            <div *ngIf="conver.recipientImg">
-                                <img [src]="conver.recipientImg"
-                                    style="height: 50px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
-                            </div>
-                            <div *ngIf="conver.recipientImg==false">
-                                <i class="fas fa-user-tie" style="font-size: 45px;bottom: 0px;position: absolute;"></i>
+                        <div class="messageUserImgContainerTableCell">
+                            <div class="messageUserImgContainer">
+                                <div *ngIf="conver.recipientImg">
+                                    <img [src]="conver.recipientImg"
+                                        style="height: 50px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                </div>
+                                <div *ngIf="conver.recipientImg==false">
+                                    <i class="fas fa-user-tie" style="font-size: 45px;bottom: 0px;position: absolute;"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="messageUsername">
