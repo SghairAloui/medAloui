@@ -31,9 +31,10 @@ export class PatientDiseaseComponent implements OnInit {
   invalidDiseaseName: boolean = false; invalidDiseaseQuestion: boolean = false;
   invalidMedicamentName: boolean = false; invalidMedicamentQuestion: boolean = false;
   questionPage: number = 0;
-  loadMoreQuestion: boolean;
+  loadMoreQuestion: boolean = true;
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
+  position: number=0;
 
   ngOnInit(): void {
     this.getAllQuestions();
@@ -85,26 +86,28 @@ export class PatientDiseaseComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.diseaseName='';
-            this.medicamentName='';
-            this.diseaseQuestion='';
-            this.medicamentQuestion='';
-            let question:QuestionGet = {questionId:res,
-              questionName:questionName,
-              questionAbout:questionAbout,
-              question:questionText,
-              questionPostTime:'',
-              postBy:this.patientComponent.patientGet.userId,
-              questionPoints:0,
-              userFullName:this.patientComponent.patientGet.patientFirstName + ' ' +this.patientComponent.patientGet.patientLastName.toUpperCase(),
-              comments:[],
-              commentPage:0,
-              loadMoreComment:false,
-              doctorComment:null,
-              invalidComment:null,
-              posterImageProfile:this.patientComponent.retrievedImage}
+            this.diseaseName = '';
+            this.medicamentName = '';
+            this.diseaseQuestion = '';
+            this.medicamentQuestion = '';
+            let question: QuestionGet = {
+              questionId: res,
+              questionName: questionName,
+              questionAbout: questionAbout,
+              question: questionText,
+              questionPostTime: '',
+              postBy: this.patientComponent.patientGet.userId,
+              questionPoints: 0,
+              userFullName: this.patientComponent.patientGet.patientFirstName + ' ' + this.patientComponent.patientGet.patientLastName.toUpperCase(),
+              comments: [],
+              commentPage: 0,
+              loadMoreComment: false,
+              doctorComment: null,
+              invalidComment: null,
+              posterImageProfile: this.patientComponent.retrievedImage
+            }
             this.questions.unshift(question);
-            document.getElementById("allQuestionSection").scrollIntoView({behavior:'smooth'});
+            document.getElementById("allQuestionSection").scrollIntoView({ behavior: 'smooth' });
           }
         },
         err => {
@@ -118,7 +121,6 @@ export class PatientDiseaseComponent implements OnInit {
   }
 
   getAllQuestions() {
-    this.loadingQuestions = true;
     this.questionService.getAll(this.questionPage, 4).subscribe(
       res => {
         let questions: QuestionGet[] = [];
@@ -129,13 +131,14 @@ export class PatientDiseaseComponent implements OnInit {
           this.questions.push(ques);
           this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
           this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
-          this.getCommentPosterProfileImg(ques.postBy+'profilePic',(this.questions.length-1),0,'question');
+          this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
         }
         this.questionPage += 1;
         if (questions.length == 4)
           this.loadMoreQuestion = true;
         else
           this.loadMoreQuestion = false;
+        document.documentElement.scrollTop = this.position;
       }
     );
   }
@@ -175,17 +178,17 @@ export class PatientDiseaseComponent implements OnInit {
         let name: FirstAndLastNameGet = res;
         if (name.doctor_first_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Dr. ' + name.doctor_first_name + ' ' + name.doctor_last_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
         else if (name.pharmacy_full_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Ph. ' + name.pharmacy_full_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
       }
     );
   }
 
-  getCommentPosterProfileImg(imageName: string, questionKey: number, commentKey: number, status:string) {
+  getCommentPosterProfileImg(imageName: string, questionKey: number, commentKey: number, status: string) {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
@@ -261,10 +264,10 @@ export class PatientDiseaseComponent implements OnInit {
 
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
-    if (this.loadMoreQuestion) {
-      let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-      let max = document.documentElement.scrollHeight;
-      if (max == pos) {
+    if (this.loadMoreQuestion && this.loadingQuestions == false) {
+      if (parseInt(document.documentElement.scrollTop + document.documentElement.offsetHeight + 10 + "") > document.documentElement.scrollHeight) {
+        this.loadingQuestions = true;
+        this.position = document.documentElement.scrollHeight;
         this.getAllQuestions();
       }
     }

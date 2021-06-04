@@ -436,13 +436,11 @@ html,body{
     transition: 0.3s;
 }
 .userInfoContainer{
-    flex: 0 0 auto;
     display: inline-block;
+    position: relative;
     background-color: var(--userInfoContainerBackground);
     padding: 20px 40px;
     margin: 10px;
-    margin-left: 50%;
-    transform: translateX(-50%);
     border-radius: 30px;
     width: fit-content;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
@@ -469,18 +467,27 @@ html,body{
     text-align: center;
     margin-left:auto;
     margin-right: auto;
+    margin-top: 5px;
     font-size: 30px;
     font-weight: 700;
     color: var(--userInfoContainerValueColor);
     text-transform: capitalize;
 }
-.fa-map-marked-alt{
+.fa-map-marked-alt, .fa-hospital-user{
     position: absolute;
     font-size: 20px;
     padding: 8px;
     border-radius: 50%;
     width: 36px;
     height: 36px;
+}
+.fa-map-marked-alt{
+    color: #08a0f7;
+    background-color: #08a0f728;
+}
+.fa-hospital-user{
+    color: #fa676a;
+    background-color: #fa676a28;
 }
 .iconButton{
     width: 50px;
@@ -557,4 +564,22 @@ html,body{
     width: 50%;
     margin-left:50%;
     transform: translateX(-50%);
+}
+.todaysNumberDot{
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background-color: #ff9100;
+    top: 20px;
+    right: 20px;
+}
+.noWaitingPres{
+    margin: 20px;
+    text-align: center;
+}
+.prescription{
+    border-radius: 5px;
+    margin: 5px 10px;
+    padding: 5px 10px;
 }

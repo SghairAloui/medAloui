@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { UserSearchGet } from 'src/model/UserSearchGet';
 
-const USER_API = 'http://localhost:8080/api/user/';
+const USER_API = environment.apiUrl+'api/user/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

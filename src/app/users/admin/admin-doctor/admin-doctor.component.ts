@@ -63,6 +63,10 @@ export class AdminDoctorComponent implements OnInit {
           this.getClinicImage(i.userId, i.docIndex);
           this.documentPic.push('cin');
         }
+        if (pendingDoctors.length == 4)
+          this.loadPendingDoc = true;
+        else
+          this.loadPendingDoc = false;
       },
       err => {
         this.toastr.info(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -343,22 +347,20 @@ export class AdminDoctorComponent implements OnInit {
     this.doctorService.getPendingDoctorsNumber().subscribe(
       res => {
         this.pendingDoctorsNumber = res;
+        if (this.pendingDoctorsNumber == 0)
+          this.loadPendingDoc = false;
       }
     );
   }
 
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
-    if (this.loadPendingDoc) {
+    if (this.loadPendingDoc == true) {
       let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
       let max = document.documentElement.scrollHeight;
       if (max == pos) {
-        if (this.pendingDoctors.length < this.pendingDoctorsNumber) {
-          this.getPendingDoctors(this.page, 4);
-          this.page += 1;
-        } else {
-          this.loadPendingDoc = false;
-        }
+        this.getPendingDoctors(this.page, 4);
+        this.page += 1;
       }
     }
   }

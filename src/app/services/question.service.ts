@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { CommentGet } from 'src/model/CommentGet';
 import { QuestionGet } from 'src/model/QuestionGet';
 
-const QUESTION_API = 'http://localhost:8080/api/question/';
-const COMMENT_API = 'http://localhost:8080/api/comment/';
-const POINT_API = 'http://localhost:8080/api/point/';
+const QUESTION_API = environment.apiUrl+'api/question/';
+const COMMENT_API = environment.apiUrl+'api/comment/';
+const POINT_API = environment.apiUrl+'api/point/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { NotificationGet } from 'src/model/NotificationGet';
 
-const NOTIFICATION_API = 'http://localhost:8080/api/notification/';
+const NOTIFICATION_API = environment.apiUrl+'api/notification/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,7 +28,7 @@ export class NotificationService {
     return this.http.delete<boolean>(NOTIFICATION_API+'deleteNotificationById/'+id,httpOptions);
   }
 
-  public sentOpenConversationRequest(senderId:number,recipientId:number,conversationId:number){
-    return this.http.post<boolean>(NOTIFICATION_API+'sentOpenConversationRequest',{senderId,recipientId,conversationId},httpOptions);
+  public sendNotificationWithSocket(senderId:number,recipientId:number,notificationParameter:string,notificationType:string,force:boolean){
+    return this.http.post<number>(NOTIFICATION_API+'sendNotificationWithSocket',{senderId,recipientId,notificationParameter,notificationType,force},httpOptions);
   }
 }

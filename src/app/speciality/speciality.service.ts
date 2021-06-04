@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { SpecialityGet } from 'src/model/SpecialityGet';
 import { SpecialityPost } from 'src/model/SpecialityPost';
 
-const SPECIALITY_API = 'http://localhost:8080/api/speciality/';
+const SPECIALITY_API = environment.apiUrl+'api/speciality/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

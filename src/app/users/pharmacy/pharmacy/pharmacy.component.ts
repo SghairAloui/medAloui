@@ -17,6 +17,7 @@ import { OneStringPost } from 'src/model/OneStringPost';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
+import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -137,10 +138,39 @@ export class PharmacyComponent implements OnInit {
               }
             }
 
+          } else if (not.notification.notificationType == 'userSelectYouForPres') {
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('selectYouForPres')), this.translate.instant('prescription'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.getTodayPrescriptionNumberById();
+            this.todaysPresNumberChanged = true;
+          } 
+          if (not.notification.notificationType != 'userSelectYouForPres') {
+            not.notification.name = not.data;
+            this.headerService.addNotification(not.notification);
           }
-          not.notification.name = not.data;
-          this.headerService.addNotification(not.notification);
           this.notificationSound();
+        } else if (not.type == 'info') {
+          if (not.data == "approvedByAdmin") {
+            this.toastr.success(this.translate.instant('congYourAccountApp'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.pharmacyGet.pharmacyStatus='approvedByAdmin';
+          } else if (not.data == "disapprovedByAdmin") {
+            this.toastr.warning(this.translate.instant('accountDis'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.pharmacyGet.pharmacyStatus='disapprovedByAdmin';
+          } else if(not.data == "disapprovedPermanently"){
+            this.toastr.warning(this.translate.instant('accountDisPerma'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.pharmacyGet.pharmacyStatus='disapprovedPermanently';
+          }
         }
       })
     });
@@ -201,7 +231,19 @@ export class PharmacyComponent implements OnInit {
   loadMoreUsers: boolean;
   selectedUser: UserSearchGet;
   myMap;
-
+  popUp: boolean = false;
+  popUpTitle: string;
+  popUpText: string;
+  popUpFor: string;
+  confirming: boolean = false;
+  popUpValue1: string;
+  popUpValue2: string;
+  todaysPresNumber: number = 0;
+  todaysPresNumberChanged: boolean = false;
+  pharmacyPrescriptionsPage: number = 0;
+  pharmacyPrescriptions: PrescriptionForPharmacy[] = [];
+  loadMorePrescription:boolean = true;
+  loadingPrescriptions:boolean = true;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -305,6 +347,7 @@ export class PharmacyComponent implements OnInit {
           else {
             this.notVerified = false;
             this.headerService.setHeader('pharmacy');
+            this.getTodayPrescriptionNumberById();
             this.getMyNotifications(this.pharmacyGet.userId);
             this.setPharmacyPosition();
             this.getStockNumberByPharmacyId();
@@ -331,6 +374,8 @@ export class PharmacyComponent implements OnInit {
   }
 
   async setPharmacyPosition() {
+    console.log(this.pharmacyGet);
+    console.log(this.pharmacyGet.pharmacyLatitude + ' ...... ' +this.pharmacyGet.pharmacyLongitude );
     if (!navigator.geolocation) {
       console.log('not supported');
     }
@@ -753,7 +798,10 @@ export class PharmacyComponent implements OnInit {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
           });
+          this.confirming = false;
+          this.closePopUp();
           this.myMedicaments[medKey].deleted = true;
+          this.myMedicamentNumber -= 1;
         }
       }
     );
@@ -1137,4 +1185,60 @@ export class PharmacyComponent implements OnInit {
     });
   }
 
+  closePopUp() {
+    this.popUp = false;
+    this.popUpTitle = '';
+    this.popUpText = '';
+    this.popUpFor = '';
+    this.popUpValue1 = '';
+    this.popUpValue2 = '';
+  }
+
+  openPopUp(popUpFor: string, value1: string, value2: string) {
+    this.popUpFor = popUpFor;
+    this.popUpValue1 = value1;
+    this.popUpValue2 = value2;
+    if (popUpFor == 'confirmDeleteMedicament') {
+      this.popUpTitle = this.translate.instant('confirmDelete');
+      this.popUpText = this.translate.instant('confirmToDeleteStock') + ' ' + this.myMedicaments[parseInt(value2)].medicamentName.toLocaleUpperCase() + ', ' + this.translate.instant('thisActionIsIree') + ', ' + this.translate.instant('confirmToDelete') + '?';
+    }
+    this.popUp = true;
+  }
+
+  confirmPopUp() {
+    this.confirming = true;
+    if (this.popUpFor == 'confirmDeleteMedicament')
+      this.deleteByMedicamentStockId(parseInt(this.popUpValue1), parseInt(this.popUpValue2));
+  }
+
+  getTodayPrescriptionNumberById() {
+    this.pharmacyService.getTodayPrescriptionNumberById(this.pharmacyGet.userId).subscribe(
+      res => {
+        this.todaysPresNumber = res;
+      }
+    );
+  }
+
+  getPharmacyPrescriptionsById() {
+    this.loadingPrescriptions = true;
+    this.pharmacyService.getPharmacyPrescriptionsById(this.pharmacyGet.userId, this.pharmacyPrescriptionsPage, 6).subscribe(
+      res => {
+        let prescriptions: PrescriptionForPharmacy[] = res;
+        for (let pres of prescriptions)
+          this.pharmacyPrescriptions.push(pres);
+        this.pharmacyPrescriptionsPage+=1;
+        if(prescriptions.length == 6)
+        this.loadMorePrescription = true;
+        else
+        this.loadMorePrescription = false;
+        this.loadingPrescriptions = false;
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
 }

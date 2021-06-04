@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { dignoses } from 'src/model/dignoses';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
@@ -9,10 +10,10 @@ import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 
-const PATIENT_API = 'http://localhost:8080/api/patient/';
-const IMAGE_API = 'http://localhost:8080/api/image/';
-const MEDICALPROFILE_API = 'http://localhost:8080/api/medicalProfile/';
-const MEDICALPROFILEDISEASE_API = 'http://localhost:8080/api/medicalProfileDisease/';
+const PATIENT_API = environment.apiUrl+'api/patient/';
+const IMAGE_API = environment.apiUrl+'api/image/';
+const MEDICALPROFILE_API = environment.apiUrl+'medicalProfile/';
+const MEDICALPROFILEDISEASE_API = environment.apiUrl+'medicalProfileDisease/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -53,7 +54,7 @@ export class PatientService {
   }
 
   public getPatientPofilePhoto(id:number) {
-    return this.http.get<string>(IMAGE_API + 'get/' + id + "patientProfilePic", httpOptions)
+    return this.http.get<string>(IMAGE_API + 'get/' + id + "profilePic", httpOptions)
   }
 
   public getDoctorPofilePhoto(imageName: string) {

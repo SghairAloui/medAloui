@@ -5,7 +5,27 @@
     <meta name="veiwport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<div *ngIf="popUp == true" class="popUp">
+    <div>
+        <span class="popUpTitle">
+            {{popUpTitle}}
+        </span> <span [disabled]="confirming == true" (click)="closePopUp()"><i class="fas fa-times-circle closePopUpIcon"></i></span>
+    </div>
+    <div class="popUpText">
+        {{popUpText}}
+    </div>
+    <div class="popUpConfirmButton" (click)="confirmPopUp()">
+        <span *ngIf="confirming == false" class="popUpConfirmIcon">
+            <i class="fas fa-check-circle"></i>
+        </span>
+        <span *ngIf="confirming == false" class="popUpConfirmText"> {{'confirm'|translate}} </span>
+        <div *ngIf="confirming == true" class="confirmingPopUp">
+            <i class="fas fa-spinner"></i>
+        </div>
+    </div>
+</div>
+
+<body [class.disabledDiv]="popUp == true">
     <div *ngIf="notVerified==true" class="sectionContainer notVerified">
         <i class="fas fa-user-lock"></i>
         <div class="accountNotVerified">
@@ -390,21 +410,40 @@
                                 <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
                             </div>
                         </div>
+
                         <button class="iconButton" style="margin-top: 20px;"
                             (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
-                        <div class="userInfoContainer">
-                            <div class="userInfoContainerTitle">
-                                <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+
+                        <div style="margin-left: 50%;transform: translateX(-50%);">
+                            <div class="userInfoContainer">
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'city'|translate}}
+                                    </div>
                                 </div>
-                                <div class="userInfoContainerTitleValue">
-                                    {{'city'|translate}}
+                                <div class="userInfoContainerValue">
+                                    {{pharmacyGet.userCity}}
                                 </div>
                             </div>
-                            <div class="userInfoContainerValue">
-                                {{pharmacyGet.userCity}}
+    
+                            <div class="userInfoContainer" (click)="todaysPresNumberChanged=false">
+                                <div *ngIf="todaysPresNumberChanged" class="todaysNumberDot"></div>
+                                <div class="userInfoContainerTitle">
+                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-hospital-user"></i>
+                                    </div>
+                                    <div class="userInfoContainerTitleValue">
+                                        {{'todayPres'|translate}}
+                                    </div>
+                                </div>
+                                <div class="userInfoContainerValue">
+                                    {{todaysPresNumber}}
+                                </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="sectionContainer" *ngIf="generalInfo=='edit'">
                         <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
                         <ng-template #updateGeneralInfo>
@@ -494,6 +533,30 @@
                     </div>
 
                 </section>
+
+                <div class="sectionContainer" style="margin-top: 40px;">
+                    <div *ngIf="pharmacyPrescriptions.length == 0" class="noWaitingPres">
+                        {{'youHaveNotAnyWaitingPrescription'|translate}}
+                    </div>
+                    <div *ngIf="pharmacyPrescriptions.length != 0">
+                        <div *ngFor="let pres of pharmacyPrescriptions;let p = index" class="prescription">
+                            <div>
+                                <span style="text-transform: capitalize;">
+                                    {{pres.patientFirstName}}
+                                </span>
+                                <span style="text-transform:uppercase">
+                                     {{pres.patientLastName}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="loadingPrescriptions == true" class="loadingPrescription"
+                    style="margin-left: 50%;transform: translateX(-50%);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                </div>
+
                 <section *ngIf="pharmacyGet.pharmacyStatus!='approved'" id="approvePharmacySection">
                     <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved' || pharmacyGet.pharmacyStatus=='disapproved'">
                         <div class="sectionTitle">{{'notApproved'|translate}}</div>
@@ -654,25 +717,25 @@
                                 <span class="mesure spanButton" (click)="searchMedByNameAndPharmacyId()">
                                     {{'find'|translate}}
                                 </span>
-                                <input type="text" name="medicamentName" [(ngModel)]="medicamentName" class="formInput"
+                                <input type="text" name="medicamentName" (keyup.enter)="searchMedByNameAndPharmacyId()" [(ngModel)]="medicamentName" class="formInput"
                                     placeholder=" ">
                                 <label for="" class="formLabel">
                                     {{'medicamentName'|translate}}
                                 </label>
                             </div>
-                            <div *ngFor="let med of myMedicaments | keyvalue">
+                            <div *ngFor="let med of myMedicaments ;let m = index">
                                 <div class="medicament">
-                                    <div *ngIf="med.value.deleted" class="deletedMed">
+                                    <div *ngIf="med.deleted" class="deletedMed">
                                         <div class="deletedMedCenterText">
-                                            {{med.value.medicamentName}} {{'deleted'|translate}}
+                                            {{med.medicamentName}} {{'deleted'|translate}}
                                         </div>
                                     </div>
                                     <div class="phMedicamentName">
-                                        {{med.value.medicamentName}}
+                                        {{med.medicamentName}}
                                     </div>
                                     <div>
                                         <button class="fullyBtn red"
-                                            (click)="deleteByMedicamentStockId(med.value.medicamentStockId,med.key)">
+                                            (click)="openPopUp('confirmDeleteMedicament',med.medicamentStockId,m)">
                                             {{'delete'|translate}}
                                         </button>
                                     </div>

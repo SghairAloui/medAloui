@@ -5,7 +5,7 @@
     <meta name="veiwport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body id="body" #body>
     <section id="addQuestionSection">
         <div class="sectionTitle">{{'addQuestion'|translate}}</div>
         <div class="sectionContainer">
@@ -67,16 +67,16 @@
     <section id="allQuestionSection">
         <div class="sectionTitle">{{'allQuestion'|translate}}</div>
         <div *ngIf="questions">
-            <div *ngFor="let ques of questions | keyvalue" class="question">
+            <div *ngFor="let ques of questions; let i =index" class="question" id="question{{i}}">
                 <div class="questionPoints">
                     <div class="centerQuestionPoints">
-                        <div (click)="addPointToQuestion(ques.value.questionId,ques.key)">
+                        <div (click)="addPointToQuestion(ques.questionId,i)">
                             <i class="fas fa-sort-up"></i>
                         </div>
                         <div class="points">
-                            {{ques.value.questionPoints}}
+                            {{ques.questionPoints}}
                         </div>
-                        <div (click)="deletePointFromQuestion(ques.value.questionId,ques.key)">
+                        <div (click)="deletePointFromQuestion(ques.questionId,i)">
                             <i class="fas fa-sort-down"></i>
                         </div>
                     </div>
@@ -85,12 +85,12 @@
                     <div class="questionInfo">
                         <div class="questionWithoutPosterInfo">
                             <div class="questionAbout">
-                                <div *ngIf="ques.value.questionAbout=='disease'" class="diseaeAndName">
+                                <div *ngIf="ques.questionAbout=='disease'" class="diseaeAndName">
                                     <div style="text-transform: capitalize;">
                                         {{'disease'|translate}} <i class="fas fa-virus"></i>
                                     </div>
                                 </div>
-                                <div *ngIf="ques.value.questionAbout=='medicament'" class="diseaeAndName">
+                                <div *ngIf="ques.questionAbout=='medicament'" class="diseaeAndName">
                                     <div style="text-transform: capitalize;">
                                         {{'medicament'|translate}} <i class="fas fa-pills"></i>
                                     </div>
@@ -101,50 +101,58 @@
                                     {{'questionAbout'|translate}}
                                 </span>
                                 <span class="text">
-                                    {{ques.value.questionName}}
+                                    {{ques.questionName}}
                                 </span>
                             </div>
                             <div class="questionText">
-                                {{ques.value.question}} ?
+                                {{ques.question}} ?
                             </div>
                         </div>
                         <div class="questionWithPosterInfo">
                             <div class="posterInfo">
-                                <span *ngIf="ques.value.posterImageProfile" class="posterImageProfileContainer">
-                                    <img [src]="ques.value.posterImageProfile" class="posterImageProfile">
+                                <span *ngIf="ques.posterImageProfile" class="posterImageProfileContainer"
+                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'')">
+                                    <img [src]="ques.posterImageProfile" class="posterImageProfile">
+                                    <div class="sendMessage">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
                                 </span>
-                                <span *ngIf="!ques.value.posterImageProfile" class="posterImageProfileContainer">
+                                <span *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer"
+                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'')">
                                     <i class="fas fa-user-tie userTiePoster"></i>
+                                    <div class="sendMessage">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
                                 </span>
                                 <div class="posterName">
-                                    {{ques.value.userFullName}}
+                                    {{ques.userFullName}}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="commentsLine"></div>
-                    <div *ngIf="ques.value.comments.length==0" class="commentContainer">
+                    <div *ngIf="ques.comments.length==0" class="commentContainer">
                         {{'noCommentYet'|translate}}
                     </div>
-                    <div *ngFor="let comment of ques.value.comments | keyvalue" class="comment">
-                        <div *ngIf="comment.value.posterProfileImage;" class="commentProfileImgConatiner">
-                            <img [src]="comment.value.posterProfileImage" class="commentProfileImg">
+                    <div *ngFor="let comment of ques.comments ; let c=index" class="comment">
+                        <div *ngIf="comment.posterProfileImage;" class="commentProfileImgConatiner">
+                            <img [src]="comment.posterProfileImage" class="commentProfileImg">
                         </div>
-                        <div *ngIf="!comment.value.posterProfileImage;" class="commentProfileImgConatiner">
+                        <div *ngIf="!comment.posterProfileImage;" class="commentProfileImgConatiner">
                             <i class="fas fa-user-tie userTie50"></i>
                         </div>
                         <div class="commentLeftLine"></div>
                         <div class="commentText">
                             <div class="commentPostBy">
-                                {{comment.value.commentPostBy}}
+                                {{comment.commentPostBy}}
                             </div>
                             <div class="commentValue">
-                                {{comment.value.comment}}
+                                {{comment.comment}}
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="ques.value.loadMoreComment"
-                        (click)="getPostCommentsByPostId(ques.value.questionId,ques.key)">
+                    <div *ngIf="ques.loadMoreComment"
+                        (click)="getPostCommentsByPostId(ques.questionId,i)">
                         <div class="loadMoreComment">
                             {{'loadMoreComment'|translate}}
                         </div>
@@ -152,7 +160,7 @@
                             <i class="fas fa-angle-down"></i>
                         </div>
                     </div>
-                    <div *ngIf="ques.value.comments.length!=0 && !ques.value.loadMoreComment" class="allCommentLoaded defaultCursor">
+                    <div *ngIf="ques.comments.length!=0 && !ques.loadMoreComment" class="allCommentLoaded defaultCursor">
                         {{'allCommentLoaded'|translate}}
                     </div>
                 </div>

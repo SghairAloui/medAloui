@@ -5,7 +5,27 @@
     <meta name="veiwport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<div *ngIf="popUp == true" class="popUp">
+    <div>
+        <span class="popUpTitle">
+            {{popUpTitle}}
+        </span> <span [disabled]="confirming == true" (click)="closePopUp()"><i class="fas fa-times-circle closePopUpIcon"></i></span>
+    </div>
+    <div class="popUpText">
+        {{popUpText}}
+    </div>
+    <div class="popUpConfirmButton" (click)="confirmPopUp()">
+        <span *ngIf="confirming == false" class="popUpConfirmIcon">
+            <i class="fas fa-check-circle"></i>
+        </span>
+        <span *ngIf="confirming == false" class="popUpConfirmText"> {{'confirm'|translate}} </span>
+        <div *ngIf="confirming == true" class="confirmingPopUp">
+            <i class="fas fa-spinner"></i>
+        </div>
+    </div>
+</div>
+
+<body [class.disabledDiv]="popUp == true">
     <div *ngIf="notVerified" class="sectionContainer notVerified">
         <i class="fas fa-user-lock"></i>
         <div class="accountNotVerified">
@@ -32,7 +52,8 @@
     <div *ngIf="!notVerified">
         <app-header></app-header>
         <div class="patientContainer">
-            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer" style="padding-top: 25px;">
+            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer"
+                style="padding-top: 25px;">
                 <div *ngIf="!selectedUser">
                     <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i)">
                         <div *ngIf="user.userId != patientGet.userId" class="searchedUser">
@@ -156,7 +177,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <button class="fullyBtnSmall" (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
+                            <button class="fullyBtnSmall"
+                                (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
                                 style="width: fit-content;margin: 10px auto; margin-left: 50%; transform: translateX(-50%);">
                                 {{'message'|translate}}
                             </button>
@@ -187,16 +209,19 @@
                             </div>
                             <div style="margin: 7px auto;text-align: center;"
                                 *ngIf="selectedUser.patientQuestions.length == 0">
-                                <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span> {{'haveNoquestion'|translate}}
+                                <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span>
+                                {{'haveNoquestion'|translate}}
                             </div>
                             <div *ngIf="selectedUser.patientQuestions.length != 0">
-                                <div *ngFor="let ques of selectedUser.patientQuestions" class="searchedUserQuestionContainer">
+                                <div *ngFor="let ques of selectedUser.patientQuestions"
+                                    class="searchedUserQuestionContainer">
                                     <div class="searchedUserQuestionContainerQuestionPostTime">
                                         <span>
                                             <i class="fas fa-calendar-day"></i> {{ques.questionPostTime | slice:0:10}}
                                         </span>
                                         <span>
-                                            <i class="fas fa-clock"></i> {{ques.questionPostTime | slice:11:(ques.questionPostTime.length-3)}}
+                                            <i class="fas fa-clock"></i> {{ques.questionPostTime |
+                                            slice:11:(ques.questionPostTime.length-3)}}
                                         </span>
                                     </div>
                                     <div class="searchedUserQuestionContainerQuestion">
@@ -208,7 +233,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions" (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
+                                <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions"
+                                    (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
                                     <i class="fas fa-sort-down"></i>
                                 </div>
                             </div>
@@ -221,9 +247,8 @@
             </div>
             <div class="messagesContainer">
                 <div *ngFor="let smallConv of smallConversations; let i=index">
-                    <div [class.smallMessagesContainer]="i==0"
-                        [class.smallMessagesContainer1]="i==1" [class.smallMessagesContainer2]="i==2"
-                        (click)="showFullconv(i)">
+                    <div [class.smallMessagesContainer]="i==0" [class.smallMessagesContainer1]="i==1"
+                        [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
                         <div class="smallMessagesContainerImg">
                             <div *ngIf="smallConv.userImg">
                                 <img [src]="smallConv.userImg"
@@ -236,8 +261,7 @@
                         <div class="smallMessagesContainerUsername">
                             {{smallConv.username}}
                         </div>
-                        <div class="smallMessagesContainerClose"
-                            (click)="closeSmallConv(i)">
+                        <div class="smallMessagesContainerClose" (click)="closeSmallConv(i)">
                             <i class="fas fa-times"></i>
                         </div>
                         <div *ngIf="smallConv.isUnread==true && smallConv.lastMessageSenderId != patientGet.userId"
@@ -259,7 +283,9 @@
                         </div>
                     </div>
                     <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
-                        (scroll)="messagesScroll($event)" (click)="readConversation(openConversation.lastMessageSenderId)" [class.messagesContainerBodyClosed]="openConversation.conversationStatus == 'close'">
+                        (scroll)="messagesScroll($event)"
+                        (click)="readConversation(openConversation.lastMessageSenderId)"
+                        [class.messagesContainerBodyClosed]="openConversation.conversationStatus == 'close'">
                         <div *ngIf="openConversation.loadMoreMessage" class="messageLoading">
                             <div></div>
                             <div></div>
@@ -279,7 +305,7 @@
                         </div>
                         <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
                             <div *ngIf="message.senderId==patientGet.userId && message.messageContent.length != 0"
-                                 class="senderMessageContainer">
+                                class="senderMessageContainer">
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=patientGet.userId && message.messageContent.length != 0"
@@ -294,10 +320,13 @@
                         </div>
                         <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
                             <div style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}}</span>, {{'sendRequestTo'|translate}}
+                                {{'convClosed'|translate}} <span
+                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                    {{'byDefault'|translate}}</span>, {{'sendRequestTo'|translate}}
                                 {{openConversation.username}} {{'toOpenThisConv'|translate}}
                             </div>
-                            <button class="fullyBtnSmall sendRequestClosedMessage" (click)="sentOpenConversationRequest(openConversation.userId,openConversation.conversationId)">
+                            <button class="fullyBtnSmall sendRequestClosedMessage"
+                                (click)="sentOpenConversationRequest(openConversation.userId,openConversation.conversationId)">
                                 {{'sendRequest'|translate}}
                             </button>
                             <div class="convClosed">
@@ -307,8 +336,8 @@
                     </div>
                     <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
                         (click)="readConversation(openConversation.lastMessageSenderId)">
-                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message" placeholder="{{'message...'|translate}}"
-                            class="messageInput">
+                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                            placeholder="{{'message...'|translate}}" class="messageInput">
                         <span (click)="sendMessage()">
                             <i class="fas fa-paper-plane sendMessageIcon"></i>
                         </span>
@@ -486,18 +515,7 @@
                                         {{yearInformation}}
                                     </label>
                                     <datalist id="yearlistOptions">
-                                        <option value="1995">
-                                        <option value="1996">
-                                        <option value="1997">
-                                        <option value="1998">
-                                        <option value="1999">
-                                        <option value="2000">
-                                        <option value="2001">
-                                        <option value="2002">
-                                        <option value="2003">
-                                        <option value="2004">
-                                        <option value="2005">
-                                        <option value="2006">
+                                        <option *ngFor="let year of birthYears" value="{{year}}">
                                     </datalist>
                                 </div>
                                 <div class="formDiv">
@@ -955,7 +973,10 @@
                                         </div>
                                     </div>
                                     <div *ngIf="docInfoForPatient[app.key]">
-                                        <div *ngIf="app.value.appointmentStatus=='pending'" class="appointmentsGrid">
+                                        <div class="appointmentsGrid"
+                                            [class.appIsToday]="isDatePassed(app.value.appointmentDate) == null"
+                                            [class.completedApp]="app.value.appointmentStatus=='completed'"
+                                            [class.missedApp]="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed'">
                                             <div class="div">
                                                 <div class="centerInDivGrid">
                                                     <div class="profileImgCon">
@@ -1056,7 +1077,8 @@
                                                         <span
                                                             class="appInfo">{{docInfoForPatient[app.key].doctorGender}}</span>
                                                     </div>
-                                                    <div class="appInfoTitleCon noWhite"><span class="appInfo">
+                                                    <div class="appInfoTitleCon noWhite" style="padding-left: 0px;">
+                                                        <span class="appInfo">
                                                             {{docInfoForPatient[app.key].exactAddress}}
                                                         </span>
                                                     </div>
@@ -1081,14 +1103,30 @@
                                             </div>
                                             <div class="div">
                                                 <div class="centerInDivGrid">
-                                                    <button class="fullyBtn fullyBtnRed"
-                                                        (click)="deleteAppById(app.value.appointmentId,app.key)">
+                                                    <button
+                                                        *ngIf="app.value.appointmentStatus=='pending' && isDatePassed(app.value.appointmentDate) == false"
+                                                        class="fullyBtn fullyBtnRed"
+                                                        (click)="openPopUp('deleteAppoitment',app.value.appointmentId,app.key)">
                                                         {{'delete'|translate}} <i class="fas fa-trash-alt"></i>
                                                     </button>
-                                                    <button class="fullyBtn fullyBtnGreen"
+                                                    <button
+                                                        *ngIf="app.value.appointmentStatus=='pending' && isDatePassed(app.value.appointmentDate) == false"
+                                                        class="fullyBtn fullyBtnGreen"
                                                         (click)="changeAppDate(app.value.doctorId,app.value.appointmentDate,app.key)">
                                                         {{'changeDate'|translate}} <i class="fas fa-edit"></i>
                                                     </button>
+                                                    <div *ngIf="app.value.appointmentStatus=='completed'"
+                                                        style="font-weight: 600;color: #51A351;">
+                                                        {{'appPassed'|translate}}
+                                                    </div>
+                                                    <div *ngIf="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed'"
+                                                        style="font-weight: 600;color: #BD362F;">
+                                                        {{'appMissed'|translate}}
+                                                    </div>
+                                                    <div *ngIf="isDatePassed(app.value.appointmentDate) == null"
+                                                        style="font-weight: 600; color: #F89406;">
+                                                        {{'yourAppIsToday'|translate}}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1414,8 +1452,14 @@
                         </div>
                         <div *ngIf="prescription=='map'" class="pharmacyMapContainer">
                             <div id="pharmacyMap"></div>
-                            <button class="emptyBtn" style="margin-top: 15px;" (click)="prescription='pharmacies'">
+                            <button class="fullyBtnSmall"
+                                style="margin-top: 15px;display: inline-block; width: fit-content; padding: 0px 10px;"
+                                (click)="prescription='pharmacies'">
                                 {{'goBack'|translate}}
+                            </button>
+                            <button class="fullyBtnSmall" (click)="selectPharmacy(false)"
+                                style="margin-top: 15px;float: right; width: fit-content;padding: 0px 10px;">
+                                {{'selectPharmacy'|translate}}
                             </button>
                         </div>
                     </ng-template>
@@ -1425,14 +1469,6 @@
                     <div class="sectionContainer">
                         <div class="noData">
                             {{'noDoctors'|translate}}
-                        </div>
-                    </div>
-                </section>
-                <section id="myPharmaciesSection">
-                    <div class="sectionTitle">{{'myPharmacies'|translate}}</div>
-                    <div class="sectionContainer">
-                        <div class="noData">
-                            {{'noPharmacies'|translate}}
                         </div>
                     </div>
                 </section>

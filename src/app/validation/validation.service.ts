@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { ValidationPost } from 'src/model/ValidationPost';
 
-const VALIDATION_API = 'http://localhost:8080/api/validation/';
+const VALIDATION_API = environment.apiUrl+'api/validation/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

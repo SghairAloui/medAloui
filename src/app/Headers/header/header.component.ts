@@ -433,6 +433,46 @@ export class HeaderComponent implements OnInit {
     document.getElementById("generalInfoSection").scrollIntoView({ behavior: "smooth" });
   }
 
+  toAdminFindDoctorScection() {
+    document.getElementById("adminFindDoctor").scrollIntoView({ behavior: "smooth" });
+  }
+  toAdminAddSpecialityScection() {
+    document.getElementById("adminAddSpeciality").scrollIntoView({ behavior: "smooth" });
+  }
+  
+  toPendingDoctorScection() {
+    document.getElementById("pendingDoctor").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toPendingPharmaciesSection() {
+    document.getElementById("pendingPharmaciesSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toTodayPatientSection() {
+    document.getElementById("todayPatientSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toTomorrowPatientSection() {
+    document.getElementById("tomorrowPatientSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toFindPatientSection() {
+    document.getElementById("findPatientSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toMyPositionSection() {
+    document.getElementById("myPositionSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  tomyPositionSection() {
+    document.getElementById("myPositionSection").scrollIntoView({ behavior: "smooth" });
+  }
+
+  toApprovedByAdminSection() {
+    document.getElementById("approvedByAdminSection").scrollIntoView({ behavior: "smooth" });
+  }
+  
+
   closeNotification(notificationKey) {
     if (this.notifications[notificationKey].isUnread == true)
       this.unreadNotifications -= 1;
@@ -564,6 +604,7 @@ export class HeaderComponent implements OnInit {
   getConversationByid(convId: number, openConv: boolean) {
     this.conversationService.getConversationByid(convId, this.userId).subscribe(
       res => {
+        console.log(res);
         let conv: ConversationGet = res;
         let retrieveResonse: any;
         let base64Data: any;

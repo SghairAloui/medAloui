@@ -54,6 +54,7 @@ html,body{
     --searchedUsersSendMessageColor: #2f303a;
     --smallMessageUsernameColor:#eaebf0;
     --smallMessageUsernameBackgroundColor:#2c3247;
+    --popUpBackgroundColor: #f0f2f55d;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -103,6 +104,7 @@ html,body{
     --searchedUsersSendMessageColor: white;
     --smallMessageUsernameColor:#2c3247;
     --smallMessageUsernameBackgroundColor:#adadad;
+    --popUpBackgroundColor: #32333388;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -1337,7 +1339,7 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     background: white;
     color: #308a7b;
 }
-.searchBtn{
+.searchBox .searchBtn{
     position: absolute;
     margin-top: -8px;
     margin-left: 5px;
@@ -1353,10 +1355,10 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     transition: 0.4s;
     cursor: pointer;
 }
-.searchText::placeholder{
+.searchBox .searchText::placeholder{
     color: white;
 }
-.searchText{
+.searchBox .searchText{
     border: none;
     background: none;
     outline: none;
@@ -1368,7 +1370,7 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     line-height: 18px;
     width: 0px;
 }
-.searchText:disabled{
+.searchBox .searchText:disabled{
     background: rgb(182, 166, 166);
     outline: none;
     border: none;
@@ -1578,4 +1580,126 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 10px;
+}
+.popUp{
+    position: fixed;
+    max-width: 50%;
+    min-width: 35%;
+    max-height: 70%;
+    background-color: var(--popUpBackgroundColor);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+    transition: .3s ease-in-out;
+}
+.disabledDiv{
+    pointer-events: none;
+    opacity: 0.2;
+}
+.closePopUpIcon{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: red;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.closePopUpIcon:hover{
+    transform: scale(1.1);
+}
+.popUpConfirmButton{
+    position: relative;
+    width: 130px;
+    height: 25px;
+    padding: 3px 10px;
+    background-color: #1b2f61;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.popUpConfirmButton .popUpConfirmIcon{
+    position: absolute;
+    left: -50px;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    transition: .3s ease-in-out;
+}
+.popUpConfirmButton .popUpConfirmText{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    transition: .3s ease-in-out;
+}
+.popUpConfirmButton:hover .popUpConfirmIcon{
+    left: 50%;
+}
+.popUpConfirmButton:hover .popUpConfirmText{
+    left: 180px;
+}
+.popUpText{
+    position: relative;
+    padding:20px 0px; 
+    padding-bottom: 40px;
+    word-wrap: break-word;
+}
+.popUpTitle{
+    font-weight: 600;
+    word-wrap: break-word;
+    margin-left: 15px;
+    text-transform: capitalize;
+}
+.confirmingPopUp{
+    position: absolute;
+    left: 45%;
+    top: 15%;
+    transform: translate(-50%,-50%);
+    animation-name: confirmingPopUp;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+@keyframes confirmingPopUp{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.loadingPrescription .fa-file-medical{
+    font-size: 25px;
+    animation-name: loadingPrescription;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    background: transparent;
+}
+
+@keyframes loadingPrescription{
+    0%{
+        opacity: 0.5;
+    }
+    50%{
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100%{
+        opacity: 0.5;
+    }
 }

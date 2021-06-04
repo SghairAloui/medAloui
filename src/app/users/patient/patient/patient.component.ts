@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -168,13 +169,13 @@ export class PatientComponent implements OnInit {
               }
             }
 
-          } else if (not.notification.notificationType == 'patientTurnClose'){
-            this.toastr.info(this.translate.instant(this.translate.instant('yourAppWithDoctor') + ' ' +not.data + ' ' + this.translate.instant('comeClose')), this.translate.instant('Notification'), {
+          } else if (not.notification.notificationType == 'patientTurnClose') {
+            this.toastr.info(this.translate.instant(this.translate.instant('yourAppWithDoctor') + ' ' + not.data + ' ' + this.translate.instant('comeClose')), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-          } else if (not.notification.notificationType == 'delayPatientTurn'){
-            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('postponeTheAppTo') +' '+not.notification.notificationParameter), this.translate.instant('Notification'), {
+          } else if (not.notification.notificationType == 'delayPatientTurn') {
+            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('postponeTheAppTo') + ' ' + not.notification.notificationParameter), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
@@ -255,8 +256,19 @@ export class PatientComponent implements OnInit {
   loadMoreUsers: boolean;
   selectedUser: UserSearchGet;
   myMap;
+  popUp: boolean = false;
+  popUpTitle: string;
+  popUpText: string;
+  popUpFor: string;
+  confirming: boolean = false;
+  popUpValue1: string;
+  popUpValue2: string;
+  birthYears:number []=[];
 
   ngOnInit(): void {
+    for(let i=2021;i>=1900;i--){
+      this.birthYears.push(i);
+    }
     this.showUpdateCalendar = [false];
     this.patientInfo = false;
     this.getUserInfo();
@@ -836,6 +848,7 @@ export class PatientComponent implements OnInit {
   }
 
   deleteAppById(id: number, key: number) {
+    this.confirming=true;
     this.appointmentService.deleteAppointmentById(id).subscribe(
       res => {
         if (res) {
@@ -845,6 +858,8 @@ export class PatientComponent implements OnInit {
           });
           this.deletedApp[key] = true;
         }
+        this.confirming=false;
+        this.closePopUp();
       },
       err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -1589,9 +1604,9 @@ export class PatientComponent implements OnInit {
   }
 
   sentOpenConversationRequest(recipientId: number, conversationid: number) {
-    this.notificationService.sentOpenConversationRequest(this.patientGet.userId, recipientId, conversationid).subscribe(
+    this.notificationService.sendNotificationWithSocket(this.patientGet.userId, recipientId, conversationid + "", "openConversationRequest", false).subscribe(
       res => {
-        if (res) {
+        if (res == 0) {
           this.toastr.success(this.translate.instant('requestSnet'), this.translate.instant('notification'), {
             timeOut: 3500,
             positionClass: 'toast-bottom-left'
@@ -1616,7 +1631,7 @@ export class PatientComponent implements OnInit {
     if (this.searchedUsers[userKey].userType == 'doctor' || this.searchedUsers[userKey].userType == 'pharmacist')
       this.setSelectedUserPosition();
     else {
-      this.selectedUser.patientQuestionsPage=0;
+      this.selectedUser.patientQuestionsPage = 0;
       this.selectedUser.patientQuestions = [];
       this.getPatientQuestionsById(this.selectedUser.userId, this.selectedUser.patientQuestionsPage);
     }
@@ -1665,15 +1680,111 @@ export class PatientComponent implements OnInit {
     this.questionService.getQuestionsByUserId(userId, pageNumber, 4).subscribe(
       res => {
         let questions: QuestionGet[] = res;
-        for (let ques of questions){
+        for (let ques of questions) {
           this.selectedUser.patientQuestions.push(ques);
         }
         if (questions.length == 4)
           this.selectedUser.loadMoreQuestion = true;
         else
           this.selectedUser.loadMoreQuestion = false;
-        this.selectedUser.patientQuestionsPage+=1;
+        this.selectedUser.patientQuestionsPage += 1;
       }
     );
+  }
+
+  isDatePassed(date: string): boolean {
+    let today: string = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    if (parseInt(date.slice(0, 4)) > parseInt(today.slice(0, 4)))
+      return false;
+    else if (parseInt(date.slice(0, 4)) < parseInt(today.slice(0, 4)))
+      return true;
+    else {
+      if (parseInt(date.slice(5, 7)) > parseInt(today.slice(5, 7)))
+        return false;
+      else if (parseInt(date.slice(5, 7)) < parseInt(today.slice(5, 7)))
+        return true;
+      else {
+        if (parseInt(date.slice(8, 10)) > parseInt(today.slice(8, 10)))
+          return false;
+        else if (parseInt(date.slice(8, 10)) < parseInt(today.slice(8, 10)))
+          return true;
+        else {
+          return null;
+        }
+      }
+    }
+  }
+
+  selectPharmacy(force: boolean) {
+    this.confirming = true;
+    this.notificationService.sendNotificationWithSocket(this.patientGet.userId, this.prescriptionPharmacies[this.pharmacyKey].userId, this.prescriptions[this.presPresKey].prescriptionId + "", "userSelectYouForPres", force).subscribe(
+      res => {
+        if (res == 0) {
+          this.toastr.success(this.translate.instant('nowYouCanVisitIt'), this.translate.instant('pharmacySelected'), {
+            timeOut: 6500,
+            positionClass: 'toast-bottom-left'
+          });
+        } else {
+          if (res == -1) {
+            this.toastr.warning(this.translate.instant('youAlreadySelectPh') + this.prescriptionPharmacies[this.pharmacyKey].pharmacyFullName.toLocaleUpperCase() + ' ' + this.translate.instant('forThisPres'), this.translate.instant('pharmacyAlreadySelected'), {
+              timeOut: 6500,
+              positionClass: 'toast-bottom-left'
+            });
+          } else {
+            this.pharmacyService.getPharmacyInfoById(res).subscribe(
+              res => {
+                let pharmacy: PharmacyGet = res;
+                this.openPopUp('confirmChangeSelectedPharmacy', pharmacy.pharmacyFullName, '');
+              },
+              err => {
+                this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+                  timeOut: 3500,
+                  positionClass: 'toast-bottom-left'
+                });
+              }
+            );
+          }
+        }
+        this.confirming = false;
+        if (force == true)
+          this.closePopUp();
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  closePopUp() {
+    this.popUp = false;
+    this.popUpTitle = '';
+    this.popUpText = '';
+    this.popUpFor = '';
+    this.popUpValue1 = '';
+    this.popUpValue2 = '';
+  }
+
+  openPopUp(popUpFor: string, value1: string, value2: string) {
+    this.popUpFor = popUpFor;
+    this.popUpValue1 = value1;
+    this.popUpValue2 = value2;
+    if (popUpFor == 'confirmChangeSelectedPharmacy') {
+      this.popUpTitle = this.translate.instant('confirmChanging');
+      this.popUpText = this.translate.instant('thisPresIsAlready') + ' ' + value1.toLocaleUpperCase() + ', ' + this.translate.instant('ifYouWantToChangePh') + value1.toLocaleUpperCase() + ', ' + this.translate.instant('doYouWantToCinfirm') + '?';
+    } else if (popUpFor == 'deleteAppoitment') {
+      this.popUpTitle = this.translate.instant('confirmDelete');
+      this.popUpText = this.translate.instant('confirmDeletingThisAppointment') + ' ' + this.docInfoForPatient[parseInt(value2)].doctorFirstName.toLocaleUpperCase() + ' ' + this.docInfoForPatient[parseInt(value2)].doctorLastName.toLocaleUpperCase() + ' ' + this.translate.instant('on').toLocaleLowerCase() + ' ' + this.myAppointment[parseInt(value2)].appointmentDate + ', ' + this.translate.instant('thisActionIsIree') + ', ' + this.translate.instant('confirmAnyWay') + '?';
+    }
+    this.popUp = true;
+  }
+
+  confirmPopUp() {
+    if (this.popUpFor == 'confirmChangeSelectedPharmacy')
+      this.selectPharmacy(true);
+    else if (this.popUpFor == 'deleteAppoitment')
+      this.deleteAppById(parseInt(this.popUpValue1), parseInt(this.popUpValue2));
   }
 }

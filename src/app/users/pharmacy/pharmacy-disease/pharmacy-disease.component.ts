@@ -27,6 +27,7 @@ export class PharmacyDiseaseComponent implements OnInit {
   loadMoreQuestion: boolean;
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
+  position: number = 0;
 
   ngOnInit(): void {
     this.getAllQuestions();
@@ -52,6 +53,7 @@ export class PharmacyDiseaseComponent implements OnInit {
           this.loadMoreQuestion = true;
         else
           this.loadMoreQuestion = false;
+        document.documentElement.scrollTop = this.position;
       }
     );
   }
@@ -177,10 +179,10 @@ export class PharmacyDiseaseComponent implements OnInit {
 
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
-    if (this.loadMoreQuestion) {
-      let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-      let max = document.documentElement.scrollHeight;
-      if (max == pos) {
+    if (this.loadMoreQuestion && this.loadingQuestions == false) {
+      if (parseInt(document.documentElement.scrollTop + document.documentElement.offsetHeight + 10 + "") > document.documentElement.scrollHeight) {
+        this.loadingQuestions = true;
+        this.position = document.documentElement.scrollHeight;
         this.getAllQuestions();
       }
     }

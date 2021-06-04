@@ -18,7 +18,6 @@
                 <ul class="navItem">
                     <li (click)="toAcceuilSection()"><a class="menuHoverEffect">{{'home'|translate}}</a></li>
                     <li (click)="toDoctocSection()"><a class="menuHoverEffect">{{'doctor'|translate}}</a></li>
-                    <li (click)="toMaladiesSection()"><a class="menuHoverEffect">{{'questions'|translate}}</a></li>
                     <li (click)="toAboutSection()"><a class="menuHoverEffect">{{'aboutUs'|translate}}</a></li>
                     <li id="settignsLi" (click)="settingsBoxUnder700=true;closeMenu()">
                         <label for="displaySettingsBox"><a class="menuHoverEffect"
@@ -150,7 +149,6 @@
                         <li (click)="toMyAppointmentsSection()"><a>{{'myAppointments'|translate}}</a></li>
                         <li (click)="toPrescriptionSection()"><a>{{'prescription'|translate}}</a></li>
                         <li (click)="toMyDoctorsSection()"><a>{{'myDoctors'|translate}}</a></li>
-                        <li (click)="toMyPharmaciesSection()"><a>{{'myPharmacies'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='settings'" class="settingItems">
@@ -211,15 +209,14 @@
             <nav class="navItem">
                 <div *ngIf="parentHeader=='doctor'">
                     <ul>
-                        <li><a>{{'findDoctor'|translate}}</a></li>
-                        <li><a>{{'addSpeciality'|translate}}</a></li>
-                        <li><a>{{'notApproved'|translate}}</a></li>
-                        <li><a>{{'topRated'|translate}}</a></li>
+                        <li (click)="toAdminFindDoctorScection()"><a>{{'findDoctor'|translate}}</a></li>
+                        <li (click)="toAdminAddSpecialityScection()"><a>{{'addSpeciality'|translate}}</a></li>
+                        <li (click)="toPendingDoctorScection()"><a>{{'notApproved'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='pharmacy'">
                     <ul>
-                        <li><a>{{'findPharmacy'|translate}}</a></li>
+                        <li (click)="toPendingPharmaciesSection()"><a>{{'findPharmacy'|translate}}</a></li>
                         <li><a>{{'notApproved'|translate}}</a></li>
                     </ul>
                 </div>
@@ -304,14 +301,16 @@
             <nav class="navItem">
                 <div *ngIf="parentHeader=='patient'">
                     <ul>
-                        <li><a>{{'todayPatient'|translate}}</a></li>
-                        <li><a>{{'allMyPatient'|translate}}</a></li>
-                        <li><a>{{'findPatient'|translate}}</a></li>
+                        <li (click)="toTodayPatientSection()"><a>{{'todayPatient'|translate}}</a></li>
+                        <li (click)="toTomorrowPatientSection()"><a>{{'tomorrowPatient'|translate}}</a></li>
+                        <li (click)="toFindPatientSection()"><a>{{'findPatient'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='profile'">
                     <ul>
                         <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
+                        <li (click)="toApprovedByAdminSection()"><a>{{'setUpAccount'|translate}}</a></li>
+                        <li (click)="tomyPositionSection()"><a>{{'myPosition'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='disease'">
@@ -378,18 +377,21 @@
             </nav>
             <nav>
                 <ul class="navItem">
-                    <li (click)="openContainerToDoctor('profile');"><a><i class="fas fa-user-circle"></i></a></li>
+                    <li (click)="openContainerToPharmacy('profile');"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>
             </nav>
         </header>
         <header class="headerChild">
             <nav class="navItem">
+                
                 <div *ngIf="parentHeader=='profile'">
                     <ul>
                         <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
                         <li (click)="toMyMedicamentsInfoSection()"><a>{{'myMedicaments'|translate}}</a></li>
+                        <li (click)="toMyPositionSection()"><a>{{'myPosition'|translate}}</a></li>
                     </ul>
                 </div>
+
                 <div *ngIf="parentHeader=='settings'" class="settingItems">
                     <ul>
                         <li><a>{{'ChooseLang'|translate}}</a></li>
@@ -420,6 +422,12 @@
                             (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
+
+                <div *ngIf="parentHeader=='disease'">
+                    <ul>
+                        <li><a>{{'allQuestions'|translate}}</a></li>
+                    </ul>
+                </div>
             </nav>
         </header>
     </div>
@@ -432,96 +440,110 @@
                     <div *ngIf="notifications.length == 0" class="noNotification">
                         {{'noNotification'|translate}}
                     </div>
+
                     <div *ngFor="let notif of notifications ;let i=index" class="notification" id="notification{{i}}">
-                        <div *ngIf="notif.notificationType=='setYourGeoLocation'">
-                            <div>
-                                <i class="fas fa-map-marked-alt"></i>
+
+                        <div *ngIf="notif.notificationType!='userSelectYouForPres'">
+
+                            <div *ngIf="notif.notificationType=='setYourGeoLocation'">
+                                <div>
+                                    <i class="fas fa-map-marked-alt"></i>
+                                </div>
+                                {{'setYourGeoLocation'|translate}}
+                                <div (click)="updatePosClick()" class="textLien">
+                                    {{'updatePos'|translate}} ?
+                                </div>
                             </div>
-                            {{'setYourGeoLocation'|translate}}
-                            <div (click)="updatePosClick()" class="textLien">
-                                {{'updatePos'|translate}} ?
+    
+                            <div
+                                *ngIf="notif.notificationType=='conversationopen' || notif.notificationType=='conversationclose'">
+                                <div *ngIf="notif.notificationType=='conversationopen'">
+                                    <i class="fas fa-unlock"></i>
+                                </div>
+                                <div *ngIf="notif.notificationType=='conversationclose'">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div *ngIf="notif.notificationType=='conversationopen'" style="margin: 5px;">
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}}
+                                    </span> {{'openConversation'|translate}}
+                                </div>
+                                <div *ngIf="notif.notificationType=='conversationclose'" style="margin: 5px;">
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}}
+                                    </span>
+                                    {{'closeConversation'|translate}}
+                                </div>
+                                <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien"
+                                    style="text-transform: capitalize;">
+                                    {{'openConversation'|translate}} ?
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            *ngIf="notif.notificationType=='conversationopen' || notif.notificationType=='conversationclose'">
-                            <div *ngIf="notif.notificationType=='conversationopen'">
-                                <i class="fas fa-unlock"></i>
-                            </div>
-                            <div *ngIf="notif.notificationType=='conversationclose'">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div *ngIf="notif.notificationType=='conversationopen'" style="margin: 5px;">
+    
+                            <div *ngIf="notif.notificationType=='openConversationRequest'">
+                                <div>
+                                    <i class="fas fa-comment"></i>
+                                </div>
                                 <span style="text-transform: capitalize;">
                                     {{notif.name}}
-                                </span> {{'openConversation'|translate}}
+                                </span> {{'sentYouReq'|translate}}
+                                <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien">
+                                    {{'showConversation'|translate}} ?
+                                </div>
                             </div>
-                            <div *ngIf="notif.notificationType=='conversationclose'" style="margin: 5px;">
-                                <span style="text-transform: capitalize;">
-                                    {{notif.name}}
+    
+                            <div
+                                *ngIf="notif.notificationType=='patientTurnClose'">
+                                <div>
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    {{'yourAppWithDoctor'|translate}}
+                                    <span style="text-transform: capitalize;">
+                                         {{notif.name}} 
+                                    </span> 
+                                    {{'comeClose'|translate}}
+                                </div>
+                                <div>
+                                    {{'currentTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
+                                </div>
+                            </div>
+    
+                            <div
+                                *ngIf="notif.notificationType=='delayPatientTurn'">
+                                <div>
+                                    <i class="fas fa-hourglass-end"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'postponeTheApp'|translate}}
+                                </div>
+                                <div>
+                                    {{'yourNewTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
+                                </div>
+                            </div>
+    
+                            <div class="notificationIcons">
+                                <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">
+                                    <i class="fas fa-bell-slash"></i>
                                 </span>
-                                {{'closeConversation'|translate}}
+                                <span *ngIf="notif.isUnread==false" (click)="changeUnreadNotification(i)">
+                                    <i class="fas fa-bell"></i>
+                                </span>
+                                <span *ngIf="notif.notificationType!='setYourGeoLocation'" (click)="deleteNotificationById(i)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </span>
                             </div>
-                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien"
-                                style="text-transform: capitalize;">
-                                {{'openConversation'|translate}} ?
-                            </div>
-                        </div>
-                        <div *ngIf="notif.notificationType=='openConversationRequest'">
-                            <div>
-                                <i class="fas fa-comment"></i>
-                            </div>
-                            <span style="text-transform: capitalize;">
-                                {{notif.name}}
-                            </span> {{'sentYouReq'|translate}}
-                            <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien">
-                                {{'showConversation'|translate}} ?
-                            </div>
-                        </div>
-                        <div
-                            *ngIf="notif.notificationType=='patientTurnClose'">
-                            <div>
-                                <i class="fas fa-user-clock"></i>
-                            </div>
-                            <div style="margin: 5px;"> 
-                                {{'yourAppWithDoctor'|translate}}
-                                <span style="text-transform: capitalize;">
-                                     {{notif.name}} 
-                                </span> 
-                                {{'comeClose'|translate}}
-                            </div>
-                            <div>
-                                {{'currentTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
-                            </div>
-                        </div>
-                        <div
-                            *ngIf="notif.notificationType=='delayPatientTurn'">
-                            <div>
-                                <i class="fas fa-hourglass-end"></i>
-                            </div>
-                            <div style="margin: 5px;"> 
-                                <span style="text-transform: capitalize;">
-                                    {{notif.name}} 
-                                </span>{{'postponeTheApp'|translate}}
-                            </div>
-                            <div>
-                                {{'yourNewTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
-                            </div>
-                        </div>
-                        <div class="notificationIcons">
-                            <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">
-                                <i class="fas fa-bell-slash"></i>
+                            
+                            <span (click)="closeNotification(i)">
+                                <i class="fas fa-times"></i>
                             </span>
-                            <span *ngIf="notif.isUnread==false" (click)="changeUnreadNotification(i)">
-                                <i class="fas fa-bell"></i>
-                            </span>
-                            <span (click)="deleteNotificationById(i)">
-                                <i class="fas fa-trash-alt"></i>
-                            </span>
+
                         </div>
-                        <span (click)="closeNotification(i)">
-                            <i class="fas fa-times"></i>
-                        </span>
+
                     </div>
+
                     <div *ngIf="loadMoreNotification==true" style="position: relative; height: 65px;">
                         <div class="loading">
                             <span></span>
@@ -529,6 +551,7 @@
                             <span></span>
                         </div>
                     </div>
+
                     <div *ngIf="loadMoreNotification==false && notifications.length != 0"
                         style="margin: 10px auto; text-align: center;padding-bottom: 15px;">
                         {{'allNotLoaded'|translate}}

@@ -1,16 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { GetPendingPharmacy } from 'src/model/GetPendingPharmacy';
 import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
+import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
-const PHARMACY_API = 'http://localhost:8080/api/pharmacy/';
-const IMAGE_API = 'http://localhost:8080/api/image/';
-const UPLOADEXCELFILE_API = 'http://localhost:8080/api/uploadExcelFile/';
-const MEDSTOCK_API = 'http://localhost:8080/api/medicamentstock/';
+const PHARMACY_API = environment.apiUrl+'api/pharmacy/';
+const IMAGE_API = environment.apiUrl+'api/image/';
+const UPLOADEXCELFILE_API = environment.apiUrl+'api/uploadExcelFile/';
+const MEDSTOCK_API = environment.apiUrl+'api/medicamentstock/';
 
 
 const httpOptions = {
@@ -90,5 +92,17 @@ export class PharmacyService {
 
   public searchPharmaciesByMedicaments(medicamentsName:string[],userLatitude:string,userLongitude:string,searchRaduis:number,page:number,size:number){
     return this.http.post<PharmacyGet []>(PHARMACY_API+'findPharmacyByPrescriptonMedicamentAndGeoLocation',{medicamentsName,userLatitude,userLongitude,searchRaduis,page,size},httpOptions);
+  }
+
+  public getPharmacyInfoById(id:number){
+    return this.http.get<PharmacyGet>(PHARMACY_API+'getPharmacyInfoById/'+id,httpOptions);
+  }
+
+  public getTodayPrescriptionNumberById(id:number){
+    return this.http.get<number>(PHARMACY_API+'getTodayPrescriptionNumberById/'+id,httpOptions);
+  }
+
+  public getPharmacyPrescriptionsById(id:number,page:number,size:number){
+    return this.http.post<PrescriptionForPharmacy []>(PHARMACY_API+'getPharmacyPrescriptionsById/',{id,page,size},httpOptions);
   }
 }

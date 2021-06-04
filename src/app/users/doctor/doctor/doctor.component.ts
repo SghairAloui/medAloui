@@ -97,6 +97,7 @@ export class DoctorComponent implements OnInit {
       // Subscribe to notification topic
       stompClient.subscribe('/topic/notification/' + this.doctorGet.userId, async message => {
         let not: WebSocketNotification = JSON.parse(message.body);
+        console.log(not);
         if (not.type == 'seen') {
           if (this.openConversation.conversationId == parseInt(not.data))
             this.openConversation.isUnread = false;
@@ -182,10 +183,36 @@ export class DoctorComponent implements OnInit {
               }
             }
 
+          } else if (not.notification.notificationType == 'setYourGeoLocation') {
+            this.toastr.info(this.translate.instant(this.translate.instant('setYourGeo')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.geoNotId=not.notification.notificationId;
           }
           not.notification.name = not.data;
           this.headerService.addNotification(not.notification);
           this.notificationSound();
+        } else if (not.type == 'info') {
+          if (not.data == "approvedByAdmin") {
+            this.toastr.success(this.translate.instant('congYourAccountApp'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.doctorGet.doctorStatus='approvedByAdmin';
+          } else if (not.data == "disapprovedByAdmin") {
+            this.toastr.warning(this.translate.instant('accountDis'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.doctorGet.doctorStatus='disapprovedByAdmin';
+          } else if(not.data == "disapprovedPermanently"){
+            this.toastr.warning(this.translate.instant('accountDisPerma'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.doctorGet.doctorStatus='disapprovedPermanently';
+          }
         }
       })
     });
@@ -269,10 +296,14 @@ export class DoctorComponent implements OnInit {
   myMap;
   loadingMessages: boolean = false;
   closeGetMessage: boolean = false;
+  birthYears: number[] = [];
 
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
 
   ngOnInit(): void {
+    for (let i = 2021; i >= 1900; i--) {
+      this.birthYears.push(i);
+    }
     this.headerService.setHeader('doctor');
     this.lengthTested = false; this.tommorowLengthTested = false;
     this.toadyAppointmentPatientInfo = []; this.tomorrowAppointmentPatientInfo = []; this.completedAppointmentPatientInfo = []; this.nextAppointmentPatientInfo = []; this.patientTodayProfilePicRes = []; this.patientTodayProfilePic = []; this.patientTomorrowProfilePicRes = []; this.patientTomorrowProfilePic = [];
@@ -640,10 +671,6 @@ export class DoctorComponent implements OnInit {
                   this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
                     res => {
                       if (res) {
-                        this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
-                          timeOut: 5000,
-                          positionClass: 'toast-bottom-left'
-                        });
                         this.ngOnInit();
                       }
                     }
@@ -1233,7 +1260,7 @@ export class DoctorComponent implements OnInit {
           if (status == 'today') {
             this.todayPatientNumber = res;
             if (this.doctorGet.currentPatient != 0)
-              this.getPatientByTurn(true);
+              this.getPatientByTurn(true, '');
             else
               this.getTodayAppPatientByDate(true);
           } else if (status == 'tomorrow')
@@ -1537,7 +1564,7 @@ export class DoctorComponent implements OnInit {
     );
   }
 
-  getPatientByTurn(firsttime: boolean) {
+  getPatientByTurn(firsttime: boolean, status: string) {
     if (!this.savePrescription) {
       this.toastr.warning(this.translate.instant('prescriptionNotNull'), this.translate.instant('prescription'), {
         timeOut: 6000,
@@ -1562,7 +1589,7 @@ export class DoctorComponent implements OnInit {
           res => {
             if (res) {
               if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])
-                this.changeAppointmentStatusById(this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1].appointmentId, 'completed');
+                this.changeAppointmentStatusById(this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1].appointmentId, status);
               this.cuurentMedicalProfileDiseasePage = 0;
               let nextPatient: number = parseInt(patientTurn.toString()) + 1;
               this.doctorGet.currentPatient = patientTurn;
@@ -2357,7 +2384,7 @@ export class DoctorComponent implements OnInit {
     this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + "")).subscribe(
       res => {
         if (res) {
-          this.getPatientByTurn(true);
+          this.getPatientByTurn(true, '');
         }
       }
     );

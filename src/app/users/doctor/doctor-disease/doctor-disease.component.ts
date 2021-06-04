@@ -28,6 +28,7 @@ export class DoctorDiseaseComponent implements OnInit {
   loadMoreQuestion: boolean;
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
+  position: number = 0;
 
   ngOnInit(): void {
     this.getAllQuestions();
@@ -45,7 +46,7 @@ export class DoctorDiseaseComponent implements OnInit {
           ques.invalidComment = false;
           this.questions.push(ques);
           this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-          this.getCommentPosterProfileImg(ques.postBy+'profilePic',(this.questions.length-1),0,'question');
+          this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
           this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
         }
         this.questionPage += 1;
@@ -53,6 +54,7 @@ export class DoctorDiseaseComponent implements OnInit {
           this.loadMoreQuestion = true;
         else
           this.loadMoreQuestion = false;
+        document.documentElement.scrollTop = this.position;
       }
     );
   }
@@ -90,19 +92,19 @@ export class DoctorDiseaseComponent implements OnInit {
     this.userService.getUserFullNameById(userId).subscribe(
       res => {
         let name: FirstAndLastNameGet = res;
-        if (name.doctor_first_name){
+        if (name.doctor_first_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Dr. ' + name.doctor_first_name + ' ' + name.doctor_last_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId+'profilePic',questionKey,commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
-        else if (name.pharmacy_full_name){
+        else if (name.pharmacy_full_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Ph. ' + name.pharmacy_full_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId+'profilePic',questionKey,commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
       }
     );
   }
 
-  getCommentPosterProfileImg(imageName:string,questionKey:number,commentKey:number,status:string){
+  getCommentPosterProfileImg(imageName: string, questionKey: number, commentKey: number, status: string) {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
@@ -126,8 +128,8 @@ export class DoctorDiseaseComponent implements OnInit {
     );
   }
 
-  addPointToComment(commentId: number, questionKey: number,commentKey:number) {
-    this.questionService.addPointToPost(commentId, this.doctorComponent.doctorGet.userId,'comment').subscribe(
+  addPointToComment(commentId: number, questionKey: number, commentKey: number) {
+    this.questionService.addPointToPost(commentId, this.doctorComponent.doctorGet.userId, 'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointAdded'), this.translate.instant('point'), {
@@ -151,8 +153,8 @@ export class DoctorDiseaseComponent implements OnInit {
     );
   }
 
-  deletePointFromComment(questionId: number, questionKey: number,commentKey:number) {
-    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.doctorComponent.doctorGet.userId,'comment').subscribe(
+  deletePointFromComment(questionId: number, questionKey: number, commentKey: number) {
+    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.doctorComponent.doctorGet.userId, 'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointDeleted'), this.translate.instant('point'), {
@@ -178,10 +180,10 @@ export class DoctorDiseaseComponent implements OnInit {
 
   @HostListener("window:scroll", ["$event"])
   onWindowScroll() {
-    if (this.loadMoreQuestion) {
-      let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-      let max = document.documentElement.scrollHeight;
-      if (max == pos) {
+    if (this.loadMoreQuestion && this.loadingQuestions == false) {
+      if (parseInt(document.documentElement.scrollTop + document.documentElement.offsetHeight + 10 + "") > document.documentElement.scrollHeight) {
+        this.loadingQuestions = true;
+        this.position = document.documentElement.scrollHeight;
         this.getAllQuestions();
       }
     }
@@ -199,13 +201,13 @@ export class DoctorDiseaseComponent implements OnInit {
       this.questionService.addComment(questionId, this.doctorComponent.doctorGet.userId, this.questions[questionKey].doctorComment).subscribe(
         res => {
           if (res) {
-            let comment: CommentGet={commentId:res,commentPostDate:'', comment : this.questions[questionKey].doctorComment,postedBy : this.doctorComponent.doctorGet.userId,postId:this.questions[questionKey].questionId,commentPoints:0,commentPostBy:'Dr. '+this.doctorComponent.doctorGet.doctorFirstName + ' ' + this.doctorComponent.doctorGet.doctorLastName.toUpperCase(),posterProfileImage:this.doctorComponent.retrievedImage};
+            let comment: CommentGet = { commentId: res, commentPostDate: '', comment: this.questions[questionKey].doctorComment, postedBy: this.doctorComponent.doctorGet.userId, postId: this.questions[questionKey].questionId, commentPoints: 0, commentPostBy: 'Dr. ' + this.doctorComponent.doctorGet.doctorFirstName + ' ' + this.doctorComponent.doctorGet.doctorLastName.toUpperCase(), posterProfileImage: this.doctorComponent.retrievedImage };
             this.toastr.success(this.translate.instant('commentAdded'), this.translate.instant('comment'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
             this.questions[questionKey].comments.push(comment);
-            this.questions[questionKey].doctorComment='';
+            this.questions[questionKey].doctorComment = '';
           }
         },
         err => {
@@ -217,4 +219,5 @@ export class DoctorDiseaseComponent implements OnInit {
       );
     }
   }
+
 }

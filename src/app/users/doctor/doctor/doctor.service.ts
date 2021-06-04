@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { AppointmentPatientInfo } from 'src/model/AppointmentPatientInfo';
 import { doctor } from 'src/model/Doctor';
@@ -15,9 +16,9 @@ import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
-const DOC_API = 'http://localhost:8080/api/doctor/';
-const IAMAGE_API = 'http://localhost:8080/api/image/';
-const PATIENT_API = 'http://localhost:8080/api/patient/';
+const DOC_API = environment.apiUrl+'api/doctor/';
+const IAMAGE_API = environment.apiUrl+'api/image/';
+const PATIENT_API = environment.apiUrl+'api/patient/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

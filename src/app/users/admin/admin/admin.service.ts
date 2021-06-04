@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { AdminGet } from 'src/model/adminGet';
 import { DoctorPendingGet } from 'src/model/DoctorPendingGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 
-const ADMIN_API = 'http://localhost:8080/api/admin/';
-const DOCTOR_API = 'http://localhost:8080/api/doctor/';
+const ADMIN_API = environment.apiUrl+'api/admin/';
+const DOCTOR_API = environment.apiUrl+'api/doctor/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

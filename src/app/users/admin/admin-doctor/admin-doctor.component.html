@@ -126,7 +126,7 @@
                     </div>
                 </div>
             </ng-template>
-            <div *ngIf="loadPendingDoc; then loadingMore else allDoctorsLoaded"></div>
+            <div *ngIf="loadPendingDoc == true; then loadingMore else allDoctorsLoaded"></div>
             <ng-template #loadingMore> <div class="loadPendingDocStatus">
                 <div class="loading">
                     <span></span>

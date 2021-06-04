@@ -16,6 +16,7 @@ import { DoctorGet } from 'src/model/Doctorget';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { ConversationService } from 'src/app/services/conversation.service';
+import { AppointmentGet } from 'src/model/AppointmentGet';
 
 @Component({
   selector: 'app-patient-doctor',
@@ -31,7 +32,7 @@ export class PatientDoctorComponent implements OnInit {
     private appointmentService: AppointmentService,
     private patientComponent: PatientComponent,
     private patientService: PatientService,
-    private conversationService:ConversationService) { }
+    private conversationService: ConversationService) { }
   medicalFilePapers: string = 'info'; losingTime: string = 'info'; appOrganize: string = 'info';
   slectedDay: boolean = true;
   monthDays: any[] = [];
@@ -404,6 +405,9 @@ export class PatientDoctorComponent implements OnInit {
           this.docInfo = false;
           this.appointment = true;
           document.getElementById("patientFindDoctorSection").scrollIntoView({ behavior: "smooth" });
+          this.patientComponent.myAppointment=[];
+          this.patientComponent.appointmentPage=0;
+          this.patientComponent.getAppointments();
         }
       }, err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -534,7 +538,7 @@ export class PatientDoctorComponent implements OnInit {
     );
   }
 
-  startConversation(recipientId:number, firstName: string, lastName: string){
-    this.patientComponent.startConversation(recipientId,firstName,lastName);
+  startConversation(recipientId: number, firstName: string, lastName: string) {
+    this.patientComponent.startConversation(recipientId, firstName, lastName);
   }
 }

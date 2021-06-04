@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { MessageGet } from 'src/model/MessageGet';
 import { StringGet } from 'src/model/StringGet';
 
-const CONVERSATION_API = 'http://localhost:8080/api/conversation/';
-const MESSAGE_API = 'http://localhost:8080/api/message/';
+const CONVERSATION_API = environment.apiUrl+'api/conversation/';
+const MESSAGE_API = environment.apiUrl+'api/message/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
