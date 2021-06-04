@@ -116,11 +116,15 @@ export class DoctorComponent implements OnInit {
             this.headerService.setFirstConversation(not.message.conversationId);
           }
           else {
+            this.newMessage += 1;
             let i: number = 0;
             for (let conv of this.smallConversations) {
               if (conv.conversationId == not.message.conversationId) {
                 this.smallConversations[i].isUnread = true;
                 this.smallConversations[i].lastMessageSenderId = not.message.senderId;
+                let message: MessageGet = { messageContent: not.message.messageContent, senderId: not.message.senderId, recipientId: not.message.recipientId, messageDate: not.message.messageDate, conversationId: not.message.conversationId }
+                this.smallConversations[i].messages.push(message);
+                break;
               }
               i += 1;
             }
@@ -188,7 +192,7 @@ export class DoctorComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.geoNotId=not.notification.notificationId;
+            this.geoNotId = not.notification.notificationId;
           }
           not.notification.name = not.data;
           this.headerService.addNotification(not.notification);
@@ -199,19 +203,19 @@ export class DoctorComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.doctorGet.doctorStatus='approvedByAdmin';
+            this.doctorGet.doctorStatus = 'approvedByAdmin';
           } else if (not.data == "disapprovedByAdmin") {
             this.toastr.warning(this.translate.instant('accountDis'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.doctorGet.doctorStatus='disapprovedByAdmin';
-          } else if(not.data == "disapprovedPermanently"){
+            this.doctorGet.doctorStatus = 'disapprovedByAdmin';
+          } else if (not.data == "disapprovedPermanently") {
             this.toastr.warning(this.translate.instant('accountDisPerma'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.doctorGet.doctorStatus='disapprovedPermanently';
+            this.doctorGet.doctorStatus = 'disapprovedPermanently';
           }
         }
       })
@@ -297,6 +301,7 @@ export class DoctorComponent implements OnInit {
   loadingMessages: boolean = false;
   closeGetMessage: boolean = false;
   birthYears: number[] = [];
+  newMessage: number = 0;
 
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
 
@@ -406,6 +411,7 @@ export class DoctorComponent implements OnInit {
               this.accountDeleted = true;
             } else {
               this.docInfo = true;
+              this.openMessages();
               this.getDoctorSpecialities();
               localStorage.setItem('id', this.doctorGet.userId.toString());
               if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
@@ -2060,6 +2066,8 @@ export class DoctorComponent implements OnInit {
         for (let conver of conversations) {
           if (conver.message_content.length >= 10)
             conver.message_content = conver.message_content.slice(0, 7) + '...';
+          if (conver.is_unread == true && conver.last_message_sender_id != this.doctorGet.userId)
+            this.newMessage += 1;
           let imageName: string;
           imageName = conver.recipient + 'profilePic';
           this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
@@ -2149,8 +2157,6 @@ export class DoctorComponent implements OnInit {
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
-            if (this.message.length > 10)
-              this.message = this.message.slice(0, 7) + '...';
             let message: MessageGet = { messageContent: this.message, senderId: this.doctorGet.userId, recipientId: this.openConversation.userId, messageDate: response.string, conversationId: this.openConversation.conversationId }
             this.openConversation.messages.push(message);
             this.headerService.newMessage(message);
@@ -2245,10 +2251,12 @@ export class DoctorComponent implements OnInit {
     if (this.openConversation.isUnread == true && lastSenderId != this.doctorGet.userId) {
       this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
-          if (res)
+          if (res) {
             this.openConversation.isUnread = false;
-          let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
-          this.headerService.setReadConversation(data);
+            this.newMessage -= 1;
+            let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
+            this.headerService.setReadConversation(data);
+          }
         }
       );
     }

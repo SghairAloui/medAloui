@@ -1703,3 +1703,14 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
         opacity: 0.5;
     }
 }
+
+.newMessageDot{
+    height: 9px;
+    width: 9px;
+    border-radius: 50%;
+    position: fixed;
+    right: 55px;
+    bottom: 53px;
+    z-index: 1001;
+    background-color: #F89406;
+}

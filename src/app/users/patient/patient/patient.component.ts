@@ -107,11 +107,15 @@ export class PatientComponent implements OnInit {
             this.headerService.newMessage(not.message);
             this.headerService.setFirstConversation(not.message.conversationId);
           } else {
+            this.newMessage += 1;
             let i: number = 0;
             for (let conv of this.smallConversations) {
               if (conv.conversationId == not.message.conversationId) {
                 this.smallConversations[i].isUnread = true;
                 this.smallConversations[i].lastMessageSenderId = not.message.senderId;
+                let message: MessageGet = { messageContent: not.message.messageContent, senderId: not.message.senderId, recipientId: not.message.recipientId, messageDate: not.message.messageDate, conversationId: not.message.conversationId }
+                this.smallConversations[i].messages.push(message);
+                break;
               }
               i += 1;
             }
@@ -263,10 +267,11 @@ export class PatientComponent implements OnInit {
   confirming: boolean = false;
   popUpValue1: string;
   popUpValue2: string;
-  birthYears:number []=[];
+  birthYears: number[] = [];
+  newMessage: number = 0;
 
   ngOnInit(): void {
-    for(let i=2021;i>=1900;i--){
+    for (let i = 2021; i >= 1900; i--) {
       this.birthYears.push(i);
     }
     this.showUpdateCalendar = [false];
@@ -354,6 +359,7 @@ export class PatientComponent implements OnInit {
           if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000)
             this.notVerified = true;
           else {
+            this.openMessages();
             this.notVerified = false;
             this.headerService.setHeader('patient');
             this.getMyNotifications(this.patientGet.userId);
@@ -848,7 +854,7 @@ export class PatientComponent implements OnInit {
   }
 
   deleteAppById(id: number, key: number) {
-    this.confirming=true;
+    this.confirming = true;
     this.appointmentService.deleteAppointmentById(id).subscribe(
       res => {
         if (res) {
@@ -858,7 +864,7 @@ export class PatientComponent implements OnInit {
           });
           this.deletedApp[key] = true;
         }
-        this.confirming=false;
+        this.confirming = false;
         this.closePopUp();
       },
       err => {
@@ -1369,6 +1375,8 @@ export class PatientComponent implements OnInit {
         for (let conver of conversations) {
           if (conver.message_content.length >= 10)
             conver.message_content = conver.message_content.slice(0, 7) + '...';
+          if (conver.is_unread == true && conver.last_message_sender_id != this.patientGet.userId)
+            this.newMessage += 1;
           let imageName: string;
           imageName = conver.recipient + 'profilePic';
           this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
@@ -1458,8 +1466,6 @@ export class PatientComponent implements OnInit {
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
-            if (this.message.length > 10)
-              this.message = this.message.slice(0, 7) + '...';
             let message: MessageGet = { messageContent: this.message, senderId: this.patientGet.userId, recipientId: this.openConversation.userId, messageDate: response.string, conversationId: this.openConversation.conversationId }
             this.openConversation.messages.push(message);
             this.headerService.newMessage(message);
@@ -1503,10 +1509,12 @@ export class PatientComponent implements OnInit {
     if (this.openConversation.isUnread == true && lastSenderId != this.patientGet.userId) {
       this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
-          if (res)
+          if (res) {
             this.openConversation.isUnread = false;
-          let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
-          this.headerService.setReadConversation(data);
+            this.newMessage -= 1;
+            let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
+            this.headerService.setReadConversation(data);
+          }
         }
       );
     }

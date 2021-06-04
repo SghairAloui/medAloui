@@ -71,11 +71,15 @@ export class PharmacyComponent implements OnInit {
             this.headerService.setFirstConversation(not.message.conversationId);
           }
           else {
+            this.newMessage += 1;
             let i: number = 0;
             for (let conv of this.smallConversations) {
               if (conv.conversationId == not.message.conversationId) {
                 this.smallConversations[i].isUnread = true;
                 this.smallConversations[i].lastMessageSenderId = not.message.senderId;
+                let message: MessageGet = { messageContent: not.message.messageContent, senderId: not.message.senderId, recipientId: not.message.recipientId, messageDate: not.message.messageDate, conversationId: not.message.conversationId }
+                this.smallConversations[i].messages.push(message);
+                break;
               }
               i += 1;
             }
@@ -145,7 +149,7 @@ export class PharmacyComponent implements OnInit {
             });
             this.getTodayPrescriptionNumberById();
             this.todaysPresNumberChanged = true;
-          } 
+          }
           if (not.notification.notificationType != 'userSelectYouForPres') {
             not.notification.name = not.data;
             this.headerService.addNotification(not.notification);
@@ -157,19 +161,19 @@ export class PharmacyComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.pharmacyGet.pharmacyStatus='approvedByAdmin';
+            this.pharmacyGet.pharmacyStatus = 'approvedByAdmin';
           } else if (not.data == "disapprovedByAdmin") {
             this.toastr.warning(this.translate.instant('accountDis'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.pharmacyGet.pharmacyStatus='disapprovedByAdmin';
-          } else if(not.data == "disapprovedPermanently"){
+            this.pharmacyGet.pharmacyStatus = 'disapprovedByAdmin';
+          } else if (not.data == "disapprovedPermanently") {
             this.toastr.warning(this.translate.instant('accountDisPerma'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.pharmacyGet.pharmacyStatus='disapprovedPermanently';
+            this.pharmacyGet.pharmacyStatus = 'disapprovedPermanently';
           }
         }
       })
@@ -242,8 +246,9 @@ export class PharmacyComponent implements OnInit {
   todaysPresNumberChanged: boolean = false;
   pharmacyPrescriptionsPage: number = 0;
   pharmacyPrescriptions: PrescriptionForPharmacy[] = [];
-  loadMorePrescription:boolean = true;
-  loadingPrescriptions:boolean = true;
+  loadMorePrescription: boolean = true;
+  loadingPrescriptions: boolean = true;
+  newMessage: number = 0;
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -354,6 +359,7 @@ export class PharmacyComponent implements OnInit {
             this.getImage();
             this.intializeEdit();
             if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
+              this.openMessages();
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
@@ -375,7 +381,7 @@ export class PharmacyComponent implements OnInit {
 
   async setPharmacyPosition() {
     console.log(this.pharmacyGet);
-    console.log(this.pharmacyGet.pharmacyLatitude + ' ...... ' +this.pharmacyGet.pharmacyLongitude );
+    console.log(this.pharmacyGet.pharmacyLatitude + ' ...... ' + this.pharmacyGet.pharmacyLongitude);
     if (!navigator.geolocation) {
       console.log('not supported');
     }
@@ -883,6 +889,8 @@ export class PharmacyComponent implements OnInit {
         for (let conver of conversations) {
           if (conver.message_content.length >= 10)
             conver.message_content = conver.message_content.slice(0, 7) + '...';
+          if (conver.is_unread == true && conver.last_message_sender_id != this.pharmacyGet.userId)
+            this.newMessage += 1;
           let imageName: string;
           imageName = conver.recipient + 'profilePic';
           this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
@@ -936,10 +944,12 @@ export class PharmacyComponent implements OnInit {
     if (this.openConversation.isUnread == true && lastSenderId != this.pharmacyGet.userId) {
       this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
-          if (res)
+          if (res) {
+            this.newMessage -= 1;
             this.openConversation.isUnread = false;
-          let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
-          this.headerService.setReadConversation(data);
+            let data: IdAndBoolean = { id: this.openConversation.conversationId, boolean: false, lastMessageSenderId: 0 };
+            this.headerService.setReadConversation(data);
+          }
         }
       );
     }
@@ -1034,8 +1044,6 @@ export class PharmacyComponent implements OnInit {
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
-            if (this.message.length > 10)
-              this.message = this.message.slice(0, 7) + '...';
             let message: MessageGet = { messageContent: this.message, senderId: this.pharmacyGet.userId, recipientId: this.openConversation.userId, messageDate: response.string, conversationId: this.openConversation.conversationId }
             this.openConversation.messages.push(message);
             this.headerService.newMessage(message);
@@ -1226,11 +1234,11 @@ export class PharmacyComponent implements OnInit {
         let prescriptions: PrescriptionForPharmacy[] = res;
         for (let pres of prescriptions)
           this.pharmacyPrescriptions.push(pres);
-        this.pharmacyPrescriptionsPage+=1;
-        if(prescriptions.length == 6)
-        this.loadMorePrescription = true;
+        this.pharmacyPrescriptionsPage += 1;
+        if (prescriptions.length == 6)
+          this.loadMorePrescription = true;
         else
-        this.loadMorePrescription = false;
+          this.loadMorePrescription = false;
         this.loadingPrescriptions = false;
       },
       err => {

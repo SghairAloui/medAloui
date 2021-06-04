@@ -144,6 +144,8 @@ export class HeaderComponent implements OnInit {
               this.conversations[index].last_update_date = this.message.messageDate;
               this.conversations[index].is_unread = true;
               this.conversations[index].last_message_sender_id = this.message.senderId;
+              if (this.message.messageContent.length > 10)
+                this.conversations[index].message_content = this.message.messageContent.slice(0, 7) + '...';
             }
           });
         }
@@ -439,7 +441,7 @@ export class HeaderComponent implements OnInit {
   toAdminAddSpecialityScection() {
     document.getElementById("adminAddSpeciality").scrollIntoView({ behavior: "smooth" });
   }
-  
+
   toPendingDoctorScection() {
     document.getElementById("pendingDoctor").scrollIntoView({ behavior: "smooth" });
   }
@@ -471,7 +473,7 @@ export class HeaderComponent implements OnInit {
   toApprovedByAdminSection() {
     document.getElementById("approvedByAdminSection").scrollIntoView({ behavior: "smooth" });
   }
-  
+
 
   closeNotification(notificationKey) {
     if (this.notifications[notificationKey].isUnread == true)

@@ -210,6 +210,7 @@
             <div class="messagesIcon" (click)="openMessages()">
                 <i class="fas fa-envelope"></i>
             </div>
+            <div *ngIf="newMessage != 0" class="newMessageDot"></div>
             <div class="messagesContainer">
                 <div *ngFor="let smallConv of smallConversations; let i=index">
                     <div [class.smallMessagesContainer]="i==0" [class.smallMessagesContainer1]="i==1"
@@ -286,7 +287,7 @@
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=doctorGet.userId && message.messageContent.length != 0"
-                                (keyup.enter)="sendMessage()" id="{{message.messageDate}}"
+                                id="{{message.messageDate}}"
                                 class="recipientMessageContainer">
                                 {{message.messageContent}}
                             </div>
@@ -323,7 +324,7 @@
                     </div>
                     <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
                         (click)="readConversation(openConversation.lastMessageSenderId)">
-                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message" (keyup.enter)="sendMessage()"
                             placeholder="{{'message...'|translate}}" class="messageInput">
                         <span (click)="sendMessage()">
                             <i class="fas fa-paper-plane sendMessageIcon"></i>
