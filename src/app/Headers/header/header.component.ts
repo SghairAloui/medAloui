@@ -171,6 +171,7 @@ export class HeaderComponent implements OnInit {
     this.headerService.notification$.subscribe(
       (message) => {
         let notification: NotificationGet = message;
+        console.log(notification);
         if (notification.notificationType) {
           this.allNotIsRead=false;
           if (notification.isUnread == true)

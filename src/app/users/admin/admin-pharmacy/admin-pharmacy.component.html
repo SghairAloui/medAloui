@@ -10,35 +10,35 @@
         <div class="sectionTitle">{{'pending'|translate}}</div>
         <div class="sectionContainer">
             <div *ngIf="pendingPharmacies" class="notApprovedDocGrid">
-                <div *ngFor="let pharmacy of pendingPharmacies | keyvalue" class="col">
-                    <div *ngIf="pharmacy.value.decision != 'null'" class="docDecision">
+                <div *ngFor="let pharmacy of pendingPharmacies ; let p = index" class="col">
+                    <div *ngIf="pharmacy.decision != 'null'" class="docDecision">
                         <div class="docNotAppNameText">Ph. <span
-                                style="text-transform: capitalize;">{{pharmacy.value.pharmacyFullName}} </span>
-                             {{pharmacy.value.decision}}
+                                style="text-transform: capitalize;">{{pharmacy.pharmacyFullName}} </span>
+                             {{pharmacy.decision}}
                         </div>
                     </div>
-                    <div *ngIf="pharmacy.value.pharmacyStatus == 'pending'" class="pendingStatus">
+                    <div *ngIf="pharmacy.pharmacyStatus == 'pending'" class="pendingStatus">
                         {{'pending'|translate}} </div>
-                    <div *ngIf="pharmacy.value.pharmacyStatus == 'reVerify'" class="reVerifyStatus">
+                    <div *ngIf="pharmacy.pharmacyStatus == 'reVerify'" class="reVerifyStatus">
                         {{'reVerify'|translate}} </div>
                     <div class="pendingDocImg">
                         <div class="strok"></div>
-                        <div *ngIf="pharmacy.value.profilePic; then showDocProfileImg else showDocDefaultImg">
+                        <div *ngIf="pharmacy.profilePic; then showDocProfileImg else showDocDefaultImg">
                         </div>
-                        <ng-template #showDocProfileImg><img [src]="pharmacy.value.profilePic" class="profileImg">
+                        <ng-template #showDocProfileImg><img class="profileImg" [style.background-image]="'url(' + pharmacy.profilePic + ')'" class="profileImg">
                         </ng-template>
                         <ng-template #showDocDefaultImg>
                             <i class="fas fa-user-tie"></i>
                         </ng-template>
                     </div>
                     <div class="docNotAppName">Ph. <span
-                            style="text-transform: capitalize;">{{pharmacy.value.pharmacyFullName}}</span>
+                            style="text-transform: capitalize;">{{pharmacy.pharmacyFullName}}</span>
                     </div>
-                    <i class="fas fa-user"></i> {{pharmacy.value.userUsername}}<br>
-                    <div *ngIf="pharmacy.value.showFullInfo; then showDocDocuments else hideDocDocuments"></div>
+                    <i class="fas fa-user"></i> {{pharmacy.userUsername}}<br>
+                    <div *ngIf="pharmacy.showFullInfo; then showDocDocuments else hideDocDocuments"></div>
                     <ng-template #hideDocDocuments>
                         <div class="showHideDocuments">
-                            <div (click)="pharmacy.value.showFullInfo=true">
+                            <div (click)="pharmacy.showFullInfo=true">
                                 {{'showDoc'|translate}}<br>
                                 <i class="fas fa-angle-double-down"></i>
                             </div>
@@ -50,7 +50,7 @@
                                 <i class="fas fa-map-marked-alt"></i>
                             </span>
                             <span class="pharmacyInfoText">
-                                {{pharmacy.value.pharmacyExactAddress}}
+                                {{pharmacy.pharmacyExactAddress}}
                             </span>
                         </span>
                         <span class="pharmacyInfo">
@@ -58,41 +58,41 @@
                                 <i class="fas fa-clock"></i>
                             </span>
                             <span  class="pharmacyInfoText">
-                                {{pharmacy.value.pharmacyType}}
+                                {{pharmacy.pharmacyType}}
                             </span>
                         </span>
-                        <div *ngIf="pharmacy.value.currentDoc=='cin'">
+                        <div *ngIf="pharmacy.currentDoc=='cin'">
                             <div class="documentImgContainer">
-                                <span (click)="pharmacy.value.currentDoc='speciality'"><i
+                                <span (click)="pharmacy.currentDoc='speciality'"><i
                                         class="fas fa-chevron-right rightArrow"></i></span>
-                                <img [src]="pharmacy.value.cinPic" class="img90">
+                                <img [src]="pharmacy.cinPic" class="img90">
                             </div>
                         </div>
-                        <div *ngIf="pharmacy.value.currentDoc=='speciality'">
+                        <div *ngIf="pharmacy.currentDoc=='speciality'">
                             <div class="documentImgContainer">
-                                <span (click)="pharmacy.value.currentDoc='cin'"><i
+                                <span (click)="pharmacy.currentDoc='cin'"><i
                                         class="fas fa-chevron-left leftArrow"></i></span>
-                                <span (click)="pharmacy.value.currentDoc='clinic'"><i
+                                <span (click)="pharmacy.currentDoc='clinic'"><i
                                         class="fas fa-chevron-right rightArrow"></i></span>
-                                <img [src]="pharmacy.value.specialityPic" class="img90">
+                                <img [src]="pharmacy.specialityPic" class="img90">
                             </div>
                         </div>
-                        <div *ngIf="pharmacy.value.currentDoc=='clinic'">
+                        <div *ngIf="pharmacy.currentDoc=='clinic'">
                             <div class="documentImgContainer">
-                                <span (click)="pharmacy.value.currentDoc='speciality'"><i
+                                <span (click)="pharmacy.currentDoc='speciality'"><i
                                         class="fas fa-chevron-left leftArrow"></i></span>
-                                <img [src]="pharmacy.value.appartmentPic" class="img90">
+                                <img [src]="pharmacy.appartmentPic" class="img90">
                             </div>
                         </div>
                         <div class="buttons">
-                            <button class="fullyBtn" (click)="approvePharmacy(pharmacy.value.userId,pharmacy.key);">
+                            <button class="fullyBtn" (click)="approvePharmacy(pharmacy.userId,p);">
                                 {{'approve'|translate}} </button>
                             <button class="fullyBtn"
-                                (click)="disapprovePharmacy(pharmacy.value.userId,pharmacy.value.pharmacyStatus,pharmacy.key);">
+                                (click)="disapprovePharmacy(pharmacy.userId,pharmacy.pharmacyStatus,p);">
                                 {{'disapprove'|translate}} </button>
                         </div>
                         <div class="showHideDocuments">
-                            <div (click)="pharmacy.value.showFullInfo=false">
+                            <div (click)="pharmacy.showFullInfo=false">
                                 <i class="fas fa-angle-double-up"></i><br>
                                 {{'hideDoc'|translate}}
                             </div>

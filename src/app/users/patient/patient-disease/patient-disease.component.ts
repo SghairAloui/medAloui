@@ -27,13 +27,17 @@ export class PatientDiseaseComponent implements OnInit {
   diseaseName: string;
   diseaseQuestion: string;
   medicamentName: string;
+  inquireName: string;
   medicamentQuestion: string;
+  inquireQuestion: string;
   invalidDiseaseName: boolean = false; invalidDiseaseQuestion: boolean = false;
   invalidMedicamentName: boolean = false; invalidMedicamentQuestion: boolean = false;
+  invalidInquireName: boolean = false; invalidInquireQuestion: boolean = false;
   questionPage: number = 0;
   loadMoreQuestion: boolean = true;
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
+  loading:boolean=false;
   position: number=0;
 
   ngOnInit(): void {
@@ -65,7 +69,19 @@ export class PatientDiseaseComponent implements OnInit {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
       });
-    } else {
+    } else if (this.question == 'inquire' && this.inquireName == null) {
+      this.invalidInquireName = true;
+      this.toastr.warning(this.translate.instant('pleaseFillTheForm'), this.translate.instant('info'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    } else if (this.question == 'inquire' && this.inquireQuestion == null) {
+      this.invalidInquireQuestion = true;
+      this.toastr.warning(this.translate.instant('pleaseFillTheForm'), this.translate.instant('info'), {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-left'
+      });
+    }else {
       let questionName: string;
       let questionAbout: string;
       let questionText: string;
@@ -73,11 +89,14 @@ export class PatientDiseaseComponent implements OnInit {
         questionName = this.diseaseName;
         questionAbout = 'disease';
         questionText = this.diseaseQuestion;
-      }
-      else if (this.question == 'medicament') {
+      } else if (this.question == 'medicament') {
         questionName = this.medicamentName;
         questionAbout = 'medicament';
         questionText = this.medicamentQuestion;
+      } else if (this.question == 'inquire') {
+        questionName = this.inquireName;
+        questionAbout = 'inquire';
+        questionText = this.inquireQuestion;
       }
       this.questionService.addQuestion(questionName, questionAbout, questionText, this.patientComponent.patientGet.userId).subscribe(
         res => {
@@ -121,26 +140,30 @@ export class PatientDiseaseComponent implements OnInit {
   }
 
   getAllQuestions() {
-    this.questionService.getAll(this.questionPage, 4).subscribe(
-      res => {
-        let questions: QuestionGet[] = [];
-        questions = res;
-        for (let ques of questions) {
-          ques.commentPage = 0;
-          ques.comments = [];
-          this.questions.push(ques);
-          this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-          this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
-          this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+    if(this.loading==false){
+      this.loading=true;
+      this.questionService.getAll(this.questionPage, 4).subscribe(
+        res => {
+          let questions: QuestionGet[] = [];
+          questions = res;
+          for (let ques of questions) {
+            ques.commentPage = 0;
+            ques.comments = [];
+            this.questions.push(ques);
+            this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
+            this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+            this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+          }
+          this.questionPage += 1;
+          if (questions.length == 4)
+            this.loadMoreQuestion = true;
+          else
+            this.loadMoreQuestion = false;
+          document.documentElement.scrollTop = this.position;
+          this.loading=false;
         }
-        this.questionPage += 1;
-        if (questions.length == 4)
-          this.loadMoreQuestion = true;
-        else
-          this.loadMoreQuestion = false;
-        document.documentElement.scrollTop = this.position;
-      }
-    );
+      );
+    }
   }
 
   getUserFullNameById(patientId: number, questionKey: number) {

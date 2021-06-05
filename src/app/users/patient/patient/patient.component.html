@@ -58,8 +58,7 @@
                     <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i)">
                         <div *ngIf="user.userId != patientGet.userId" class="searchedUser">
                             <div class="searchedUserProfilePic">
-                                <img *ngIf="user.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                    [src]="user.userImg">
+                                <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg  + ')'" class="profileImg">
                                 <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
                             </div>
                             <div class="searchedUserInfo">
@@ -123,8 +122,7 @@
                     </div>
                     <div class="selectedUserFirstHalfInfo">
                         <div class="selectedUserImgprofileContainer">
-                            <img *ngIf="selectedUser.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                [src]="selectedUser.userImg">
+                            <img *ngIf="selectedUser.userImg" [style.background-image]="'url(' + selectedUser.userImg  + ')'" class="profileImg">
                             <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
                                 class="fas fa-user-tie"></i>
                         </div>
@@ -252,8 +250,7 @@
                         [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
                         <div class="smallMessagesContainerImg">
                             <div *ngIf="smallConv.userImg">
-                                <img [src]="smallConv.userImg"
-                                    style="height: 45px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                <img [style.background-image]="'url(' + smallConv.userImg + ')'" class="profileImg">
                             </div>
                             <div *ngIf="smallConv.userImg==false">
                                 <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
@@ -294,8 +291,7 @@
                         <div *ngIf="!openConversation.loadMoreMessage">
                             <div class="messageUsernameImgContainer">
                                 <div *ngIf="openConversation.userImg">
-                                    <img [src]="openConversation.userImg"
-                                        style="height: 70px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                    <img [style.background-image]="'url(' + openConversation.userImg + ')'" class="profileImg">
                                 </div>
                                 <div *ngIf="openConversation.userImg==false">
                                     <i class="fas fa-user-tie"
@@ -352,11 +348,11 @@
                         <div class="sectionContainerTopGreen"></div>
                         <div>
                             <div class="imgContainer">
-                                <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                                <div *ngIf="retrievedImage">
+                                    <img [style.background-image]="'url(' + retrievedImage  + ')'" class="profileImg">
+                                </div>
+                                <div *ngIf="retrievedImage == false"><i class="fas fa-user-tie"></i></div>
                                 <div class="editImage">
-                                    <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
-                                    </ng-template>
-                                    <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                     <div class="centerChangeText">{{'changeImage'|translate}}</div>
                                 </div>
                                 <div class="strok">
@@ -778,9 +774,7 @@
                                                     <div
                                                         *ngIf="disPrescriptions[presKey].prescriptiondoctor.profileImg; then showDocProfileImg else showDocDefaultImg">
                                                     </div>
-                                                    <ng-template #showDocProfileImg><img
-                                                            [src]="disPrescriptions[presKey].prescriptiondoctor.profileImg"
-                                                            class="profileImg">
+                                                    <ng-template #showDocProfileImg><img [style.background-image]="'url(' + disPrescriptions[presKey].prescriptiondoctor.profileImg + ')'" class="profileImg">
                                                     </ng-template>
                                                     <ng-template #showDocDefaultImg><i
                                                             class="fas fa-user-tie userTie75"></i>
@@ -984,8 +978,7 @@
                                                         <div
                                                             *ngIf="doctorProfileImg[app.key]; then showDocProfileImg else showDocDefaultImg">
                                                         </div>
-                                                        <ng-template #showDocProfileImg><img
-                                                                [src]="doctorProfileImg[app.key]" class="profileImg">
+                                                        <ng-template #showDocProfileImg><img [style.background-image]="'url(' + doctorProfileImg[app.key] + ')'" class="profileImg">
                                                         </ng-template>
                                                         <ng-template #showDocDefaultImg><i
                                                                 class="fas fa-user-tie userTie50"></i>
@@ -1257,8 +1250,7 @@
                                         *ngIf="prescriptions[presPresKey].prescriptiondoctor.profileImg; then showDocProfileImg else showDocDefaultImg">
                                     </div>
                                     <ng-template #showDocProfileImg><img
-                                            [src]="prescriptions[presPresKey].prescriptiondoctor.profileImg"
-                                            class="profileImg">
+                                        [style.background-image]="'url(' + prescriptions[presPresKey].prescriptiondoctor.profileImg + ')'" class="profileImg">
                                     </ng-template>
                                     <ng-template #showDocDefaultImg><i class="fas fa-user-tie userTie75"></i>
                                     </ng-template>

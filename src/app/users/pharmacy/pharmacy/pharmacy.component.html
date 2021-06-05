@@ -9,10 +9,18 @@
     <div>
         <span class="popUpTitle">
             {{popUpTitle}}
-        </span> <span [disabled]="confirming == true" (click)="closePopUp()"><i class="fas fa-times-circle closePopUpIcon"></i></span>
+        </span> <span [disabled]="confirming == true" (click)="closePopUp()"><i
+                class="fas fa-times-circle closePopUpIcon"></i></span>
     </div>
     <div class="popUpText">
         {{popUpText}}
+        <div *ngIf="popUpFor=='prescriptionMeds'">
+            <div *ngFor="let med of prescriptionMeds">
+                <div class="patientPresMed">
+                    {{med.medicamentName}} | {{med.treatmentPeriode}}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="popUpConfirmButton" (click)="confirmPopUp()">
         <span *ngIf="confirming == false" class="popUpConfirmIcon">
@@ -53,13 +61,13 @@
     <div *ngIf="notVerified==false">
         <app-header></app-header>
         <div class="pharmacyContainer">
-            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer" style="padding-top: 25px;">
+            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer"
+                style="padding-top: 25px;">
                 <div *ngIf="!selectedUser">
                     <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i)">
                         <div *ngIf="user.userId != pharmacyGet.userId" class="searchedUser">
                             <div class="searchedUserProfilePic">
-                                <img *ngIf="user.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                    [src]="user.userImg">
+                                <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg + ')'" class="profileImg">
                                 <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
                             </div>
                             <div class="searchedUserInfo">
@@ -123,8 +131,8 @@
                     </div>
                     <div class="selectedUserFirstHalfInfo">
                         <div class="selectedUserImgprofileContainer">
-                            <img *ngIf="selectedUser.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                [src]="selectedUser.userImg">
+                            <img *ngIf="selectedUser.userImg" 
+                                [style.background-image]="'url(' + selectedUser.userImg + ')'" class="profileImg">
                             <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
                                 class="fas fa-user-tie"></i>
                         </div>
@@ -177,7 +185,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <button class="fullyBtnSmall" (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
+                            <button class="fullyBtnSmall"
+                                (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
                                 style="width: fit-content;margin: 10px auto; margin-left: 50%; transform: translateX(-50%);">
                                 {{'message'|translate}}
                             </button>
@@ -192,7 +201,7 @@
                     <div class="selectedUserSecondHalfInfo">
                         <div *ngIf="selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist'">
                             <div id="selectedUserMap">
-                                <div *ngIf= "selectedUser.userLatitude && selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
+                                <div *ngIf="selectedUser.userLatitude && selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
                                     class="userDontSetPos">
                                     {{'loadingMap'|translate}}
                                 </div>
@@ -208,16 +217,19 @@
                             </div>
                             <div style="margin: 7px auto;text-align: center;"
                                 *ngIf="selectedUser.patientQuestions.length == 0">
-                                <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span> {{'haveNoquestion'|translate}}
+                                <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span>
+                                {{'haveNoquestion'|translate}}
                             </div>
                             <div *ngIf="selectedUser.patientQuestions.length != 0">
-                                <div *ngFor="let ques of selectedUser.patientQuestions" class="searchedUserQuestionContainer">
+                                <div *ngFor="let ques of selectedUser.patientQuestions"
+                                    class="searchedUserQuestionContainer">
                                     <div class="searchedUserQuestionContainerQuestionPostTime">
                                         <span>
                                             <i class="fas fa-calendar-day"></i> {{ques.questionPostTime | slice:0:10}}
                                         </span>
                                         <span>
-                                            <i class="fas fa-clock"></i> {{ques.questionPostTime | slice:11:(ques.questionPostTime.length-3)}}
+                                            <i class="fas fa-clock"></i> {{ques.questionPostTime |
+                                            slice:11:(ques.questionPostTime.length-3)}}
                                         </span>
                                     </div>
                                     <div class="searchedUserQuestionContainerQuestion">
@@ -229,7 +241,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions" (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
+                                <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions"
+                                    (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
                                     <i class="fas fa-sort-down"></i>
                                 </div>
                             </div>
@@ -247,8 +260,7 @@
                         [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
                         <div class="smallMessagesContainerImg">
                             <div *ngIf="smallConv.userImg">
-                                <img [src]="smallConv.userImg"
-                                    style="height: 45px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                <img [style.background-image]="'url(' + smallConv.userImg + ')'" class="profileImg">
                             </div>
                             <div *ngIf="smallConv.userImg==false">
                                 <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
@@ -301,8 +313,7 @@
                         <div *ngIf="!openConversation.loadMoreMessage">
                             <div class="messageUsernameImgContainer">
                                 <div *ngIf="openConversation.userImg">
-                                    <img [src]="openConversation.userImg"
-                                        style="height: 70px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                    <img [style.background-image]="'url(' + openConversation.userImg + ')'" class="profileImg">
                                 </div>
                                 <div *ngIf="openConversation.userImg==false">
                                     <i class="fas fa-user-tie"
@@ -313,12 +324,11 @@
                         </div>
                         <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
                             <div *ngIf="message.senderId==pharmacyGet.userId && message.messageContent.length != 0"
-                                 class="senderMessageContainer">
+                                class="senderMessageContainer">
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=pharmacyGet.userId && message.messageContent.length != 0"
-                                id="{{message.messageDate}}"
-                                class="recipientMessageContainer">
+                                id="{{message.messageDate}}" class="recipientMessageContainer">
                                 {{message.messageContent}}
                             </div>
                         </div>
@@ -327,15 +337,24 @@
                             {{'seen'|translate}} <i class="fas fa-check"></i>
                         </div>
                         <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
-                            <div *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId" style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}} </span>
+                            <div *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId"
+                                style="margin: 5px auto;">
+                                {{'convClosed'|translate}} <span
+                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                    {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}}
+                                </span>
                             </div>
-                            <div *ngIf="openConversation.statusUpdatedBy != pharmacyGet.userId" style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span *ngIf="openConversation.conversationStatus == 'closeByDefault'"> {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}} {{openConversation.username}} </span>
+                            <div *ngIf="openConversation.statusUpdatedBy != pharmacyGet.userId"
+                                style="margin: 5px auto;">
+                                {{'convClosed'|translate}} <span
+                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                    {{'byDefault'|translate}} </span>
+                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}}
+                                    {{openConversation.username}} </span>
                             </div>
-                            <button *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0"
+                            <button
+                                *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0"
                                 class="fullyBtnSmall sendRequestClosedMessage"
                                 (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
                                 {{'open'|translate}}
@@ -347,8 +366,8 @@
                     </div>
                     <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
                         (click)="readConversation(openConversation.lastMessageSenderId)">
-                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message" (keyup.enter)="sendMessage()"
-                            placeholder="{{'message...'|translate}}" class="messageInput">
+                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                            (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}" class="messageInput">
                         <span (click)="sendMessage()">
                             <i class="fas fa-paper-plane sendMessageIcon"></i>
                         </span>
@@ -394,7 +413,7 @@
                             <div class="imgContainer">
                                 <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
                                 <div class="editImage">
-                                    <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                    <ng-template #showProfileImg><img [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
                                     </ng-template>
                                     <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                     <div class="centerChangeText">{{'changeImage'|translate}}</div>
@@ -428,8 +447,9 @@
                                     {{pharmacyGet.userCity}}
                                 </div>
                             </div>
-    
-                            <div class="userInfoContainer" (click)="todaysPresNumberChanged=false">
+
+                            <div class="userInfoContainer"
+                                (click)="todaysPresNumberChanged=false;getPharmacyPrescriptionsById()">
                                 <div *ngIf="todaysPresNumberChanged" class="todaysNumberDot"></div>
                                 <div class="userInfoContainerTitle">
                                     <div class="userInfoContainerTitleIcon"><i class="fas fa-hospital-user"></i>
@@ -475,7 +495,7 @@
                             </div>
                             <div class="textLien" style="padding-left: 50px;"
                                 (click)="changePasswordClick();passwordDis=true;">
-                                {{'changePassword'|translate}} ?</div> 
+                                {{'changePassword'|translate}} ?</div>
                             <div class="buttons">
                                 <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
                                 <button class="fullyBtn" (click)="checkForm()"
@@ -535,26 +555,39 @@
 
                 </section>
 
-                <div class="sectionContainer" style="margin-top: 40px;">
+                <div *ngIf="showMyPres==true" class="sectionContainer" id="allMyPrescriptions"
+                    style="margin-top: 40px;">
                     <div *ngIf="pharmacyPrescriptions.length == 0" class="noWaitingPres">
                         {{'youHaveNotAnyWaitingPrescription'|translate}}
                     </div>
+                    <div class="closeMypres" (click)="showMyPres=false;">
+                        <i class="fas fa-times"></i>
+                    </div>
                     <div *ngIf="pharmacyPrescriptions.length != 0">
-                        <div *ngFor="let pres of pharmacyPrescriptions;let p = index" class="prescription">
-                            <div>
+                        <div *ngFor="let pres of pharmacyPrescriptions;let p = index">
+                            <div class="prescription" (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName)">
                                 <span style="text-transform: capitalize;">
                                     {{pres.patientFirstName}}
+                                    <span style="font-weight: 600;">
+                                        {{pres.patientLastName}}
+                                    </span>
                                 </span>
-                                <span style="text-transform:uppercase">
-                                     {{pres.patientLastName}}
+                                <div class="prescriptionTime">
+                                    <i class="fas fa-calendar-day"></i> | {{pres.time_sent | slice:0:10}} <i
+                                        class="fas fa-clock"></i> | {{pres.time_sent | slice:11:16}}
+                                </div>
+                                <span style="text-transform: capitalize; ">
+                                    {{pres.doctorFirstName}}
+                                    <span style="font-weight: 600;">
+                                        {{pres.doctorLastName}}
+                                    </span>
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div *ngIf="loadingPrescriptions == true" class="loadingPrescription"
-                    style="margin-left: 50%;transform: translateX(-50%);">
-                        <i class="fas fa-file-medical"></i>
+                    <div *ngIf="loadingPrescriptions == true" class="loadingPrescription">
+                        <i class="fas fa-file-medical" style="margin-left: 50%;"></i>
                     </div>
                 </div>
 
@@ -592,7 +625,7 @@
                                     <ng-template #cinUploadedSuccessfully>
                                         <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
                                         <div class="editPic">
-                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            <ng-template #showProfileImg><img [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
                                             </ng-template>
                                             <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                             <div class="center">{{'changeImage'|translate}}</div>
@@ -619,7 +652,7 @@
                                         <input type="file" (change)="onFileChangedMedicalClinic($event)"
                                             class="uploadImgBtn">
                                         <div class="editPic">
-                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            <ng-template #showProfileImg><img [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
                                             </ng-template>
                                             <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                             <div class="center">{{'changeImage'|translate}}</div>
@@ -648,7 +681,7 @@
                                         <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
                                             class="uploadImgBtn">
                                         <div class="editPic">
-                                            <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                            <ng-template #showProfileImg><img [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
                                             </ng-template>
                                             <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                             <div class="center">{{'changeImage'|translate}}</div>
@@ -718,8 +751,8 @@
                                 <span class="mesure spanButton" (click)="searchMedByNameAndPharmacyId()">
                                     {{'find'|translate}}
                                 </span>
-                                <input type="text" name="medicamentName" (keyup.enter)="searchMedByNameAndPharmacyId()" [(ngModel)]="medicamentName" class="formInput"
-                                    placeholder=" ">
+                                <input type="text" name="medicamentName" (keyup.enter)="searchMedByNameAndPharmacyId()"
+                                    [(ngModel)]="medicamentName" class="formInput" placeholder=" ">
                                 <label for="" class="formLabel">
                                     {{'medicamentName'|translate}}
                                 </label>

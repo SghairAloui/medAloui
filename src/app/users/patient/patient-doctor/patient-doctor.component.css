@@ -162,31 +162,28 @@ body{
 }
 .confirmButtons .green{
     background-color: #308a7b;
-    width: 30%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.55rem;
+    padding-left: 10px;
+    padding-right: 5px;
+    font-size: 1.3rem;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
 }
 .confirmButtons .red{
     background-color: red;
-    width: 30%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.55rem;
-}
-.confirmButtons .green:hover{
-    border: 2px solid #308a7b;
-}
-.confirmButtons .red:hover{
-    border: 2px solid red;
+    padding-left: 10px;
+    padding-right: 5px;
+    font-size: 1.3rem;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
 }
 .fa-trash-alt,.fa-check{
-    margin: 5px 5px;
+    margin: auto 5px;
 }
 .confirmNote{
     margin-top: 3%;
     margin-left: 3%;
-    width: 75%;
 }
 .yourTurn{
     font-family: Arial, Helvetica, sans-serif;
@@ -233,12 +230,6 @@ body{
     border: 1px solid white;
     color:white;
 }
-.profileImg{
-    position: relative;
-    border-radius: 10px;
-    width: auto;
-    height: 100%;
-}
 .loading{
     margin-top: 20px;
     position: relative;
@@ -274,4 +265,20 @@ body{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.topRatedSendMsg{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    right: 10px;
+    bottom: 10px;
+}
+.topRatedSendMsg i{
+    font-size: 30;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }

@@ -48,76 +48,76 @@
             <ng-template #showAllDocApp>{{'allDoctorsApproved'|translate}}</ng-template>
             <ng-template #showNotAppDoc>
                 <div class="notApprovedDocGrid">
-                    <div *ngFor="let doc of pendingDoctors | keyvalue" class="col">
-                        <div *ngIf="!showPendingDoc[doc.key]" class="docDecision">
+                    <div *ngFor="let doc of pendingDoctors ; let d = index" class="col">
+                        <div *ngIf="!showPendingDoc[d]" class="docDecision">
                             <div class="docNotAppNameText">Dr. <span
-                                    style="text-transform: capitalize;">{{doc.value.doctorFirstName}}</span> <span
-                                    style="text-transform: uppercase;"> {{doc.value.doctorLastName}}</span>
-                                {{pendingDocDecision[doc.key]}}
+                                    style="text-transform: capitalize;">{{doc.doctorFirstName}}</span> <span
+                                    style="text-transform: uppercase;"> {{doc.doctorLastName}}</span>
+                                {{pendingDocDecision[d]}}
                             </div>
                         </div>
-                        <div *ngIf="doc.value.doctorStatus == 'pending'" class="pendingStatus">
+                        <div *ngIf="doc.doctorStatus == 'pending'" class="pendingStatus">
                             {{'pending'|translate}} </div>
-                        <div *ngIf="doc.value.doctorStatus == 'reVerify'" class="reVerifyStatus">
+                        <div *ngIf="doc.doctorStatus == 'reVerify'" class="reVerifyStatus">
                             {{'reVerify'|translate}} </div>
                         <div class="pendingDocImg">
                             <div class="strok"></div>
-                            <div *ngIf="profileImages[doc.key]; then showDocProfileImg else showDocDefaultImg">
+                            <div *ngIf="profileImages[d]; then showDocProfileImg else showDocDefaultImg">
                             </div>
-                            <ng-template #showDocProfileImg><img [src]="profileImages[doc.key]" class="profileImg">
+                            <ng-template #showDocProfileImg><img [style.background-image]="'url(' + profileImages[d] + ')'" class="profileImg">
                             </ng-template>
                             <ng-template #showDocDefaultImg>
                                 <i class="fas fa-user-tie"></i>
                             </ng-template>
                         </div>
                         <div class="docNotAppName">Dr. <span
-                                style="text-transform: capitalize;">{{doc.value.doctorFirstName}}</span> <span
-                                style="text-transform: uppercase;"> {{doc.value.doctorLastName}}</span>
+                                style="text-transform: capitalize;">{{doc.doctorFirstName}}</span> <span
+                                style="text-transform: uppercase;"> {{doc.doctorLastName}}</span>
                         </div>
-                        <i class="fas fa-user"></i> {{doc.value.userUsername}}<br>
-                        <div class="specialityContainer">{{doc.value.specialityCode|translate}}</div>
-                        <div *ngIf="docDocuments[doc.key]; then showDocDocuments else hideDocDocuments"></div>
+                        <i class="fas fa-user"></i> {{doc.userUsername}}<br>
+                        <div class="specialityContainer">{{doc.specialityCode|translate}}</div>
+                        <div *ngIf="docDocuments[d]; then showDocDocuments else hideDocDocuments"></div>
                         <ng-template #hideDocDocuments>
                             <div class="showHideDocuments">
-                                <div (click)="docDocuments[doc.key]=true">
+                                <div (click)="docDocuments[d]=true">
                                     {{'showDoc'|translate}}<br>
                                     <i class="fas fa-angle-double-down"></i>
                                 </div>
                             </div>
                         </ng-template>
                         <ng-template #showDocDocuments>
-                            <div *ngIf="documentPic[doc.key]=='cin'">
+                            <div *ngIf="documentPic[d]=='cin'">
                                 <div class="documentImgContainer">
-                                    <span (click)="documentPic[doc.key]='speciality'"><i
+                                    <span (click)="documentPic[d]='speciality'"><i
                                             class="fas fa-chevron-right rightArrow"></i></span>
-                                    <img [src]="cinImages[doc.key]" class="img90">
+                                    <img [src]="cinImages[d]" class="img90">
                                 </div>
                             </div>
-                            <div *ngIf="documentPic[doc.key]=='speciality'">
+                            <div *ngIf="documentPic[d]=='speciality'">
                                 <div class="documentImgContainer">
-                                    <span (click)="documentPic[doc.key]='cin'"><i
+                                    <span (click)="documentPic[d]='cin'"><i
                                             class="fas fa-chevron-left leftArrow"></i></span>
-                                    <span (click)="documentPic[doc.key]='clinic'"><i
+                                    <span (click)="documentPic[d]='clinic'"><i
                                             class="fas fa-chevron-right rightArrow"></i></span>
-                                    <img [src]="specialityImages[doc.key]" class="img90">
+                                    <img [src]="specialityImages[d]" class="img90">
                                 </div>
                             </div>
-                            <div *ngIf="documentPic[doc.key]=='clinic'">
+                            <div *ngIf="documentPic[d]=='clinic'">
                                 <div class="documentImgContainer">
-                                    <span (click)="documentPic[doc.key]='speciality'"><i
+                                    <span (click)="documentPic[d]='speciality'"><i
                                             class="fas fa-chevron-left leftArrow"></i></span>
-                                    <img [src]="clinicImages[doc.key]" class="img90">
+                                    <img [src]="clinicImages[d]" class="img90">
                                 </div>
                             </div>
                             <div class="buttons">
-                                <button class="fullyBtn" (click)="approveDoc(doc.value.userId,doc.key);">
+                                <button class="fullyBtn" (click)="approveDoc(doc.userId,d);">
                                     {{'approve'|translate}} </button>
                                 <button class="fullyBtn"
-                                    (click)="disapproveDoc(doc.value.userId,doc.value.doctorStatus,doc.key);">
+                                    (click)="disapproveDoc(doc.userId,doc.doctorStatus,d);">
                                     {{'disapprove'|translate}} </button>
                             </div>
                             <div class="showHideDocuments">
-                                <div (click)="docDocuments[doc.key]=false">
+                                <div (click)="docDocuments[d]=false">
                                     <i class="fas fa-angle-double-up"></i><br>
                                     {{'hideDoc'|translate}}
                                 </div>

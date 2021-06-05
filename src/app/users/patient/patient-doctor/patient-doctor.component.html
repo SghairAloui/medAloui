@@ -38,87 +38,84 @@
             <div *ngIf="docInfo; then docotorInfo else allDoctorinfo"></div>
             <ng-template #allDoctorinfo>
                 <div class="searchedDocGrid">
-                    <div *ngFor="let doc of searchedDoc | keyvalue" class="doctor"
-                        (click)="showDoctorInfo(doc.key,doc.value.userId)">
+                    <div *ngFor="let doc of searchedDoc ; let d = index" class="doctor"
+                        (click)="showDoctorInfo(d,doc.userId)">
                         <div class="searchedDocProfileImgContainer">
-                            <div *ngIf="doctorsProfileImages[doc.key]; then showDocProfileImg else showDocDefaultImg">
-                            </div>
-                            <ng-template #showDocProfileImg><img [src]="doctorsProfileImages[doc.key]"
-                                    class="profileImg">
-                            </ng-template>
-                            <ng-template #showDocDefaultImg><i class="fas fa-user-tie searchedDocDefaultImg"></i>
-                            </ng-template>
+                            <img *ngIf="doctorsProfileImages[d]"
+                                [style.background-image]="'url(' + doctorsProfileImages[d] + ')'" class="profileImg">
+                            <i *ngIf="doctorsProfileImages[d] == false"
+                                class="fas fa-user-tie searchedDocDefaultImg"></i>
                         </div>
                         <div class="searchedDocInfo">
-                            <div><span style="text-transform: capitalize;">{{doc.value.doctorFirstName}} </span> <span
-                                    style="text-transform: uppercase;">{{doc.value.doctorLastName}}</span></div>
-                            <div><i class="fas fa-map-marked-alt"></i> {{doc.value.userCity}} </div>
-                            <div *ngIf="doc.value.doctorRate != 0; then showRate else notRated"></div>
+                            <div><span style="text-transform: capitalize;">{{doc.doctorFirstName}} </span> <span
+                                    style="text-transform: uppercase;">{{doc.doctorLastName}}</span></div>
+                            <div><i class="fas fa-map-marked-alt"></i> {{doc.userCity}} </div>
+                            <div *ngIf="doc.doctorRate != 0; then showRate else notRated"></div>
                             <ng-template #showRate>
-                                <div *ngIf="doc.value.doctorRate == 0.5">
+                                <div *ngIf="doc.doctorRate == 0.5">
                                     <i class="fas fa-star-half-alt"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 1">
+                                <div *ngIf="doc.doctorRate == 1">
                                     <i class="fas fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 1.5">
+                                <div *ngIf="doc.doctorRate == 1.5">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 2">
+                                <div *ngIf="doc.doctorRate == 2">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 2.5">
+                                <div *ngIf="doc.doctorRate == 2.5">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 3">
+                                <div *ngIf="doc.doctorRate == 3">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="far fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 3.5">
+                                <div *ngIf="doc.doctorRate == 3.5">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 4">
+                                <div *ngIf="doc.doctorRate == 4">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="far fa-star"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 4.5">
+                                <div *ngIf="doc.doctorRate == 4.5">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <div *ngIf="doc.value.doctorRate == 5">
+                                <div *ngIf="doc.doctorRate == 5">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -130,12 +127,12 @@
                                 {{'notRated'|translate}}
                             </ng-template>
                         </div>
-                        <div *ngIf="!loadDoctorInfo[doc.key]" class="docMoreDatails">
+                        <div *ngIf="!loadDoctorInfo[d]" class="docMoreDatails">
                             <div class="text">
                                 {{'showMoreDetails'|translate}}
                             </div>
                         </div>
-                        <div *ngIf="loadDoctorInfo[doc.key]" class="loadingClass">
+                        <div *ngIf="loadDoctorInfo[d]" class="loadingClass">
                             <div class="loading">
                                 <span></span>
                                 <span></span>
@@ -173,7 +170,8 @@
                                     <div
                                         *ngIf="doctorsProfileImages[selectedDoctorKey]; then showDocProfileImg else showDocDefaultImg">
                                     </div>
-                                    <ng-template #showDocProfileImg><img [src]="doctorsProfileImages[selectedDoctorKey]"
+                                    <ng-template #showDocProfileImg><img
+                                            [style.background-image]="'url(' + doctorsProfileImages[selectedDoctorKey] + ')'"
                                             class="profileImg">
                                     </ng-template>
                                     <ng-template #showDocDefaultImg><i
@@ -271,42 +269,88 @@
                                         {{'whatIs'|translate}}
                                         {{specialityName}}?</div>
                                 </ng-template>
-                                <div class="infoGridTowColumn">
-                                    <div class="infoContainer">
-                                        <div class="infoTitle">{{'gender'|translate}}</div>
-                                        <div class="info"> {{searchedDoc[selectedDoctorKey].doctorGender}} </div>
+                                <div class="centerDocInfo">
+                                    <div class="newDoctorInfoContainer">
+                                        <i class="fas fa-venus-mars"></i>
+                                        <div>
+                                            <span *ngIf="searchedDoc[selectedDoctorKey].doctorGender == 'male'">
+                                                {{'male'|translate}}
+                                            </span>
+                                            <span *ngIf="searchedDoc[selectedDoctorKey].doctorGender == 'female'">
+                                                {{'female'|translate}}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="infoContainer">
-                                        <div class="infoTitle">{{'Adress'|translate}}</div>
-                                        <div class="info">{{searchedDoc[selectedDoctorKey].userCity}} -
-                                            {{appointmentDocInfo[selectedDoctorKey].exactAddress}}
+
+                                    <div class="newDoctorInfoContainer">
+                                        <i class="fas fa-coins"></i>
+                                        <div>
+                                            {{appointmentDocInfo[selectedDoctorKey].appointmentPrice}}
+                                            {{'dt'|translate}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="priceContainer">
-                                    <div class="infoTitle">{{'price'|translate}}</div>
-                                    <div class="info">{{appointmentDocInfo[selectedDoctorKey].appointmentPrice}}
-                                        {{'dt'|translate}}
-                                    </div>
+                                <div class="doctorAddress">
+                                    {{searchedDoc[selectedDoctorKey].userCity}} -
+                                    {{appointmentDocInfo[selectedDoctorKey].exactAddress}}
                                 </div>
-                                <div class="sendMessageIconBtn" (click)="startConversation(searchedDoc[selectedDoctorKey].userId,searchedDoc[selectedDoctorKey].doctorFirstName,searchedDoc[selectedDoctorKey].doctorLastName)">
+                                <div class="sendMessageIconBtn"
+                                    (click)="startConversation(searchedDoc[selectedDoctorKey].userId,searchedDoc[selectedDoctorKey].doctorFirstName,searchedDoc[selectedDoctorKey].doctorLastName)">
                                     <i class="fas fa-envelope"></i>
                                 </div>
                             </div>
                             <div class="doctorAppointmentContainer">
-                                <div class="appointmentTitle">{{'appointment'|translate}}</div>
-                                <div class="center">
-                                    <span style="margin-left: 4%;">{{'selectAppointmentDay'|translate}}</span>
-                                    <div class="calendarGrid">
-                                        <div class="day dayNumber" *ngFor="let day of monthDays">
-                                            <input type="radio" id="day{{day}}" name="dayName"
-                                                (click)="daySelected(day)" [disabled]="monthDaysDis[day]">
-                                            <label for="day{{day}}" id="day{{day}}Lab" class="fillAllDay"
-                                                [disabled]="monthDaysDis[day]">{{day}}</label>
+                                <div *ngIf="showAppointment == true">
+                                    <div class="appointmentTitle">
+                                        <div class="appointmentTitleSelectedItem">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <div (click)="showAppointment=false;loadMap()">
+                                            <i class="fas fa-map-marked-alt"></i>
                                         </div>
                                     </div>
-                                    <button class="emptyBtn white" (click)="takeAppointment()">
-                                        {{'takeAppointment'|translate}} </button>
+                                    <div class="center">
+                                        <span style="margin-left: 4%;">{{'selectAppointmentDay'|translate}}</span>
+                                        <div class="calendarGrid">
+                                            <div class="day dayNumber" *ngFor="let day of monthDays">
+                                                <input type="radio" id="day{{day}}" name="dayName"
+                                                    (click)="daySelected(day)" [disabled]="monthDaysDis[day]">
+                                                <label for="day{{day}}" id="day{{day}}Lab" class="fillAllDay"
+                                                    [disabled]="monthDaysDis[day]">{{day}}</label>
+                                            </div>
+                                        </div>
+                                        <button class="emptyBtn white" (click)="takeAppointment()">
+                                            {{'takeAppointment'|translate}} </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="showAppointment == false">
+                                    <div class="appointmentTitle">
+                                        <div (click)="showAppointment=true">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <div class="appointmentTitleSelectedItem">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="center">
+                                        <div class="loadingMap">
+                                            <span *ngIf="!appointmentDocInfo[selectedDoctorKey].doctorLatitude">
+                                                <span style="text-transform: capitalize;">
+                                                    searchedDoc[selectedDoctorKey].doctorFirstName
+                                                    <span style="font-weight: 600;">
+                                                        searchedDoc[selectedDoctorKey].doctorLastName
+                                                    </span>
+                                                </span>
+                                                {{'heHasNotSetHerPositionYet'|translate}}
+                                            </span>
+                                            <span *ngIf="appointmentDocInfo[selectedDoctorKey].doctorLatitude">
+                                                {{'loadingMap'|translate}}
+                                            </span>
+                                        </div>
+                                        <div id="doctorMap"></div>
+                                        <button class="emptyBtn white routeBtn" (click)="addRouteToMap()">
+                                            <i class="fas fa-route"></i> </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -314,7 +358,8 @@
                     <div *ngIf="!appointment">
                         <div class="sectionContainer">
                             <div class="yourTurn"> {{'yourTurn'|translate}} <span
-                                    class="patientTurn">{{patientTurn}}</span> {{'between'|translate}}
+                                    class="patientTurn">{{patientTurn}}</span>
+                                {{'between'|translate}}
                                 <span class="patientTurn">
                                     {{getApproximationTime(appointmentDocInfo[selectedDoctorKey].startTime,appointmentDocInfo[selectedDoctorKey].appointmentApproximateDuration,patientTurn)}}</span>
                                 {{'on'|translate}} <span class="patientTurn"> {{appointmentDate}}</span>
@@ -342,89 +387,91 @@
     <section id="patientTopRatedDoctorSection">
         <div class="sectionTitle">{{'topRated'|translate}}</div>
         <div class="sectionContainer">
-            <div *ngIf="topRatedDoctors.length == 0" style="text-align: center; margin-left: auto;margin-right: auto;padding: 0px 15px;">
+            <div *ngIf="topRatedDoctors.length == 0"
+                style="text-align: center; margin-left: auto;margin-right: auto;padding: 0px 15px;">
                 {{'ourAppHaveNoDocYet'|translate}}
             </div>
             <div *ngIf="topRatedDoctors" class="searchedDocGrid">
-                <div *ngFor="let doc of topRatedDoctors | keyvalue" class="doctor">
+                <div *ngFor="let doc of topRatedDoctors ; let d=index" class="doctor">
                     <div class="searchedDocProfileImgContainer">
-                        <div *ngIf="doc.value.profileImg; then showDocProfileImg else showDocDefaultImg">
+                        <div *ngIf="doc.profileImg; then showDocProfileImg else showDocDefaultImg">
                         </div>
-                        <ng-template #showDocProfileImg><img [src]="doc.value.profileImg" class="profileImg">
+                        <ng-template #showDocProfileImg><img [style.background-image]="'url(' + doc.profileImg + ')'"
+                                class="profileImg">
                         </ng-template>
                         <ng-template #showDocDefaultImg><i class="fas fa-user-tie searchedDocDefaultImg"></i>
                         </ng-template>
                     </div>
                     <div class="searchedDocInfo">
-                        <div><span style="text-transform: capitalize;">{{doc.value.doctorFirstName}} </span> <span
-                                style="text-transform: uppercase;">{{doc.value.doctorLastName}}</span></div>
-                        <div><i class="fas fa-map-marked-alt"></i> {{doc.value.userCity}} </div>
-                        <div *ngIf="doc.value.doctorRate != 0; then showRate else notRated"></div>
+                        <div><span style="text-transform: capitalize;">{{doc.doctorFirstName}} </span> <span
+                                style="text-transform: uppercase;">{{doc.doctorLastName}}</span></div>
+                        <div><i class="fas fa-map-marked-alt"></i> {{doc.userCity}} </div>
+                        <div *ngIf="doc.doctorRate != 0; then showRate else notRated"></div>
                         <ng-template #showRate>
-                            <div *ngIf="doc.value.doctorRate == 0.5">
+                            <div *ngIf="doc.doctorRate == 0.5">
                                 <i class="fas fa-star-half-alt"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 1">
+                            <div *ngIf="doc.doctorRate == 1">
                                 <i class="fas fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 1.5">
+                            <div *ngIf="doc.doctorRate == 1.5">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star-half-alt"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 2">
+                            <div *ngIf="doc.doctorRate == 2">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 2.5">
+                            <div *ngIf="doc.doctorRate == 2.5">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star-half-alt"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 3">
+                            <div *ngIf="doc.doctorRate == 3">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 3.5">
+                            <div *ngIf="doc.doctorRate == 3.5">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star-half-alt"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 4">
+                            <div *ngIf="doc.doctorRate == 4">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 4.5">
+                            <div *ngIf="doc.doctorRate == 4.5">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star-half-alt"></i>
                             </div>
-                            <div *ngIf="doc.value.doctorRate == 5">
+                            <div *ngIf="doc.doctorRate == 5">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -436,13 +483,14 @@
                             {{'notRated'|translate}}
                         </ng-template>
                     </div>
+                    <button class="fullyBtn topRatedSendMsg"
+                        (click)="startConversation(doc.userId,doc.doctorFirstName,doc.doctorLastName)">
+                        <i class="fas fa-envelope"></i>
+                    </button>
                 </div>
             </div>
             <div *ngIf="topRatedLoadMore" class="loadMoreArrow" (click)="getTopRatedDoctor()">
-                <div>
-                    {{'loadMoreDiagnose'|translate}}</div>
-                <i
-                    class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
+                <i class="fas fa-angle-double-down loadMoreDiagnosesIcon"></i>
             </div>
             <div *ngIf="!topRatedLoadMore" class="centerAddDocLoaded">
                 {{'allDocLoaded'|translate}}
@@ -495,7 +543,8 @@
     <section id="patientWhyHealthCareSection">
         <div class="sectionTitle">{{'whyHealthCare'|translate}}</div>
         <div class="sectionContainer">
-            <span style="font-size: 1.1rem;font-weight: 500; padding-left: 20px;">{{'helthCareHelpYouTo'|translate}}</span>
+            <span
+                style="font-size: 1.1rem;font-weight: 500; padding-left: 20px;">{{'helthCareHelpYouTo'|translate}}</span>
             <div class="grid">
                 <div class="gridInfo">
                     <div class="gridinfoCenter">

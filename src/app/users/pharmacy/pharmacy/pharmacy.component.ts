@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { PrescriptionService } from 'src/app/services/prescription.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { Conversation } from 'src/model/Conversation';
@@ -18,6 +19,7 @@ import { OpenConversation } from 'src/model/OpenConversation';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
+import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -45,7 +47,8 @@ export class PharmacyComponent implements OnInit {
     private doctorService: DoctorService,
     private notificationService: NotificationService,
     private conversationService: ConversationService,
-    private webSocketService: WebSocketService) {
+    private webSocketService: WebSocketService,
+    private prescriptionService:PrescriptionService) {
     // Open connection with server socket
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, async frame => {
@@ -249,6 +252,8 @@ export class PharmacyComponent implements OnInit {
   loadMorePrescription: boolean = true;
   loadingPrescriptions: boolean = true;
   newMessage: number = 0;
+  showMyPres:boolean;
+  prescriptionMeds:PrescriptionMedicament [];
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -324,10 +329,10 @@ export class PharmacyComponent implements OnInit {
   getMyNotifications(userId: number) {
     this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
       res => {
-        console.log(res);
         let notifications: NotificationGet[] = [];
         notifications = res;
         for (let notification of notifications) {
+          notification.order = 'end';
           this.headerService.addNotification(notification);
           if (notification.notificationType == 'setYourGeoLocation')
             this.geoNotId = notification.notificationId;
@@ -380,8 +385,6 @@ export class PharmacyComponent implements OnInit {
   }
 
   async setPharmacyPosition() {
-    console.log(this.pharmacyGet);
-    console.log(this.pharmacyGet.pharmacyLatitude + ' ...... ' + this.pharmacyGet.pharmacyLongitude);
     if (!navigator.geolocation) {
       console.log('not supported');
     }
@@ -1030,7 +1033,6 @@ export class PharmacyComponent implements OnInit {
             this.openConversation.loadMoreMessage = true;
           else
             this.openConversation.loadMoreMessage = false;
-          console.log(this.openConversation.loadMoreMessage);
           this.openConversation.messagePage += 1;
           this.loadingMessages = false;
         }
@@ -1240,12 +1242,26 @@ export class PharmacyComponent implements OnInit {
         else
           this.loadMorePrescription = false;
         this.loadingPrescriptions = false;
+        this.showMyPres=true;
+        document.getElementById("allMyPrescriptions").scrollIntoView({'behavior':'smooth'});
       },
       err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 3500,
           positionClass: 'toast-bottom-left'
         });
+      }
+    );
+  }
+
+  getMedicamentsByPrescriptionId(presId:number,name:string){
+    this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
+      res=>{
+        this.prescriptionMeds = [];
+        this.prescriptionMeds =res;
+        this.popUpTitle=name;
+        this.popUpFor="prescriptionMeds";
+        this.popUp = true;
       }
     );
   }

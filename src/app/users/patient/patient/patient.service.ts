@@ -12,8 +12,8 @@ import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 
 const PATIENT_API = environment.apiUrl+'api/patient/';
 const IMAGE_API = environment.apiUrl+'api/image/';
-const MEDICALPROFILE_API = environment.apiUrl+'medicalProfile/';
-const MEDICALPROFILEDISEASE_API = environment.apiUrl+'medicalProfileDisease/';
+const MEDICALPROFILE_API = environment.apiUrl+'api/medicalProfile/';
+const MEDICALPROFILEDISEASE_API = environment.apiUrl+'api/medicalProfileDisease/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

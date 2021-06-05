@@ -136,7 +136,7 @@ html,body{
 .homeHeader header{
     top: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 1002;
     width: 100%;
     height: 50px;
     font-weight: 500;
@@ -396,7 +396,7 @@ html,body{
 .loginHeader .parentHeader{
     top: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 1002;
     width: 100%;
     height: 50px;
     font-weight: 500;
@@ -464,7 +464,7 @@ html,body{
     position: fixed;
     height: 100%;
     width: 20%;
-    z-index: 1;
+    z-index: 1001;
     background-color: var(--box-color);
     box-shadow: var(--box-shadow);
     transition: all .3s ease-in-out;
@@ -569,6 +569,16 @@ html,body{
     border-radius: 5px;
     color: white;
 }
+.logOutBtn{
+    width: fit-content;
+    height: fit-content;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+}
 @media screen and (max-width: 1000px){
     .homeHeader header{
         font-size: 14px;
@@ -603,7 +613,7 @@ html,body{
     .homeHeader .settingsBoxUnder700Conatiner{
         padding: 5px 10px;
         display: block;
-        z-index: 4;
+        z-index: 1004;
         position: fixed;
         width: auto;
         height: auto;
@@ -676,7 +686,7 @@ html,body{
     }
     .homeHeader #displayMenuLabel{
         opacity: 100%;
-        z-index: 2;
+        z-index: 1002;
         width: 40px;
         height: 40px;
         border-radius: 5px;

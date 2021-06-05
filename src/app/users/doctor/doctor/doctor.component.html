@@ -42,8 +42,8 @@
                     <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i,true)">
                         <div *ngIf="user.userId != doctorGet.userId" class="searchedUser">
                             <div class="searchedUserProfilePic">
-                                <img *ngIf="user.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                    [src]="user.userImg">
+                                <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg + ')'"
+                                    class="profileImg">
                                 <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
                             </div>
                             <div class="searchedUserInfo">
@@ -107,8 +107,8 @@
                     </div>
                     <div class="selectedUserFirstHalfInfo">
                         <div class="selectedUserImgprofileContainer">
-                            <img *ngIf="selectedUser.userImg" style="height:100%; position: absolute;bottom: 0px;"
-                                [src]="selectedUser.userImg">
+                            <img *ngIf="selectedUser.userImg"
+                                [style.background-image]="'url(' + selectedUser.userImg + ')'" class="profileImg">
                             <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
                                 class="fas fa-user-tie"></i>
                         </div>
@@ -217,8 +217,7 @@
                         [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
                         <div class="smallMessagesContainerImg">
                             <div *ngIf="smallConv.userImg">
-                                <img [src]="smallConv.userImg"
-                                    style="height: 45px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                <img [style.background-image]="'url(' + smallConv.userImg+ ')'" class="profileImg">
                             </div>
                             <div *ngIf="smallConv.userImg==false">
                                 <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
@@ -271,8 +270,8 @@
                         <div *ngIf="!openConversation.loadMoreMessage">
                             <div class="messageUsernameImgContainer">
                                 <div *ngIf="openConversation.userImg">
-                                    <img [src]="openConversation.userImg"
-                                        style="height: 70px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                    <img [style.background-image]="'url(' + openConversation.userImg + ')'"
+                                        class="profileImg">
                                 </div>
                                 <div *ngIf="openConversation.userImg==false">
                                     <i class="fas fa-user-tie"
@@ -287,8 +286,7 @@
                                 {{message.messageContent}}
                             </div>
                             <div *ngIf="message.senderId!=doctorGet.userId && message.messageContent.length != 0"
-                                id="{{message.messageDate}}"
-                                class="recipientMessageContainer">
+                                id="{{message.messageDate}}" class="recipientMessageContainer">
                                 {{message.messageContent}}
                             </div>
                         </div>
@@ -324,8 +322,8 @@
                     </div>
                     <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
                         (click)="readConversation(openConversation.lastMessageSenderId)">
-                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message" (keyup.enter)="sendMessage()"
-                            placeholder="{{'message...'|translate}}" class="messageInput">
+                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                            (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}" class="messageInput">
                         <span (click)="sendMessage()">
                             <i class="fas fa-paper-plane sendMessageIcon"></i>
                         </span>
@@ -342,7 +340,9 @@
                                 <div class="imgContainer">
                                     <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
                                     <div class="editImage">
-                                        <ng-template #showProfileImg><img [src]="retrievedImage" class="profileImg">
+                                        <ng-template #showProfileImg><img
+                                                [style.background-image]="'url(' + retrievedImage + ')'"
+                                                class="profileImg">
                                         </ng-template>
                                         <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
                                         <div class="centerChangeText">{{'changeImage'|translate}}</div>
@@ -625,7 +625,8 @@
                                         <ng-template #cinUploadedSuccessfully>
                                             <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -656,7 +657,8 @@
                                             <input type="file" (change)="onFileChangedMedicalClinic($event)"
                                                 class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -687,7 +689,8 @@
                                             <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
                                                 class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -1139,7 +1142,8 @@
                                         <ng-template #cinUploadedSuccessfully>
                                             <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -1169,7 +1173,8 @@
                                             <input type="file" (change)="onFileChangedMedicalClinic($event)"
                                                 class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -1200,7 +1205,8 @@
                                             <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
                                                 class="uploadImgBtn">
                                             <div class="editPic">
-                                                <ng-template #showProfileImg><img [src]="retrievedImage"
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
                                                         class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showDefaultImg><i class="fas fa-user-tie"></i>
@@ -1253,7 +1259,8 @@
                                                     *ngIf="patientTodayProfilePic[patientKey]; then showPatientProfileImg else showPatientDefaultImg">
                                                 </div>
                                                 <ng-template #showPatientProfileImg><img
-                                                        [src]="patientTodayProfilePic[patientKey]" class="profileImg">
+                                                        [style.background-image]="'url(' + patientTodayProfilePic[patientKey] + ')'"
+                                                        class="profileImg">
                                                 </ng-template>
                                                 <ng-template #showPatientDefaultImg><i
                                                         class="fas fa-user-tie patientBigUserTie"></i>
@@ -1403,7 +1410,7 @@
                                                                             *ngIf="doctorProfileImgForMedicalProfileDis[todayDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
                                                                         </div>
                                                                         <ng-template #showDocProfileImg><img
-                                                                                [src]="doctorProfileImgForMedicalProfileDis[todayDiseaseKey]"
+                                                                                [style.background-image]="'url(' + doctorProfileImgForMedicalProfileDis[todayDiseaseKey] + ')'"
                                                                                 class="profileImg">
                                                                         </ng-template>
                                                                         <ng-template #showDocDefaultImg><i
@@ -1576,7 +1583,7 @@
                                                                 *ngIf="patientTodayProfilePic[patient.key]; then showPatientProfileImg else showPatientDefaultImg">
                                                             </div>
                                                             <ng-template #showPatientProfileImg><img
-                                                                    [src]="patientTodayProfilePic[patient.key]"
+                                                                    [style.background-image]="'url(' + patientTodayProfilePic[patient.key] + ')'"
                                                                     class="profileImg">
                                                             </ng-template>
                                                             <ng-template #showPatientDefaultImg><i
@@ -1616,8 +1623,8 @@
                                         *ngIf="currentPatientProfileImg[currentPatient-1]; then showCurrentPatientProfilePic else showCurrentPatientDefaultProfilePic">
                                     </div>
                                     <ng-template #showCurrentPatientProfilePic>
-                                        <img [src]="currentPatientProfileImg[currentPatient-1]"
-                                            class="currentPatientProfilePic">
+                                        <img [style.background-image]="'url(' + currentPatientProfileImg[currentPatient-1] + ')'"
+                                            class="profileImg">
                                     </ng-template>
                                     <ng-template #showCurrentPatientDefaultProfilePic>
                                         <i class="fas fa-user-tie currentPatientProfileDefaultPic"></i>
@@ -1760,7 +1767,7 @@
                                                                 *ngIf="doctorProfileImgForMedicalProfileDis[currentDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
                                                             </div>
                                                             <ng-template #showDocProfileImg><img
-                                                                    [src]="doctorProfileImgForMedicalProfileDis[currentDiseaseKey]"
+                                                                    [style.background-image]="'url(' + doctorProfileImgForMedicalProfileDis[currentDiseaseKey] + ')'"
                                                                     class="profileImg">
                                                             </ng-template>
                                                             <ng-template #showDocDefaultImg><i
@@ -2068,8 +2075,8 @@
                                                 *ngIf="currentPatientProfileImg[currentPatient]; then showNextPatientProfilePic else showNextPatientDefaultProfilePic">
                                             </div>
                                             <ng-template #showNextPatientProfilePic>
-                                                <img [src]="currentPatientProfileImg[currentPatient]"
-                                                    class="currentPatientProfilePic">
+                                                <img [style.background-image]="'url(' + currentPatientProfileImg[currentPatient] + ')'"
+                                                    class="profileImg">
                                             </ng-template>
                                             <ng-template #showNextPatientDefaultProfilePic>
                                                 <i class="fas fa-user-tie nextPatientProfileDefaultPic"></i>
@@ -2126,7 +2133,7 @@
                                             *ngIf="patientTomorrowProfilePic[tomorrowPatientKey]; then showTomorrowPatientProfileImg else showTomorrowPatientDefaultImg">
                                         </div>
                                         <ng-template #showTomorrowPatientProfileImg><img
-                                                [src]="patientTomorrowProfilePic[tomorrowPatientKey]"
+                                                [style.background-image]="'url(' + patientTomorrowProfilePic[tomorrowPatientKey] + ')'"
                                                 class="profileImg">
                                         </ng-template>
                                         <ng-template #showTomorrowPatientDefaultImg><i
@@ -2275,7 +2282,7 @@
                                                                     *ngIf="doctorProfileImgForMedicalProfileDis[tomorrowDiseaseKey]; then showDocProfileImg else showDocDefaultImg">
                                                                 </div>
                                                                 <ng-template #showDocProfileImg><img
-                                                                        [src]="doctorProfileImgForMedicalProfileDis[tomorrowDiseaseKey]"
+                                                                        [style.background-image]="'url(' + doctorProfileImgForMedicalProfileDis[tomorrowDiseaseKey] + ')'"
                                                                         class="profileImg">
                                                                 </ng-template>
                                                                 <ng-template #showDocDefaultImg><i
@@ -2444,7 +2451,7 @@
                                                         *ngIf="patientTomorrowProfilePic[patient.key]; then showTomorrowPatientProfileImg else showTomorrowPPatientDefaultImg">
                                                     </div>
                                                     <ng-template #showTomorrowPatientProfileImg><img
-                                                            [src]="patientTomorrowProfilePic[patient.key]"
+                                                            [style.background-image]="'url(' + patientTomorrowProfilePic[patient.key] + ')'"
                                                             class="profileImg">
                                                     </ng-template>
                                                     <ng-template #showTomorrowPPatientDefaultImg><i

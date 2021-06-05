@@ -18,6 +18,8 @@ import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
 
+declare const L: any;
+
 @Component({
   selector: 'app-patient-doctor',
   templateUrl: './patient-doctor.component.html',
@@ -84,6 +86,8 @@ export class PatientDoctorComponent implements OnInit {
   loadDoctorInfo: boolean[] = [];
   doctorApp: boolean; generateDays: boolean;
   topRatedLoadMore: boolean;
+  showAppointment: boolean = true;
+  doctorMap;
 
   ngOnInit(): void {
     this.appointment = true;
@@ -405,8 +409,8 @@ export class PatientDoctorComponent implements OnInit {
           this.docInfo = false;
           this.appointment = true;
           document.getElementById("patientFindDoctorSection").scrollIntoView({ behavior: "smooth" });
-          this.patientComponent.myAppointment=[];
-          this.patientComponent.appointmentPage=0;
+          this.patientComponent.myAppointment = [];
+          this.patientComponent.appointmentPage = 0;
           this.patientComponent.getAppointments();
         }
       }, err => {
@@ -424,6 +428,7 @@ export class PatientDoctorComponent implements OnInit {
   }
 
   showDoctorInfo(key: number, userId: number) {
+    this.showAppointment=true;
     this.loadDoctorInfo[this.selectedDoctorKey] = false;
     this.selectedDoctorKey = key;
     this.generateDays = false;
@@ -540,5 +545,44 @@ export class PatientDoctorComponent implements OnInit {
 
   startConversation(recipientId: number, firstName: string, lastName: string) {
     this.patientComponent.startConversation(recipientId, firstName, lastName);
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  async loadMap() {
+    if (this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude) {
+      let container = document.getElementById('doctorMap');
+      while (!container) {
+        container = document.getElementById('doctorMap');
+        await this.sleep(500);
+      }
+      this.doctorMap = L.map('doctorMap').setView([this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude, this.appointmentDocInfo[this.selectedDoctorKey].doctorLongitude], 13);
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(this.doctorMap);
+
+      let marker = L.marker([this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude, this.appointmentDocInfo[this.selectedDoctorKey].doctorLongitude]).addTo(this.doctorMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.searchedDoc[this.selectedDoctorKey].doctorFirstName + ' ' + this.searchedDoc[this.selectedDoctorKey].doctorLastName + + "</b>").openPopup();
+    }
+  }
+
+  addRouteToMap(){
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude, this.appointmentDocInfo[this.selectedDoctorKey].doctorLongitude)
+        ]
+      }).addTo(this.doctorMap);
+    });
   }
 }

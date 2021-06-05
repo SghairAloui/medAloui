@@ -5,4 +5,6 @@ export interface AppointmentDocInfoGet{
     maxPatientPerDay:number;
     appointmentApproximateDuration:number;
     appointmentPrice:number;
+    doctorLatitude:number;
+    doctorLongitude:number;
 }

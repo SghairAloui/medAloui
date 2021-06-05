@@ -564,9 +564,3 @@ html,body{
 .loadingClass .loading{
     margin-top: 0px;
 }
-.profileImg{
-    position: relative;
-    border-radius: 10px;
-    width: auto;
-    height: 100%;
-}

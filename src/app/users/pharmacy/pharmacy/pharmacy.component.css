@@ -579,7 +579,48 @@ html,body{
     text-align: center;
 }
 .prescription{
-    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
     margin: 5px 10px;
+    padding: 15px 10px;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+}
+.prescription:hover{
+    background-color: #c5c2c234;
+}
+.closeMypres{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 30px;
+    width: 30px;
+    background-color: #308a7b;
+    color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+.closeMypres .fa-times{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.prescriptionTime{
+    margin: auto;
+    color: var(--gray-text);
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.prescriptionTime .fa-clock{
+    margin-left: 15px;
+}
+.patientPresMed{
     padding: 5px 10px;
+    margin: 7px 0px;
+    background-color: #c5c2c234;
+    border-radius: 5px;
+    text-align: center;
 }

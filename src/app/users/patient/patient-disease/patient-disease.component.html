@@ -9,12 +9,18 @@
     <section id="addQuestionSection">
         <div class="sectionTitle">{{'addQuestion'|translate}}</div>
         <div class="sectionContainer">
+            <div class="addQuesQuesAbout">
+                {{'questionAbout'|translate}} <i class="fas fa-question-circle"></i>
+            </div>
             <div *ngIf="question=='question'" class="askButtons">
                 <button class="emptyBtn" (click)="question='disease'">
-                    {{'askAboutDisease'|translate}}
+                    {{'disease'|translate}}
                 </button>
                 <button class="emptyBtn" (click)="question='medicament'">
-                    {{'askAboutMedicament'|translate}}
+                    {{'medicament'|translate}}
+                </button>
+                <button class="emptyBtn" (click)="question='inquire'">
+                    {{'inquire'|translate}}
                 </button>
             </div>
             <div *ngIf="question=='disease'">
@@ -61,6 +67,28 @@
                     </button>
                 </div>
             </div>
+            <div *ngIf="question=='inquire'">
+                <div class="formDiv questionName">
+                    <input type="text" class="formInput" name="inquireName"
+                        [class.labelInvalidInfo]="invalidInquireName" [(ngModel)]="inquireName"
+                        id="inquireName" placeholder=" " (keyup)="invalidInquireName=false">
+                    <label for="inquireName" class="formLabel" style="text-transform: capitalize;">{{'inquire'|translate}}</label>
+                </div>
+                <div class="formDiv">
+                    <input type="text" class="formInput" name="inquireQuestion"
+                        [class.labelInvalidInfo]="invalidInquireQuestion" [(ngModel)]="inquireQuestion"
+                        id="inquireQuestion" placeholder=" " (keyup)="invalidInquireQuestion=false">
+                    <label for="inquireQuestion" class="formLabel">{{'question'|translate}}</label>
+                </div>
+                <div class="buttons">
+                    <button class="emptyBtn" (click)="question='question'">
+                        {{'goBack'|translate}}
+                    </button>
+                    <button class="emptyBtn" (click)="postQuestion()">
+                        {{'postQuestion'|translate}}
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -95,6 +123,11 @@
                                         {{'medicament'|translate}} <i class="fas fa-pills"></i>
                                     </div>
                                 </div>
+                                <div *ngIf="ques.questionAbout=='inquire'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'inquire'|translate}} <i class="fas fa-question-circle"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="questionTitle">
                                 <span class="title">
@@ -111,14 +144,14 @@
                         <div class="questionWithPosterInfo">
                             <div class="posterInfo">
                                 <span *ngIf="ques.posterImageProfile" class="posterImageProfileContainer"
-                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'')">
-                                    <img [src]="ques.posterImageProfile" class="posterImageProfile">
+                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'',0)">
+                                    <img [style.background-image]="'url(' + ques.posterImageProfile + ')'" class="profileImg">
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
                                     </div>
                                 </span>
                                 <span *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer"
-                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'')">
+                                (click)="patientComponent.startConversation(ques.postBy,ques.userFullName,'',0)">
                                     <i class="fas fa-user-tie userTiePoster"></i>
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
@@ -136,7 +169,7 @@
                     </div>
                     <div *ngFor="let comment of ques.comments ; let c=index" class="comment">
                         <div *ngIf="comment.posterProfileImage;" class="commentProfileImgConatiner">
-                            <img [src]="comment.posterProfileImage" class="commentProfileImg">
+                            <img [style.background-image]="'url(' + comment.posterProfileImage + ')'" class="profileImg">
                         </div>
                         <div *ngIf="!comment.posterProfileImage;" class="commentProfileImgConatiner">
                             <i class="fas fa-user-tie userTie50"></i>
@@ -144,7 +177,7 @@
                         <div class="commentLeftLine"></div>
                         <div class="commentText">
                             <div class="commentPostBy">
-                                {{comment.commentPostBy}}
+                                {{comment.commentPostBy}} <span style="color: #308a7b; margin-left: 10px;" (click)="patientComponent.startConversation(comment.postedBy,comment.commentPostBy,'',0)"><i class="fas fa-envelope"></i></span>
                             </div>
                             <div class="commentValue">
                                 {{comment.comment}}
@@ -154,14 +187,8 @@
                     <div *ngIf="ques.loadMoreComment"
                         (click)="getPostCommentsByPostId(ques.questionId,i)">
                         <div class="loadMoreComment">
-                            {{'loadMoreComment'|translate}}
-                        </div>
-                        <div class="loadMoreComment">
                             <i class="fas fa-angle-down"></i>
                         </div>
-                    </div>
-                    <div *ngIf="ques.comments.length!=0 && !ques.loadMoreComment" class="allCommentLoaded defaultCursor">
-                        {{'allCommentLoaded'|translate}}
                     </div>
                 </div>
             </div>

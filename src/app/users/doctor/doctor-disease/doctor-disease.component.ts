@@ -29,34 +29,39 @@ export class DoctorDiseaseComponent implements OnInit {
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
   position: number = 0;
+  loading: boolean = false;
 
   ngOnInit(): void {
     this.getAllQuestions();
   }
 
   getAllQuestions() {
-    this.loadingQuestions = true;
-    this.questionService.getAll(this.questionPage, 4).subscribe(
-      res => {
-        let questions: QuestionGet[] = [];
-        questions = res;
-        for (let ques of questions) {
-          ques.commentPage = 0;
-          ques.comments = [];
-          ques.invalidComment = false;
-          this.questions.push(ques);
-          this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-          this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
-          this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+    if (this.loading == false) {
+      this.loading = true;
+      this.loadingQuestions = true;
+      this.questionService.getAll(this.questionPage, 4).subscribe(
+        res => {
+          let questions: QuestionGet[] = [];
+          questions = res;
+          for (let ques of questions) {
+            ques.commentPage = 0;
+            ques.comments = [];
+            ques.invalidComment = false;
+            this.questions.push(ques);
+            this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
+            this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+            this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+          }
+          this.questionPage += 1;
+          if (questions.length == 4)
+            this.loadMoreQuestion = true;
+          else
+            this.loadMoreQuestion = false;
+          document.documentElement.scrollTop = this.position;
+          this.loading = false;
         }
-        this.questionPage += 1;
-        if (questions.length == 4)
-          this.loadMoreQuestion = true;
-        else
-          this.loadMoreQuestion = false;
-        document.documentElement.scrollTop = this.position;
-      }
-    );
+      );
+    }
   }
 
   getUserFullNameById(patientId: number, questionKey: number) {

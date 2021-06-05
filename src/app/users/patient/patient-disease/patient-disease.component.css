@@ -46,8 +46,9 @@
     margin-left: 20px;
 }
 .questionText{
-    width: 95%;
+    max-width: 95%;
     margin-left: 20px;
+    min-width: fit-content;
 }
 .questionPoints{
     margin: 2px;
@@ -281,4 +282,11 @@
 }
 .posterImageProfileContainer:hover .sendMessage{
     opacity: 1;
+}
+.addQuesQuesAbout{
+    margin-left: 50px;
+    color: var(--gray-text);
+}
+.addQuesQuesAbout .fa-question-circle{
+    margin-left: 7px;
 }

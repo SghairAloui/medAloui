@@ -24,6 +24,11 @@
                                         {{'medicament'|translate}} <i class="fas fa-pills"></i>
                                     </div>
                                 </div>
+                                <div *ngIf="ques.questionAbout=='inquire'" class="diseaeAndName">
+                                    <div style="text-transform: capitalize;">
+                                        {{'inquire'|translate}} <i class="fas fa-question-circle"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="questionTitle">
                                 <span class="title">
@@ -39,13 +44,13 @@
                         </div>
                         <div class="questionWithPosterInfo">
                             <div class="posterInfo">
-                                <div *ngIf="ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'')">
-                                    <img [src]="ques.posterImageProfile" class="posterImageProfile">
+                                <div *ngIf="ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'',0)">
+                                    <img [style.background-image]="'url(' + ques.posterImageProfile + ')'" class="profileImg">
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
                                     </div>
                                 </div>
-                                <div *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'')">
+                                <div *ngIf="!ques.posterImageProfile" class="posterImageProfileContainer" (click)="pharmacyComponent.startConversation(ques.postBy,ques.userFullName,'',0)">
                                     <i class="fas fa-user-tie userTiePoster"></i>
                                     <div class="sendMessage">
                                         <i class="fas fa-envelope"></i>
@@ -66,14 +71,14 @@
                             <input type="text" class="formInput" name="firstComment"
                                 [class.labelInvalidInfo]="ques.invalidComment"
                                 [(ngModel)]="ques.doctorComment" id="firstComment" placeholder=" "
-                                (keyup)="ques.invalidComment=false">
+                                (keyup)="ques.invalidComment=false" style="padding-right: 85px;">
                             <label for="chooseSpeciality" class="formLabel">{{'firstComment'|translate}}</label>
                         </div>
                     </div>
                     <div *ngIf="ques.comments.length!=0">
                         <div *ngFor="let comment of ques.comments; let c=index" class="comment">
                             <div *ngIf="comment.posterProfileImage;" class="commentProfileImgConatiner">
-                                <img [src]="comment.posterProfileImage" class="commentProfileImg">
+                                <img [style.background-image]="'url(' + comment.posterProfileImage + ')'" class="profileImg">
                             </div>
                             <div *ngIf="!comment.posterProfileImage;"  class="commentProfileImgConatiner">
                                 <i class="fas fa-user-tie userTie50"></i>
@@ -92,7 +97,7 @@
                             </div>
                             <div class="commentText">
                                 <div class="commentPostBy">
-                                {{comment.commentPostBy}} <span *ngIf="comment.postedBy != pharmacyComponent.pharmacyGet.userId" style="color: #308a7b; margin-left: 10px;" (click)="pharmacyComponent.startConversation(comment.postedBy,comment.commentPostBy,'')"><i class="fas fa-envelope"></i></span>
+                                {{comment.commentPostBy}} <span *ngIf="comment.postedBy != pharmacyComponent.pharmacyGet.userId" style="color: #308a7b; margin-left: 10px;" (click)="pharmacyComponent.startConversation(comment.postedBy,comment.commentPostBy,'',0)"><i class="fas fa-envelope"></i></span>
                                 </div>
                                 <div>
                                     {{comment.comment}}
@@ -101,14 +106,8 @@
                         </div>
                         <div *ngIf="ques.loadMoreComment" (click)="getPostCommentsByPostId(ques.questionId,i)">
                             <div class="loadMoreComment">
-                                {{'loadMoreComment'|translate}}
-                            </div>
-                            <div class="loadMoreComment">
                                 <i class="fas fa-angle-down"></i>
                             </div>
-                        </div>
-                        <div *ngIf="!ques.loadMoreComment" class="allCommentLoaded defaultCursor">
-                            {{'allCommentLoaded'|translate}}
                         </div>
                         <div class="formDiv commentInput">
                             <span class="mesure spanButton" (click)="addComment(ques.questionId,i)">

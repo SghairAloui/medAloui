@@ -712,7 +712,8 @@ input[disabled]{
     float: left;
     height: 150px;
     width: 150px;
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
     overflow:hidden;
 }
 .doctor .searchedDocInfo{
@@ -727,12 +728,6 @@ input[disabled]{
 .searchedDocDefaultImg{
     font-size: 135px;
     margin-bottom: 0px;
-}
-.profileImg{
-    position: relative;
-    border-radius: 10px;
-    width: auto;
-    height: 100%;
 }
 .loadMoreArrow{
     width: fit-content; 
@@ -1015,14 +1010,12 @@ input[disabled]{
     cursor: pointer;
 }
 .profileImg{
+    height: 104%;
+    width: 104%;
     position: absolute;
-    height: 100%;
-    width: auto;
-    border-radius: 50%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    bottom: 0px;
+    background-size:cover;
+    margin-left: -2%;
+    margin-top: -2%;
 }
 .formInput{
     font-family: Arial, Helvetica, sans-serif;
@@ -1094,8 +1087,39 @@ input[disabled]{
 .appointmentTitle{
     padding-top: 5%;
     position: relative;
-    text-align: center;
-    font-size: 1.5rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+}
+.appointmentTitle div:nth-child(1){
+    display: inline-block;
+    padding: 5px 15px;
+    border: 1px solid white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    color: white;
+    background: transparent;
+    transition: .3s ease-in-out;
+}
+.appointmentTitle div:nth-child(2){
+    display: inline-block;
+    padding: 5px 15px;
+    border: 1px solid white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: white;
+    background: transparent;
+    transition: .3s ease-in-out;
+}
+.appointmentTitle div:hover{
+    background-color: white;
+    color: #308a7b;
+    cursor: pointer;
+}
+.appointmentTitleSelectedItem{
+    background-color: white !important;
+    color: #308a7b !important;
+    padding: 7px 18px !important;
 }
 .calendarGrid{
     position: relative;
@@ -1713,4 +1737,64 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     bottom: 53px;
     z-index: 1001;
     background-color: #F89406;
+}
+.centerDocInfo{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+#doctorMap{
+    width: 90%;
+    margin-left: 5%;
+    height: 300px;
+    border-radius: 10px;
+}
+.loadingMap{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.routeBtn{
+    border-radius: 50%;
+    min-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    max-width: 60px;
+}
+.routeBtn i{
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.newDoctorInfoContainer{
+    margin: 10px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 5px;
+    padding-left: 5px;
+    color: #308a7b;
+    box-shadow: var(--infoBox);
+}
+.newDoctorInfoContainer div{
+    display: inline-block;
+    color: white;
+    background-color: #308a7b;
+    padding: 3px 5px;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+.doctorAddress{
+    text-transform: capitalize;
+    background-color: #308a7b;
+    padding: 3px 5px;
+    border-radius: 5px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
 }

@@ -118,8 +118,7 @@
                                 <div
                                     *ngIf="doctorsProfileImages[doc.key]; then showDocProfileImg else showDocDefaultImg">
                                 </div>
-                                <ng-template #showDocProfileImg><img [src]="doctorsProfileImages[doc.key]"
-                                        class="profileImg">
+                                <ng-template #showDocProfileImg><img [style.background-image]="'url(' + doctorsProfileImages[doc.key]+ ')'" class="profileImg">
                                 </ng-template>
                                 <ng-template #showDocDefaultImg><i class="fas fa-user-tie searchedDocDefaultImg"></i>
                                 </ng-template>
@@ -249,8 +248,7 @@
                                         <div
                                             *ngIf="doctorsProfileImages[selectedDoctorKey]; then showDocProfileImg else showDocDefaultImg">
                                         </div>
-                                        <ng-template #showDocProfileImg><img [src]="doctorsProfileImages[selectedDoctorKey]"
-                                                class="profileImg">
+                                        <ng-template #showDocProfileImg><img [style.background-image]="'url(' + doctorsProfileImages[selectedDoctorKey] + ')'" class="profileImg">
                                         </ng-template>
                                         <ng-template #showDocDefaultImg><i
                                                 class="fas fa-user-tie searchedDocDefaultImg"></i>
@@ -347,26 +345,89 @@
                                             {{'whatIs'|translate}}
                                             {{specialityName}}?</div>
                                     </ng-template>
-                                    <div class="infoGridTowColumn">
-                                        <div class="infoContainer">
-                                            <div class="infoTitle">{{'gender'|translate}}</div>
-                                            <div class="info"> {{searchedDoc[selectedDoctorKey].doctorGender}} </div>
+                                    <div class="centerDocInfo">
+                                        <div class="newDoctorInfoContainer">
+                                            <i class="fas fa-venus-mars"></i>
+                                            <div>
+                                                <span *ngIf="searchedDoc[selectedDoctorKey].doctorGender == 'male'">
+                                                    {{'male'|translate}}
+                                                </span>
+                                                <span *ngIf="searchedDoc[selectedDoctorKey].doctorGender == 'female'">
+                                                    {{'female'|translate}}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="infoContainer">
-                                            <div class="infoTitle">{{'Adress'|translate}}</div>
-                                            <div class="info">{{searchedDoc[selectedDoctorKey].userCity}} -
-                                                {{appointmentDocInfo[selectedDoctorKey].exactAddress}}
+    
+                                        <div class="newDoctorInfoContainer">
+                                            <i class="fas fa-coins"></i>
+                                            <div>
+                                                {{appointmentDocInfo[selectedDoctorKey].appointmentPrice}}
+                                                {{'dt'|translate}}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="priceContainer">
-                                        <div class="infoTitle">{{'price'|translate}}</div>
-                                        <div class="info">{{appointmentDocInfo[selectedDoctorKey].appointmentPrice}}
-                                            {{'dt'|translate}}
+                                    <div class="doctorAddress">
+                                        {{searchedDoc[selectedDoctorKey].userCity}} -
+                                        {{appointmentDocInfo[selectedDoctorKey].exactAddress}}
+                                    </div>
+                                </div>
+
+                                <div class="doctorAppointmentContainer">
+                                    <div *ngIf="showAppointment == true">
+                                        <div class="appointmentTitle">
+                                            <div class="appointmentTitleSelectedItem">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div (click)="showAppointment=false;loadMap()">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                            </div>
+                                        </div>
+                                        <div class="center">
+                                            <span style="margin-left: 4%;">{{'selectAppointmentDay'|translate}}</span>
+                                            <div class="calendarGrid">
+                                                <div class="day dayNumber" *ngFor="let day of monthDays">
+                                                    <input type="radio" id="day{{day}}" name="dayName"
+                                                        (click)="daySelected(day)" [disabled]="monthDaysDis[day]">
+                                                    <label for="day{{day}}" id="day{{day}}Lab" class="fillAllDay"
+                                                        [disabled]="monthDaysDis[day]">{{day}}</label>
+                                                </div>
+                                            </div>
+                                            <button class="emptyBtn white" (click)="takeAppointment()">
+                                                {{'takeAppointment'|translate}} </button>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="showAppointment == false">
+                                        <div class="appointmentTitle">
+                                            <div (click)="showAppointment=true">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div class="appointmentTitleSelectedItem">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                            </div>
+                                        </div>
+                                        <div class="center">
+                                            <div class="loadingMap">
+                                                <span *ngIf="!appointmentDocInfo[selectedDoctorKey].doctorLatitude">
+                                                    <span style="text-transform: capitalize;">
+                                                        searchedDoc[selectedDoctorKey].doctorFirstName
+                                                        <span style="font-weight: 600;">
+                                                            searchedDoc[selectedDoctorKey].doctorLastName
+                                                        </span>
+                                                    </span>
+                                                    {{'heHasNotSetHerPositionYet'|translate}}
+                                                </span>
+                                                <span *ngIf="appointmentDocInfo[selectedDoctorKey].doctorLatitude">
+                                                    {{'loadingMap'|translate}}
+                                                </span>
+                                            </div>
+                                            <div id="doctorMap"></div>
+                                            <button class="emptyBtn white routeBtn" (click)="addRouteToMap()">
+                                                <i class="fas fa-route"></i> </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="doctorAppointmentContainer">
+                                <!--<div class="doctorAppointmentContainer">
+
                                     <div class="appointmentTitle">{{'appointment'|translate}}</div>
                                     <div class="center">
                                         <span style="margin-left: 4%;">{{'selectAppointmentDay'|translate}}</span>
@@ -381,7 +442,7 @@
                                         <button class="emptyBtn white"
                                             (click)="generateAppointmentInfo();">{{'takeAppointment'|translate}}</button>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                             <div *ngIf="!appointment">
                                 <div class="yourTurn"> {{'yourTurn'|translate}} <span

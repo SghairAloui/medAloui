@@ -176,8 +176,7 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
-                        <button class="emptyBtn"
-                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                        <button class="emptyBtn logOutBtn"
                             (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
@@ -343,8 +342,7 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
-                        <button class="emptyBtn"
-                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                        <button class="emptyBtn logOutBtn"
                             (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
@@ -417,8 +415,7 @@
                                 <div class="ball"></div>
                             </label>
                         </li>
-                        <button class="emptyBtn"
-                            style="width: fit-content;height: fit-content;margin-left: 50%;transform: translateX(-50%);margin-top: 15px;margin-bottom: 15px;"
+                        <button class="emptyBtn logOutBtn"
                             (click)="logOut()"> {{'logOut'|translate}} <i class="fas fa-sign-out-alt"></i></button>
                     </ul>
                 </div>
@@ -441,9 +438,9 @@
                         {{'noNotification'|translate}}
                     </div>
 
-                    <div *ngFor="let notif of notifications ;let i=index" class="notification" id="notification{{i}}">
+                    <div *ngFor="let notif of notifications ;let i=index" id="notification{{i}}">
 
-                        <div *ngIf="notif.notificationType!='userSelectYouForPres'">
+                        <div *ngIf="notif.notificationType!='userSelectYouForPres'" class="notification">
 
                             <div *ngIf="notif.notificationType=='setYourGeoLocation'">
                                 <div>
@@ -574,8 +571,7 @@
                         <div class="messageUserImgContainerTableCell">
                             <div class="messageUserImgContainer">
                                 <div *ngIf="conver.recipientImg">
-                                    <img [src]="conver.recipientImg"
-                                        style="height: 50px;position: absolute;left: 50%;top:50%;transform: translate(-50%,-50%);">
+                                    <img [style.background-image]="'url(' + conver.recipientImg + ')'" class="profileImg">
                                 </div>
                                 <div *ngIf="conver.recipientImg==false">
                                     <i class="fas fa-user-tie" style="font-size: 45px;bottom: 0px;position: absolute;"></i>

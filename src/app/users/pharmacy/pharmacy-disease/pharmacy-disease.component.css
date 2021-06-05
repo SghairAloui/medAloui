@@ -38,8 +38,9 @@ body{
     margin-left: 20px;
 }
 .questionText{
-    width: 95%;
+    max-width: 95%;
     margin-left: 20px;
+    min-width: fit-content;
 }
 .questionContainer{
     margin: 2px;
