@@ -598,7 +598,7 @@
                         <div *ngIf="pharmacyPrescriptions.list.length != 0">
                             <div *ngFor="let pres of pharmacyPrescriptions.list;let p = index">
                                 <div class="prescription"
-                                    (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName,p)"
+                                    (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName,p,pres.patientId)"
                                     (mouseleave)="hoveredPrescription=-2" (mouseenter)="hoveredPrescription=p">
                                     <span style="text-transform: capitalize;">
                                         {{pres.patientFirstName}}

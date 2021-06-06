@@ -1181,22 +1181,24 @@
                     </ng-template>
                     <ng-template #showPrescription>
                         <div *ngIf="prescription=='all'">
-                            <div *ngFor="let pres of prescriptions | keyvalue" class="userInfoContainers">
+                            <div *ngFor="let pres of prescriptions ;let p = index" class="userInfoContainers">
                                 <div class="userInfoContainer userInfoContainerHover"
-                                    (click)="getDoctorInfoForPresById(pres.value.doctorId,pres.key,'prescription');">
+                                    (click)="getDoctorInfoForPresById(pres.doctorId,p,'prescription');">
                                     <div class="userInfoContainerTitle">
                                         <div class="userInfoContainerTitleIcon"><i class="fas fa-pills"></i></div>
-                                        <div class="userInfoContainerTitleValue">
-                                            {{'prescripton'|translate}}
+                                        <div class="userInfoContainerTitleValue"
+                                        [class.usedPres]="pres.prescriptionStatus == 'used'">
+                                            {{pres.prescriptionStatus+'Pres'|translate}}
                                         </div>
                                     </div>
 
-                                    <div *ngIf="pres.value.medicament" class="userInfoContainerValue">
-                                        {{pres.value.medicament.length}} {{'medicaments'|translate}}
+                                    <div *ngIf="pres.medicament" class="userInfoContainerValue">
+                                        {{pres.medicament.length}} {{'medicaments'|translate}}
                                     </div>
                                     <div class="userInfoContainerSecondValue">
                                         <div class="userInfoContainerSecondValuePoint"></div>
-                                        <div class="userInfoContainerSecondValueText">{{pres.value.prescriptionDate}}
+                                        <div class="userInfoContainerSecondValueText">
+                                            {{pres.prescriptionDate}}
                                         </div>
                                     </div>
                                 </div>
@@ -1234,7 +1236,7 @@
                             </div>
                         </div>
                         <div *ngIf="prescription=='prescription'" class="sectionContainer">
-                            <div class="worldMapImg">
+                            <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'" class="worldMapImg">
                                 <img src="../../../../assets/img/worldMap.png" style="width: 100%;">
                             </div>
                             <div class="returnToAllDisease" (click)="prescription='all'"><i
@@ -1363,10 +1365,10 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="findPhText">
+                            <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'" class="findPhText">
                                 {{'findPharmacyThatContainYourMedicaments'|translate}}
                             </div>
-                            <div (click)="searchPharmaciesByMedicaments(true)">
+                            <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'" (click)="searchPharmaciesByMedicaments(true)">
                                 <div *ngIf="!loadingPh">
                                     <i class="fas fa-search searchIcon"></i>
                                 </div>

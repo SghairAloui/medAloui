@@ -247,6 +247,7 @@ export class PharmacyComponent implements OnInit {
   confirming: boolean = false;
   popUpValue1: string;
   popUpValue2: string;
+  popUpValue3: string;
   todaysPresNumber: number = 0;
   todaysPresNumberChanged: boolean = false;
   pharmacyPrescriptionsPage: number = 0;
@@ -1203,6 +1204,7 @@ export class PharmacyComponent implements OnInit {
     this.popUpFor = '';
     this.popUpValue1 = '';
     this.popUpValue2 = '';
+    this.popUpValue3= '';
   }
 
   openPopUp(popUpFor: string, value1: string, value2: string) {
@@ -1298,7 +1300,8 @@ export class PharmacyComponent implements OnInit {
     this.getPharmacyPrescriptionsById();
   }
 
-  getMedicamentsByPrescriptionId(presId: number, name: string, index: string) {
+  getMedicamentsByPrescriptionId(presId: number, name: string, index: string,patientId:number,) {
+    console.log(patientId)
     this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
       res => {
         this.prescriptionMeds = [];
@@ -1308,13 +1311,15 @@ export class PharmacyComponent implements OnInit {
         this.popUp = true;
         this.popUpValue1 = presId + "";
         this.popUpValue2 = index;
+        this.popUpValue3=patientId+"";
       }
     );
   }
 
   confirmPrescription() {
+    console.log(this.popUpValue3)
     this.confirming = true;
-    this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code)).subscribe(
+    this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code),parseInt(this.popUpValue3)).subscribe(
       res => {
         if (res == true) {
           this.pharmacyPrescriptions.list.splice(parseInt(this.popUpValue2), 1);

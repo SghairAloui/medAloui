@@ -10,4 +10,5 @@ export interface prescriptionGet{
     fullData:boolean;
     prescriptiondoctor:doctor;
     prescriptionCode:number;
+    prescriptionStatus:string;
 }

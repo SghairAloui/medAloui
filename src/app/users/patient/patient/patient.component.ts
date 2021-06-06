@@ -205,6 +205,16 @@ export class PatientComponent implements OnInit {
             this.headerService.addNotification(not.notification);
           }
           this.notificationSound();
+        } else if (not.type == 'confirmPrescription') {
+          for (let pres of this.prescriptions) {
+            let i: number = 0;
+            console.log(not.data);
+            if (pres.prescriptionId == parseInt(not.data)){
+              this.prescription='all';
+              this.prescriptions.splice(i, 1);
+            }
+            i++;
+          }
         }
       })
     });
@@ -384,7 +394,7 @@ export class PatientComponent implements OnInit {
             this.getImage();
             this.getPatientMedicalProfile();
             this.getAppointments();
-            this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, 'pending', this.pendingPrescriptionPage, 'prescription');
+            this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, '%', this.pendingPrescriptionPage, 'prescription');
             this.intializeEdit();
             this.patientInfo = true;
             localStorage.setItem('id', this.patientGet.userId + '')
@@ -1271,7 +1281,7 @@ export class PatientComponent implements OnInit {
         } else {
           this.presKey = presKey;
           let pres: prescriptionGet;
-          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null, prescriptionCode: 0 };
+          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null, prescriptionCode: 0,prescriptionStatus:'pending' };
           this.disPrescriptions[presKey] = pres;
           this.getDoctorInfoForPresById(docId, presKey, 'disease');
         }
@@ -1750,7 +1760,7 @@ export class PatientComponent implements OnInit {
             timeOut: 6500,
             positionClass: 'toast-bottom-left'
           });
-          this.prescription='all';
+          this.prescription = 'all';
         } else {
           if (res == -1) {
             this.toastr.warning(this.translate.instant('youAlreadySelectPh') + this.prescriptionPharmacies[this.pharmacyKey].pharmacyFullName.toLocaleUpperCase() + ' ' + this.translate.instant('forThisPres'), this.translate.instant('pharmacyAlreadySelected'), {

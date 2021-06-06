@@ -589,5 +589,7 @@
     "incorrectCode":"Incorrect code",
     "beginReceivePat":"begins to receive the patients",
     "delectedPres":"deleted a prescription",
-    "addedPres":"added prescription"
+    "addedPres":"added prescription",
+    "usedPres":"Used",
+    "pendingPres":"Not used yet"
 }
