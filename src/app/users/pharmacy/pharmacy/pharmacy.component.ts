@@ -48,7 +48,7 @@ export class PharmacyComponent implements OnInit {
     private notificationService: NotificationService,
     private conversationService: ConversationService,
     private webSocketService: WebSocketService,
-    private prescriptionService:PrescriptionService) {
+    private prescriptionService: PrescriptionService) {
     // Open connection with server socket
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, async frame => {
@@ -252,8 +252,8 @@ export class PharmacyComponent implements OnInit {
   loadMorePrescription: boolean = true;
   loadingPrescriptions: boolean = true;
   newMessage: number = 0;
-  showMyPres:boolean;
-  prescriptionMeds:PrescriptionMedicament [];
+  showMyPres: boolean;
+  prescriptionMeds: PrescriptionMedicament[];
 
   ngOnInit(): void {
     this.headerService.setHeader('pharmacy');
@@ -1219,6 +1219,8 @@ export class PharmacyComponent implements OnInit {
     this.confirming = true;
     if (this.popUpFor == 'confirmDeleteMedicament')
       this.deleteByMedicamentStockId(parseInt(this.popUpValue1), parseInt(this.popUpValue2));
+    else if (this.popUpFor == 'prescriptionMeds')
+      this.confirmPrescription();
   }
 
   getTodayPrescriptionNumberById() {
@@ -1242,8 +1244,8 @@ export class PharmacyComponent implements OnInit {
         else
           this.loadMorePrescription = false;
         this.loadingPrescriptions = false;
-        this.showMyPres=true;
-        document.getElementById("allMyPrescriptions").scrollIntoView({'behavior':'smooth'});
+        this.showMyPres = true;
+        document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
       },
       err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -1254,14 +1256,31 @@ export class PharmacyComponent implements OnInit {
     );
   }
 
-  getMedicamentsByPrescriptionId(presId:number,name:string){
+  getMedicamentsByPrescriptionId(presId: number, name: string,index:string) {
     this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
-      res=>{
+      res => {
         this.prescriptionMeds = [];
-        this.prescriptionMeds =res;
-        this.popUpTitle=name;
-        this.popUpFor="prescriptionMeds";
+        this.prescriptionMeds = res;
+        this.popUpTitle = name;
+        this.popUpFor = "prescriptionMeds";
         this.popUp = true;
+        this.popUpValue1 = presId + "";
+        this.popUpValue2 = index;
+      }
+    );
+  }
+
+  confirmPrescription() {
+    this.confirming = true;
+    this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code)).subscribe(
+      res => {
+        if (res == true){
+          this.pharmacyPrescriptions.splice(parseInt(this.popUpValue2),1);
+          this.closePopUp();
+        }
+        else
+          this.isVerificationCode = false;
+        this.confirming = false;
       }
     );
   }

@@ -9,4 +9,5 @@ export interface prescriptionGet{
     medicament:PrescriptionMedicament [];
     fullData:boolean;
     prescriptiondoctor:doctor;
+    prescriptionCode:number;
 }

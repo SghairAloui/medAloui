@@ -41,4 +41,8 @@ export class PrescriptionService {
   public getMedicamentsByPrescriptionId(presId:number){
     return this.http.get<PrescriptionMedicament []>(PRESMED_API + 'getMedicamentsByPrescriptionId/'+presId,httpOptions);
   }
+
+  confirmPrescriptionById(id:number,code:number){
+    return this.http.post<boolean>(PRES_API + 'confirmPrescriptionById',{id,code},httpOptions);
+  }
 }

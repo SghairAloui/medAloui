@@ -584,5 +584,7 @@
     "congYourAccountApp":"Congratulations your account has been approved",
     "accountDis":"Your account has been disapproved",
     "accountDisPerma":"Your account has been disapproved permanently",
-    "setYourGeo":"Set your location so users can find you by GPS"
+    "setYourGeo":"Set your location so users can find you by GPS",
+    "code":"Code",
+    "incorrectCode":"Incorrect code"
 }

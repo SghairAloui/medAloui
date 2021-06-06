@@ -1253,7 +1253,7 @@ export class PatientComponent implements OnInit {
         } else {
           this.presKey = presKey;
           let pres: prescriptionGet;
-          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null };
+          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null,prescriptionCode:0 };
           this.disPrescriptions[presKey] = pres;
           this.getDoctorInfoForPresById(docId, presKey, 'disease');
         }

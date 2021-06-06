@@ -20,6 +20,19 @@
                     {{med.medicamentName}} | {{med.treatmentPeriode}}
                 </div>
             </div>
+            <div *ngIf="isVerificationCode==false" style="color: red;font-size: 12px;text-align: center;margin-top: 10px;">
+                {{'incorrectCode'|translate}}
+            </div>
+            <div class="inputVerificationCode" [class.invalidVerificationCode]="isVerificationCode==false">
+                <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1" class="verficationCodeNumber" #1
+                    (keyup)="field1Keyup();isVerificationCode=null">
+                <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1" class="verficationCodeNumber" #2
+                    (keyup)="field2Keyup();isVerificationCode=null">
+                <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1" class="verficationCodeNumber" #3
+                    (keyup)="field3Keyup();isVerificationCode=null">
+                <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1" class="verficationCodeNumber" #4
+                    (keyup)="field4Keyup();isVerificationCode=null">
+            </div>
         </div>
     </div>
     <div class="popUpConfirmButton" (click)="confirmPopUp()">
@@ -434,7 +447,7 @@
                         <button class="iconButton" style="margin-top: 20px;"
                             (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
 
-                        <div style="margin-left: 50%;transform: translateX(-50%);">
+                        <div style="margin-left: 50%;transform: translateX(-50%);width: max-content;">
                             <div class="userInfoContainer">
                                 <div class="userInfoContainerTitle">
                                     <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
@@ -565,7 +578,7 @@
                     </div>
                     <div *ngIf="pharmacyPrescriptions.length != 0">
                         <div *ngFor="let pres of pharmacyPrescriptions;let p = index">
-                            <div class="prescription" (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName)">
+                            <div class="prescription" (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName,p)">
                                 <span style="text-transform: capitalize;">
                                     {{pres.patientFirstName}}
                                     <span style="font-weight: 600;">

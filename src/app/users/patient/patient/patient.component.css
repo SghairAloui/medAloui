@@ -97,6 +97,7 @@ html,body{
     transform: translateY(-50%);
 }
 .profileImgCon{
+    position: relative;
     margin-left: 50%;
     transform: translateX(-50%);
     width: 50px;
@@ -902,4 +903,11 @@ html,body{
 .appIsToday{
     background-color: rgba(248,148,6,0.05);
     border-left: 3px solid rgb(248,148,6);
+}
+.presCode{
+    display: block;
+    margin-left: 50%;
+    transform: translateX(-50%); 
+    margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif;
 }
