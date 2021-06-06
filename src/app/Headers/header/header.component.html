@@ -520,6 +520,18 @@
                                     {{'yourNewTurn'|translate}}: <span class="notifCurrentPatientTurn">{{notif.notificationParameter}}</span>
                                 </div>
                             </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='doctorStartSession'">
+                                <div>
+                                    <i class="fas fa-door-open"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'beginReceivePat'|translate}}
+                                </div>
+                            </div>
     
                             <div class="notificationIcons">
                                 <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">

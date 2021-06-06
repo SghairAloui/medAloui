@@ -260,7 +260,7 @@ export class PatientDoctorComponent implements OnInit {
 
     for (var i = this.today; i <= this.lastMonthDay; i++) {
       this.monthDays[day] = i;
-      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+1) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)

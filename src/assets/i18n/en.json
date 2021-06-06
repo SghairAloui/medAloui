@@ -586,5 +586,6 @@
     "accountDisPerma":"Your account has been disapproved permanently",
     "setYourGeo":"Set your location so users can find you by GPS",
     "code":"Code",
-    "incorrectCode":"Incorrect code"
+    "incorrectCode":"Incorrect code",
+    "beginReceivePat":"begins to receive the patients"
 }

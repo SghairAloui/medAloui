@@ -183,6 +183,11 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
+          } else if (not.notification.notificationType == 'doctorStartSession') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('beginReceivePat'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
           not.notification.name = not.data;
           this.headerService.addNotification(not.notification);
@@ -942,7 +947,7 @@ export class PatientComponent implements OnInit {
         workDays = this.appointmentDocInfoGet[key].workDays;
       else if (this.docInfoForPatient[key])
         workDays = this.docInfoForPatient[key].workDays;
-      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+1) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)
