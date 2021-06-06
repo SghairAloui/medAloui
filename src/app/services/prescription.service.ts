@@ -26,8 +26,8 @@ export class PrescriptionService {
     return this.http.post<boolean>(PRESMED_API+'add',{medicamentName,prescriptionId,treatmentPeriode},httpOptions);
   }
 
-  public deleteById(id:number){
-    return this.http.delete<boolean>(PRES_API+'deleteById/'+id,httpOptions);
+  public deleteById(id:number,patientId:number,doctorId:number){
+    return this.http.post<boolean>(PRES_API+'deleteById',{id,patientId,doctorId},httpOptions);
   }
 
   public getPrescriptionByDoctorIdPatientIdAndDate(doctorId:number,patientId:number,prescriptionDate:string){

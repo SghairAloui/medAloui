@@ -579,12 +579,13 @@ html,body{
     text-align: center;
 }
 .prescription{
+    position: relative;
     display: flex;
     justify-content: space-between;
     border-radius: 10px;
-    margin: 5px 10px;
-    padding: 15px 10px;
-    transition: .3s ease-in-out;
+    margin: 0px 10px;
+    padding: 20px 10px;
+    transition: .1s ease-in-out;
     cursor: pointer;
 }
 .prescription:hover{
@@ -623,4 +624,15 @@ html,body{
     background-color: #c5c2c234;
     border-radius: 5px;
     text-align: center;
+}
+.prescriptionLine{
+    position: absolute;
+    opacity: 1;
+    border-bottom: 1px solid var(--hr);
+    width: 100%;
+    transition: .1s ease-in-out;
+    bottom: 0px;
+}
+.opacity0{
+    opacity: 0;
 }

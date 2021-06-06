@@ -587,5 +587,7 @@
     "setYourGeo":"Set your location so users can find you by GPS",
     "code":"Code",
     "incorrectCode":"Incorrect code",
-    "beginReceivePat":"begins to receive the patients"
+    "beginReceivePat":"begins to receive the patients",
+    "delectedPres":"deleted a prescription",
+    "addedPres":"added prescription"
 }

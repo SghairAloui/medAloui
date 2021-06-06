@@ -1791,7 +1791,8 @@ export class DoctorComponent implements OnInit {
   }
 
   deletePres(doctor: boolean, patientId: number) {
-    this.prescriptionService.deleteById(this.prescriptionAddedToCurrentPatient).subscribe(
+    console.log(patientId);
+    this.prescriptionService.deleteById(this.prescriptionAddedToCurrentPatient,patientId,this.doctorGet.userId).subscribe(
       res => {
         if (res) {
           if (doctor) {

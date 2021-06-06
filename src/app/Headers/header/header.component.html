@@ -532,6 +532,18 @@
                                     </span>{{'beginReceivePat'|translate}}
                                 </div>
                             </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='doctorAddPrescription'">
+                                <div>
+                                    <i class="fas fa-file-prescription"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'addedPres'|translate}}
+                                </div>
+                            </div>
     
                             <div class="notificationIcons">
                                 <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">

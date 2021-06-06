@@ -969,7 +969,7 @@
                                     </div>
                                     <div *ngIf="docInfoForPatient[app.key]">
                                         <div class="appointmentsGrid"
-                                            [class.appIsToday]="isDatePassed(app.value.appointmentDate) == null"
+                                            [class.appIsToday]="isDatePassed(app.value.appointmentDate) == null && app.value.appointmentStatus != 'completed' && app.value.appointmentStatus != 'missed'"
                                             [class.completedApp]="app.value.appointmentStatus=='completed'"
                                             [class.missedApp]="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed'">
                                             <div class="div">
@@ -1114,7 +1114,7 @@
                                                         style="font-weight: 600;color: #BD362F;">
                                                         {{'appMissed'|translate}}
                                                     </div>
-                                                    <div *ngIf="isDatePassed(app.value.appointmentDate) == null"
+                                                    <div *ngIf="isDatePassed(app.value.appointmentDate) == null && app.value.appointmentStatus != 'completed' && app.value.appointmentStatus != 'missed'"
                                                         style="font-weight: 600; color: #F89406;">
                                                         {{'yourAppIsToday'|translate}}
                                                     </div>

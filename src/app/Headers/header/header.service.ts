@@ -67,4 +67,10 @@ export class HeaderService {
   searchUserNow(data:boolean){
     this.searchUser.next(data);
   }
+
+  private deletePrescription: Subject<number>= new BehaviorSubject<any>("");
+  deletePrescription$ = this.deletePrescription.asObservable();
+  deletePrescriptionById(data:any){
+    this.deletePrescription.next(data);
+  }
 }

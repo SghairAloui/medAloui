@@ -132,7 +132,7 @@ export class PatientComponent implements OnInit {
         } else if (not.type == 'notification') {
           not.notification.order = 'start';
           if (not.notification.notificationType == 'conversationclose') {
-            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('closeConversation')), this.translate.instant('Notification'), {
+            this.toastr.info(not.data + ' ' + this.translate.instant('closeConversation'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
@@ -153,7 +153,7 @@ export class PatientComponent implements OnInit {
             }
 
           } else if (not.notification.notificationType == 'conversationopen') {
-            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('openConversation')), this.translate.instant('Notification'), {
+            this.toastr.info(not.data + ' ' + this.translate.instant('openConversation'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
@@ -174,12 +174,12 @@ export class PatientComponent implements OnInit {
             }
 
           } else if (not.notification.notificationType == 'patientTurnClose') {
-            this.toastr.info(this.translate.instant(this.translate.instant('yourAppWithDoctor') + ' ' + not.data + ' ' + this.translate.instant('comeClose')), this.translate.instant('Notification'), {
+            this.toastr.info(this.translate.instant('yourAppWithDoctor') + ' ' + not.data + ' ' + this.translate.instant('comeClose'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
           } else if (not.notification.notificationType == 'delayPatientTurn') {
-            this.toastr.info(this.translate.instant(not.data + ' ' + this.translate.instant('postponeTheAppTo') + ' ' + not.notification.notificationParameter), this.translate.instant('Notification'), {
+            this.toastr.info(not.data + ' ' + this.translate.instant('postponeTheAppTo') + ' ' + not.notification.notificationParameter, this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
@@ -188,9 +188,22 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
+          } else if (not.notification.notificationType == 'doctorDeletePrescription') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('delectedPres'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.headerService.deletePrescriptionById(parseInt(not.notification.notificationParameter));
+          } else if (not.notification.notificationType == 'doctorAddPrescription') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('addedPres'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
-          not.notification.name = not.data;
-          this.headerService.addNotification(not.notification);
+          if (not.notification.notificationType != 'doctorDeletePrescription') {
+            not.notification.name = not.data;
+            this.headerService.addNotification(not.notification);
+          }
           this.notificationSound();
         }
       })
@@ -947,7 +960,7 @@ export class PatientComponent implements OnInit {
         workDays = this.appointmentDocInfoGet[key].workDays;
       else if (this.docInfoForPatient[key])
         workDays = this.docInfoForPatient[key].workDays;
-      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+1) % 7]) == -1)
+      if (workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber) + 1) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)
@@ -1258,7 +1271,7 @@ export class PatientComponent implements OnInit {
         } else {
           this.presKey = presKey;
           let pres: prescriptionGet;
-          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null,prescriptionCode:0 };
+          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null, prescriptionCode: 0 };
           this.disPrescriptions[presKey] = pres;
           this.getDoctorInfoForPresById(docId, presKey, 'disease');
         }
@@ -1737,6 +1750,7 @@ export class PatientComponent implements OnInit {
             timeOut: 6500,
             positionClass: 'toast-bottom-left'
           });
+          this.prescription='all';
         } else {
           if (res == -1) {
             this.toastr.warning(this.translate.instant('youAlreadySelectPh') + this.prescriptionPharmacies[this.pharmacyKey].pharmacyFullName.toLocaleUpperCase() + ' ' + this.translate.instant('forThisPres'), this.translate.instant('pharmacyAlreadySelected'), {

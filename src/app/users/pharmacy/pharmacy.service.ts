@@ -6,6 +6,7 @@ import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
+import { ReturnWithPag } from 'src/model/ReturnWithPag';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
@@ -103,6 +104,10 @@ export class PharmacyService {
   }
 
   public getPharmacyPrescriptionsById(id:number,page:number,size:number){
-    return this.http.post<PrescriptionForPharmacy []>(PHARMACY_API+'getPharmacyPrescriptionsById/',{id,page,size},httpOptions);
+    return this.http.post<ReturnWithPag>(PHARMACY_API+'getPharmacyPrescriptionsById/',{id,page,size},httpOptions);
+  }
+
+  public searchPharamacyPrescriptionByPatientName(name:string,id:number,page:number,size:number){
+    return this.http.post<ReturnWithPag>(PHARMACY_API+'searchPharamacyPrescriptionByPatientName/',{name,id,page,size},httpOptions);
   }
 }

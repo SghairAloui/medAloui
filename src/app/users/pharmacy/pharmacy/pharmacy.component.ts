@@ -20,6 +20,7 @@ import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
 import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
 import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
+import { ReturnWithPag } from 'src/model/ReturnWithPag';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -231,6 +232,7 @@ export class PharmacyComponent implements OnInit {
   openConversation: OpenConversation;
   smallConversations: OpenConversation[] = [];
   message: string;
+  hoveredPrescription: number = -2;
 
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   loadingMessages: boolean = false;
@@ -248,8 +250,7 @@ export class PharmacyComponent implements OnInit {
   todaysPresNumber: number = 0;
   todaysPresNumberChanged: boolean = false;
   pharmacyPrescriptionsPage: number = 0;
-  pharmacyPrescriptions: PrescriptionForPharmacy[] = [];
-  loadMorePrescription: boolean = true;
+  pharmacyPrescriptions: ReturnWithPag;
   loadingPrescriptions: boolean = true;
   newMessage: number = 0;
   showMyPres: boolean;
@@ -1231,32 +1232,73 @@ export class PharmacyComponent implements OnInit {
     );
   }
 
+  pharmacyPrescriptionsPages: number[] = [1, 2, 3, 4, 5];
+  searchPrescription:string='';
   getPharmacyPrescriptionsById() {
-    this.loadingPrescriptions = true;
-    this.pharmacyService.getPharmacyPrescriptionsById(this.pharmacyGet.userId, this.pharmacyPrescriptionsPage, 6).subscribe(
-      res => {
-        let prescriptions: PrescriptionForPharmacy[] = res;
-        for (let pres of prescriptions)
-          this.pharmacyPrescriptions.push(pres);
-        this.pharmacyPrescriptionsPage += 1;
-        if (prescriptions.length == 6)
-          this.loadMorePrescription = true;
-        else
-          this.loadMorePrescription = false;
-        this.loadingPrescriptions = false;
-        this.showMyPres = true;
-        document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
-      },
-      err => {
-        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-          timeOut: 3500,
-          positionClass: 'toast-bottom-left'
-        });
-      }
-    );
+    this.showMyPres = true;
+    if(this.searchPrescription==''){
+      this.pharmacyService.getPharmacyPrescriptionsById(this.pharmacyGet.userId, this.pharmacyPrescriptionsPage, 6).subscribe(
+        async res => {
+          let prescriptions: ReturnWithPag = res;
+  
+          if (this.pharmacyPrescriptionsPage == 0)
+            this.pharmacyPrescriptions = { totalPages: (prescriptions.totalPages % 6), list: [] };
+  
+          this.pharmacyPrescriptions.list = prescriptions.list;
+  
+          this.loadingPrescriptions = false;
+          await this.sleep(1);
+          document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }else{
+      this.pharmacyService.searchPharamacyPrescriptionByPatientName('%'+this.searchPrescription.split(' ').join('% %')+'%',this.pharmacyGet.userId ,this.pharmacyPrescriptionsPage, 6).subscribe(
+        async res => {
+          let prescriptions: ReturnWithPag = res;
+  
+          if (this.pharmacyPrescriptionsPage == 0)
+            this.pharmacyPrescriptions = { totalPages: (prescriptions.totalPages % 6), list: [] };
+  
+          this.pharmacyPrescriptions.list = prescriptions.list;
+  
+          this.loadingPrescriptions = false;
+          await this.sleep(1);
+          document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
+        },
+        err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 3500,
+            positionClass: 'toast-bottom-left'
+          });
+        }
+      );
+    }
   }
 
-  getMedicamentsByPrescriptionId(presId: number, name: string,index:string) {
+  changePharmacyPrescriptionsPage(page: number) {
+    this.loadingPrescriptions = true;
+    this.pharmacyPrescriptionsPage = page;
+    let j: number = 0;
+    let endPage = page + 2;
+    while ((page - 2) < 1) {
+      page = page + 1;
+    }
+    if ((page + 2) > this.pharmacyPrescriptionsPage)
+      endPage = this.pharmacyPrescriptionsPage;
+    for (let i = (page - 2); i <= endPage; i++) {
+      this.pharmacyPrescriptionsPages[j] = i;
+      j++;
+    }
+    this.getPharmacyPrescriptionsById();
+  }
+
+  getMedicamentsByPrescriptionId(presId: number, name: string, index: string) {
     this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
       res => {
         this.prescriptionMeds = [];
@@ -1274,8 +1316,8 @@ export class PharmacyComponent implements OnInit {
     this.confirming = true;
     this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code)).subscribe(
       res => {
-        if (res == true){
-          this.pharmacyPrescriptions.splice(parseInt(this.popUpValue2),1);
+        if (res == true) {
+          this.pharmacyPrescriptions.list.splice(parseInt(this.popUpValue2), 1);
           this.closePopUp();
         }
         else
@@ -1283,5 +1325,9 @@ export class PharmacyComponent implements OnInit {
         this.confirming = false;
       }
     );
+  }
+
+  consoleelksjdflkjdfe() {
+    console.log('ffff');
   }
 }

@@ -173,13 +173,27 @@ export class HeaderComponent implements OnInit {
         let notification: NotificationGet = message;
         console.log(notification);
         if (notification.notificationType) {
-          this.allNotIsRead=false;
+          this.allNotIsRead = false;
           if (notification.isUnread == true)
             this.unreadNotifications += 1;
           if (notification.order == 'start')
             this.notifications.unshift(message);
           else if (notification.order == 'end')
             this.notifications.push(message);
+        }
+      }
+    );
+
+    this.headerService.deletePrescription$.subscribe(
+      (message) => {
+        if (message > 0) {
+          let index: number = 0;
+          for (let not of this.notifications) {
+            if (parseInt(not.notificationParameter) == message && not.notificationType == 'doctorAddPrescription') {
+              this.notifications.splice(index, 1);
+              break;
+            }
+          }
         }
       }
     );
@@ -244,7 +258,7 @@ export class HeaderComponent implements OnInit {
   headerOnScrollVariable = false;
   parentHeader: string = 'profile';
   role: any = this.headerService.header$;
-  allNotIsRead:boolean=false;
+  allNotIsRead: boolean = false;
 
 
   //Home header

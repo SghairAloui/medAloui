@@ -55,6 +55,8 @@ html,body{
     --smallMessageUsernameColor:#eaebf0;
     --smallMessageUsernameBackgroundColor:#2c3247;
     --popUpBackgroundColor: #f0f2f55d;
+    --selectedPageBackgroundColor:#10182f;
+    --selectedPageColor:white;
 }
 .dark-theme{
     --background-color: #18191a;
@@ -105,6 +107,8 @@ html,body{
     --smallMessageUsernameColor:#2c3247;
     --smallMessageUsernameBackgroundColor:#adadad;
     --popUpBackgroundColor: #32333388;
+    --selectedPageBackgroundColor:white;
+    --selectedPageColor:#10182f;
 }
 @import '~ngx-toastr/toastr';
 @import '~ngx-toastr/toastr-bs4-alert';
@@ -1708,7 +1712,10 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
         transform: rotate(360deg);
     }
 }
-
+.loadingPrescription{
+    padding-top: 20px;
+    height: 65px;
+}
 .loadingPrescription .fa-file-medical{
     font-size: 25px;
     animation-name: loadingPrescription;
@@ -1723,7 +1730,7 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
         opacity: 0.5;
     }
     50%{
-        transform: scale(1.2);
+        transform: scale(0.8);
         opacity: 1;
     }
     100%{
@@ -1800,4 +1807,79 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     transform: translateX(-50%);
     color: white;
     text-align: center;
+}
+
+.page{
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+.pageSlected{
+    position: relative;
+    background-color: var(--selectedPageBackgroundColor);
+    width: 100%;
+    height: 100%;
+    color: var(--selectedPageColor);
+}
+.pageIndex{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.disabledPage{
+    display: none;
+}
+.pageLoading{
+    animation-name: pageLoding;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    background: transparent;
+}
+
+@keyframes pageLoding{
+    50%{
+        transform: scale(0.85);
+    }
+}
+
+.loadingPages{
+    pointer-events: none;
+    cursor: default;
+}
+
+.fixSearchBox{
+    position: relative;
+    width: 40%;
+    height: 40px;
+    margin: 20px 30%;
+}
+.fixSearchBox .fixSearchBoxInput{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border:2px solid #308a7b;
+    background: transparent;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 40px;
+    color: var(--text-color);
+}
+.fixSearchBox .fixSearchBoxInput::placeholder{
+    color: var(--text-color);
+}
+.fixSearchBox .fa-search{
+    position: absolute;
+    right: 15px;
+    top: 20px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #308a7b;
 }
