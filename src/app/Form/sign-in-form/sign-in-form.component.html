@@ -9,6 +9,9 @@
   <div class="container">
     <form>
       <div class="signInText"><i class="fas fa-user-circle"></i> {{'signIn'|translate}} </div>
+      <div *ngIf="InvalidInfo == true" style="color:red;font-size: 12px;margin-bottom: 10px;">
+        {{'emailOrPassInvalid'|translate}}
+      </div>
       <div class="formDiv">
         <input type="text" [class.labelInvalidInfo]="InvalidInfo" name="username" [(ngModel)]="username" id="username"
           (keyup)="InvalidInfo=false;" class="formInput" placeholder=" ">

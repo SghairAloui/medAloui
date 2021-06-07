@@ -580,7 +580,6 @@
     "youHaveNotAnyWaitingPrescription":"You have not any waiting prescription",
     "inquire":"inquire",
     "add":"add",
-
     "congYourAccountApp":"Congratulations your account has been approved",
     "accountDis":"Your account has been disapproved",
     "accountDisPerma":"Your account has been disapproved permanently",
@@ -591,5 +590,6 @@
     "delectedPres":"deleted a prescription",
     "addedPres":"added prescription",
     "usedPres":"Used",
-    "pendingPres":"Not used yet"
+    "pendingPres":"Not used yet",
+    "emailOrPassInvalid":"Invalid email or password"
 }

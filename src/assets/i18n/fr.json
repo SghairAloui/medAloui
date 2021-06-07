@@ -582,5 +582,17 @@
     "todayPres":"Ordonnance d'aujourd'hui",
     "youHaveNotAnyWaitingPrescription":"Vous n'avez pas d'ordonnance en attente",
     "inquire":"renseigner",
-    "add":"ajouter"
+    "add":"ajouter",
+    "congYourAccountApp":"Félicitations, votre compte a été approuvé",
+    "accountDis":"Votre compte a été refusé",
+    "accountDisPerma":"Votre compte a été refusé définitivement",
+    "setYourGeo":"Définissez votre position afin que les utilisateurs puissent vous trouver par GPS",
+    "code":"Code",
+    "incorrectCode":"code incorrect",
+    "beginReceivePat":"commence à recevoir les patients",
+    "delectedPres":"supprimé une ordonnance",
+    "addedPres":"ordonnance ajoutée",
+    "usedPres":"Utilisée",
+    "pendingPres":"Pas encore utilisée",
+    "emailOrPassInvalid":"Email ou mot de passe invalide"
 }

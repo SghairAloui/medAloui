@@ -442,6 +442,9 @@
 
                         <div *ngIf="notif.notificationType!='userSelectYouForPres'" class="notification">
 
+                            <div class="notificationDate">
+                                {{getPassedTime(notif.timeSent)}}
+                            </div>
                             <div *ngIf="notif.notificationType=='setYourGeoLocation'">
                                 <div>
                                     <i class="fas fa-map-marked-alt"></i>

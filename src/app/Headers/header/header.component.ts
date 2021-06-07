@@ -538,9 +538,9 @@ export class HeaderComponent implements OnInit {
     let clockTime: string = this.convertMillisecondsToDigitalClock(timeBetween).clock;
     if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) == 0) {
       if (clockTime.slice((clockTime.indexOf(':') + 2), (clockTime.indexOf(':') + 3)) == ':')
-        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 2)) + ' ' + this.translate.instant('muniteAgo');
+        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 2)) + ' munites';
       else
-        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 3)) + ' ' + this.translate.instant('muniteAgo');
+        time = clockTime.slice((clockTime.indexOf(':') + 1), (clockTime.indexOf(':') + 3)) + ' munites';
     }
     else if (parseInt(clockTime.slice(0, clockTime.indexOf(':'))) >= 1 && parseInt(clockTime.slice(0, clockTime.indexOf(':'))) <= 24)
       time = date.slice(11, 16);

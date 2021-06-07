@@ -139,7 +139,7 @@ export class SignInFormComponent implements OnInit {
         }
       },
       err => {
-        this.errorMessage = err.error.message;
+        this.InvalidInfo=true;
         this.isLoginFailed = true;
         this.waitOppeningAcc=false;
       }

@@ -241,6 +241,13 @@ html,body{
 }
 
 /*login header*/
+.notificationDate{
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
 .iconMenu{
     margin: 0px 5px;
     transition: .3s ease-in-out;
