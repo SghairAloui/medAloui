@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
     private conversationService: ConversationService,
     private doctorService: DoctorService,
     private userService: UserService,
-    private secretaryComponent:SecretaryComponent) {
+    private secretaryComponent: SecretaryComponent) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -238,6 +238,8 @@ export class HeaderComponent implements OnInit {
           this.userId = this.pharmacyComp.pharmacyGet.userId
         else if (this.role == 'admin')
           this.userId = this.adminComp.adminGet.userId
+        else if (this.role == 'secretary')
+          this.userId = this.secretaryComponent.secretaryGet.userId
       }
     );
 
@@ -444,9 +446,12 @@ export class HeaderComponent implements OnInit {
   //pharmacy header
 
   //secretary header
-  openContainerToSecretary(container:string){
-    this.secretaryComponent.container=container;
-    this.parentHeader=container;
+  openContainerToSecretary(container: string) {
+    this.secretaryComponent.container = container;
+    this.parentHeader = container;
+  }
+  toWorkTimeLinesSection() {
+    document.getElementById("secretaryWork").scrollIntoView({ behavior: "smooth" });
   }
   //secretary header
 
@@ -627,6 +632,8 @@ export class HeaderComponent implements OnInit {
       this.patientComp.openFullConversation(openConver);
     else if (this.role == 'pharmacy')
       this.pharmacyComp.openFullConversation(openConver);
+    else if (this.role == 'secretary')
+      this.secretaryComponent.openFullConversation(openConver);
   }
 
   getConversationByid(convId: number, openConv: boolean) {
@@ -669,6 +676,8 @@ export class HeaderComponent implements OnInit {
                 this.patientComp.openFullConversation(openConver);
               else if (this.role == 'pharmacy')
                 this.pharmacyComp.openFullConversation(openConver);
+              else if (this.role == 'secretary')
+                this.secretaryComponent.openFullConversation(openConver);
             }
           }
         );
@@ -728,6 +737,8 @@ export class HeaderComponent implements OnInit {
       this.patientComp.searchedUsers = [];
     else if (firstTime && this.role == 'pharmacy')
       this.pharmacyComp.searchedUsers = [];
+    else if (firstTime && this.role == 'secretary')
+      this.secretaryComponent.searchedUsers = [];
     if (firstTime)
       this.searchPage = 0;
     if (firstTime)
@@ -757,6 +768,8 @@ export class HeaderComponent implements OnInit {
             this.patientComp.searchedUsers.push(user);
           else if (this.role == 'pharmacy')
             this.pharmacyComp.searchedUsers.push(user);
+          else if (this.role == 'secretary')
+            this.secretaryComponent.searchedUsers.push(user);
         }
         this.search = '';
         if (searchedUsers.length == 6) {
@@ -766,6 +779,8 @@ export class HeaderComponent implements OnInit {
             this.patientComp.loadMoreUsers = true;
           else if (this.role == 'pharmacy')
             this.pharmacyComp.loadMoreUsers = true;
+          else if (this.role == 'secretary')
+            this.secretaryComponent.loadMoreUsers = true;
         } else {
           if (this.role == 'doctor')
             this.doctorComp.loadMoreUsers = false;
@@ -773,6 +788,8 @@ export class HeaderComponent implements OnInit {
             this.patientComp.loadMoreUsers = false;
           else if (this.role == 'pharmacy')
             this.pharmacyComp.loadMoreUsers = false;
+          else if (this.role == 'secretary')
+            this.secretaryComponent.loadMoreUsers = false;
         }
         this.searchPage += 1;
         this.searchingUsers = false;
@@ -790,6 +807,14 @@ export class HeaderComponent implements OnInit {
           positionClass: 'toast-bottom-left'
         });
       });
+  }
+
+  nameMaxLength(firstName: string, lastName: string): string {
+    let name: string = firstName + ' ' + lastName;
+    if (name.length > 14)
+      return name.slice(0, 14) + '...';
+    else
+      return name;
   }
 
 }

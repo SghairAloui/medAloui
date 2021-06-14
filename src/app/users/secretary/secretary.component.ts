@@ -4,19 +4,24 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { ConversationService } from 'src/app/services/conversation.service';
+import { QuestionService } from 'src/app/services/question.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
+import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
 import { OpenConversation } from 'src/model/OpenConversation';
+import { QuestionGet } from 'src/model/QuestionGet';
 import { SecretaryInfo } from 'src/model/SecretaryInfo';
+import { SecretaryWork } from 'src/model/SecretaryWork';
 import { StringGet } from 'src/model/StringGet';
-import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../doctor/doctor/doctor.service';
 import { SecretaryService } from './secretary.service';
+
+declare const L: any;
 
 @Component({
   selector: 'app-secretary',
@@ -33,7 +38,8 @@ export class SecretaryComponent implements OnInit {
     private doctorService: DoctorService,
     private headerService: HeaderService,
     private webSocketService: WebSocketService,
-    private router:Router) {
+    private router: Router,
+    private questionService:QuestionService) {
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
@@ -140,6 +146,7 @@ export class SecretaryComponent implements OnInit {
   notVerified: boolean;
   secretaryGet: SecretaryInfo;
   generalInfo: string = 'show';
+  loadMoreUsers:boolean;
   getSecretaryInfo() {
     this.secretaryService.getSecretaryInfoBySecureLogin(localStorage.getItem('secureLogin')).subscribe(
       res => {
@@ -150,6 +157,7 @@ export class SecretaryComponent implements OnInit {
           this.headerService.setHeader('secretary');
           this.notVerified = false;
           this.secretaryGet.profileImage = this.getSecProfileImage(this.secretaryGet.userId + "profilePic");
+          this.getSecretaryWork();
         }
       },
       err => {
@@ -450,14 +458,14 @@ export class SecretaryComponent implements OnInit {
 
   invalidFirstNameVariable: boolean; invalidLastNameVariable: boolean; invalidMailVariable: boolean; invalidDayVariable: boolean; invalidMonthVariable: boolean; invalidYearVariable: boolean; invalidAdressVariable: boolean; invalidPasswordVariable: boolean; invalidPasswordRepeatVariable: boolean;
   passwordRepeatInfromation: string; passwordInfromation: string; firstNameInformation: string; lastNameInformation: string; mailInformation: string; dayInformation: string; monthInformation: string; yearInformation: string; adressInformation: string;
-  firstName: string=''; lastName: string=''; mail: string=''; day: string=''; month: string=''; year: string=''; adress: string=''; password: string=''; passwordRepeat: string='';
+  firstName: string = ''; lastName: string = ''; mail: string = ''; day: string = ''; month: string = ''; year: string = ''; adress: string = ''; password: string = ''; passwordRepeat: string = '';
   days: number[] = [];
   months: number[] = [];
   years: number[] = [];
   cities: string[] = ["Ariana", this.translate.instant('Beja'), "Ben Arous", "Bizerte", this.translate.instant('Gabes'), "Gafsa", "Jendouba", "Kairouan", "Kasserine", this.translate.instant('Kebili'), "Kef", "Mahdia", "Manouba", this.translate.instant('Medenine'), "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"];
   femaleCheckBox: boolean = false;
   maleCheckBox: boolean = false;
-  editeSecureInfo:boolean=false;
+  editeSecureInfo: boolean = false;
   initializeEditLabel() {
     this.firstNameInformation = this.translate.instant('firstName');
     this.passwordRepeatInfromation = this.translate.instant('repeatPassword');
@@ -637,32 +645,32 @@ export class SecretaryComponent implements OnInit {
       this.disableSaveBtn = false;
   }
 
-  updateSecretaryInfoBySecureLogin(){
-    let birthday: string = (this.day.length == 1 ? '0'+this.day : this.day)  + '/' + (this.month.length == 1 ? '0'+this.month : this.month) + '/' + this.year;
+  updateSecretaryInfoBySecureLogin() {
+    let birthday: string = (this.day.length == 1 ? '0' + this.day : this.day) + '/' + (this.month.length == 1 ? '0' + this.month : this.month) + '/' + this.year;
     let gender: string;
     if (this.maleCheckBox == true)
       gender = 'male';
     else
       gender = 'female';
-    this.secretaryService.updateSecretaryInfoBySecureLogin(this.firstName,this.lastName,birthday,this.adress,gender,this.secretaryGet.secureLogin).subscribe(
-      res=>{
-        if(res){
+    this.secretaryService.updateSecretaryInfoBySecureLogin(this.firstName, this.lastName, birthday, this.adress, gender, this.secretaryGet.secureLogin).subscribe(
+      res => {
+        if (res) {
           this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('notification'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
           });
-          this.generalInfo='show';
-          this.editeSecureInfo=false;
-          this.secretaryGet.secretaryFirstName=this.firstName;
-          this.secretaryGet.secretaryLastName=this.lastName;
-          this.secretaryGet.secretaryBirthDay=birthday;
-          this.secretaryGet.userCity=this.adress;
-          this.secretaryGet.secretaryGender=gender;
-          this.disableSaveBtn=true;
+          this.generalInfo = 'show';
+          this.editeSecureInfo = false;
+          this.secretaryGet.secretaryFirstName = this.firstName;
+          this.secretaryGet.secretaryLastName = this.lastName;
+          this.secretaryGet.secretaryBirthDay = birthday;
+          this.secretaryGet.userCity = this.adress;
+          this.secretaryGet.secretaryGender = gender;
+          this.disableSaveBtn = true;
           this.toGeneralInfoSection();
         }
       },
-      err=>{
+      err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
@@ -689,19 +697,19 @@ export class SecretaryComponent implements OnInit {
       this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
     }
     if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
-      this.secretaryService.updatePasswordBySecureLogin(this.passwordRepeat,this.secretaryGet.secureLogin).subscribe(
-        async res=>{
+      this.secretaryService.updatePasswordBySecureLogin(this.passwordRepeat, this.secretaryGet.secureLogin).subscribe(
+        async res => {
           this.router.navigate(['/acceuil']);
-            this.toastr.success(this.translate.instant('passwordChanged'), this.translate.instant('info'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-            localStorage.setItem('secureLogin', '');
-            localStorage.setItem('id', '');
-            await this.sleep(1);
-            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
+          this.toastr.success(this.translate.instant('passwordChanged'), this.translate.instant('info'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          localStorage.setItem('secureLogin', '');
+          localStorage.setItem('id', '');
+          await this.sleep(1);
+          document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
         },
-        err=>{
+        err => {
           this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
@@ -709,5 +717,169 @@ export class SecretaryComponent implements OnInit {
         }
       );
     }
+  }
+
+  secretaryWork: SecretaryWork[] = [];
+  getSecretaryWork() {
+    this.secretaryService.getSecretaryWorkById(this.secretaryGet.userId).subscribe(
+      res => {
+        this.secretaryWork = res;
+        for (let work of this.secretaryWork) {
+          let retrieveResonse: any;
+          let base64Data: any;
+          this.doctorService.getDoctorPofilePhoto(work.doctorId + "profilePic").subscribe(
+            res => {
+              if (res != null) {
+                retrieveResonse = res;
+                base64Data = retrieveResonse.picByte;
+                work.doctorImg = 'data:image/jpeg;base64,' + base64Data;
+              } else
+                work.doctorImg = false;
+            }
+          );
+        }
+      }
+    );
+  }
+
+  openFullConversation(conver: OpenConversation) {
+    if (!this.openConversation || this.openConversation.conversationId != conver.conversationId) {
+      if (this.openConversation)
+        this.restoreConversation();
+      this.openConversation = conver;
+      if (this.openConversation.isUnread == true)
+        this.readConversation(this.openConversation.lastMessageSenderId);
+      this.getConversationMessages(true);
+      let i: number = 0;
+      for (let conv of this.smallConversations) {
+        if (conv.conversationId == this.openConversation.conversationId) {
+          this.smallConversations.splice(i, 1);
+          break;
+        }
+        i = +1;
+      }
+    }
+  }
+
+  selectedUser: UserSearchGet;
+  showUserFullInfo(userKey: number) {
+    this.selectedUser = this.searchedUsers[userKey];
+    if (this.searchedUsers[userKey].userType == 'doctor' || this.searchedUsers[userKey].userType == 'pharmacist')
+      this.setSelectedUserPosition();
+    else {
+      this.selectedUser.patientQuestionsPage = 0;
+      this.selectedUser.patientQuestions = [];
+      this.getPatientQuestionsById(this.selectedUser.userId, this.selectedUser.patientQuestionsPage);
+    }
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  myMap;
+  async setSelectedUserPosition() {
+    if (this.selectedUser.userLatitude.length != 0 && this.selectedUser.userLongitude.length != 0) {
+      let container = document.getElementById('selectedUserMap');
+      while (!container) {
+        container = document.getElementById('selectedUserMap');
+        await this.sleep(500);
+      }
+      this.myMap = L.map('selectedUserMap').setView([this.selectedUser.userLatitude, this.selectedUser.userLongitude], 13);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVzc2FhZGlpIiwiYSI6ImNrbzE3ZHZwbzA1djEyb3M1bzY4cmw1ejYifQ.cisRE8KJri7O9GD3KkMCCg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+      }).addTo(this.myMap);
+
+      let marker = L.marker([this.selectedUser.userLatitude, this.selectedUser.userLongitude]).addTo(this.myMap);
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> " + this.selectedUser.userFullName + "</b>").openPopup();
+    }
+  }
+
+  addMapRoute() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      L.Routing.control({
+        waypoints: [
+          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
+        ]
+      }).addTo(this.myMap);
+    });
+  }
+
+  getPatientQuestionsById(userId: number, pageNumber: number) {
+    this.questionService.getQuestionsByUserId(userId, pageNumber, 4).subscribe(
+      res => {
+        let questions: QuestionGet[] = res;
+        for (let ques of questions) {
+          this.selectedUser.patientQuestions.push(ques);
+        }
+        if (questions.length == 4)
+          this.selectedUser.loadMoreQuestion = true;
+        else
+          this.selectedUser.loadMoreQuestion = false;
+        this.selectedUser.patientQuestionsPage += 1;
+      }
+    );
+  }
+
+  startConversation(recipientId: number, firstName: string, lastName: string) {
+    this.conversationService.addConversation(this.secretaryGet.userId, recipientId).subscribe(
+      res => {
+        let conversation: Conversation = res;
+        let conv: ConversationGet = {
+          recipient: recipientId,
+          open_date: conversation.openDate,
+          last_name: lastName,
+          conversation_id: conversation.conversationId,
+          last_update_date: conversation.openDate,
+          first_name: firstName,
+          conversation_status: conversation.conversationStatus,
+          recipientImg: false,
+          user_type: '',
+          message_content: conversation.messageContent,
+          order: 'start',
+          is_unread: false,
+          last_message_sender_id: 0,
+          status_updated_by: conversation.statusUpdatedBy
+        }
+        let retrieveResonse: any;
+        let base64Data: any;
+        let retrievedImage: any;
+        this.doctorService.getDoctorPofilePhoto(recipientId + 'profilePic').subscribe(
+          res => {
+            if (res != null) {
+              retrieveResonse = res;
+              base64Data = retrieveResonse.picByte;
+              retrievedImage = 'data:image/jpeg;base64,' + base64Data;
+              conv.recipientImg = retrievedImage;
+            }
+          }
+        );
+        this.headerService.addConversation(conv);
+        this.headerService.setParentHeader('message');
+
+        let openConver: OpenConversation = {
+          conversationId: conv.conversation_id,
+          username: firstName + ' ' + lastName.toUpperCase(),
+          messagePage: 0,
+          messages: [],
+          userId: conv.recipient,
+          userImg: conv.recipientImg,
+          isUnread: conv.is_unread,
+          lastMessageSenderId: conv.last_message_sender_id,
+          conversationStatus: conv.conversation_status,
+          loadMoreMessage: true,
+          statusUpdatedBy: conv.status_updated_by
+        };
+        this.openFullConversation(openConver);
+      }
+    );
   }
 }

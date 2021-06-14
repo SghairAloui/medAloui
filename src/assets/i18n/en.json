@@ -602,5 +602,7 @@
     "create":"Create",
     "emailAlreadyTaken":"Email already taken",
     "accountCreatedAskSec":"Account created ask the secretary to open and verify her account",
-    "notification":"Notification"
+    "notification":"Notification",
+    "untilNow":"Until now",
+    "workTimeLines":"Work time lines"
 }

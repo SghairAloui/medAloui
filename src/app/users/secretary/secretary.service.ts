@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { SecretaryInfo } from 'src/model/SecretaryInfo';
+import { SecretaryWork } from 'src/model/SecretaryWork';
 
 const SECRETARY_API = environment.apiUrl+'api/secretary/';
 
@@ -26,5 +27,9 @@ export class SecretaryService {
 
   public updatePasswordBySecureLogin(password:string,secureLogin: string) {
     return this.http.post<boolean>(SECRETARY_API + "updatePasswordBySecureLogin", {password,secureLogin}, httpOptions);
+  }
+
+  public getSecretaryWorkById(id:number) {
+    return this.http.get<SecretaryWork []>(SECRETARY_API + "getSecretaryWorkById/"+id, httpOptions);
   }
 }

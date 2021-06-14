@@ -466,6 +466,7 @@
                 <div *ngIf="parentHeader=='profile'">
                     <ul>
                         <li (click)="toGeneralInfoSection()"><a>{{'generalInfo'|translate}}</a></li>
+                        <li (click)="toWorkTimeLinesSection()"><a>{{'workTimeLines'|translate}}</a></li>
                     </ul>
                 </div>
                 <div *ngIf="parentHeader=='settings'" class="settingItems">
@@ -680,10 +681,7 @@
                         <div class="messageUsername">
                             <div>
                                 <span style="text-transform: capitalize;">
-                                    {{conver.first_name}}
-                                </span>
-                                <span style="text-transform: uppercase;">
-                                    {{conver.last_name}}
+                                    {{nameMaxLength(conver.first_name,conver.last_name)}}
                                 </span>
                                 <div class="lastMessageContent" style="margin-right: 3px;"
                                     *ngIf="!conver.message_content">
