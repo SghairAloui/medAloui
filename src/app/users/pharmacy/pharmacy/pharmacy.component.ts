@@ -524,7 +524,7 @@ export class PharmacyComponent implements OnInit {
             });
             localStorage.setItem('secureLogin', '');
             localStorage.setItem('id', '');
-            await this.sleep(1000);
+            await this.sleep(1);
             document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
           } else {
             this.router.navigate(['/acceuil']);

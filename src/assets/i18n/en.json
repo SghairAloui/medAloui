@@ -591,5 +591,16 @@
     "addedPres":"added prescription",
     "usedPres":"Used",
     "pendingPres":"Not used yet",
-    "emailOrPassInvalid":"Invalid email or password"
+    "emailOrPassInvalid":"Invalid email or password",
+
+    "youHaveNotAnySerc":"You have not any secretary yet",
+    "addSecretary":"Add secretary",
+    "createSecretaryAccount":"Create secretary account",
+    "thereIsNoSecretary":"There is no secretary with this email",
+    "secretaryAdded":"Secretary saved, waiting for her confirmation",
+    "enterSecretaryInfo":"Enter secretary informations",
+    "create":"Create",
+    "emailAlreadyTaken":"Email already taken",
+    "accountCreatedAskSec":"Account created ask the secretary to open and verify her account",
+    "notification":"Notification"
 }

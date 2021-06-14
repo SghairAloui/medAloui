@@ -121,4 +121,16 @@ export class DoctorService {
   public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
     return this.http.post<boolean>(DOC_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
   }
+
+  public addSecretary(email:string,doctorId:number){
+    return this.http.post<boolean>(DOC_API+"addSecretary",{email,doctorId},httpOptions);
+  }
+
+  public createSecretaryAccount(username:string,
+    userPassword:string,userCity:string,userFirstName:string,
+    userLastName:string,userBirthday:string,userGender:string,
+    doctorId:number){
+    return this.http.post<boolean>(DOC_API+"createSecretaryAccount",{username,
+      userPassword,userCity,userFirstName,userLastName,userBirthday,userGender,doctorId},httpOptions);
+  }
 }

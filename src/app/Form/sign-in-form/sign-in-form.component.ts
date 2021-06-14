@@ -136,6 +136,8 @@ export class SignInFormComponent implements OnInit {
           this.router.navigate(['/admin']);
         }else if (this.signInResponse.roles.indexOf('PHARMACIST_ROLE') != -1){
           this.router.navigate(['/pharmacy']);
+        }else if(this.signInResponse.roles.indexOf('SECRETARY_ROLE') != -1){
+          this.router.navigate(['/secretary']);
         }
       },
       err => {

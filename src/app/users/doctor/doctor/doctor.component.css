@@ -1,11 +1,10 @@
 html,body{
     width: 100%;
-    height: auto;
+    height: 100% - 30px;
     font-family: 'Raleway', sans-serif;
 }
 .doctorContainer{
     position: relative;
-    margin-top: 20px;
     left: 20%;
     width: 80%;
     overflow-x: hidden;
@@ -504,7 +503,7 @@ html,body{
     display: inline-block;
     position: relative;
     width: 40%;
-    transition: .3s ease-in-out;
+    transition:all .3s ease-in-out;
     background-color: var(--background-color);
     box-shadow: var(--infoBox);
     margin-top: 15px;
@@ -527,6 +526,7 @@ html,body{
     border: none;
     border-radius: 50%;
     overflow:hidden;
+    transition: all .3s ease-in-out;
 }
 .verified{
     font-size: 17px;
@@ -540,6 +540,7 @@ html,body{
     left: 250px;
     color: white;
     border: 2px solid var(--background-color);
+    transition: all .3s ease-in-out;
 }
 .doctorGeneralInfo{
     display: inline-block;
@@ -659,7 +660,7 @@ html,body{
     z-index: 2;
     background: var(--background-color);
     color: #308a7b;
-    transition: .3s ease-in-out;
+    transition:all .3s ease-in-out;
 }
 .spanButton:hover{
     background-color: #308a7b;
@@ -753,6 +754,7 @@ html,body{
     font-size: 25px;
     width: fit-content;
     font-weight: 600;
+    transition: all .3s ease-in-out;
     color: var(--userInfoContainerValueColor);
     margin: 5px auto;
 }
@@ -906,12 +908,14 @@ html,body{
     border-radius: 30px;
     width: fit-content;
     box-shadow: var(--userInfoContainerShadow);
+    transition: all .3s ease-in-out;
 }
 .userInfoContainerTitle{
     text-transform: capitalize;
     position: relative;
     display: flex;
     margin-left: 10px;
+    transition: all .3s ease-in-out;
     color: var(--userInfoContainerTitleColor);
 }
 .userInfoContainerTitleIcon{
@@ -933,6 +937,7 @@ html,body{
     font-weight: 700;
     color: var(--userInfoContainerValueColor);
     text-transform: capitalize;
+    transition: all .3s ease-in-out;
 }
 #profile .fa-birthday-cake,#profile .fa-venus-mars,#profile .userInfoContainer .fa-hospital-user,#profile .userInfoContainer .fa-clock,#profile .userInfoContainer .fa-hand-holding-usd,#profile .userInfoContainer .fa-user-clock,#profile .fa-map-marked-alt{
     position: absolute;
@@ -996,6 +1001,7 @@ html,body{
     font-weight: 700;
     margin-left: 18%;
     color: var(--userInfoContainerValueColor);
+    transition: all .3s ease-in-out;
 }
 .workDayLineTilteValue{
     padding-left: 45px;
@@ -1058,6 +1064,7 @@ html,body{
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    transition: all .3s ease-in-out;
 }
 .workDaysLine .workDaysLineFirst div{
     color: var(--dayColor);

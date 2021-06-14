@@ -11,6 +11,7 @@ import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
 import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
+import { SecretaryComponent } from 'src/app/users/secretary/secretary.component';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
@@ -41,7 +42,8 @@ export class HeaderComponent implements OnInit {
     private notificationService: NotificationService,
     private conversationService: ConversationService,
     private doctorService: DoctorService,
-    private userService: UserService) {
+    private userService: UserService,
+    private secretaryComponent:SecretaryComponent) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -440,6 +442,13 @@ export class HeaderComponent implements OnInit {
     this.parentHeader = containerName;
   }
   //pharmacy header
+
+  //secretary header
+  openContainerToSecretary(container:string){
+    this.secretaryComponent.container=container;
+    this.parentHeader=container;
+  }
+  //secretary header
 
   logOut() {
     localStorage.setItem("secureLogin", "");

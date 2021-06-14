@@ -543,7 +543,7 @@ export class PatientComponent implements OnInit {
             });
             localStorage.setItem('secureLogin', '');
             localStorage.setItem('id', '');
-            await this.sleep(1000);
+            await this.sleep(1);
             document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
           }
         },

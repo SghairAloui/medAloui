@@ -47,6 +47,9 @@ import { EmailService } from './services/email.service';
 import { ConversationService } from './services/conversation.service';
 import { WebSocketService } from './services/web-socket.service';
 import { PharmacyDiseaseComponent } from './users/pharmacy/pharmacy-disease/pharmacy-disease.component';
+import { DoctorSecretaryComponent } from './users/doctor/doctor-secretary/doctor-secretary.component';
+import { SecretaryComponent } from './users/secretary/secretary.component';
+import { SecretaryService } from './users/secretary/secretary.service';
 
 @NgModule({
   declarations: [
@@ -68,7 +71,9 @@ import { PharmacyDiseaseComponent } from './users/pharmacy/pharmacy-disease/phar
     PatientDiseaseComponent,
     DoctorDiseaseComponent,
     ForgetPasswordComponent,
-    PharmacyDiseaseComponent
+    PharmacyDiseaseComponent,
+    DoctorSecretaryComponent,
+    SecretaryComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +97,7 @@ import { PharmacyDiseaseComponent } from './users/pharmacy/pharmacy-disease/phar
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,EmailService,
-    NotificationService,ConversationService,WebSocketService,authInterceptorProviders
+    NotificationService,ConversationService,WebSocketService,SecretaryService,SecretaryComponent,authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -193,7 +193,7 @@
     color: #308a7b;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 0px 0px 5px #308a7b46;
-    transition: .3s ease-in-out;
+    transition:all .3s ease-in-out;
 }
 .invalidVerificationCode .verficationCodeNumber{
     border: 1px solid red;

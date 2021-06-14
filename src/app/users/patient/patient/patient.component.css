@@ -452,24 +452,6 @@ html,body{
     text-align: center;
     padding-bottom: 5px;
 }
-.newSectionContainer{
-    position: relative;
-    margin: 20px 30px;
-    border-radius: 20px;
-    background-color: var(--box-color);
-    box-shadow: var(--box-shadow);
-    transition: all .3s ease-in-out;
-    overflow: hidden;
-    padding-bottom: 15px;
-}
-.sectionContainerTopGreen{
-    height: 150px;
-    width: 100%;
-    position: absolute;
-    background-color: #308a7b;
-    left: 0px;
-    top: 0px;
-}
 .imgContainer{
     background-color: var(--box-color);
     display: inline-block;
@@ -482,33 +464,7 @@ html,body{
     border: none;
     border-radius: 50%;
     overflow:hidden;
-}
-.centerChangeText{
-    opacity: 1;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 1.2rem;
-    font-weight: 700;
-    transform: translate(-50%,-50%);
-    color: white;
-    transition: 0.3s;
-}
-.doctorGeneralInfo{
-    display: inline-block;
-    position: absolute;
-    color: #eceff3;
-    margin-top: 50px;
-    margin-left: 150px;
-}
-.doctorName{
-    color: #242f3d;
-    font-size: 1.5rem;
-    text-transform: capitalize;
-    font-weight: 600;
-}
-.doctorName span{
-    text-transform: uppercase;
+    transition: all .3s ease-in-out;
 }
 .infoGrid .infoContainer,.infoGridTowColumn .infoContainer{
     background-color: none;
@@ -526,19 +482,6 @@ html,body{
     font-size: 25px;
     padding: 10px 0px;
 }
-.iconButton{
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    padding: 10px;
-    background-color: #308a7b;
-    border-radius: 50%;
-    border: none;
-    margin-left: 90%;
-    margin-top: -150px;
-    color: white;
-    box-shadow: 0px 0px 5px #308a7b;
-}
 .userInfoContainer{
     flex: 0 0 auto;
     display: inline-block;
@@ -547,6 +490,7 @@ html,body{
     margin: 10px;
     border-radius: 30px;
     width: fit-content;
+    transition: all .3s ease-in-out;
     box-shadow: var(--userInfoContainerShadow);
 }
 .userInfoContainerTitle{
@@ -555,6 +499,7 @@ html,body{
     display: flex;
     margin-left: 10px;
     color: var(--userInfoContainerTitleColor);
+    transition: all .3s ease-in-out;
 }
 .userInfoContainerTitleIcon{
     position: absolute;
@@ -575,6 +520,7 @@ html,body{
     font-weight: 700;
     color: var(--userInfoContainerValueColor);
     text-transform: capitalize;
+    transition: all .3s ease-in-out;
 }
 .fa-arrows-alt-v, .fa-birthday-cake,.fa-venus-mars,.fa-map-marked-alt,.fa-weight,.fa-bacterium,.fa-search,.fa-pills,.fa-clinic-medical{
     position: absolute;
@@ -605,6 +551,7 @@ html,body{
     height: 12px;
     background-color: transparent;
     color: var(--gray-text);
+    transition: all .3s ease-in-out;
 }
 .fa-weight,.fa-clinic-medical{
     color: #9983ea;
@@ -706,6 +653,7 @@ html,body{
     position: absolute;
     width: 100%;
     top: 45%;
+    transition: all .3s ease-in-out;
     opacity: var(--worldMapImgOpacity);
 }
 .searchIcon{
@@ -750,6 +698,7 @@ html,body{
     height: 400px;
     margin-left: 5%;
     border-radius: 10px;
+    transition: all .3s ease-in-out;
     box-shadow: var(--infoBox);
 }
 .noPharmacyFound{
@@ -828,7 +777,7 @@ html,body{
     color: #308a7b;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 0px 0px 5px #308a7b46;
-    transition: .3s ease-in-out;
+    transition:all .3s ease-in-out;
 }
 .invalidVerificationCode .verficationCodeNumber{
     border: 1px solid red;
@@ -864,16 +813,19 @@ html,body{
     padding: 5px 10px;
     margin: 10px 15px;
     border-radius: 8px;
+    transition: all .3s ease-in-out;
 }
 .searchedUserQuestionContainerQuestion{
     display: flex;
     color: var(--text-color);
     margin: 10px 5px;
+    transition: all .3s ease-in-out;
 }
 .searchedUserQuestionContainerQuestion div:nth-child(1){
     min-width: max-content;
     border-right: 1px solid var(--gray-text);
     padding-right: 10px;
+    transition: all .3s ease-in-out;
 }
 .searchedUserQuestionContainerQuestion div:nth-child(2){
     flex-grow: 1;

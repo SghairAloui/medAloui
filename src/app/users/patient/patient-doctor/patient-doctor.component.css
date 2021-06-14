@@ -255,6 +255,7 @@ body{
 }
 #patientTopRatedDoctorSection .doctor{
     background-color: var(--background-color);
+    transition: all .3s ease-in-out;
 }
 #patientTopRatedDoctorSection .doctor:hover{
     transform: scale(1);
