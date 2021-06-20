@@ -969,9 +969,11 @@
                                     </div>
                                     <div *ngIf="docInfoForPatient[app.key]">
                                         <div class="appointmentsGrid"
-                                            [class.appIsToday]="isDatePassed(app.value.appointmentDate) == null && app.value.appointmentStatus != 'completed' && app.value.appointmentStatus != 'missed'"
+                                            [class.appIsToday]="(isDatePassed(app.value.appointmentDate) == null && app.value.appointmentStatus != 'completed' && app.value.appointmentStatus != 'missed')
+                                             || app.value.appointmentStatus == 'unconfirmed' || app.value.appointmentStatus == 'changeDateRequest'"
                                             [class.completedApp]="app.value.appointmentStatus=='completed'"
-                                            [class.missedApp]="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed'">
+                                            [class.missedApp]="((app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed')
+                                             || app.value.appointmentStatus == 'refused'">
                                             <div class="div">
                                                 <div class="centerInDivGrid">
                                                     <div class="profileImgCon">
@@ -1118,6 +1120,18 @@
                                                         style="font-weight: 600; color: #F89406;">
                                                         {{'yourAppIsToday'|translate}}
                                                     </div>
+                                                    <div *ngIf="app.value.appointmentStatus == 'refused'"
+                                                        style="font-weight: 600;color: #BD362F;">
+                                                        {{'appRefused'|translate}}
+                                                    </div>
+                                                    <div *ngIf="app.value.appointmentStatus == 'unconfirmed'"
+                                                        style="font-weight: 600;color: #F89406;">
+                                                        {{'appWaitingForConf'|translate}}
+                                                    </div>
+                                                    <div *ngIf="app.value.appointmentStatus == 'changeDateRequest'"
+                                                        style="font-weight: 600;color: #F89406;">
+                                                        {{'changeAppDateRequest'|translate}}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1187,7 +1201,7 @@
                                     <div class="userInfoContainerTitle">
                                         <div class="userInfoContainerTitleIcon"><i class="fas fa-pills"></i></div>
                                         <div class="userInfoContainerTitleValue"
-                                        [class.usedPres]="pres.prescriptionStatus == 'used'">
+                                            [class.usedPres]="pres.prescriptionStatus == 'used'">
                                             {{pres.prescriptionStatus+'Pres'|translate}}
                                         </div>
                                     </div>
@@ -1368,7 +1382,8 @@
                             <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'" class="findPhText">
                                 {{'findPharmacyThatContainYourMedicaments'|translate}}
                             </div>
-                            <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'" (click)="searchPharmaciesByMedicaments(true)">
+                            <div *ngIf="prescriptions[presPresKey].prescriptionStatus=='pending'"
+                                (click)="searchPharmaciesByMedicaments(true)">
                                 <div *ngIf="!loadingPh">
                                     <i class="fas fa-search searchIcon"></i>
                                 </div>

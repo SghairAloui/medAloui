@@ -350,7 +350,7 @@
     "confirmAppointmentTitle":"Confirmer le rendez-vous",
     "confirm":"Confirmer",
     "cancel":"Annuler",
-    "confirmNote":"Remarque: Vous pouvez consulter ou annuler votre rendez-vous même après votre confirmation, vous pouvez retrouver tous vos rendez-vous dans votre profil.",
+    "confirmNote":"Remarque: Le tour et l'heure peuvent être modifiées après confirmation de votre rendez-vous par le médecin, vous pouvez consulter ou annuler votre rendez-vous à tout moment dans votre profil.",
     "appointmentCanceled":"Rendez-vous annulé",
     "appointmentConfirmed":"Rendez-vous confirmé",
     "myAppointments":"Mes rendez-vous",

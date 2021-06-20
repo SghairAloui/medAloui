@@ -193,6 +193,16 @@ export class DoctorComponent implements OnInit {
               positionClass: 'toast-bottom-left'
             });
             this.geoNotId = not.notification.notificationId;
+          } else if (not.notification.notificationType == 'secretaryRefuseYou') {
+            this.toastr.info(not.data +' '+this.translate.instant(this.translate.instant('refuseYourAdd')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'secretaryAcceptYou') {
+            this.toastr.info(not.data +' '+this.translate.instant(this.translate.instant('acceptYourAdd')), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
           not.notification.name = not.data;
           this.headerService.addNotification(not.notification);
@@ -359,7 +369,7 @@ export class DoctorComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId,this.doctorGet.secureLogin).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -2061,7 +2071,7 @@ export class DoctorComponent implements OnInit {
   }
 
   openMessages() {
-    this.conversationService.getConversationByUserId(this.doctorGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.doctorGet.secureLogin,this.doctorGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -2154,7 +2164,7 @@ export class DoctorComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId,this.doctorGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -2250,7 +2260,7 @@ export class DoctorComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.doctorGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId,this.doctorGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
@@ -2264,7 +2274,7 @@ export class DoctorComponent implements OnInit {
   }
 
   updateConversationStatusById(conversationId: number, status: string, userId: number) {
-    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId).subscribe(
+    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId,this.doctorGet.secureLogin).subscribe(
       res => {
         if (res) {
           this.openConversation.conversationStatus = status;

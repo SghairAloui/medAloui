@@ -8,4 +8,5 @@ export interface PatientGet{
     patientGender:string;
     medicalProfileId:number;
     patientStatus:string;
+    secureLogin:string;
 }

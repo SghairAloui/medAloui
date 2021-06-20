@@ -419,7 +419,7 @@ export class PharmacyComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId,this.pharmacyGet.secureLogin).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -888,7 +888,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   openMessages() {
-    this.conversationService.getConversationByUserId(this.pharmacyGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.pharmacyGet.secureLogin, this.pharmacyGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -947,7 +947,7 @@ export class PharmacyComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.pharmacyGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId,this.pharmacyGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.newMessage -= 1;
@@ -989,7 +989,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   updateConversationStatusById(conversationId: number, status: string, userId: number) {
-    this.conversationService.updateConversationStatusById(conversationId, status, this.pharmacyGet.userId, userId).subscribe(
+    this.conversationService.updateConversationStatusById(conversationId, status, this.pharmacyGet.userId, userId,this.pharmacyGet.secureLogin).subscribe(
       res => {
         if (res) {
           this.openConversation.conversationStatus = status;
@@ -1044,7 +1044,7 @@ export class PharmacyComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId,this.pharmacyGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {

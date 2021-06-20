@@ -2085,3 +2085,6 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     text-transform: capitalize;
     transition: all .3s ease-in-out;
 }
+.fa-star,.fa-star-half-alt{
+    color: #f4bb02;
+}

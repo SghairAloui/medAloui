@@ -199,6 +199,62 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
+          } else if (not.notification.notificationType == 'secretaryConfirmAppointment') {
+            this.toastr.info(this.translate.instant('yourAppWith') + ' ' + not.data + ' ' + this.translate.instant('confirmed'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            let index: number = 0;
+            for (let app of this.myAppointment) {
+              if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
+                this.myAppointment.splice(index,1);
+                break;
+              }
+              index += 1;
+            }
+            this.getAppointmentById(parseInt(not.notification.notificationParameter));
+          } else if (not.notification.notificationType == 'secretaryRefuseAppointment') {
+            this.toastr.info(this.translate.instant('yourAppWith') + ' ' + not.data + ' ' + this.translate.instant('refused'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            let index: number = 0;
+            for (let app of this.myAppointment) {
+              if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
+                this.myAppointment.splice(index,1);
+                break;
+              }
+              index += 1;
+            }
+            this.getAppointmentById(parseInt(not.notification.notificationParameter));
+          } else if (not.notification.notificationType == 'secretaryConfirmAppDateChange') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('acceptChangeDateReq'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            let index: number = 0;
+            for (let app of this.myAppointment) {
+              if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
+                this.myAppointment.splice(index,1);
+                break;
+              }
+              index += 1;
+            }
+            this.getAppointmentById(parseInt(not.notification.notificationParameter));
+          } else if (not.notification.notificationType == 'secretaryRefuseAppDateChange') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('refuseChangeDateReq'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            let index: number = 0;
+            for (let app of this.myAppointment) {
+              if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
+                this.myAppointment.splice(index,1);
+                break;
+              }
+              index += 1;
+            }
+            this.getAppointmentById(parseInt(not.notification.notificationParameter));
           }
           if (not.notification.notificationType != 'doctorDeletePrescription') {
             not.notification.name = not.data;
@@ -209,8 +265,8 @@ export class PatientComponent implements OnInit {
           for (let pres of this.prescriptions) {
             let i: number = 0;
             console.log(not.data);
-            if (pres.prescriptionId == parseInt(not.data)){
-              this.prescription='all';
+            if (pres.prescriptionId == parseInt(not.data)) {
+              this.prescription = 'all';
               this.prescriptions.splice(i, 1);
             }
             i++;
@@ -383,7 +439,6 @@ export class PatientComponent implements OnInit {
       res => {
         if (res) {
           this.patientGet = res;
-          console.log(this.patientGet.patientStatus);
           if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000)
             this.notVerified = true;
           else {
@@ -1065,19 +1120,19 @@ export class PatientComponent implements OnInit {
         else
           this.appointmentDate = this.appointmentYear + '/' + this.appointmentMonth + '/' + this.appointmentDay;
       }
-      this.integerAndStringPost = new IntegerAndStringPost(appId, this.appointmentDate);
-      this.appointmentService.updateAppointmentDateById(this.integerAndStringPost).subscribe(
+      this.appointmentService.updateAppointmentDateById(appId, this.myAppointment[key].doctorId, this.patientGet.userId, this.appointmentDate).subscribe(
         res => {
-          if (res) {
+          if (res == false) {
             this.toastr.success(this.translate.instant('appontmentDateUpdated'), this.translate.instant('appointment'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.showUpdateCalendar[key] = false;
-            document.getElementById(key.toString()).scrollIntoView({ behavior: "smooth" });
-            this.slectedDay = true;
-            this.myAppointment[key].appointmentDate = this.appointmentDate;
-          }
+          } else
+            this.myAppointment[key].appointmentStatus = 'changeDateRequest';
+          this.showUpdateCalendar[key] = false;
+          document.getElementById(key.toString()).scrollIntoView({ behavior: "smooth" });
+          this.slectedDay = true;
+          this.myAppointment[key].appointmentDate = this.appointmentDate;
         },
         err => {
           this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
@@ -1281,7 +1336,7 @@ export class PatientComponent implements OnInit {
         } else {
           this.presKey = presKey;
           let pres: prescriptionGet;
-          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null, prescriptionCode: 0,prescriptionStatus:'pending' };
+          pres = { prescriptionId: 0, prescriptionDate: '', patientId: 0, doctorId: 0, medicament: null, fullData: false, prescriptiondoctor: null, prescriptionCode: 0, prescriptionStatus: 'pending' };
           this.disPrescriptions[presKey] = pres;
           this.getDoctorInfoForPresById(docId, presKey, 'disease');
         }
@@ -1397,7 +1452,7 @@ export class PatientComponent implements OnInit {
   }
 
   openMessages() {
-    this.conversationService.getConversationByUserId(this.patientGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.patientGet.secureLogin, this.patientGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -1490,7 +1545,7 @@ export class PatientComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.patientGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+      this.conversationService.sendMessage(this.patientGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.patientGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -1535,7 +1590,7 @@ export class PatientComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.patientGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.patientGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
@@ -1823,5 +1878,13 @@ export class PatientComponent implements OnInit {
       this.selectPharmacy(true);
     else if (this.popUpFor == 'deleteAppoitment')
       this.deleteAppById(parseInt(this.popUpValue1), parseInt(this.popUpValue2));
+  }
+
+  getAppointmentById(appId:number){
+    this.appointmentService.getAppointmentById(appId).subscribe(
+      res=>{
+        this.myAppointment.unshift(res);
+      }
+    );
   }
 }

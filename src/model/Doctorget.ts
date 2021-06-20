@@ -17,4 +17,5 @@ export interface DoctorGet{
     currentPatient:number;
     doctorLatitude:string;
     doctorLongitude:string;
+    secureLogin:string;
 }

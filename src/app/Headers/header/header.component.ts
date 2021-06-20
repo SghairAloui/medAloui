@@ -12,6 +12,7 @@ import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
 import { SecretaryComponent } from 'src/app/users/secretary/secretary.component';
+import { SecretaryService } from 'src/app/users/secretary/secretary.service';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
@@ -43,7 +44,8 @@ export class HeaderComponent implements OnInit {
     private conversationService: ConversationService,
     private doctorService: DoctorService,
     private userService: UserService,
-    private secretaryComponent: SecretaryComponent) {
+    private secretaryComponent: SecretaryComponent,
+    private secretaryService: SecretaryService) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -62,6 +64,7 @@ export class HeaderComponent implements OnInit {
   currentSearch: string;
   searchPage: number = 0;
   searchingUsers: boolean = false;
+  secureLogin:string;
 
   @ViewChild('notificationsScrollEL') private notificationsScrollEl: ElementRef;
   @ViewChild('conversationsScrollEl') private conversationsScrollEl: ElementRef;
@@ -72,7 +75,6 @@ export class HeaderComponent implements OnInit {
       (message) => {
         let conversation: ConversationGet = message;
         let convExist: boolean = false;
-        console.log(this.userId);
         for (let conver of this.conversations) {
           if (conver.conversation_id == conversation.conversation_id) {
             convExist = true;
@@ -173,7 +175,6 @@ export class HeaderComponent implements OnInit {
     this.headerService.notification$.subscribe(
       (message) => {
         let notification: NotificationGet = message;
-        console.log(notification);
         if (notification.notificationType) {
           this.allNotIsRead = false;
           if (notification.isUnread == true)
@@ -230,16 +231,26 @@ export class HeaderComponent implements OnInit {
     this.headerService.header$.subscribe(
       (message) => {
         this.role = message;
-        if (this.role == 'doctor')
-          this.userId = this.doctorComp.doctorGet.userId
-        else if (this.role == 'patient')
-          this.userId = this.patientComp.patientGet.userId
-        else if (this.role == 'pharmacy')
-          this.userId = this.pharmacyComp.pharmacyGet.userId
-        else if (this.role == 'admin')
-          this.userId = this.adminComp.adminGet.userId
-        else if (this.role == 'secretary')
-          this.userId = this.secretaryComponent.secretaryGet.userId
+        if (this.role == 'doctor'){
+          this.userId = this.doctorComp.doctorGet.userId;
+          this.secureLogin = this.doctorComp.doctorGet.secureLogin;
+        }
+        else if (this.role == 'patient'){
+          this.userId = this.patientComp.patientGet.userId;
+          this.secureLogin = this.patientComp.patientGet.secureLogin;
+        }
+        else if (this.role == 'pharmacy'){
+          this.userId = this.pharmacyComp.pharmacyGet.userId;
+          this.secureLogin = this.pharmacyComp.pharmacyGet.secureLogin;
+        }
+        else if (this.role == 'admin'){
+          this.userId = this.adminComp.adminGet.userId;
+          this.secureLogin = this.adminComp.adminGet.secureLogin;
+        }
+        else if (this.role == 'secretary'){
+          this.userId = this.secretaryComponent.secretaryGet.userId;
+          this.secureLogin = this.secretaryComponent.secretaryGet.secureLogin;
+        }
       }
     );
 
@@ -545,7 +556,7 @@ export class HeaderComponent implements OnInit {
     document.getElementById("myPositionSection").scrollIntoView({ behavior: 'smooth' });
   }
 
-  getPassedTime(date: string): string {
+  getPassedTime(date: string): string { 
     let time: string = '';
     time += date.slice(0, 10).split('/').join('-') + 'T' + date.slice(11, date.length);
     let timeBetween = new Date(new Date().valueOf() - new Date(time).valueOf());
@@ -637,9 +648,8 @@ export class HeaderComponent implements OnInit {
   }
 
   getConversationByid(convId: number, openConv: boolean) {
-    this.conversationService.getConversationByid(convId, this.userId).subscribe(
+    this.conversationService.getConversationByid(convId, this.secureLogin).subscribe(
       res => {
-        console.log(res);
         let conv: ConversationGet = res;
         let retrieveResonse: any;
         let base64Data: any;
@@ -686,7 +696,7 @@ export class HeaderComponent implements OnInit {
   }
 
   deleteNotificationById(notifKey: number) {
-    this.notificationService.deleteNotificationById(this.notifications[notifKey].notificationId).subscribe(
+    this.notificationService.deleteNotificationById(this.notifications[notifKey].notificationId,this.secureLogin).subscribe(
       res => {
         if (res) {
           if (this.notifications[notifKey].isUnread == true)
@@ -815,6 +825,36 @@ export class HeaderComponent implements OnInit {
       return name.slice(0, 14) + '...';
     else
       return name;
+  }
+
+  acceptDoctorAddRequest(notKey:number){
+    this.secretaryService.acceptDoctorAddRequest(this.notifications[notKey].senderId,this.notifications[notKey].notificationId,this.userId,this.secureLogin).subscribe(
+      res=>{
+        if(res){
+          this.notifications[notKey].notificationParameter = 'accepted';
+          this.secretaryComponent.getSecretaryWork();
+        }
+      },err=>{
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  refuseDoctorAddRequest(notKey:number){
+    this.secretaryService.refuseDoctorAddRequest(this.notifications[notKey].notificationId,this.secureLogin,this.notifications[notKey].senderId,this.userId).subscribe(
+      res=>{
+        if(res)
+          this.notifications[notKey].notificationParameter = 'refused';
+      },err=>{
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
   }
 
 }

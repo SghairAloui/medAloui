@@ -4,13 +4,17 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { ConversationService } from 'src/app/services/conversation.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { QuestionService } from 'src/app/services/question.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
+import { AppointmentForSec } from 'src/model/AppointmentForSec';
+import { AppointmentForSecWithPag } from 'src/model/AppointmentForSecWithPag';
 import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { MessageGet } from 'src/model/MessageGet';
+import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { QuestionGet } from 'src/model/QuestionGet';
 import { SecretaryInfo } from 'src/model/SecretaryInfo';
@@ -39,7 +43,8 @@ export class SecretaryComponent implements OnInit {
     private headerService: HeaderService,
     private webSocketService: WebSocketService,
     private router: Router,
-    private questionService:QuestionService) {
+    private questionService: QuestionService,
+    private notificationService: NotificationService) {
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
@@ -129,6 +134,32 @@ export class SecretaryComponent implements OnInit {
               }
             }
 
+          } else if (not.notification.notificationType == 'doctorAddedYou') {
+            this.toastr.info(this.translate.instant('addedYouToHisSecretaryList'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'seeSecretaryWorkRequest') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('wantToSeePersonalInfo'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'changeAppDateReq') {
+            this.toastr.info(not.extraData + ' ' + this.translate.instant('wantToChangeAppDate'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.getAppointmentInfoById(parseInt(not.data));
+          } else if (not.notification.notificationType == 'newAppointment') {
+            this.toastr.info(not.data + ' ' + this.translate.instant('wantToTakeAnAppointment'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.getAppointmentInfoById(parseInt(not.notification.notificationParameter));
+          }
+          if (not.notification.notificationType != 'newAppointment' && not.notification.notificationType != 'changeAppDateReq') {
+            not.notification.name = not.data;
+            this.headerService.addNotification(not.notification);
           }
           this.notificationSound();
         }
@@ -146,7 +177,7 @@ export class SecretaryComponent implements OnInit {
   notVerified: boolean;
   secretaryGet: SecretaryInfo;
   generalInfo: string = 'show';
-  loadMoreUsers:boolean;
+  loadMoreUsers: boolean;
   getSecretaryInfo() {
     this.secretaryService.getSecretaryInfoBySecureLogin(localStorage.getItem('secureLogin')).subscribe(
       res => {
@@ -158,6 +189,8 @@ export class SecretaryComponent implements OnInit {
           this.notVerified = false;
           this.secretaryGet.profileImage = this.getSecProfileImage(this.secretaryGet.userId + "profilePic");
           this.getSecretaryWork();
+          this.getMyNotifications(this.secretaryGet.userId);
+          this.getUncofirmedApp();
         }
       },
       err => {
@@ -174,7 +207,6 @@ export class SecretaryComponent implements OnInit {
     let base64Data: any;
     this.doctorService.getDoctorPofilePhoto(imgName).subscribe(
       res => {
-        console.log(res);
         if (res != null) {
           retrieveResonse = res;
           base64Data = retrieveResonse.picByte;
@@ -187,6 +219,25 @@ export class SecretaryComponent implements OnInit {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });
+      }
+    );
+  }
+
+  notificationPage: number = 0;
+  getMyNotifications(userId: number) {
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+      res => {
+        let notifications: NotificationGet[] = [];
+        notifications = res;
+        for (let notification of notifications) {
+          notification.order = 'end';
+          this.headerService.addNotification(notification);
+        }
+        if (notifications.length == 6)
+          this.headerService.setLoadMoreNotification(true);
+        else
+          this.headerService.setLoadMoreNotification(false);
+        this.notificationPage += 1;
       }
     );
   }
@@ -264,7 +315,7 @@ export class SecretaryComponent implements OnInit {
   smallConversations: OpenConversation[] = [];
   openConversation: OpenConversation;
   openMessages() {
-    this.conversationService.getConversationByUserId(this.secretaryGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.secretaryGet.secureLogin, this.secretaryGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -272,9 +323,7 @@ export class SecretaryComponent implements OnInit {
             conver.message_content = conver.message_content.slice(0, 7) + '...';
           if (conver.is_unread == true && conver.last_message_sender_id != this.secretaryGet.userId)
             this.newMessage += 1;
-          let imageName: string;
-          imageName = conver.recipient + 'profilePic';
-          this.doctorService.getDoctorPofilePhoto(imageName).subscribe(
+          this.doctorService.getDoctorPofilePhoto(conver.recipient + 'profilePic').subscribe(
             res => {
               if (res != null) {
                 let retrieveResonse: any = res;
@@ -396,7 +445,7 @@ export class SecretaryComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.secretaryGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.secretaryGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
@@ -412,7 +461,7 @@ export class SecretaryComponent implements OnInit {
   message: string;
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.secretaryGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
+      this.conversationService.sendMessage(this.secretaryGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.secretaryGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -881,5 +930,89 @@ export class SecretaryComponent implements OnInit {
         this.openFullConversation(openConver);
       }
     );
+  }
+
+  pendingAppointment: AppointmentForSecWithPag = { totalPages: 0, list: [] };
+  pendingAppointmentPage: number = 0;
+  getUncofirmedApp() {
+    this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.secretaryGet.secureLogin, this.pendingAppointmentPage, 4).subscribe(
+      res => {
+        let pendingAppointment: AppointmentForSecWithPag = res;
+        console.log(pendingAppointment);
+        for (let app of pendingAppointment.list) {
+          this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
+          app.confirmingApp = false;
+          app.refusingApp = false;
+          this.pendingAppointment.list.push(app);
+        }
+        this.pendingAppointment.totalPages = parseInt((pendingAppointment.totalPages / 4) + 1 + "");
+      },
+      err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 5000,
+          positionClass: 'toast-bottom-left'
+        });
+      }
+    );
+  }
+
+  async getImage(imageName: string): Promise<any> {
+    let res: any = await this.doctorService.getDoctorPofilePhoto(imageName).toPromise();
+    if (res != null) {
+      let retrieveResonse: any = res;
+      let base64Data: any = retrieveResonse.picByte;
+      return 'data:image/jpeg;base64,' + base64Data;
+    } else
+      return false;
+  }
+
+  getAppointmentInfoById(appId: number) {
+    this.secretaryService.getAppointmentInfoById(this.secretaryGet.userId, this.secretaryGet.secureLogin, appId).subscribe(
+      res => {
+        let app: AppointmentForSec = res;
+        this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
+        app.confirmingApp = false;
+        app.refusingApp = false;
+        this.pendingAppointment.list.unshift(app);
+      }
+    );
+  }
+
+  confirmAppointment(appkey: number) {
+    this.pendingAppointment.list[appkey].confirmingApp = true;
+    this.secretaryService.confirmAppointmentById(this.secretaryGet.userId, this.secretaryGet.secureLogin,
+      this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
+      this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
+        res => {
+          if (res)
+            this.pendingAppointment.list.splice(appkey, 1);
+          this.pendingAppointment.list[appkey].confirmingApp = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.pendingAppointment.list[appkey].confirmingApp = false;
+        }
+      );
+  }
+
+  refuseAppointment(appkey: number) {
+    this.pendingAppointment.list[appkey].refusingApp = true;
+    this.secretaryService.refuseAppointmentById(this.secretaryGet.userId, this.secretaryGet.secureLogin,
+      this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
+      this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
+        res => {
+          if (res)
+            this.pendingAppointment.list.splice(appkey, 1);
+          this.pendingAppointment.list[appkey].refusingApp = false;
+        }, err => {
+          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.pendingAppointment.list[appkey].refusingApp = false;
+        }
+      );
   }
 }

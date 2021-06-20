@@ -42,8 +42,8 @@ export class AppointmentService {
     return this.http.delete<boolean>(APPOINTMENT_API + "deleteAppointmentById/"+id,httpOptions)
   }
 
-  public updateAppointmentDateById(integerAndStringPost:IntegerAndStringPost){
-    return this.http.post<boolean>(APPOINTMENT_API + "updateAppointmentDateById",integerAndStringPost,httpOptions);
+  public updateAppointmentDateById(appointmentId:number,doctorId:number,patientId:number,date:string){
+    return this.http.post<boolean>(APPOINTMENT_API + "updateAppointmentDateById",{appointmentId,doctorId,patientId,date},httpOptions);
   }
 
   public changeAppointmentStatusById(integer:number,string:string){
@@ -56,5 +56,9 @@ export class AppointmentService {
 
   public delayAppointmentByAppId(doctorId:number, userId:number,appointmentId:number, allPatientNumber:number, patientTurn:number){
     return this.http.post<boolean>(APPOINTMENT_API + "delayAppointmentByAppId",{doctorId,userId,appointmentId,allPatientNumber,patientTurn},httpOptions);
+  }
+
+  public getAppointmentById(appointmentId:number){
+    return this.http.get<AppointmentGet>(APPOINTMENT_API + "getAppointmentById/"+appointmentId,httpOptions);
   }
 }

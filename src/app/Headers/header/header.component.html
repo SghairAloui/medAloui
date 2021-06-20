@@ -503,7 +503,7 @@
     </div>
 
     <div *ngIf="parentHeader=='notification'" id="" class="loginHeader">
-        <header class="headerChild" style="overflow-y: scroll;" (scroll)="notificationsScroll($event)"
+        <header class="headerChild" style="overflow-y: auto;" (scroll)="notificationsScroll($event)"
             id="notificationsScroll" #notificationsScrollEL>
             <nav class="navItem">
                 <div>
@@ -513,7 +513,7 @@
 
                     <div *ngFor="let notif of notifications ;let i=index" id="notification{{i}}">
 
-                        <div *ngIf="notif.notificationType!='userSelectYouForPres'" class="notification">
+                        <div class="notification">
 
                             <div class="notificationDate">
                                 {{getPassedTime(notif.timeSent)}}
@@ -620,6 +620,120 @@
                                     </span>{{'addedPres'|translate}}
                                 </div>
                             </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='doctorAddedYou'">
+                                <div>
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'addedYouToHisSecretaryList'|translate}}
+                                    <div class="confirmSection" *ngIf="notif.notificationParameter == 'pending'">
+                                        {{'doYouWantToConfirm'|translate}} ?
+                                        <div class="confirmButtons">
+                                            <div class="confirmIconBtn" (click)="acceptDoctorAddRequest(i)">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+                                            <div class="refuseIconBtn" (click)="refuseDoctorAddRequest(i)">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="notif.notificationParameter == 'accepted'" class="acceptedText">
+                                        {{'accepted'|translate}}
+                                    </div>
+                                    <div *ngIf="notif.notificationParameter == 'refused'" class="refusedText">
+                                        {{'refused'|translate}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='seeSecretaryWorkRequest'">
+                                <div>
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'wantToSeeYourPersonal'|translate}}
+                                    <div class="confirmSection">
+                                        {{'code'|translate}}: {{notif.notificationParameter}} 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryAcceptYou'">
+                                <div>
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'acceptYourAdd'|translate}}
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryRefuseYou'">
+                                <div>
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    <span style="text-transform: capitalize;">
+                                        {{notif.name}} 
+                                    </span>{{'refuseYourAdd'|translate}}
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryRefuseAppointment'">
+                                <div>
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div style="margin: 5px;"> 
+                                    {{'yourAppWith'|translate}}
+                                    <span style="text-transform: capitalize;">
+                                         {{notif.name}} 
+                                    </span>{{'refused'|translate}}, {{'tryAgainWithAnotherDay'|translate}}
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryConfirmAppointment'">
+                                <div>
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div style="margin: 5px;">
+                                    {{'yourAppWith'|translate}}
+                                    <span style="text-transform: capitalize;">
+                                         {{notif.name}} 
+                                    </span>{{'confirmed'|translate}}, {{'consultYourApps'|translate}}
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryConfirmAppDateChange'">
+                                <div>
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div style="margin: 5px;">
+                                    {{notif.name}} {{'acceptChangeDateReq'|translate}}
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='secretaryRefuseAppDateChange'">
+                                <div>
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div style="margin: 5px;">
+                                    {{notif.name}} {{'refuseChangeDateReq'|translate}}
+                                </div>
+                            </div>
     
                             <div class="notificationIcons">
                                 <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">
@@ -628,7 +742,8 @@
                                 <span *ngIf="notif.isUnread==false" (click)="changeUnreadNotification(i)">
                                     <i class="fas fa-bell"></i>
                                 </span>
-                                <span *ngIf="notif.notificationType!='setYourGeoLocation'" (click)="deleteNotificationById(i)">
+                                <span *ngIf="notif.notificationType!='setYourGeoLocation'
+                                && notif.notificationType!='doctorAddedYou'" (click)="deleteNotificationById(i)">
                                     <i class="fas fa-trash-alt"></i>
                                 </span>
                             </div>

@@ -12,6 +12,8 @@ import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { OneStringPost } from 'src/model/OneStringPost';
 import { SearchDoctorDoctorPost } from 'src/model/SearchDoctorDoctorPost';
 import { SearchedDocGet } from 'src/model/SearchedDocGet';
+import { SecretaryPublicInfo } from 'src/model/SecretaryPublicInfo';
+import { SecretaryWork } from 'src/model/SecretaryWork';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
@@ -122,6 +124,10 @@ export class DoctorService {
     return this.http.post<boolean>(DOC_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
   }
 
+  public sendSeeSecretaryWorkRequest(email:string,doctorId:number){
+    return this.http.post<string>(DOC_API+"sendSeeSecretaryWorkRequest",{email,doctorId}, {responseType: 'text' as 'json'});
+  }
+
   public addSecretary(email:string,doctorId:number){
     return this.http.post<boolean>(DOC_API+"addSecretary",{email,doctorId},httpOptions);
   }
@@ -132,5 +138,17 @@ export class DoctorService {
     doctorId:number){
     return this.http.post<boolean>(DOC_API+"createSecretaryAccount",{username,
       userPassword,userCity,userFirstName,userLastName,userBirthday,userGender,doctorId},httpOptions);
+  }
+
+  public getMySecretaries(secureLogin:string,doctorId:number){
+    return this.http.post<SecretaryPublicInfo []>(DOC_API+"getMySecretaries",{secureLogin,doctorId},httpOptions);
+  }
+  
+  public getSecretaryWork(secureLogin:string,secretaryId:number){
+    return this.http.post<SecretaryWork []>(DOC_API+"getSecretaryWorkById",{secureLogin,secretaryId},httpOptions);
+  }
+
+  public checkSecretaryCode(doctorId:number,email:string,code:number){
+    return this.http.post<SecretaryPublicInfo>(DOC_API+"checkSecretaryCode",{doctorId,code,email},httpOptions);
   }
 }
