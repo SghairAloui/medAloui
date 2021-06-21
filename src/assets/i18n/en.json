@@ -349,9 +349,9 @@
     "confirmAppointmentTitle":"Confirm appointment",
     "confirm":"Confirm",
     "cancel":"Cancel",
-    "confirmNote":"Note:The tour and time may be changed after confirmation of your appointment by the doctor, you can view or cancel your appointment at any time in your profile.",
+    "confirmNote":"Note:The tour and time may be changed after the confirmation of your appointment by the doctor, you can view or cancel your appointment at any time in your profile.",
     "appointmentCanceled":"Appointment canceled",
-    "appointmentConfirmed":"Appointment confirmed",
+    "appointmentConfirmed":"Appointment saved",
     "myAppointments":"My appointments",
     "noAppointments":"You didn't take any appointment yet",
     "appointmentsFound":"Appointments found",
@@ -619,8 +619,8 @@
     "refuseYourAdd":"refuse your add request",
     "thisSecAlreadyWithYou":"This secretary is already work with you",
     "wantToTakeAnAppointment":"want to take an appointment",
-    "notConfirmedAppointment":"not confirmed appointment",
-    "thereNoUnonfirmedApp":"There are no unconfirmed appointments",
+    "appRequests":"Appointment requests",
+    "noPendingReq":"There is no pending request",
     "hello":"Hello",
     "mrs":"Mrs",
     "sir":"Sir",
@@ -635,5 +635,8 @@
     "IWantToChangeMyAppDate":"I want to change my appointment date to",
     "wantToChangeAppDate":"want to change her appointment date",
     "acceptChangeDateReq":"accept your request to change the appointment date",
-    "refuseChangeDateReq":"refuse your request to change the appointment date"
+    "refuseChangeDateReq":"refuse your request to change the appointment date",
+    "yourAppTurndec":"Your appointment turn with",
+    "decremented":"decremented",
+    "newTurn":"Your new turn is"
 }

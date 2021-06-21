@@ -255,6 +255,11 @@ export class PatientComponent implements OnInit {
               index += 1;
             }
             this.getAppointmentById(parseInt(not.notification.notificationParameter));
+          } else if (not.notification.notificationType == 'appointmentTurnDecremented') {
+            this.toastr.info(this.translate.instant('yourAppTurndec') + ' ' + not.data + ' ' + this.translate.instant('decremented'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
           if (not.notification.notificationType != 'doctorDeletePrescription') {
             not.notification.name = not.data;

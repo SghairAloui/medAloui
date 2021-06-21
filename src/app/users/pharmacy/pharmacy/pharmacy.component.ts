@@ -1301,7 +1301,6 @@ export class PharmacyComponent implements OnInit {
   }
 
   getMedicamentsByPrescriptionId(presId: number, name: string, index: string,patientId:number,) {
-    console.log(patientId)
     this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
       res => {
         this.prescriptionMeds = [];

@@ -734,6 +734,19 @@
                                     {{notif.name}} {{'refuseChangeDateReq'|translate}}
                                 </div>
                             </div>
+
+                            <div
+                                *ngIf="notif.notificationType=='appointmentTurnDecremented'">
+                                <div>
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div style="margin: 5px;">
+                                    {{'yourAppTurndec'|translate}} {{notif.name}} {{'on'|translate}} {{notif.notificationParameter | slice:0:10}}
+                                </div>
+                                <div style="margin-top: 5px;">
+                                    {{'newTurn'|translate}} <div class="numberContainer">{{notif.notificationParameter | slice:11:notif.notificationParameter.length}}</div>
+                                </div>
+                            </div>
     
                             <div class="notificationIcons">
                                 <span *ngIf="notif.isUnread==true" (click)="changeUnreadNotification(i)">

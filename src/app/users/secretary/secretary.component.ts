@@ -149,13 +149,18 @@ export class SecretaryComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.getAppointmentInfoById(parseInt(not.data));
+            if(this.pendingAppointment.list.length != 4)
+              this.getAppointmentInfoById(parseInt(not.data));
+            this.updatePendingRequestsPages((this.pendingAppointment.totalPages + 1));
           } else if (not.notification.notificationType == 'newAppointment') {
             this.toastr.info(not.data + ' ' + this.translate.instant('wantToTakeAnAppointment'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.getAppointmentInfoById(parseInt(not.notification.notificationParameter));
+            if(this.pendingAppointment.list.length != 4)
+              this.getAppointmentInfoById(parseInt(not.notification.notificationParameter));
+            console.log(this.pendingAppointment.list.length);
+            this.updatePendingRequestsPages((this.pendingAppointment.totalPages + 1));
           }
           if (not.notification.notificationType != 'newAppointment' && not.notification.notificationType != 'changeAppDateReq') {
             not.notification.name = not.data;
@@ -932,28 +937,89 @@ export class SecretaryComponent implements OnInit {
     );
   }
 
-  pendingAppointment: AppointmentForSecWithPag = { totalPages: 0, list: [] };
-  pendingAppointmentPage: number = 0;
+  pendingAppointment: AppointmentForSecWithPag;
+  loadingRequests: boolean;
   getUncofirmedApp() {
-    this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.secretaryGet.secureLogin, this.pendingAppointmentPage, 4).subscribe(
+    console.log(this.pendingRequestsPage)
+    this.loadingRequests=true;
+    this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.secretaryGet.secureLogin, this.pendingRequestsPage, 4).subscribe(
       res => {
         let pendingAppointment: AppointmentForSecWithPag = res;
-        console.log(pendingAppointment);
+        this.pendingAppointment = { totalPages: this.pendingAppointment ? pendingAppointment.totalPages : 0, list: [] };
+        
         for (let app of pendingAppointment.list) {
           this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
           app.confirmingApp = false;
           app.refusingApp = false;
           this.pendingAppointment.list.push(app);
         }
-        this.pendingAppointment.totalPages = parseInt((pendingAppointment.totalPages / 4) + 1 + "");
+        this.pendingAppointment.totalPages = pendingAppointment.totalPages;
+        this.updatePendingRequestsPages(this.pendingAppointment.totalPages);
+        this.loadingRequests = false;
       },
       err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
           timeOut: 5000,
           positionClass: 'toast-bottom-left'
         });
+        this.loadingRequests = false;
       }
     );
+  }
+
+  updatePendingRequestsPages(items: number) {
+    if (items > this.pendingAppointment.totalPages) {
+      let maxIndex = Math.ceil(items / 4);
+      if(maxIndex > this.pendingRequestsPages.length){
+        this.pendingRequestsPages.push(maxIndex);
+      }
+    } else if(items < this.pendingAppointment.totalPages){
+      let maxIndex = Math.ceil(items / 4);
+      if(this.pendingRequestsPages[(this.pendingRequestsPage + 1)])
+        this.getNextRequest(this.pendingAppointment.list[(this.pendingAppointment.list.length-1)].appointmentId);
+      if(maxIndex < this.pendingRequestsPages.length){
+        this.pendingRequestsPages.splice((this.pendingRequestsPages.length-1),1);
+        if(this.pendingRequestsPage != 0){
+          this.pendingRequestsPage = (this.pendingRequestsPage - 1);
+          this.getUncofirmedApp();
+        }
+      }
+    } else if(this.pendingRequestsPages.length == 0){
+      for (let i = 1; i <= Math.ceil(items / 4);i++ )
+        this.pendingRequestsPages.push(i);
+    }
+    this.pendingAppointment.totalPages = items;
+  }
+
+  getNextRequest(appId:number){
+    this.secretaryService.getNextRequestByAppId(this.secretaryGet.userId,this.secretaryGet.secureLogin,appId).subscribe(
+      res=>{
+        let app : AppointmentForSec =res;
+        this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
+        app.refusingApp =false;
+        app.confirmingApp=false;
+        this.pendingAppointment.list.push(res);
+      }
+    );
+  }
+
+  pendingRequestsPages: number[] = [];
+  pendingRequestsPage: number = 0;
+  changePendingRequestPage(page: number) {
+    this.loadingRequests = true;
+    this.pendingRequestsPage = page;
+    let j: number = 0;
+    let endPage = page + 2;
+    while ((page - 2) < 1) {
+      page = page + 1;
+    }
+    if ((page + 2) > this.pendingRequestsPage)
+      endPage = this.pendingRequestsPage;
+    for (let i = (page - 2); i <= endPage; i++) {
+      this.pendingRequestsPages[j] = i;
+      j++;
+    }
+    this.getUncofirmedApp();
   }
 
   async getImage(imageName: string): Promise<any> {
@@ -973,7 +1039,7 @@ export class SecretaryComponent implements OnInit {
         this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
         app.confirmingApp = false;
         app.refusingApp = false;
-        this.pendingAppointment.list.unshift(app);
+        this.pendingAppointment.list.push(app);
       }
     );
   }
@@ -984,9 +1050,11 @@ export class SecretaryComponent implements OnInit {
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {
-          if (res)
+          if (res){
+            this.pendingAppointment.list[appkey].confirmingApp = false;
             this.pendingAppointment.list.splice(appkey, 1);
-          this.pendingAppointment.list[appkey].confirmingApp = false;
+            this.updatePendingRequestsPages((this.pendingAppointment.totalPages - 1));
+          }
         }, err => {
           this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
             timeOut: 5000,
@@ -1003,9 +1071,11 @@ export class SecretaryComponent implements OnInit {
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {
-          if (res)
+          if (res){
+            this.pendingAppointment.list[appkey].refusingApp = false;
             this.pendingAppointment.list.splice(appkey, 1);
-          this.pendingAppointment.list[appkey].refusingApp = false;
+            this.updatePendingRequestsPages((this.pendingAppointment.totalPages - 1));
+          }
         }, err => {
           this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
             timeOut: 5000,

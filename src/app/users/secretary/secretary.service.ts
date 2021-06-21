@@ -58,4 +58,8 @@ export class SecretaryService {
   public refuseAppointmentById(secretaryId:number,secureLogin:string,appointmentId:number,patientId:number,doctorId:number,appointmentStatus:string) {
     return this.http.post<boolean>(SECRETARY_API + "refuseAppointmentById",{secretaryId,secureLogin,appointmentId,patientId,doctorId,appointmentStatus}, httpOptions);
   }
+
+  public getNextRequestByAppId(secretaryId:number,secureLogin:string,appointmentId:number) {
+    return this.http.post<AppointmentForSec>(SECRETARY_API + "getNextRequestByAppId",{secretaryId,secureLogin,appointmentId}, httpOptions);
+  }
 }

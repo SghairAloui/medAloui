@@ -392,7 +392,7 @@ html,body{
     padding: 3px;
 }
 .fa-map-marked-alt,.fa-unlock,.fa-lock,.fa-comment,.fa-user-clock,.fa-hourglass-end,.fa-door-open,.fa-file-prescription,.fa-user-plus,
-.fa-check-circle,.fa-times-circle{
+.fa-check-circle,.fa-times-circle,.fa-info-circle{
     font-size: 30px;
     margin-left: auto;
     margin-right: auto;
@@ -640,6 +640,18 @@ html,body{
 }
 .refusedText{
     color: #BD362F;
+}
+.numberContainer{
+    display: inline-block;
+    vertical-align: top;
+    background-color: #308a7b;
+    padding: 2px 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    transform: translateY(-2px);
+    border-radius: 5px;
+    margin-left: 5px;
+    color: white;
+    width: fit-content;
 }
 @media screen and (max-width: 1000px){
     .homeHeader header{

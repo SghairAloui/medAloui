@@ -1864,6 +1864,10 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
 .disabledPage{
     display: none;
 }
+.disabledClick{
+    pointer-events: none;
+    cursor: default;
+}
 .pageLoading{
     animation-name: pageLoding;
     animation-duration: 2s;
