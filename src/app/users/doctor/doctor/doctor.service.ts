@@ -100,8 +100,8 @@ export class DoctorService {
     return this.http.get<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoById/' + id,httpOptions)
   }
 
-  public changeCurrentPatientBySecureLogin(secureLogin:string,patientTurn,allPatientNumber){
-    return this.http.post<boolean>(DOC_API + 'changeCurrentPatientBySecureLogin',{secureLogin,patientTurn,allPatientNumber},httpOptions)
+  public changeCurrentPatientBySecureLogin(secureLogin:string,patientTurn,allPatientNumber,doctorId:number){
+    return this.http.post<boolean>(DOC_API + 'changeCurrentPatientBySecureLogin',{secureLogin,patientTurn,allPatientNumber,doctorId},httpOptions)
   }
 
   public getPatientInfoById(id:number){

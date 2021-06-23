@@ -227,6 +227,13 @@ export class DoctorComponent implements OnInit {
             });
             this.doctorGet.doctorStatus = 'disapprovedPermanently';
           }
+        }  else if (not.type == 'delayPatientTurn'){
+          this.toastr.info(not.data + ' ' + this.translate.instant('postponeTheApp'), this.translate.instant('Notification'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.getPatientByTurn(true, '');
+          this.notificationSound();
         }
       })
     });
@@ -1601,7 +1608,7 @@ export class DoctorComponent implements OnInit {
       else
         patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
       if (firsttime == false) {
-        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber).subscribe(
+        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber,this.doctorGet.userId).subscribe(
           res => {
             if (res) {
               if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])
@@ -1621,7 +1628,8 @@ export class DoctorComponent implements OnInit {
                   appointmentStatus: 'completed',
                   doctorId: null,
                   patientId: null,
-                  patientTurn: null
+                  patientTurn: null,
+                  profileImg: null
                 };
                 this.docTodayAppointments = [];
                 this.docTodayAppointments.push(data);
@@ -1656,7 +1664,8 @@ export class DoctorComponent implements OnInit {
             appointmentStatus: 'completed',
             doctorId: null,
             patientId: null,
-            patientTurn: null
+            patientTurn: null,
+            profileImg:null
           };
           this.docTodayAppointments = [];
           this.docTodayAppointments.push(data);
@@ -1679,7 +1688,8 @@ export class DoctorComponent implements OnInit {
     this.doctorService.getAppPatientInfoByDoctorIdTurnAndDate(this.doctorGet.userId, patientTurn, this.currentDate).subscribe(
       res => {
         this.currentPatientInfo[patientTurn - 1] = res;
-        this.getCurrentPatientProfileImg(this.currentPatientInfo[patientTurn - 1].userId, patientTurn);
+        console.log(this.currentPatientInfo[patientTurn - 1].userId)
+        this.getImageByName(this.currentPatientInfo[patientTurn - 1].userId+'profilePic').then((value)=>{this.currentPatientProfileImg[patientTurn - 1]=value});
         this.getCurrentPatientMedicalProfile(this.currentPatientInfo[patientTurn - 1].medicalProfileId, patientTurn);
         if (firstTime) {
           this.getPrescriptionByDoctorIdPatientIdAndDate(patientTurn);
@@ -2382,6 +2392,16 @@ export class DoctorComponent implements OnInit {
     });
   }
 
+  async getImageByName(imageName: string): Promise<any> {
+    let res: any = await this.doctorService.getDoctorPofilePhoto(imageName).toPromise();
+    if (res != null) {
+      let retrieveResonse: any = res;
+      let base64Data: any = retrieveResonse.picByte;
+      return 'data:image/jpeg;base64,' + base64Data;
+    } else
+      return false;
+  }
+
   getAppointmentByDoctorIdAndPatientId() {
     if (!this.selectedUser.patientAppPage)
       this.selectedUser.patientAppPage = 0;
@@ -2400,7 +2420,7 @@ export class DoctorComponent implements OnInit {
 
   delayToLastTurn(userId: number, appointmentId: number) {
     console.log(userId + ' ' + appointmentId + ' ' + this.todayPatientNumber, + ' ' + parseInt(this.doctorGet.currentPatient + ""))
-    this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + "")).subscribe(
+    this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + ""),0,'doctor').subscribe(
       res => {
         if (res) {
           this.getPatientByTurn(true, '');

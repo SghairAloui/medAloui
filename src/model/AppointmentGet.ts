@@ -5,4 +5,5 @@ export interface AppointmentGet{
     doctorId:number;
     patientId:number;
     patientTurn:number;
+    profileImg:any;
 }

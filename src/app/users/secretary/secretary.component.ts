@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderService } from 'src/app/Headers/header/header.service';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -10,6 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { AppointmentForSec } from 'src/model/AppointmentForSec';
 import { AppointmentForSecWithPag } from 'src/model/AppointmentForSecWithPag';
+import { AppointmentGet } from 'src/model/AppointmentGet';
+import { AppointmentInfoForSec } from 'src/model/AppointmentInfoForSec';
 import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
@@ -44,7 +47,8 @@ export class SecretaryComponent implements OnInit {
     private webSocketService: WebSocketService,
     private router: Router,
     private questionService: QuestionService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private appointmentService: AppointmentService) {
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
@@ -149,7 +153,7 @@ export class SecretaryComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            if(this.pendingAppointment.list.length != 4)
+            if (this.pendingAppointment.list.length != 4)
               this.getAppointmentInfoById(parseInt(not.data));
             this.updatePendingRequestsPages((this.pendingAppointment.totalPages + 1));
           } else if (not.notification.notificationType == 'newAppointment') {
@@ -157,7 +161,7 @@ export class SecretaryComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            if(this.pendingAppointment.list.length != 4)
+            if (this.pendingAppointment.list.length != 4)
               this.getAppointmentInfoById(parseInt(not.notification.notificationParameter));
             console.log(this.pendingAppointment.list.length);
             this.updatePendingRequestsPages((this.pendingAppointment.totalPages + 1));
@@ -166,6 +170,29 @@ export class SecretaryComponent implements OnInit {
             not.notification.name = not.data;
             this.headerService.addNotification(not.notification);
           }
+          this.notificationSound();
+        } else if (not.type == 'delayPatientTurn'){
+          this.toastr.info(not.data + ' ' + this.translate.instant('postponeTheApp'), this.translate.instant('Notification'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
+          this.getCurrentPatient();
+          this.notificationSound();
+        } else if (not.type == 'nextPatient'){
+          if(not.extraData != '0'){
+            this.toastr.info(not.data + ' ' + this.translate.instant('getTheNextPat'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.getCurrentPatient();
+          }else{
+            this.toastr.info(not.data + ' ' + this.translate.instant('finishAllThePatients'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+            this.currentPatient=null;
+          }
+
           this.notificationSound();
         }
       })
@@ -183,6 +210,14 @@ export class SecretaryComponent implements OnInit {
   secretaryGet: SecretaryInfo;
   generalInfo: string = 'show';
   loadMoreUsers: boolean;
+  todayApp: AppointmentGet[] = [];
+  tomorrowApp: AppointmentGet[] = [];
+  todayAppPage: number = 0;
+  tomorrowAppPage: number = 0;
+  todayAppNumber: number;
+  tomorrowAppNumber: number;
+  todayPages: number[] = [];
+  tomorrowPages: number[] = [];
   getSecretaryInfo() {
     this.secretaryService.getSecretaryInfoBySecureLogin(localStorage.getItem('secureLogin')).subscribe(
       res => {
@@ -196,6 +231,25 @@ export class SecretaryComponent implements OnInit {
           this.getSecretaryWork();
           this.getMyNotifications(this.secretaryGet.userId);
           this.getUncofirmedApp();
+          this.getCurrentPatient();
+          let nowDate = new Date();
+          this.getAppointmentNumberByDoctorIdAndDate(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate())).then(
+            (value) => {
+              this.todayAppNumber = value;
+              for (let i = 1; i <= Math.ceil(this.todayAppNumber / 6); i++)
+                this.todayPages.push(i);
+            });
+          let tomorrwoDate = new Date(nowDate.setDate(nowDate.getDate() + 1));
+          this.getAppointmentByDateAndDocId(tomorrwoDate.getFullYear() + '/' + ((tomorrwoDate.getMonth() + 1) < 10 ? '0' + (tomorrwoDate.getMonth() + 1) : (tomorrwoDate.getMonth() + 1)) + '/' + (tomorrwoDate.getDate() < 10 ? '0' + tomorrwoDate.getDate() : tomorrwoDate.getDate()), this.tomorrowAppPage).then(
+            (value) => {
+              this.tomorrowApp = value;
+            });
+          this.getAppointmentNumberByDoctorIdAndDate(tomorrwoDate.getFullYear() + '/' + ((tomorrwoDate.getMonth() + 1) < 10 ? '0' + (tomorrwoDate.getMonth() + 1) : (tomorrwoDate.getMonth() + 1)) + '/' + (tomorrwoDate.getDate() < 10 ? '0' + tomorrwoDate.getDate() : tomorrwoDate.getDate())).then(
+            (value) => {
+              this.tomorrowAppNumber = value;
+              for (let i = 1; i <= Math.ceil(this.todayAppNumber / 6); i++)
+                this.tomorrowPages.push(i);
+            });
         }
       },
       err => {
@@ -941,12 +995,12 @@ export class SecretaryComponent implements OnInit {
   loadingRequests: boolean;
   getUncofirmedApp() {
     console.log(this.pendingRequestsPage)
-    this.loadingRequests=true;
+    this.loadingRequests = true;
     this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.secretaryGet.secureLogin, this.pendingRequestsPage, 4).subscribe(
       res => {
         let pendingAppointment: AppointmentForSecWithPag = res;
         this.pendingAppointment = { totalPages: this.pendingAppointment ? pendingAppointment.totalPages : 0, list: [] };
-        
+
         for (let app of pendingAppointment.list) {
           this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
           app.confirmingApp = false;
@@ -970,34 +1024,34 @@ export class SecretaryComponent implements OnInit {
   updatePendingRequestsPages(items: number) {
     if (items > this.pendingAppointment.totalPages) {
       let maxIndex = Math.ceil(items / 4);
-      if(maxIndex > this.pendingRequestsPages.length){
+      if (maxIndex > this.pendingRequestsPages.length) {
         this.pendingRequestsPages.push(maxIndex);
       }
-    } else if(items < this.pendingAppointment.totalPages){
+    } else if (items < this.pendingAppointment.totalPages) {
       let maxIndex = Math.ceil(items / 4);
-      if(this.pendingRequestsPages[(this.pendingRequestsPage + 1)])
-        this.getNextRequest(this.pendingAppointment.list[(this.pendingAppointment.list.length-1)].appointmentId);
-      if(maxIndex < this.pendingRequestsPages.length){
-        this.pendingRequestsPages.splice((this.pendingRequestsPages.length-1),1);
-        if(this.pendingRequestsPage != 0){
+      if (this.pendingRequestsPages[(this.pendingRequestsPage + 1)])
+        this.getNextRequest(this.pendingAppointment.list[(this.pendingAppointment.list.length - 1)].appointmentId);
+      if (maxIndex < this.pendingRequestsPages.length) {
+        this.pendingRequestsPages.splice((this.pendingRequestsPages.length - 1), 1);
+        if (this.pendingRequestsPage != 0) {
           this.pendingRequestsPage = (this.pendingRequestsPage - 1);
           this.getUncofirmedApp();
         }
       }
-    } else if(this.pendingRequestsPages.length == 0){
-      for (let i = 1; i <= Math.ceil(items / 4);i++ )
+    } else if (this.pendingRequestsPages.length == 0) {
+      for (let i = 1; i <= Math.ceil(items / 4); i++)
         this.pendingRequestsPages.push(i);
     }
     this.pendingAppointment.totalPages = items;
   }
 
-  getNextRequest(appId:number){
-    this.secretaryService.getNextRequestByAppId(this.secretaryGet.userId,this.secretaryGet.secureLogin,appId).subscribe(
-      res=>{
-        let app : AppointmentForSec =res;
+  getNextRequest(appId: number) {
+    this.secretaryService.getNextRequestByAppId(this.secretaryGet.userId, this.secretaryGet.secureLogin, appId).subscribe(
+      res => {
+        let app: AppointmentForSec = res;
         this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
-        app.refusingApp =false;
-        app.confirmingApp=false;
+        app.refusingApp = false;
+        app.confirmingApp = false;
         this.pendingAppointment.list.push(res);
       }
     );
@@ -1050,7 +1104,7 @@ export class SecretaryComponent implements OnInit {
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {
-          if (res){
+          if (res) {
             this.pendingAppointment.list[appkey].confirmingApp = false;
             this.pendingAppointment.list.splice(appkey, 1);
             this.updatePendingRequestsPages((this.pendingAppointment.totalPages - 1));
@@ -1071,7 +1125,7 @@ export class SecretaryComponent implements OnInit {
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {
-          if (res){
+          if (res) {
             this.pendingAppointment.list[appkey].refusingApp = false;
             this.pendingAppointment.list.splice(appkey, 1);
             this.updatePendingRequestsPages((this.pendingAppointment.totalPages - 1));
@@ -1084,5 +1138,76 @@ export class SecretaryComponent implements OnInit {
           this.pendingAppointment.list[appkey].refusingApp = false;
         }
       );
+  }
+
+  async getAppointmentByDateAndDocId(date: string, page: number,): Promise<any> {
+    let apps: AppointmentInfoForSec[] = await this.appointmentService.getAppointmentByDoctorIdAndDateForSec(this.secretaryGet.doctorId, page, 6, date).toPromise();
+    for (let app of apps) {
+      this.getImage(app.userId + 'profilePic').then((value) => { app.profileImg = value; });
+    }
+    return apps;
+  }
+
+  getAppointmentNumberByDoctorIdAndDate(date: string): Promise<any> {
+    let number = this.appointmentService.getAppointmentNumberByDoctorIdAndDate(this.secretaryGet.doctorId, date).toPromise();
+    return number;
+  }
+
+  loadingTodayApp: boolean = false;
+  getTodayApp(page: number) {
+    this.loadingTodayApp = true;
+    let nowDate = new Date();
+    this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), page).then(
+      async (value) => {
+        this.todayApp = value;
+        this.todayAppPage = page;
+        this.loadingTodayApp = false;
+        await this.sleep(1);
+        document.getElementById("todayApp").scrollIntoView({ behavior: "smooth" });
+      });
+  }
+
+  loadingTomorrowApp: boolean = false;
+  getTomorrowApp(page: number) {
+    this.loadingTomorrowApp = true;
+    let nowDate = new Date();
+    let tomorrwoDate = new Date(nowDate.setDate(nowDate.getDate() + 1));
+    this.getAppointmentByDateAndDocId(tomorrwoDate.getFullYear() + '/' + ((tomorrwoDate.getMonth() + 1) < 10 ? '0' + (tomorrwoDate.getMonth() + 1) : (tomorrwoDate.getMonth() + 1)) + '/' + (tomorrwoDate.getDate() < 10 ? '0' + tomorrwoDate.getDate() : tomorrwoDate.getDate()), this.tomorrowAppPage).then(
+      async (value) => {
+        this.tomorrowApp = value;
+        this.tomorrowAppPage = page;
+        this.loadingTomorrowApp = false;
+        await this.sleep(1);
+        document.getElementById("tomorrowApp").scrollIntoView({ behavior: "smooth" });
+      });
+  }
+
+  findMoreUser() {
+    this.headerService.searchUserNow(true);
+  }
+
+  currentPatient:AppointmentInfoForSec;
+  getCurrentPatient(){
+    let nowDate = new Date();
+    this.secretaryService.getDoctorCurrentPatient(this.secretaryGet.doctorId,nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate())).subscribe(
+      res=>{
+        if(res){
+          this.currentPatient=res;
+          this.getImage(this.currentPatient.userId + 'profilePic').then((value) => { this.currentPatient.profileImg = value; });
+          let nowDate = new Date();
+          this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), this.todayAppPage).then((value) => { this.todayApp = value; });
+        }
+      }
+    );
+  }
+  
+  delayToLastTurn() {
+    this.appointmentService.delayAppointmentByAppId(this.secretaryGet.doctorId, this.currentPatient.userId, this.currentPatient.appointmentId, this.todayAppNumber, this.currentPatient.patientTurn,this.secretaryGet.userId,'secretary').subscribe(
+      res => {
+        if (res) {
+          this.getCurrentPatient();
+        }
+      }
+    );
   }
 }

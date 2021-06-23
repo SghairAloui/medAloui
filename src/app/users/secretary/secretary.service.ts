@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { AppointmentForSec } from 'src/model/AppointmentForSec';
 import { AppointmentForSecWithPag } from 'src/model/AppointmentForSecWithPag';
+import { AppointmentInfoForSec } from 'src/model/AppointmentInfoForSec';
 import { SecretaryInfo } from 'src/model/SecretaryInfo';
 import { SecretaryWork } from 'src/model/SecretaryWork';
 
@@ -61,5 +62,9 @@ export class SecretaryService {
 
   public getNextRequestByAppId(secretaryId:number,secureLogin:string,appointmentId:number) {
     return this.http.post<AppointmentForSec>(SECRETARY_API + "getNextRequestByAppId",{secretaryId,secureLogin,appointmentId}, httpOptions);
+  }
+
+  public getDoctorCurrentPatient(doctorId:number,date:string) {
+    return this.http.post<AppointmentInfoForSec>(SECRETARY_API + "getDoctorCurrentPatient",{doctorId,date}, httpOptions);
   }
 }

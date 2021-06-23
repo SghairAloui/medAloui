@@ -1615,20 +1615,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="doctorGet.currentPatient!=0">
+                        <div *ngIf="doctorGet.currentPatient!=0" style="margin-top: 70px;">
                             <section id="currentPatientSection" class="sectionContainer">
                                 {{'Patient'|translate}} {{doctorGet.currentPatient}} / {{todayPatientNumber}}
                                 <div class="currentPatientProfileCon">
-                                    <div
-                                        *ngIf="currentPatientProfileImg[currentPatient-1]; then showCurrentPatientProfilePic else showCurrentPatientDefaultProfilePic">
-                                    </div>
-                                    <ng-template #showCurrentPatientProfilePic>
-                                        <img [style.background-image]="'url(' + currentPatientProfileImg[currentPatient-1] + ')'"
-                                            class="profileImg">
-                                    </ng-template>
-                                    <ng-template #showCurrentPatientDefaultProfilePic>
-                                        <i class="fas fa-user-tie currentPatientProfileDefaultPic"></i>
-                                    </ng-template>
+                                    <img *ngIf="currentPatientProfileImg[(doctorGet.currentPatient-1)]"
+                                        [style.background-image]="'url(' + currentPatientProfileImg[(doctorGet.currentPatient-1)] + ')'"
+                                        class="profileImg">
+                                    <i *ngIf="currentPatientProfileImg[(doctorGet.currentPatient-1)] == false"
+                                        class="fas fa-user-tie currentPatientProfileDefaultPic"></i>
                                 </div>
                                 <div class="currentPatientInfo">
                                     <span
@@ -2072,10 +2067,10 @@
                                         <div class="patientProfileConDesign"></div>
                                         <div class="nextPatientProfileImgContainer">
                                             <div
-                                                *ngIf="currentPatientProfileImg[currentPatient]; then showNextPatientProfilePic else showNextPatientDefaultProfilePic">
+                                                *ngIf="currentPatientProfileImg[doctorGet.currentPatient]; then showNextPatientProfilePic else showNextPatientDefaultProfilePic">
                                             </div>
                                             <ng-template #showNextPatientProfilePic>
-                                                <img [style.background-image]="'url(' + currentPatientProfileImg[currentPatient] + ')'"
+                                                <img [style.background-image]="'url(' + currentPatientProfileImg[doctorGet.currentPatient] + ')'"
                                                     class="profileImg">
                                             </ng-template>
                                             <ng-template #showNextPatientDefaultProfilePic>

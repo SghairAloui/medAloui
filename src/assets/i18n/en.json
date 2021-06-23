@@ -553,7 +553,7 @@
     "currentTurn":"Current patient turn",
     "delayTolastTurn":"Postpone patient to last turn",
     "postponeTheAppTo":"Postpone the aapointment to",
-    "postponeTheApp":"Postpone the aapointment",
+    "postponeTheApp":"Postpone the appointment",
     "yourNewTurn":"Your new turn",
     "skipApp":"Skip appointment",
     "appPassed":"Appointment passed",
@@ -638,5 +638,11 @@
     "refuseChangeDateReq":"refuse your request to change the appointment date",
     "yourAppTurndec":"Your appointment turn with",
     "decremented":"decremented",
-    "newTurn":"Your new turn is"
+    "newTurn":"Your new turn is",
+    "todayPatNum":"The number of today's patients",
+    "tomorrowPatNum":"The number of tomorrow's patients",
+    "patientTurn":"Patient turn",
+    "currentPatient":"Current patient",
+    "getTheNextPat":"get the next patient",
+    "finishAllThePatients":"finish all the patients"
 }

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { AppointmentGet } from 'src/model/AppointmentGet';
+import { AppointmentInfoForSec } from 'src/model/AppointmentInfoForSec';
 import { AppointmentPost } from 'src/model/AppointmentPost';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 
@@ -54,11 +55,15 @@ export class AppointmentService {
     return this.http.post<AppointmentGet []>(APPOINTMENT_API + 'getAppointmentByDoctorIdAndPatientId',{userId,page,doctorId,size},httpOptions)
   }
 
-  public delayAppointmentByAppId(doctorId:number, userId:number,appointmentId:number, allPatientNumber:number, patientTurn:number){
-    return this.http.post<boolean>(APPOINTMENT_API + "delayAppointmentByAppId",{doctorId,userId,appointmentId,allPatientNumber,patientTurn},httpOptions);
+  public delayAppointmentByAppId(doctorId:number, userId:number,appointmentId:number, allPatientNumber:number, patientTurn:number,secretaryId:number,postponeBy:string){
+    return this.http.post<boolean>(APPOINTMENT_API + "delayAppointmentByAppId",{doctorId,userId,appointmentId,allPatientNumber,patientTurn,secretaryId,postponeBy},httpOptions);
   }
 
   public getAppointmentById(appointmentId:number){
     return this.http.get<AppointmentGet>(APPOINTMENT_API + "getAppointmentById/"+appointmentId,httpOptions);
+  }
+
+  public getAppointmentByDoctorIdAndDateForSec(id:number,page:number,size:number,date:string){
+    return this.http.post<AppointmentInfoForSec []>(APPOINTMENT_API + 'getAppointmentByDoctorIdAndDateForSec',{id,page,date,size},httpOptions)
   }
 }
