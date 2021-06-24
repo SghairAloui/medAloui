@@ -646,5 +646,7 @@
     "getTheNextPat":"get the next patient",
     "finishAllThePatients":"finish all the patients",
     "rateMe":"Rate me!",
-    "submitRate":"Submit rate"
+    "submitRate":"Submit rate",
+    "mySecretaries":"My secretaries",
+    "noSecretaries":"You need first to make an appointment then you can find your doctor's secretaries here"
 }

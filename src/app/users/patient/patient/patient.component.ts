@@ -22,7 +22,7 @@ import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { MessageGet } from 'src/model/MessageGet';
-import { MyDoctor } from 'src/model/MyDoctor';
+import { MyUserWithPag } from 'src/model/MyUserWithPag';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { PatientGet } from 'src/model/PatientGet';
@@ -458,7 +458,9 @@ export class PatientComponent implements OnInit {
             this.getPatientMedicalProfile();
             this.getAppointments();
             this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, '%', this.pendingPrescriptionPage, 'prescription');
-            this.getMyDoctors();
+            this.getMyDoctors(0);
+            this.getMySecretaries(0);
+            this.getMyPharmacies(0);
             this.intializeEdit();
             this.patientInfo = true;
             localStorage.setItem('id', this.patientGet.userId + '')
@@ -1908,16 +1910,91 @@ export class PatientComponent implements OnInit {
   }
 
   myDoctorsPage: number = 0;
-  myDoctors: MyDoctor[] = [];
-  getMyDoctors() {
-    this.patientService.getMyDoctors(this.patientGet.secureLogin, this.myDoctorsPage, 4).subscribe(
+  myDoctors: MyUserWithPag = { list: [], count: 0 };
+  myDoctorsPages: number[]=[];
+  loadingDoctors:boolean;
+  getMyDoctors(page:number) {
+    this.loadingDoctors=true;
+    this.patientService.getMyDoctors(this.patientGet.secureLogin, page, 4).subscribe(
       res => {
-        let myDoctors = res;
-        for (let doc of myDoctors) {
+        let myDoctors: MyUserWithPag = res;
+        this.myDoctors.count = Math.ceil(myDoctors.count / 4);
+        if(this.myDoctorsPage == 0){
+          let myDoctorsPages: number[]=[];
+          for (let i = 1; i <= this.myDoctors.count; i++)
+            myDoctorsPages.push(i);
+          this.myDoctorsPages=myDoctorsPages;
+        }
+        for (let doc of myDoctors.list) {
           this.getImageByName(doc.userId + 'profilePic').then((vlaue) => { doc.profileImg = vlaue; });
           doc.rated = false;
-          this.myDoctors.push(doc);
+          this.myDoctors.list.push(doc);
         }
+        this.myDoctorsPage=page;
+        this.loadingDoctors=false;
+      },
+      err=>{
+        this.loadingDoctors=false;
+      }
+    );
+  }
+
+  mySecretariesPage: number = 0;
+  mySecretaries: MyUserWithPag = { list: [], count: 0 };
+  mySecretariesPages: number[]=[];
+  loadingSecretaries:boolean;
+  getMySecretaries(page:number) {
+    this.loadingSecretaries=true;
+    this.patientService.getMySecretaries(this.patientGet.secureLogin, page, 4).subscribe(
+      res => {
+        let mySecretaries: MyUserWithPag = res;
+        this.mySecretaries.count = Math.ceil(mySecretaries.count / 4);
+        if(this.mySecretariesPage == 0){
+          let mySecretariesPages: number[]=[];
+          for (let i = 1; i <= this.mySecretaries.count; i++)
+          mySecretariesPages.push(i);
+          this.mySecretariesPages=mySecretariesPages;
+        }
+        for (let sec of mySecretaries.list) {
+          this.getImageByName(sec.userId + 'profilePic').then((vlaue) => { sec.profileImg = vlaue; });
+          sec.rated = false;
+          this.mySecretaries.list.push(sec);
+        }
+        this.mySecretariesPage=page;
+        this.loadingSecretaries=false;
+      },
+      err=>{
+        this.loadingSecretaries=false;
+      }
+    );
+  }
+
+  myPharmaciesPage: number = 0;
+  myPharmacies: MyUserWithPag = { list: [], count: 0 };
+  myPharmaciesPages: number[]=[];
+  loadingPharmacies:boolean;
+  getMyPharmacies(page:number) {
+    this.loadingPharmacies=true;
+    this.patientService.getMyPharmacies(this.patientGet.secureLogin, page, 4).subscribe(
+      res => {
+        let myPharmacies: MyUserWithPag = res;
+        this.myPharmacies.count = Math.ceil(myPharmacies.count / 4);
+        if(this.myPharmaciesPage == 0){
+          let myPharmaciesPages: number[]=[];
+          for (let i = 1; i <= this.myPharmacies.count; i++)
+          myPharmaciesPages.push(i);
+          this.myPharmaciesPages=myPharmaciesPages;
+        }
+        for (let sec of myPharmacies.list) {
+          this.getImageByName(sec.userId + 'profilePic').then((vlaue) => { sec.profileImg = vlaue; });
+          sec.rated = false;
+          this.myPharmacies.list.push(sec);
+        }
+        this.myPharmaciesPage=page;
+        this.loadingPharmacies=false;
+      },
+      err=>{
+        this.loadingPharmacies=false;
       }
     );
   }
@@ -1926,15 +2003,30 @@ export class PatientComponent implements OnInit {
     let userId: number;
     let rate: number;
     if (userType == 'doctor') {
-      userId = this.myDoctors[key].userId;
-      rate = this.myDoctors[key].rate;
+      userId = this.myDoctors.list[key].userId;
+      rate = this.myDoctors.list[key].rate;
+    }else if(userType == 'secretary'){
+      userId = this.mySecretaries.list[key].userId;
+      rate = this.mySecretaries.list[key].rate;
+    }else if(userType == 'pharmacy'){
+      userId = this.myPharmacies.list[key].userId;
+      rate = this.myPharmacies.list[key].rate;
     }
     this.rateService.addRate(this.patientGet.userId, userId, rate).subscribe(
       res => {
         if (userType == 'doctor') {
-          this.myDoctors[key].rate = rate;
-          this.myDoctors[key].rated = false;
-          this.myDoctors[key].doctorRate = res;
+          this.myDoctors.list[key].rate = rate;
+          this.myDoctors.list[key].rated = false;
+          this.myDoctors.list[key].userRate = res;
+        } else if(userType == 'secretary'){
+          this.myPharmacies.list[key].rate = rate;
+          this.myPharmacies.list[key].rated = false;
+          this.myPharmacies.list[key].userRate = res;
+        }
+        else if(userType == 'pharmacy'){
+          this.myPharmacies.list[key].rate = rate;
+          this.myPharmacies.list[key].rated = false;
+          this.myPharmacies.list[key].userRate = res;
         }
       }, err => {
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
