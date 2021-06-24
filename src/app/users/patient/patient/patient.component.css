@@ -867,3 +867,109 @@ html,body{
 .usedPres{
     color:#51A351;
 }
+.myDoctorContainer{
+    position: relative;
+    margin: 0.5%;
+    width: 49%;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--box-color);
+    box-shadow: var(--infoBox);
+}
+.myDoctorProfilePic{
+    width: 80px;
+    height: 80px;
+    border: 2px solid #308a7b;
+    border-radius: 50%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+.myDoctorName{
+    margin-top: 10px;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+.myDoctorRate{
+    margin-top: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+}
+.giveRate{
+    margin-top: 10px;
+    font-size: 25px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+}
+.giveRate .fa-star{
+    color: #757963;
+    transition:all .3s ease-in-out;
+    cursor: pointer;
+}
+.giveRate div{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0px 2px;
+}
+.giveRate .rateMe{
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.giveRate div:hover .fa-star{
+    color: #f4bb02;
+    font-size: 30px;
+}
+.giveRate .fullyStar .fa-star{
+    color: #f4bb02 !important;
+}
+.disableHover:hover .fa-star{
+    font-size: 25px !important;
+    cursor: default;
+}
+.submitRate{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #308a7b;
+    color: white;
+    bottom: 20px;
+    right: 20px;
+    animation-name: openPopUp;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+    cursor: pointer;
+}
+.submitRate .icon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 20px;
+    width: fit-content;
+}
+.submitRate .info{
+    display: none;
+    position: absolute;
+    border-radius: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--smallMessageUsernameBackgroundColor);
+    color: var(--smallMessageUsernameColor);
+    top: -35px;
+    padding: 2px 5px;
+    white-space: nowrap;
+}
+.submitRate:hover .info{
+    display: block;
+}
+@keyframes openPopUp{
+    0%{transform: scale(0);}
+    60%{transform: scale(1.2);}
+    100%{transform: scale(1);}
+}

@@ -128,7 +128,7 @@
     "editMedicalProfileInfoToShow":"Please first set your medical informations so you can display them",
     "setInfo":"Set informations ?",
     "noPrescription":"It seems like you don't have any prescription yet",
-    "noDoctors":"You need first to take an appointment then you can find your doctor here",
+    "noDoctors":"You need first to make an appointment then you can find your doctor here",
     "noPharmacies":"You need first to use a prescription then you can find your pharmacy here",
     "height":"Height",
     "weight":"Weight",
@@ -644,5 +644,7 @@
     "patientTurn":"Patient turn",
     "currentPatient":"Current patient",
     "getTheNextPat":"get the next patient",
-    "finishAllThePatients":"finish all the patients"
+    "finishAllThePatients":"finish all the patients",
+    "rateMe":"Rate me!",
+    "submitRate":"Submit rate"
 }

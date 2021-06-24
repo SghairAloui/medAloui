@@ -50,6 +50,7 @@ import { PharmacyDiseaseComponent } from './users/pharmacy/pharmacy-disease/phar
 import { DoctorSecretaryComponent } from './users/doctor/doctor-secretary/doctor-secretary.component';
 import { SecretaryComponent } from './users/secretary/secretary.component';
 import { SecretaryService } from './users/secretary/secretary.service';
+import { RateService } from './services/rate.service';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { SecretaryService } from './users/secretary/secretary.service';
     SignInService,PatientService,PatientComponent,AdminService,
     AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,EmailService,
-    NotificationService,ConversationService,WebSocketService,SecretaryService,SecretaryComponent,authInterceptorProviders
+    NotificationService,ConversationService,WebSocketService,SecretaryService,SecretaryComponent,
+    RateService,authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -5,6 +5,7 @@ import { dignoses } from 'src/model/dignoses';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
+import { MyDoctor } from 'src/model/MyDoctor';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
@@ -81,5 +82,9 @@ export class PatientService {
   public getUserFullNameById(patientId:number) {
     return this.http.get<FirstAndLastNameGet>(PATIENT_API + 'getUserFullNameById/'+patientId, httpOptions);
   }
+
+  public getMyDoctors(secureLogin: string, page: number,size:number) {
+    return this.http.post<MyDoctor[]>(PATIENT_API + 'getMyDoctors', { secureLogin,page, size }, httpOptions);
+  } 
 
 }

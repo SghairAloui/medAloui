@@ -1480,10 +1480,125 @@
                 </section>
                 <section id="myDoctorsSection">
                     <div class="sectionTitle">{{'myDoctors'|translate}}</div>
-                    <div class="sectionContainer">
+                    <div *ngIf="myDoctors.length == 0" class="sectionContainer">
                         <div class="noData">
                             {{'noDoctors'|translate}}
                         </div>
+                    </div>
+                    <div *ngIf="myDoctors.length != 0">
+                        <div *ngFor="let doc of myDoctors;let d=index" class="myDoctorContainer">
+                            <div class="myDoctorProfilePic">
+                                <img *ngIf="doc.profileImg" [style.background-image]="'url(' + doc.profileImg  + ')'"
+                                    class="profileImg">
+                                <i *ngIf="doc.profileImg == false" style="font-size: 70px;" class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="myDoctorName">
+                                {{doc.doctorFirstName}} {{doc.doctorLastName}}
+                            </div>
+                            <div class="myDoctorRate">
+                                <div *ngIf="doc.doctorRate == 0">
+                                    {{'notRated'|transform}}
+                                </div>
+                                <div *ngIf="doc.doctorRate !=0">
+                                    <div *ngIf="doc.doctorRate  == 0.5">
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 1">
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 1.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 2.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 3">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 3.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 4">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 4.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div *ngIf="doc.doctorRate  == 5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="giveRate" (click)="doc.rated = true">
+                                <div class="rateMe">
+                                    {{'rateMe'|translate}}
+                                </div>
+                                <div (click)="doc.rate = 1" [class.fullyStar]="doc.rate == 1 || doc.rate == 2 || 
+                                doc.rate == 3 || doc.rate == 4 || doc.rate == 5"
+                                [class.disableHover]="doc.rate == 1"><i class="fas fa-star"></i></div>
+                                <div (click)="doc.rate = 2" [class.fullyStar]="doc.rate == 2 || doc.rate == 3 || doc.rate == 4 ||
+                                doc.rate == 5" [class.disableHover]="doc.rate == 2"><i class="fas fa-star"></i></div>
+                                <div (click)="doc.rate = 3" [class.fullyStar]="doc.rate == 3 || doc.rate == 4 || doc.rate == 5"
+                                [class.disableHover]="doc.rate == 3"><i class="fas fa-star"></i></div>
+                                <div (click)="doc.rate = 4" [class.fullyStar]="doc.rate == 4 || doc.rate == 5"
+                                [class.disableHover]="doc.rate == 4"><i class="fas fa-star"></i></div>
+                                <div (click)="doc.rate = 5" [class.fullyStar]="doc.rate == 5"
+                                [class.disableHover]="rate == 5"><i class="fas fa-star"></i></div>
+                            </div>
+                            <div class="submitRate" *ngIf="doc.rated == true"
+                            (click)="addRate(d,'doctor')">
+                                <div class="info">
+                                    {{'submitRate'|translate}}
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-paper-plane"></i>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
             </div>

@@ -9,6 +9,7 @@ import { ConversationService } from 'src/app/services/conversation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 import { QuestionService } from 'src/app/services/question.service';
+import { RateService } from 'src/app/services/rate.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
@@ -21,6 +22,7 @@ import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { MessageGet } from 'src/model/MessageGet';
+import { MyDoctor } from 'src/model/MyDoctor';
 import { NotificationGet } from 'src/model/NotificationGet';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { PatientGet } from 'src/model/PatientGet';
@@ -83,7 +85,8 @@ export class PatientComponent implements OnInit {
     private pharmacyService: PharmacyService,
     private conversationService: ConversationService,
     private webSocketService: WebSocketService,
-    private questionService: QuestionService) {
+    private questionService: QuestionService,
+    private rateService: RateService) {
     let stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
@@ -207,7 +210,7 @@ export class PatientComponent implements OnInit {
             let index: number = 0;
             for (let app of this.myAppointment) {
               if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
-                this.myAppointment.splice(index,1);
+                this.myAppointment.splice(index, 1);
                 break;
               }
               index += 1;
@@ -221,7 +224,7 @@ export class PatientComponent implements OnInit {
             let index: number = 0;
             for (let app of this.myAppointment) {
               if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
-                this.myAppointment.splice(index,1);
+                this.myAppointment.splice(index, 1);
                 break;
               }
               index += 1;
@@ -235,7 +238,7 @@ export class PatientComponent implements OnInit {
             let index: number = 0;
             for (let app of this.myAppointment) {
               if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
-                this.myAppointment.splice(index,1);
+                this.myAppointment.splice(index, 1);
                 break;
               }
               index += 1;
@@ -249,7 +252,7 @@ export class PatientComponent implements OnInit {
             let index: number = 0;
             for (let app of this.myAppointment) {
               if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
-                this.myAppointment.splice(index,1);
+                this.myAppointment.splice(index, 1);
                 break;
               }
               index += 1;
@@ -455,6 +458,7 @@ export class PatientComponent implements OnInit {
             this.getPatientMedicalProfile();
             this.getAppointments();
             this.getPrescriptionsByPatientIdAndPrescriptionStatus(this.patientGet.userId, '%', this.pendingPrescriptionPage, 'prescription');
+            this.getMyDoctors();
             this.intializeEdit();
             this.patientInfo = true;
             localStorage.setItem('id', this.patientGet.userId + '')
@@ -1885,10 +1889,58 @@ export class PatientComponent implements OnInit {
       this.deleteAppById(parseInt(this.popUpValue1), parseInt(this.popUpValue2));
   }
 
-  getAppointmentById(appId:number){
+  getAppointmentById(appId: number) {
     this.appointmentService.getAppointmentById(appId).subscribe(
-      res=>{
+      res => {
         this.myAppointment.unshift(res);
+      }
+    );
+  }
+
+  async getImageByName(imageName: string): Promise<any> {
+    let res: any = await this.doctorService.getDoctorPofilePhoto(imageName).toPromise();
+    if (res != null) {
+      let retrieveResonse: any = res;
+      let base64Data: any = retrieveResonse.picByte;
+      return 'data:image/jpeg;base64,' + base64Data;
+    } else
+      return false;
+  }
+
+  myDoctorsPage: number = 0;
+  myDoctors: MyDoctor[] = [];
+  getMyDoctors() {
+    this.patientService.getMyDoctors(this.patientGet.secureLogin, this.myDoctorsPage, 4).subscribe(
+      res => {
+        let myDoctors = res;
+        for (let doc of myDoctors) {
+          this.getImageByName(doc.userId + 'profilePic').then((vlaue) => { doc.profileImg = vlaue; });
+          doc.rated = false;
+          this.myDoctors.push(doc);
+        }
+      }
+    );
+  }
+
+  addRate(key: number, userType: string) {
+    let userId: number;
+    let rate: number;
+    if (userType == 'doctor') {
+      userId = this.myDoctors[key].userId;
+      rate = this.myDoctors[key].rate;
+    }
+    this.rateService.addRate(this.patientGet.userId, userId, rate).subscribe(
+      res => {
+        if (userType == 'doctor') {
+          this.myDoctors[key].rate = rate;
+          this.myDoctors[key].rated = false;
+          this.myDoctors[key].doctorRate = res;
+        }
+      }, err => {
+        this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
+          timeOut: 3500,
+          positionClass: 'toast-bottom-left'
+        });
       }
     );
   }
