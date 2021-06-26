@@ -259,7 +259,7 @@ export class HeaderComponent implements OnInit {
         if (message)
           this.parentHeader = message;
         else
-          this.parentHeader = 'profile';
+          this.parentHeader = 'message';
       }
     );
   }
@@ -271,7 +271,7 @@ export class HeaderComponent implements OnInit {
   darkMode: boolean = false;
   menuCheckBox: boolean = false;
   headerOnScrollVariable = false;
-  parentHeader: string = 'profile';
+  parentHeader: string = 'message';
   role: any = this.headerService.header$;
   allNotIsRead: boolean = false;
 
@@ -390,18 +390,14 @@ export class HeaderComponent implements OnInit {
 
   doctorClick() {
     this.patientComp.container = 'patientDoctor';
-    this.parentHeader = 'doctor';
   }
 
   profileCLick() {
-    this.patientComp.container = 'profile';
-    this.patientComp.ngOnInit();
-    this.parentHeader = 'profile';
+    this.patientComp.container='profile';
   }
 
   diseaseClick() {
     this.patientComp.container = 'patientDisease';
-    this.parentHeader = 'disease';
   }
 
   toFindDoctorSection() {
@@ -435,14 +431,12 @@ export class HeaderComponent implements OnInit {
   //doctor header
   openContainerToDoctor(containerName: string) {
     this.doctorComp.container = containerName;
-    this.parentHeader = containerName;
   }
   //doctor header
 
   //admin header
   openContainerToAdmin(containerName: string) {
     this.adminComp.container = containerName;
-    this.parentHeader = containerName;
   }
   //admin header
 
@@ -452,14 +446,12 @@ export class HeaderComponent implements OnInit {
   }
   openContainerToPharmacy(containerName: string) {
     this.pharmacyComp.container = containerName;
-    this.parentHeader = containerName;
   }
   //pharmacy header
 
   //secretary header
   openContainerToSecretary(container: string) {
     this.secretaryComponent.container = container;
-    this.parentHeader = container;
   }
   toWorkTimeLinesSection() {
     document.getElementById("secretaryWork").scrollIntoView({ behavior: "smooth" });
@@ -470,6 +462,7 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem("secureLogin", "");
     localStorage.setItem("id", "");
     localStorage.setItem("secureLoginType", "");
+    this.parentHeader='';
     this.router.navigate(['/acceuil']);
   }
 
@@ -548,7 +541,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async updatePosClick() {
-    if (this.parentHeader != 'profile') {
+    if ((this.doctorComp.container && this.doctorComp.container != 'profile') || (this.pharmacyComp.container && this.pharmacyComp.container != 'profile')) {
       this.doctorComp.container = 'profile';
       this.pharmacyComp.container = 'profile';
       await this.sleep(500);
@@ -856,5 +849,7 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
+
+  showLoginHeaderUnder700:boolean=false;
 
 }

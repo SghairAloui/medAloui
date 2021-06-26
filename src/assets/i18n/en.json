@@ -650,5 +650,7 @@
     "mySecretaries":"My secretaries",
     "noSecretaries":"You need first to make an appointment then you can find your doctor's secretaries here",
     "youNeedToWait7Days":"You must wait 7 days from the last update to be able to update your medical profile again",
-    "now":"Now"
+    "now":"Now",
+    "notifications":"notifications",
+    "profile":"profile"
 }

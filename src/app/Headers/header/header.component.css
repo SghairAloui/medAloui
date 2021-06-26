@@ -653,10 +653,70 @@ html,body{
     color: white;
     width: fit-content;
 }
+.headerChild{
+    transition: all .3s ease-in-out;
+}
+.loginHeaderUnder700{
+    position: fixed;
+    left: -200px;
+    transition:all .3s ease-in-out;
+}
+.loginHeaderMenuIcon{
+    display: none;
+    z-index: 1002;
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    top: 20px;
+    left: 20px;
+    color: white;
+    background-color: #308a7b9d;
+    transition: all .3s ease-in-out;
+}
+.loginHeaderMenuIcon .fa-bars{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 30px;
+}
+.loginHeaderMenuIcon:hover{
+    transform: scale(1.1);
+    background-color: #308a7b;
+}
+@media screen and (max-width: 1400px){
+    .loginHeader .headerChild{
+        width: 23%;
+    }
+}
+@media screen and (max-width: 1300px){
+    .loginHeader .headerChild{
+        width: 25%;
+    }
+}
+@media screen and (max-width: 1150px){
+    .loginHeader .headerChild{
+        width: 28%;
+    }
+}
+@media screen and (max-width: 1070px){
+    .loginHeader .headerChild{
+        width: 30%;
+    }
+}
 @media screen and (max-width: 1000px){
     .homeHeader header{
         font-size: 14px;
         padding: 5px 2%;
+    }
+    .headerChild{
+        margin-left: -30%;
+    }
+}
+@media screen and (max-width: 950px){
+    .loginHeader .headerTitle{
+        display: none;
     }
 }
 @media screen and (max-width: 900px){
@@ -684,6 +744,87 @@ html,body{
     }
 }
 @media screen and (max-width: 700px){
+    .loginHeader .parentHeader{
+        opacity: 0;
+        z-index: 0;
+        top: -55px;
+    }
+    .showLoginHeaderUnder700{
+        left: 0px !important;
+    }
+    .loginHeaderMenuIcon{
+        display: block;
+    }
+    .loginHeaderUnder700{
+        z-index: 1002;
+        position: fixed;
+        background-color: var(--box-color);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, .6);
+        color: var(--greenWhite);
+        padding: 10px 20px;
+        height: 100%;
+        top: 0px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .loginHeaderUnder700 .fa-times-circle{
+        color: #308a7b;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
+        margin-bottom: 15px;
+        font-size: 40px;
+        cursor: pointer;
+    }
+    .loginHeaderUnder700 .fa-user-circle,
+    .loginHeaderUnder700 .fa-hospital-user,
+    .loginHeaderUnder700 .fa-female,
+    .loginHeaderUnder700 .fa-question,
+    .loginHeaderUnder700 .fa-cog,
+    .loginHeaderUnder700 .fa-bell,
+    .loginHeaderUnder700 .fa-sign-out-alt{
+        font-size: 20px !important;
+    }
+    .loginHeaderUnder700 .loginHeaderItmes{
+        display: block;
+        font-size: 17px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+    .loginHeaderUnder700 .loginHeaderItmes .item{
+        margin: 10px 0px;
+    }
+    .loginHeaderUnder700 .loginHeaderItmes .item:hover .icon{
+        background-color: #308a7b;
+    }
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon{
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        width: 35px !important;
+        height: 35px;
+        background-color: #308a7bab;
+        color: white;
+        border-radius: 5px;
+        transition: all .3s ease-in-out;
+    }
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-user-circle,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-hospital-user,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-female,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-question,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-cog,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-bell,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-sign-out-alt{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    .loginHeaderUnder700 .loginHeaderItmes .item .text{
+        margin-left: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
     .homeHeader .settingsBoxUnder700Conatiner{
         padding: 5px 10px;
         display: block;

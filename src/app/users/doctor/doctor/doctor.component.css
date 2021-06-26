@@ -1204,3 +1204,108 @@ html,body{
     padding: 2px 15px;
     margin-left: 25px;
 }
+@media screen and (max-width: 1400px){
+    .doctorContainer{
+        width: 77%;
+        left: 23%;
+    }
+}
+@media screen and (max-width: 1300px){
+    .doctorContainer{
+        left: 25%;
+        width: 75%;
+    }
+}
+@media screen and (max-width: 1310px){
+    .doctorContainer{
+        left: 25%;
+        width: 75%;
+    }
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr 1fr;
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+}
+@media screen and (max-width: 1150px){
+    .doctorContainer{
+        left: 28%;
+        width: 72%;
+    }
+}
+@media screen and (max-width: 1130px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 1040px){
+    .newSectionContainer .infoGrid{
+        gap: 5%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 60%;
+    }
+}
+@media screen and (max-width: 1070px){
+    .doctorContainer{
+        left: 30%;
+        width: 70%;
+    }
+}
+@media screen and (max-width: 1000px){
+    .doctorContainer{
+        left: 0%;
+        width: 100%;
+    }
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 80%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+}
+@media screen and (max-width: 910px){
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+}
+@media screen and (max-width: 810px){
+    .newSectionContainer .infoGrid{
+        gap: 5%;
+        width: 100%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 60%;
+    }
+}
+@media screen and (max-width: 810px){
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr;
+        gap: 0px;
+        width: 70%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 0%;
+    }
+    .newSectionContainer .infoGrid .infoContainer .userInfoContainer{
+        margin-left: 0%;
+    }
+}
+@media screen and (max-width: 510px){
+    .newSectionContainer .infoGrid{
+        width: 85%;
+    }
+}
+@media screen and (max-width: 420px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+}
