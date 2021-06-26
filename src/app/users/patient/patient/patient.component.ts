@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as Chart from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentService } from 'src/app/appointment/appointment.service';
 import { HeaderService } from 'src/app/Headers/header/header.service';
@@ -17,6 +18,7 @@ import { AppointmentGet } from 'src/model/AppointmentGet';
 import { Conversation } from 'src/model/Conversation';
 import { ConversationGet } from 'src/model/ConversationGet';
 import { DoctorInfoForPatient } from 'src/model/DoctorInfoForPatient';
+import { HeightValues } from 'src/model/HeightValues';
 import { IdAndBoolean } from 'src/model/IdAndBoolean';
 import { IntegerAndStringPost } from 'src/model/IntegerAndStringPost';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
@@ -38,6 +40,7 @@ import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 import { UpdatePasswordPost } from 'src/model/UpdatePasswordPost';
 import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
+import { WeightValues } from 'src/model/WeightValues';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../../pharmacy/pharmacy.service';
 import { PatientService } from './patient.service';
@@ -830,11 +833,12 @@ export class PatientComponent implements OnInit {
       this.updateMedicalProfileData();
   }
 
+  wait7Days: boolean = false;
   updateMedicalProfileData() {
     this.updateMedicalProfilePost = new UpdateMedicalProfilePost(this.patientGet.medicalProfileId, parseFloat(this.height), parseFloat(this.weight));
     this.patientService.updateMedicalProfileByMedicalProfileId(this.updateMedicalProfilePost).subscribe(
       res => {
-        if (res) {
+        if (res == true) {
           this.medicalProfile = 'showData';
           this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
             timeOut: 5000,
@@ -842,6 +846,8 @@ export class PatientComponent implements OnInit {
           });
           this.getUserInfo();
           this.medicalProfileInfo = 'showData';
+        } else {
+          this.wait7Days = true;
         }
       }
     );
@@ -1911,90 +1917,90 @@ export class PatientComponent implements OnInit {
 
   myDoctorsPage: number = 0;
   myDoctors: MyUserWithPag = { list: [], count: 0 };
-  myDoctorsPages: number[]=[];
-  loadingDoctors:boolean;
-  getMyDoctors(page:number) {
-    this.loadingDoctors=true;
+  myDoctorsPages: number[] = [];
+  loadingDoctors: boolean;
+  getMyDoctors(page: number) {
+    this.loadingDoctors = true;
     this.patientService.getMyDoctors(this.patientGet.secureLogin, page, 4).subscribe(
       res => {
         let myDoctors: MyUserWithPag = res;
         this.myDoctors.count = Math.ceil(myDoctors.count / 4);
-        if(this.myDoctorsPage == 0){
-          let myDoctorsPages: number[]=[];
+        if (this.myDoctorsPage == 0) {
+          let myDoctorsPages: number[] = [];
           for (let i = 1; i <= this.myDoctors.count; i++)
             myDoctorsPages.push(i);
-          this.myDoctorsPages=myDoctorsPages;
+          this.myDoctorsPages = myDoctorsPages;
         }
         for (let doc of myDoctors.list) {
           this.getImageByName(doc.userId + 'profilePic').then((vlaue) => { doc.profileImg = vlaue; });
           doc.rated = false;
           this.myDoctors.list.push(doc);
         }
-        this.myDoctorsPage=page;
-        this.loadingDoctors=false;
+        this.myDoctorsPage = page;
+        this.loadingDoctors = false;
       },
-      err=>{
-        this.loadingDoctors=false;
+      err => {
+        this.loadingDoctors = false;
       }
     );
   }
 
   mySecretariesPage: number = 0;
   mySecretaries: MyUserWithPag = { list: [], count: 0 };
-  mySecretariesPages: number[]=[];
-  loadingSecretaries:boolean;
-  getMySecretaries(page:number) {
-    this.loadingSecretaries=true;
+  mySecretariesPages: number[] = [];
+  loadingSecretaries: boolean;
+  getMySecretaries(page: number) {
+    this.loadingSecretaries = true;
     this.patientService.getMySecretaries(this.patientGet.secureLogin, page, 4).subscribe(
       res => {
         let mySecretaries: MyUserWithPag = res;
         this.mySecretaries.count = Math.ceil(mySecretaries.count / 4);
-        if(this.mySecretariesPage == 0){
-          let mySecretariesPages: number[]=[];
+        if (this.mySecretariesPage == 0) {
+          let mySecretariesPages: number[] = [];
           for (let i = 1; i <= this.mySecretaries.count; i++)
-          mySecretariesPages.push(i);
-          this.mySecretariesPages=mySecretariesPages;
+            mySecretariesPages.push(i);
+          this.mySecretariesPages = mySecretariesPages;
         }
         for (let sec of mySecretaries.list) {
           this.getImageByName(sec.userId + 'profilePic').then((vlaue) => { sec.profileImg = vlaue; });
           sec.rated = false;
           this.mySecretaries.list.push(sec);
         }
-        this.mySecretariesPage=page;
-        this.loadingSecretaries=false;
+        this.mySecretariesPage = page;
+        this.loadingSecretaries = false;
       },
-      err=>{
-        this.loadingSecretaries=false;
+      err => {
+        this.loadingSecretaries = false;
       }
     );
   }
 
   myPharmaciesPage: number = 0;
   myPharmacies: MyUserWithPag = { list: [], count: 0 };
-  myPharmaciesPages: number[]=[];
-  loadingPharmacies:boolean;
-  getMyPharmacies(page:number) {
-    this.loadingPharmacies=true;
+  myPharmaciesPages: number[] = [];
+  loadingPharmacies: boolean;
+  getMyPharmacies(page: number) {
+    this.loadingPharmacies = true;
     this.patientService.getMyPharmacies(this.patientGet.secureLogin, page, 4).subscribe(
       res => {
         let myPharmacies: MyUserWithPag = res;
         this.myPharmacies.count = Math.ceil(myPharmacies.count / 4);
-        if(this.myPharmaciesPage == 0){
-          let myPharmaciesPages: number[]=[];
+        if (this.myPharmaciesPage == 0) {
+          let myPharmaciesPages: number[] = [];
           for (let i = 1; i <= this.myPharmacies.count; i++)
-          myPharmaciesPages.push(i);
-          this.myPharmaciesPages=myPharmaciesPages;
+            myPharmaciesPages.push(i);
+          this.myPharmaciesPages = myPharmaciesPages;
         }
         for (let sec of myPharmacies.list) {
           this.getImageByName(sec.userId + 'profilePic').then((vlaue) => { sec.profileImg = vlaue; });
           sec.rated = false;
           this.myPharmacies.list.push(sec);
         }
-        this.myPharmaciesPage=page;
-        this.loadingPharmacies=false;
+        this.myPharmaciesPage = page;
+        this.loadingPharmacies = false;
       },
-      err=>{
-        this.loadingPharmacies=false;
+      err => {
+        this.loadingPharmacies = false;
       }
     );
   }
@@ -2005,10 +2011,10 @@ export class PatientComponent implements OnInit {
     if (userType == 'doctor') {
       userId = this.myDoctors.list[key].userId;
       rate = this.myDoctors.list[key].rate;
-    }else if(userType == 'secretary'){
+    } else if (userType == 'secretary') {
       userId = this.mySecretaries.list[key].userId;
       rate = this.mySecretaries.list[key].rate;
-    }else if(userType == 'pharmacy'){
+    } else if (userType == 'pharmacy') {
       userId = this.myPharmacies.list[key].userId;
       rate = this.myPharmacies.list[key].rate;
     }
@@ -2018,12 +2024,12 @@ export class PatientComponent implements OnInit {
           this.myDoctors.list[key].rate = rate;
           this.myDoctors.list[key].rated = false;
           this.myDoctors.list[key].userRate = res;
-        } else if(userType == 'secretary'){
-          this.myPharmacies.list[key].rate = rate;
-          this.myPharmacies.list[key].rated = false;
-          this.myPharmacies.list[key].userRate = res;
+        } else if (userType == 'secretary') {
+          this.mySecretaries.list[key].rate = rate;
+          this.mySecretaries.list[key].rated = false;
+          this.mySecretaries.list[key].userRate = res;
         }
-        else if(userType == 'pharmacy'){
+        else if (userType == 'pharmacy') {
           this.myPharmacies.list[key].rate = rate;
           this.myPharmacies.list[key].rated = false;
           this.myPharmacies.list[key].userRate = res;
@@ -2035,5 +2041,99 @@ export class PatientComponent implements OnInit {
         });
       }
     );
+  }
+
+  heightValues: boolean = false;
+  heightChartWidth: number;
+  getHeightValues() {
+    if (this.heightValues == false) {
+      this.patientService.getHeightValues(this.patientGet.secureLogin).subscribe(
+        res => {
+          let labels: any[] = [];
+          let dataCases: any[] = [];
+          let heightValues: HeightValues[] = res;
+          for (let height of heightValues) {
+            if (height.time.length != 0)
+              labels.push(height.time.slice(2, 10));
+            else
+              labels.push(this.translate.instant('now'));
+            dataCases.push(height.height);
+          }
+          this.heightChartWidth = 50 * labels.length;
+          this.chartjs(labels, dataCases, 'heightChart');
+        }
+      );
+    } else {
+      this.heightValues = false;
+      document.getElementById("heightSection").scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  weightValues: boolean = false;
+  weightChartWidth: number;
+  getWeightValues() {
+    if (this.weightValues == false) {
+      this.patientService.getWeightValues(this.patientGet.secureLogin).subscribe(
+        res => {
+          let labels: any[] = [];
+          let dataCases: any[] = [];
+          let weightValues: WeightValues[] = res;
+          for (let weight of weightValues) {
+            if (weight.time.length != 0)
+              labels.push(weight.time.slice(2, 10));
+            else
+              labels.push(this.translate.instant('now'));
+            dataCases.push(weight.weight);
+          }
+          this.weightChartWidth = 50 * labels.length;
+          this.chartjs(labels, dataCases, 'weightChart');
+        }
+      );
+    } else {
+      this.weightValues = false;
+      document.getElementById("weightSection").scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  chartjs(labels, dataCases, chartId) {
+    let canvas:any = document.getElementById(chartId);
+    let ctx:any = canvas.getContext('2d');
+
+    let chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: dataCases,
+          backgroundColor: '#08a0f6',
+          borderColor: '#08a0f6',
+          fill: false,
+          borderWidth: 2
+        }]
+      }, options: {
+        maintainAspectRatio: false,
+        title: {
+          display: false,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: false
+        },
+        legend: {
+          display: false
+        }
+      }
+    });
+    if(chartId == 'heightChart'){
+      this.heightValues = true;
+      document.getElementById("heightSection").scrollIntoView({ behavior: 'smooth' });
+    } else if (chartId == 'weightChart'){
+      this.weightValues = true;
+      document.getElementById("weightSection").scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }

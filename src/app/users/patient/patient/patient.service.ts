@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { dignoses } from 'src/model/dignoses';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
+import { HeightValues } from 'src/model/HeightValues';
 import { medicalProfileDiseaseGet } from 'src/model/medicalProfileDiseaseGet';
 import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { MyUserWithPag } from 'src/model/MyUserWithPag';
@@ -10,6 +11,7 @@ import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
+import { WeightValues } from 'src/model/WeightValues';
 
 const PATIENT_API = environment.apiUrl+'api/patient/';
 const IMAGE_API = environment.apiUrl+'api/image/';
@@ -93,5 +95,13 @@ export class PatientService {
 
   public getMyPharmacies(secureLogin: string, page: number,size:number) {
     return this.http.post<MyUserWithPag>(PATIENT_API + 'getMyPharmacies', { secureLogin,page, size }, httpOptions);
+  } 
+
+  public getHeightValues(secureLogin: string) {
+    return this.http.post<HeightValues []>(PATIENT_API + 'getHeightValues', { secureLogin}, httpOptions);
+  } 
+
+  public getWeightValues(secureLogin: string) {
+    return this.http.post<WeightValues []>(PATIENT_API + 'getWeightValues', { secureLogin}, httpOptions);
   } 
 }

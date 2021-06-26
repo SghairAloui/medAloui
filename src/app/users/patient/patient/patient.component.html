@@ -648,9 +648,9 @@
                         </ng-template>
                         <ng-template #showTemplate>
                             <div *ngIf="medicalProfile=='showData'">
-                                <div class="infoGridTowColumn">
-                                    <div class="infoContainer">
-                                        <div class="userInfoContainer">
+                                    <div class="medicalProfileInfoConatiner" id="heightSection">
+                                        <div class="userInfoContainer" [class.hoverEffect]="heightValues == false" (click)="getHeightValues()"
+                                         [class.bigUserInfo]="heightValues == true">
                                             <div class="userInfoContainerTitle">
                                                 <div class="userInfoContainerTitleIcon"><i
                                                         class="fas fa-arrows-alt-v"></i>
@@ -663,9 +663,18 @@
                                                 {{patientMedicalProfile.height}} {{'metre'|translate}}
                                             </div>
                                         </div>
+                                        <div [class.userInfoContainer]="heightValues == true" 
+                                        [class.bigUserInfo]="heightValues == true"
+                                        [class.medicalProfileChart]="heightValues == true">
+                                            <div [class.hideChart]="heightValues == false" [class.heightChart]="heightValues == true"
+                                            [style.width.px]="heightChartWidth">
+                                               <canvas id="heightChart"></canvas>
+                                           </div>
+                                        </div>
                                     </div>
-                                    <div class="infoContainer">
-                                        <div class="userInfoContainer">
+                                    <div class="medicalProfileInfoConatiner" id="weightSection">
+                                        <div class="userInfoContainer" [class.hoverEffect]="weightValues == false" (click)="getWeightValues()"
+                                        [class.bigUserInfo]="weightValues == true">
                                             <div class="userInfoContainerTitle">
                                                 <div class="userInfoContainerTitleIcon"><i class="fas fa-weight"></i>
                                                 </div>
@@ -677,8 +686,15 @@
                                                 {{patientMedicalProfile.weight}} {{'kilogram'|translate}}
                                             </div>
                                         </div>
+                                        <div [class.userInfoContainer]="weightValues == true" 
+                                        [class.bigUserInfo]="weightValues == true"
+                                        [class.medicalProfileChart]="weightValues == true">
+                                            <div [class.hideChart]="weightValues == false" [class.heightChart]="weightValues == true"
+                                            [style.width.px]="weightChartWidth">
+                                               <canvas id="weightChart"></canvas>
+                                           </div>
+                                        </div>
                                     </div>
-                                </div>
                                 <button class="iconButton"
                                     (click)="medicalProfile='editData';initilizeMedicalProfile();"><i
                                         class="far fa-edit"></i></button>
@@ -908,7 +924,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="medicalProfile=='editData'" class="sectionContainer">
+                            <div *ngIf="medicalProfile=='editData'" class="sectionContainer"
+                            style="padding-top: 5%;">
+                                <div *ngIf="wait7Days == true" class="errInfo">
+                                    {{'youNeedToWait7Days'|translate}}
+                                </div>
                                 <div class="infoEdit">
                                     <div class="formDiv">
                                         <span class="mesure">{{'metre'|translate}}</span>
@@ -934,7 +954,7 @@
                                 <div class="buttons">
                                     <button class="fullyBtn"
                                         (click)="medicalProfile='showData'">{{'goBack'|translate}}</button>
-                                    <button class="fullyBtn" [disabled]="disableSaveMedicalProfileBtn"
+                                    <button class="fullyBtn"
                                         (click)="checkMedicalProfileForm();">{{'update'|translate}}</button>
                                 </div>
                             </div>

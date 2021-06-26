@@ -51,6 +51,7 @@ import { DoctorSecretaryComponent } from './users/doctor/doctor-secretary/doctor
 import { SecretaryComponent } from './users/secretary/secretary.component';
 import { SecretaryService } from './users/secretary/secretary.service';
 import { RateService } from './services/rate.service';
+import {ChartsModule} from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { RateService } from './services/rate.service';
     }),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    ChartsModule
   ],
   providers: [AcceuilService,AppComponent,SaveNewUserService,
     SignInService,PatientService,PatientComponent,AdminService,
