@@ -222,6 +222,7 @@ html,body{
     margin-top: -150px;
     color: white;
     box-shadow: 0px 0px 5px #308a7b;
+    transition: all .3s ease-in-out;
 }
 .infoGrid .infoContainer:hover{
     transform: scale(1);
@@ -537,7 +538,7 @@ html,body{
     background-color: #308a7b;
     position: absolute;
     top: 180px;
-    left: 250px;
+    left: 25%;
     color: white;
     border: 2px solid var(--background-color);
     transition: all .3s ease-in-out;
@@ -1277,13 +1278,34 @@ html,body{
         margin-left: 65%;
     }
 }
-@media screen and (max-width: 810px){
-    .newSectionContainer .infoGrid{
-        gap: 5%;
-        width: 100%;
+@media screen and (max-width: 850px){
+    .imgContainer{
+        left: 50%;
+        transform: translateX(-50%);
     }
-    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
-        margin-left: 60%;
+    .verified{
+        left: 50%;
+        transform: translateX(-50%);
+        height: 50px;
+        width: 50px;
+    }
+    .verified .fa-check{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 30px;
+    }
+    .doctorEmail{
+        display: none;
+    }
+    .doctorGeneralInfo{
+        display: block;
+        position: relative;
+        width: max-content;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
     }
 }
 @media screen and (max-width: 810px){
@@ -1298,14 +1320,23 @@ html,body{
     .newSectionContainer .infoGrid .infoContainer .userInfoContainer{
         margin-left: 0%;
     }
+    .iconButton{
+        margin-left: 85%;
+    }
 }
 @media screen and (max-width: 510px){
     .newSectionContainer .infoGrid{
         width: 85%;
     }
+    .iconButton{
+        margin-left: 80%;
+    }
 }
 @media screen and (max-width: 420px){
     .newSectionContainer .infoGrid{
         width: 100%;
+    }
+    .iconButton{
+        margin-left: 70%;
     }
 }

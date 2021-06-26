@@ -233,6 +233,10 @@ export class SecretaryComponent implements OnInit {
           this.getUncofirmedApp();
           this.getCurrentPatient();
           let nowDate = new Date();
+          this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), this.tomorrowAppPage).then(
+            (value) => {
+              this.todayApp = value;
+            });
           this.getAppointmentNumberByDoctorIdAndDate(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate())).then(
             (value) => {
               this.todayAppNumber = value;
@@ -1194,8 +1198,6 @@ export class SecretaryComponent implements OnInit {
         if(res){
           this.currentPatient=res;
           this.getImage(this.currentPatient.userId + 'profilePic').then((value) => { this.currentPatient.profileImg = value; });
-          let nowDate = new Date();
-          this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), this.todayAppPage).then((value) => { this.todayApp = value; });
         }
       }
     );

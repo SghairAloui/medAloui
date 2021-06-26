@@ -357,7 +357,9 @@
                                 <div class="doctorGeneralInfo">
                                     <div class="doctorName">Dr. {{doctorGet.doctorFirstName}} <span
                                             class="last">{{doctorGet.doctorLastName}}</span></div>
-                                    <i class="fas fa-user"></i> {{doctorGet.userUsername}}
+                                    <div class="doctorEmail">
+                                        <i class="fas fa-user"></i> {{doctorGet.userUsername}}
+                                    </div>
                                 </div>
                             </div>
                             <button class="iconButton" (click)="generalInfo='edit';initializeEditLabel();"><i
