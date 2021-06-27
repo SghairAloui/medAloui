@@ -232,6 +232,7 @@ export class SecretaryComponent implements OnInit {
           this.getMyNotifications(this.secretaryGet.userId);
           this.getUncofirmedApp();
           this.getCurrentPatient();
+          this.openMessages(true);
           let nowDate = new Date();
           this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), this.tomorrowAppPage).then(
             (value) => {
@@ -377,7 +378,7 @@ export class SecretaryComponent implements OnInit {
   newMessage: number = 0;
   smallConversations: OpenConversation[] = [];
   openConversation: OpenConversation;
-  openMessages() {
+  openMessages(firstTime:boolean) {
     this.conversationService.getConversationByUserId(this.secretaryGet.secureLogin, this.secretaryGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
@@ -406,6 +407,8 @@ export class SecretaryComponent implements OnInit {
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
         this.conversationPage += 1;
+        if (firstTime == false)
+          this.headerService.showChildHeader(true);
       }
     );
   }
