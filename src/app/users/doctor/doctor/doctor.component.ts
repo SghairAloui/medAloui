@@ -194,12 +194,12 @@ export class DoctorComponent implements OnInit {
             });
             this.geoNotId = not.notification.notificationId;
           } else if (not.notification.notificationType == 'secretaryRefuseYou') {
-            this.toastr.info(not.data +' '+this.translate.instant(this.translate.instant('refuseYourAdd')), this.translate.instant('Notification'), {
+            this.toastr.info(not.data + ' ' + this.translate.instant(this.translate.instant('refuseYourAdd')), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
           } else if (not.notification.notificationType == 'secretaryAcceptYou') {
-            this.toastr.info(not.data +' '+this.translate.instant(this.translate.instant('acceptYourAdd')), this.translate.instant('Notification'), {
+            this.toastr.info(not.data + ' ' + this.translate.instant(this.translate.instant('acceptYourAdd')), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
@@ -227,7 +227,7 @@ export class DoctorComponent implements OnInit {
             });
             this.doctorGet.doctorStatus = 'disapprovedPermanently';
           }
-        }  else if (not.type == 'delayPatientTurn'){
+        } else if (not.type == 'delayPatientTurn') {
           this.toastr.info(not.data + ' ' + this.translate.instant('postponeTheApp'), this.translate.instant('Notification'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
@@ -376,7 +376,7 @@ export class DoctorComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId,this.doctorGet.secureLogin).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId, this.doctorGet.secureLogin).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -428,7 +428,7 @@ export class DoctorComponent implements OnInit {
               this.accountDeleted = true;
             } else {
               this.docInfo = true;
-              this.openMessages();
+              this.openMessages(true);
               this.getDoctorSpecialities();
               localStorage.setItem('id', this.doctorGet.userId.toString());
               if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
@@ -1608,7 +1608,7 @@ export class DoctorComponent implements OnInit {
       else
         patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
       if (firsttime == false) {
-        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber,this.doctorGet.userId).subscribe(
+        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber, this.doctorGet.userId).subscribe(
           res => {
             if (res) {
               if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])
@@ -1665,7 +1665,7 @@ export class DoctorComponent implements OnInit {
             doctorId: null,
             patientId: null,
             patientTurn: null,
-            profileImg:null
+            profileImg: null
           };
           this.docTodayAppointments = [];
           this.docTodayAppointments.push(data);
@@ -1689,7 +1689,7 @@ export class DoctorComponent implements OnInit {
       res => {
         this.currentPatientInfo[patientTurn - 1] = res;
         console.log(this.currentPatientInfo[patientTurn - 1].userId)
-        this.getImageByName(this.currentPatientInfo[patientTurn - 1].userId+'profilePic').then((value)=>{this.currentPatientProfileImg[patientTurn - 1]=value});
+        this.getImageByName(this.currentPatientInfo[patientTurn - 1].userId + 'profilePic').then((value) => { this.currentPatientProfileImg[patientTurn - 1] = value });
         this.getCurrentPatientMedicalProfile(this.currentPatientInfo[patientTurn - 1].medicalProfileId, patientTurn);
         if (firstTime) {
           this.getPrescriptionByDoctorIdPatientIdAndDate(patientTurn);
@@ -1812,7 +1812,7 @@ export class DoctorComponent implements OnInit {
 
   deletePres(doctor: boolean, patientId: number) {
     console.log(patientId);
-    this.prescriptionService.deleteById(this.prescriptionAddedToCurrentPatient,patientId,this.doctorGet.userId).subscribe(
+    this.prescriptionService.deleteById(this.prescriptionAddedToCurrentPatient, patientId, this.doctorGet.userId).subscribe(
       res => {
         if (res) {
           if (doctor) {
@@ -2080,8 +2080,8 @@ export class DoctorComponent implements OnInit {
       this.field4Input.nativeElement.focus();
   }
 
-  openMessages() {
-    this.conversationService.getConversationByUserId(this.doctorGet.secureLogin,this.doctorGet.userId, this.conversationPage, 10).subscribe(
+  openMessages(firstTime: boolean) {
+    this.conversationService.getConversationByUserId(this.doctorGet.secureLogin, this.doctorGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -2111,6 +2111,8 @@ export class DoctorComponent implements OnInit {
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
         this.conversationPage += 1;
+        if (firstTime == false)
+          this.headerService.showChildHeader(true);
       }
     );
   }
@@ -2174,7 +2176,7 @@ export class DoctorComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId,this.doctorGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.doctorGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -2270,7 +2272,7 @@ export class DoctorComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.doctorGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId,this.doctorGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.doctorGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
@@ -2284,7 +2286,7 @@ export class DoctorComponent implements OnInit {
   }
 
   updateConversationStatusById(conversationId: number, status: string, userId: number) {
-    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId,this.doctorGet.secureLogin).subscribe(
+    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId, this.doctorGet.secureLogin).subscribe(
       res => {
         if (res) {
           this.openConversation.conversationStatus = status;
@@ -2420,7 +2422,7 @@ export class DoctorComponent implements OnInit {
 
   delayToLastTurn(userId: number, appointmentId: number) {
     console.log(userId + ' ' + appointmentId + ' ' + this.todayPatientNumber, + ' ' + parseInt(this.doctorGet.currentPatient + ""))
-    this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + ""),0,'doctor').subscribe(
+    this.appointmentService.delayAppointmentByAppId(this.doctorGet.userId, parseInt(userId + ""), parseInt(appointmentId + ""), this.todayPatientNumber, parseInt(this.doctorGet.currentPatient + ""), 0, 'doctor').subscribe(
       res => {
         if (res) {
           this.getPatientByTurn(true, '');

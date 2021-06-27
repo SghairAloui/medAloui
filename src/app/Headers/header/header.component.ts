@@ -71,6 +71,15 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.headerService.childHeader$.subscribe(
+      (message)=>{
+        if(message == true || message == false ){
+          console.log(message)
+          this.showChildHeader = message;
+        }
+      }
+    );
+
     this.headerService.conversation$.subscribe(
       (message) => {
         let conversation: ConversationGet = message;
@@ -604,7 +613,7 @@ export class HeaderComponent implements OnInit {
         this.loadMoreConversation = false;
         this.conversationScroll = document.getElementById("conversationsScroll").scrollTop;
         if (this.role == 'doctor')
-          this.doctorComp.openMessages();
+          this.doctorComp.openMessages(true);
         else if (this.role == 'patient')
           this.patientComp.openMessages();
         else if (this.role == 'pharmacy')
@@ -638,6 +647,7 @@ export class HeaderComponent implements OnInit {
       this.pharmacyComp.openFullConversation(openConver);
     else if (this.role == 'secretary')
       this.secretaryComponent.openFullConversation(openConver);
+    this.showChildHeader=false;
   }
 
   getConversationByid(convId: number, openConv: boolean) {
@@ -851,5 +861,5 @@ export class HeaderComponent implements OnInit {
   }
 
   showLoginHeaderUnder700:boolean=false;
-
+  showChildHeader:boolean=false;
 }

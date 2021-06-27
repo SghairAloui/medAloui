@@ -373,7 +373,7 @@
     "tomorrowPatient":"Tomorrow's patient",
     "notomorrowPatient":"You don't have yet any patients for tomorrow",
     "patientTommorow":"Patient tomorrow",
-    "appointmentApproximateDuration":"Duration of the appointment",
+    "appointmentApproximateDuration":"Appointment duration",
     "appointmentPrice":"Appointment price",
     "appointmentApproximateDurationInvalid":"Invalid duration",
     "appointmentPriceInvalid":"Invalid price",

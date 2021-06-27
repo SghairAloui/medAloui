@@ -207,7 +207,7 @@
                     </div>
                 </div>
             </div>
-            <div class="messagesIcon" (click)="openMessages()">
+            <div class="messagesIcon" (click)="openMessages(false)">
                 <i class="fas fa-envelope"></i>
             </div>
             <div *ngIf="newMessage != 0" class="newMessageDot"></div>
@@ -330,7 +330,8 @@
                     </div>
                 </div>
             </div>
-            <div class="doctorContainer">
+            <div class="doctorContainer"
+                [class.marginTop]="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify' || doctorGet.doctorStatus=='approvedByAdmin' || doctorGet.doctorStatus=='notApproved'">
                 <div *ngIf="container=='profile'" id="profile">
                     <section id="generalInfoSection">
                         <div class="sectionTitle">{{'generalInfo'|translate}}</div>
@@ -356,7 +357,10 @@
                                 </div>
                                 <div class="doctorGeneralInfo">
                                     <div class="doctorName">Dr. {{doctorGet.doctorFirstName}} <span
-                                            class="last">{{doctorGet.doctorLastName}}</span></div>
+                                            class="last">{{doctorGet.doctorLastName}}
+                                            <i *ngIf="doctorGet.doctorStatus=='approved'"
+                                                class="fas fa-check-circle docVerified"></i>
+                                        </span></div>
                                     <div class="doctorEmail">
                                         <i class="fas fa-user"></i> {{doctorGet.userUsername}}
                                     </div>
@@ -540,7 +544,7 @@
                                             (click)="checkDisabledBtnFromFemale()">{{'female'|translate}}</label>
                                     </div>
                                 </div>
-                                <div class="textLien" style="padding-left: 50px;" (click)="changePasswordClick()">
+                                <div id="changePass" class="textLien" (click)="changePasswordClick()">
                                     {{'changePassword'|translate}} ?</div>
                                 <div class="buttons">
                                     <button class="fullyBtn"
@@ -604,8 +608,10 @@
                     <div *ngIf="doctorGet.doctorStatus=='notApproved'">
                         <section id="notApprovedSection">
                             <div class="sectionTitle">{{'notApproved'|translate}}</div>
-                            <div class="sectionContainer">
-                                {{'toProveYourAccount'|translate}}
+                            <div class="sectionContainer" id="approve">
+                                <div class="toProveYourAccount">
+                                    {{'toProveYourAccount'|translate}}
+                                </div>
                                 <div class="specialtyInput">
                                     <div class="formDiv">
                                         <input type="text" [class.labelInvalidInfo]="invalidSpecialityVariable"
@@ -735,19 +741,22 @@
                     <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'">
                         <section id="approvedByAdminSection">
                             <div class="sectionTitle">{{'setUpAccount'|translate}}</div>
-                            <div class="sectionContainer pending">
+                            <div class="sectionContainer pending" id="settings">
                                 <div class="infoGridTowColumn">
                                     <div class="infoContainer" style="box-shadow: none;">
-                                        <div class="formDiv">
-                                            <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                                name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                                (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{maxPatientPerDayInformation}}
-                                            </label>
-                                        </div>
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'mn'|translate}}</span>
+                                        <input type="text" maxlength="50"
+                                            [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
+                                            name="appointmentApproximateDuration"
+                                            [(ngModel)]="appointmentApproximateDuration"
+                                            (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{appointmentApproximateDurationInformation}}
+                                        </label>
                                     </div>
+                                </div>
                                     <div class="infoContainer" style="box-shadow: none;">
                                         <div class="formDiv">
                                             <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
@@ -811,18 +820,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="formDiv width90">
-                                    <span class="mesure">{{'mn'|translate}}</span>
-                                    <input type="text" maxlength="50"
-                                        [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
-                                        name="appointmentApproximateDuration"
-                                        [(ngModel)]="appointmentApproximateDuration"
-                                        (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{appointmentApproximateDurationInformation}}
-                                    </label>
-                                </div>
+                                
+                                    <div class="formDiv width90">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+                                
                                 <div class="weekDays">
                                     <div class="workDays">{{'workDays'|translate}}</div><br>
                                     <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
@@ -948,7 +956,7 @@
                                 <i class="fas fa-briefcase"></i> <span
                                     class="workDayLineTilteValue">{{'workDaysShow'|translate}}</span>
                             </div>
-                            <drag-scroll scrollbar-hidden="true" style="height: auto;" class="workDaysLine">
+                            <div class="workDaysLine">
                                 <div class="workDaysLineFirstCircle"></div>
                                 <div class="workDaysLineFirst"></div>
                                 <div *ngIf="Mon" class="workDaysLineWorkCircle"></div>
@@ -988,25 +996,28 @@
                                 </div>
                                 <div class="workDaysLineEndCircle"></div>
                                 <div style="opacity: 0;" class="workDaysLineWorkCircle"></div>
-                            </drag-scroll>
+                            </div>
                             <button class="iconButton" style="margin-bottom: 20px;" (click)="doctorSettings=false;">
                                 <i class="far fa-edit"></i>
                             </button>
                         </ng-template>
                         <ng-template #editDoctorSettings>
-                            <div class="sectionContainer">
+                            <div class="sectionContainer" id="settings">
                                 <div class="infoGridTowColumn">
                                     <div class="infoContainer" style="box-shadow: none;">
-                                        <div class="formDiv">
-                                            <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                                name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                                (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{maxPatientPerDayInformation}}
-                                            </label>
-                                        </div>
+                                    <div class="formDiv">
+                                        <span class="mesure">{{'mn'|translate}}</span>
+                                        <input type="text" maxlength="50"
+                                            [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
+                                            name="appointmentApproximateDuration"
+                                            [(ngModel)]="appointmentApproximateDuration"
+                                            (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false;compareAppointmenTime()"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{appointmentApproximateDurationInformation}}
+                                        </label>
                                     </div>
+                                </div>
                                     <div class="infoContainer" style="box-shadow: none;">
                                         <div class="formDiv">
                                             <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
@@ -1067,18 +1078,17 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="formDiv width90">
-                                    <span class="mesure">{{'mn'|translate}}</span>
-                                    <input type="text" maxlength="50"
-                                        [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
-                                        name="appointmentApproximateDuration"
-                                        [(ngModel)]="appointmentApproximateDuration"
-                                        (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false;compareAppointmenTime()"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{appointmentApproximateDurationInformation}}
-                                    </label>
-                                </div>
+                                    <div class="formDiv width90">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+                                
+
                                 <div class="weekDays">
                                     <div class="workDays">{{'workDays'|translate}}</div><br>
                                     <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
@@ -1131,7 +1141,7 @@
                     <div *ngIf="doctorGet.doctorStatus=='disapprovedByAdmin'">
                         <section id="reVerifySection">
                             <div class="sectionTitle">{{'reVerify'|translate}}</div>
-                            <div class="sectionContainer">
+                            <div class="sectionContainer" id="approve">
                                 {{'toProveYourAccount'|translate}}
                                 <div *ngFor="let spec of doctorSpecialities" class="horizentalCenter">
                                     <span class="specialityCon">
@@ -2106,8 +2116,7 @@
                                         style="margin: 5px; display: inline-block;" class="textLien">
                                         {{'delayTolastTurn'|translate}} ?
                                     </div>
-                                    <div (click)="getPatientByTurn(false,'missed')" style="margin: 5px; float: right;"
-                                        class="textLien">
+                                    <div (click)="getPatientByTurn(false,'missed')" class="textLien skipApp">
                                         {{'skipApp'|translate}} ?
                                     </div>
                                 </div>

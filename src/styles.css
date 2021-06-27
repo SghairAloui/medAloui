@@ -2092,3 +2092,40 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
 .fa-star,.fa-star-half-alt{
     color: #f4bb02;
 }
+
+
+@media screen and (max-width: 700px){
+    .messagesContainer .messagesConatiner{
+        z-index: 1111;
+        right: 0px;
+        width: 100%;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        overflow: hidden;
+        height: 100%;
+    }
+    .messagesContainer .messagesContainerHeader{
+        top: 0px;
+        position: absolute;
+        width: 100%;
+    }
+    .messagesContainer .messagesContainerBody{
+        width: 100%;
+        height: 100%;
+    }
+    .messagesContainer .messagesContainerFooter{
+        margin: 4px 5%;
+        width: 90%;
+    }
+    .messagesContainer .sendMessageIcon{
+        position: absolute;
+        right: 7px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .messagesContainer .messageInput{
+        width: 100%;
+        margin: 5px;
+        padding-right: 30px;
+    }
+}

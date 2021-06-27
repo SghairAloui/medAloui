@@ -55,11 +55,13 @@ html,body{
     margin-bottom: 5px;
 }
 .fullyBtn{
-    width: 30%;
+    width: auto;
+    padding: 0px 20px;
 }
 .emptyBtn{
     position: relative;
-    width: 30%;
+    width: auto;
+    padding: 0px 20px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -159,10 +161,11 @@ html,body{
     padding: 2% 0px;
 }
 .weekDays{
-    padding: 5% 0px;
+    position: relative;
+    padding: 5% 5px;
     margin-left: auto;
     margin-right: auto;
-    width: fit-content;
+    width: 100%;
 }
 .weekDays .day{
     border: 1px solid #308a7b;
@@ -393,6 +396,7 @@ html,body{
     margin-left: 50%;
     transform: translateX(-50%);
     margin-bottom: 15px;
+    width: fit-content;
 }
 .patientInfoContainer .info{
     display: inline-block;
@@ -530,15 +534,11 @@ html,body{
     transition: all .3s ease-in-out;
 }
 .verified{
-    font-size: 17px;
-    width: 30px;
-    height: 30px;
+    display: none;
     padding: 1px 5px;
     border-radius: 50%;
     background-color: #308a7b;
     position: absolute;
-    top: 180px;
-    left: 25%;
     color: white;
     border: 2px solid var(--background-color);
     transition: all .3s ease-in-out;
@@ -1205,20 +1205,44 @@ html,body{
     padding: 2px 15px;
     margin-left: 25px;
 }
+.doctorName .fa-check-circle{
+    color: white;
+    transform: translateY(4px);
+}
+.docVerified{
+    display: inline-block;
+    vertical-align: auto;
+}
+#changePass{
+    padding-left: 50px;
+}
+.skipApp{
+    margin: 5px;
+    float: right;
+}
+.marginTop{
+    padding-top: 20px !important;
+}
+@media screen and (max-width: 1440px){
+    #approve .infoGrid{
+        grid-template-columns: 1fr 1fr;
+    }
+    #approve .infoGrid .infoContainer:nth-child(3){
+        width: 100%;
+        margin-left: 51%;
+    }
+}
 @media screen and (max-width: 1400px){
-    .doctorContainer{
+    .doctorContainer,.notApproved{
         width: 77%;
         left: 23%;
     }
 }
-@media screen and (max-width: 1300px){
-    .doctorContainer{
-        left: 25%;
-        width: 75%;
-    }
-}
 @media screen and (max-width: 1310px){
-    .doctorContainer{
+    .pending{
+        padding: 20px 0px;
+    }
+    .doctorContainer,.notApproved{
         left: 25%;
         width: 75%;
     }
@@ -1230,16 +1254,39 @@ html,body{
     .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
         margin-left: 65%;
     }
+    .sectionTitle{
+        padding-top: 60px;
+    }
+}
+@media screen and (max-width: 1300px){
+    .doctorContainer,.notApproved{
+        left: 25%;
+        width: 75%;
+    }
+}
+@media screen and (max-width: 1250px){
+    .patientProfilePicContainer{
+        top: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    .patientSmallInfo{
+        width: 100%;
+    }
 }
 @media screen and (max-width: 1150px){
-    .doctorContainer{
+    .doctorContainer,.notApproved{
         left: 28%;
         width: 72%;
     }
-}
-@media screen and (max-width: 1130px){
-    .newSectionContainer .infoGrid{
-        width: 100%;
+    #approve .infoGrid{
+        grid-template-columns: 1fr;
+    }
+    #approve .infoGrid .infoContainer:nth-child(3){
+        margin-left: 0%;
+    }
+    #settings .infoGridTowColumn{
+        padding: 2% 0px !important;
     }
 }
 @media screen and (max-width: 1040px){
@@ -1250,14 +1297,31 @@ html,body{
         margin-left: 60%;
     }
 }
+@media screen and (max-width: 1130px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+    .patientSmallInfoGrid{
+        grid-template-columns: 1fr;
+        width: 70%;
+        margin-left: 15%;
+    }
+}
 @media screen and (max-width: 1070px){
-    .doctorContainer{
+    .doctorContainer,.notApproved{
         left: 30%;
         width: 70%;
     }
 }
 @media screen and (max-width: 1000px){
-    .doctorContainer{
+    #approve .infoGrid{
+        grid-template-columns: 1fr 1fr;
+    }
+    #approve .infoGrid .infoContainer:nth-child(3){
+        width: 100%;
+        margin-left: 51%;
+    }
+    .doctorContainer,.notApproved{
         left: 0%;
         width: 100%;
     }
@@ -1268,6 +1332,11 @@ html,body{
     .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
         margin-left: 65%;
     }
+    .patientSmallInfoGrid{
+        grid-template-columns: 1fr 1fr;
+        width: 92%;
+        margin-left: 4%;
+    }
 }
 @media screen and (max-width: 910px){
     .newSectionContainer .infoGrid{
@@ -1277,13 +1346,30 @@ html,body{
     .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
         margin-left: 65%;
     }
+    .nextPatient{
+        width: 50%;
+    }
+    .specialtyInput{
+        width: 60%;
+    }
 }
 @media screen and (max-width: 850px){
+    #approve .infoGrid{
+        grid-template-columns: 1fr;
+    }
+    #approve .infoGrid .infoContainer:nth-child(3){
+        margin-left: 0%;
+    }
+    .docVerified{
+        display: none;
+    }
     .imgContainer{
         left: 50%;
         transform: translateX(-50%);
     }
     .verified{
+        display: block;
+        top: 185px;
         left: 50%;
         transform: translateX(-50%);
         height: 50px;
@@ -1309,6 +1395,12 @@ html,body{
     }
 }
 @media screen and (max-width: 810px){
+    .specialtyInput{
+        width:70%;
+    }
+    .nextPatient{
+        width: 55%;
+    }
     .newSectionContainer .infoGrid{
         grid-template-columns:1fr;
         gap: 0px;
@@ -1321,7 +1413,105 @@ html,body{
         margin-left: 0%;
     }
     .iconButton{
+        margin-top: 15px;
         margin-left: 85%;
+    }
+    .infoEdit,.infoGridTowColumn{
+        grid-template-columns: 1fr;
+    }
+    .width90{
+        width: 85%;
+        left: 7.5%;
+    }
+    #changePass{
+        margin-top: 100px;
+        padding-left: 30px;
+    }
+    .patientSmallInfoGrid{
+        grid-template-columns: 1fr;
+        width: 70%;
+        margin-left: 15%;
+    }
+}
+@media screen and (max-width: 750px){
+    .workDaysLine .workDaysLineBetween{
+        width: 30px;
+    }
+    .workDaysLine .workDaysLineFirst{
+        width: 30px;
+    }
+    .workDaysLine .workDaysLineWorkCircle,.workDaysLine .workDaysLineDisabledWorkCircle{
+        margin-left: 30px;
+    }
+    .workDaysLine .workDaysLineBetween div,.workDaysLine .workDaysLineFirst div{
+        top: 20px;
+        left: -50%;
+    }
+    #currentPatientSection .buttons{
+        display: block;
+    }
+    #currentPatientSection .buttons .emptyBtn{
+        min-width: max-content;
+        margin-bottom: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    .addToCurrentPatientClass,.patientMedicalProfile{
+        margin-left: 0px;
+        width: 100%;
+    }
+    .nextPatient{
+        width: 60%;
+    }
+}
+@media screen and (max-width: 700px){
+    .notApproved{
+        top: 0px;
+    }
+    .specialtyInput{
+        width: 75%;
+    }
+}
+@media screen and (max-width: 650px){
+    .patientSmallInfoGrid{
+        width: 85%;
+        margin-left: 7.5%;
+    }
+    .prescriptionAdded{
+        display: block;
+    }
+    .addedPresBtns{
+        display: block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+    }
+    .nextPatient{
+        width: 70%;
+    }
+    .skipApp{
+        display: block;
+        float: none;
+    }
+    .specialtyInput{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 550px){
+    .specialtyInput{
+        width: 90%;
+    }
+    .workDaysLine .workDaysLineBetween{
+        width: 20px;
+    }
+    .workDaysLine .workDaysLineFirst{
+        width: 20px;
+    }
+    .workDaysLine .workDaysLineWorkCircle,.workDaysLine .workDaysLineDisabledWorkCircle{
+        margin-left: 20px;
+    }
+    .nextPatient{
+        width: 80%;
     }
 }
 @media screen and (max-width: 510px){
@@ -1330,6 +1520,34 @@ html,body{
     }
     .iconButton{
         margin-left: 80%;
+    }
+    .buttons{
+        display: block;
+    }
+    .buttons .fullyBtn{
+        min-width: max-content;
+        margin-bottom: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    #changePass{
+        padding-left: 15px;
+    }
+    .patientSmallInfoGrid{
+        width: 92%;
+        margin-left: 4%;
+    }
+}
+@media screen and (max-width: 450px){
+    .sectionContainer,.newSectionContainer{
+        margin: 0px;
+        padding: 10px 0px;
+    }
+    .nextPatient{
+        width: 90%;
+    }
+    .toProveYourAccount{
+        margin-left: 10px;
     }
 }
 @media screen and (max-width: 420px){

@@ -123,15 +123,15 @@
                 <div class="icon"><i class="fas fa-question"></i></div>
                 <div class="text">{{'questions'|translate}}</div>
             </div>
-            <div class="item">
+            <div class="item" (click)="parentHeader='settings';showChildHeader = true">
                 <div class="icon"><i class="fas fa-cog"></i></div>
                 <div class="text">{{'settings'|translate}}</div>
             </div>
-            <div class="item">
+            <div class="item" (click)="parentHeader='notification';showChildHeader=true;showLoginHeaderUnder700 = false">
                 <div class="icon"><i class="fas fa-bell"></i></div>
                 <div class="text">{{'notifications'|translate}}</div>
             </div>
-            <div class="item">
+            <div class="item" (click)="logOut()">
                 <div class="icon"><i class="fas fa-sign-out-alt"></i></div>
                 <div class="text">{{'logOut'|translate}}</div>
             </div>
@@ -199,7 +199,7 @@
     <div *ngIf="role=='doctor'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                <li (click)="parentHeader='notification';allNotIsRead=true;showChildHeader=true" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -306,8 +306,11 @@
 
     <div *ngIf="role != 'home' && parentHeader=='settings'" id="childHeader" class="loginHeader">
         <header class="headerChild" style="overflow-y: auto;" (scroll)="notificationsScroll($event)"
-            id="notificationsScroll" #notificationsScrollEL>
+            id="notificationsScroll" #notificationsScrollEL [class.showChildHeader]="showChildHeader == true">
             <nav class="navItem">
+                <div class="closeIcon" (click)="showChildHeader=false">
+                    <i class="fas fa-times-circle"></i>
+                </div>
                 <div class="settingItems">
                     <ul>
                         <li><a>{{'ChooseLang'|translate}}</a></li>
@@ -343,8 +346,11 @@
 
     <div *ngIf="role != 'home' && parentHeader=='notification'" id="childHeader" class="loginHeader">
         <header class="headerChild" style="overflow-y: auto;" (scroll)="notificationsScroll($event)"
-            id="notificationsScroll" #notificationsScrollEL>
+            id="notificationsScroll" #notificationsScrollEL [class.showChildHeader]="showChildHeader == true">
             <nav class="navItem">
+                <div class="closeIcon" (click)="showChildHeader=false">
+                    <i class="fas fa-times-circle"></i>
+                </div>
                 <div>
                     <div *ngIf="notifications.length == 0" class="noNotification">
                         {{'noNotification'|translate}}
@@ -362,7 +368,7 @@
                                     <i class="fas fa-map-marked-alt"></i>
                                 </div>
                                 {{'setYourGeoLocation'|translate}}
-                                <div (click)="updatePosClick()" class="textLien">
+                                <div (click)="updatePosClick();showChildHeader = false" class="textLien">
                                     {{'updatePos'|translate}} ?
                                 </div>
                             </div>
@@ -386,7 +392,7 @@
                                     </span>
                                     {{'closeConversation'|translate}}
                                 </div>
-                                <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien"
+                                <div (click)="getConversationByid(notif.notificationParameter,false);showChildHeader=false" class="textLien"
                                     style="text-transform: capitalize;">
                                     {{'openConversation'|translate}} ?
                                 </div>
@@ -399,7 +405,7 @@
                                 <span style="text-transform: capitalize;">
                                     {{notif.name}}
                                 </span> {{'sentYouReq'|translate}}
-                                <div (click)="getConversationByid(notif.notificationParameter,false)" class="textLien">
+                                <div (click)="getConversationByid(notif.notificationParameter,false);showChildHeader=false" class="textLien">
                                     {{'showConversation'|translate}} ?
                                 </div>
                             </div>
@@ -469,10 +475,10 @@
                                     <div class="confirmSection" *ngIf="notif.notificationParameter == 'pending'">
                                         {{'doYouWantToConfirm'|translate}} ?
                                         <div class="confirmButtons">
-                                            <div class="confirmIconBtn" (click)="acceptDoctorAddRequest(i)">
+                                            <div class="confirmIconBtn" (click)="acceptDoctorAddRequest(i);showChildHeader=false">
                                                 <i class="fas fa-check"></i>
                                             </div>
-                                            <div class="refuseIconBtn" (click)="refuseDoctorAddRequest(i)">
+                                            <div class="refuseIconBtn" (click)="refuseDoctorAddRequest(i);showChildHeader=false">
                                                 <i class="fas fa-times"></i>
                                             </div>
                                         </div>
@@ -618,7 +624,10 @@
 
     <div *ngIf="role != 'home' && parentHeader=='message'" id="childHeader" class="loginHeader">
         <div class="headerChild" style="overflow-y: scroll;" (scroll)="conversationsScroll($event)"
-            id="conversationsScroll" #conversationsScrollEl>
+            id="conversationsScroll" #conversationsScrollEl [class.showChildHeader]="showChildHeader == true">
+            <div class="closeIcon" (click)="showChildHeader=false">
+                <i class="fas fa-times-circle"></i>
+            </div>
             <nav class="navItem">
                 <div style="margin-bottom: 20px;">
                     <div *ngIf="conversations.length == 0" class="noNotification">

@@ -73,4 +73,10 @@ export class HeaderService {
   deletePrescriptionById(data:any){
     this.deletePrescription.next(data);
   }
+
+  private childHeader: Subject<boolean>= new BehaviorSubject<any>("");
+  childHeader$ = this.childHeader.asObservable();
+  showChildHeader(data:any){
+    this.childHeader.next(data);
+  }
 }

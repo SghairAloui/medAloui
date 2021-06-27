@@ -685,6 +685,12 @@ html,body{
     transform: scale(1.1);
     background-color: #308a7b;
 }
+.closeIcon{
+    display: none;
+}
+.showChildHeader{
+    margin-left: 0px !important;
+}
 @media screen and (max-width: 1400px){
     .loginHeader .headerChild{
         width: 23%;
@@ -710,8 +716,26 @@ html,body{
         font-size: 14px;
         padding: 5px 2%;
     }
-    .headerChild{
-        margin-left: -30%;
+    .loginHeader .headerChild{
+        margin-left: -40%;
+        width: 40%;
+    }
+    .showChildHeader{
+        margin-left: 0px !important;
+        transition: all .3 ease-in-out !important;
+    }
+    .closeIcon{
+        display: block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+        margin-top: -25px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+    .closeIcon .fa-times-circle{
+        font-size: 35px;
+        color: #308a7b;
     }
 }
 @media screen and (max-width: 950px){
@@ -744,6 +768,17 @@ html,body{
     }
 }
 @media screen and (max-width: 700px){
+    .notification{
+        margin: 15px 10%;
+    }
+    .loginHeader .headerChild nav{
+        margin-top: 30px;
+    }
+    .loginHeader .headerChild{
+        z-index: 1111;
+        margin-left: -100%;
+        width: 100%;
+    }
     .loginHeader .parentHeader{
         opacity: 0;
         z-index: 0;
@@ -932,5 +967,11 @@ html,body{
     }
     .homeHeader .headerOnScroll .menuHoverEffect::after{
         background: none;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .notification{
+        margin: 10px 30px;
     }
 }
