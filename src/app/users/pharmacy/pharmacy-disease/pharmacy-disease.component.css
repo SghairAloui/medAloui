@@ -8,6 +8,7 @@ body{
     margin-top: 15px;
 }
 .question{
+    position: relative;
     background-color: var(--background-color);
     transition: all .3s ease-in-out;
     box-shadow: var(--box-info);
@@ -215,4 +216,59 @@ body{
 }
 .posterImageProfileContainer:hover .sendMessage{
     opacity: 1;
+}
+@media screen and (max-width: 800px){
+    .questionTitle .title{
+        display: none;
+    }
+    .questionText{
+        max-width: 100%;
+    }
+}
+@media screen and (max-width: 700px){
+    .questionInfo{
+        display: block;
+    }
+    .questionInfo .questionWithPosterInfo{
+        position: absolute;
+        top: 0px;
+        height: 50px;
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+    .questionInfo .questionWithoutPosterInfo{
+        margin-top: 60px;
+    }
+    .questionTitle{
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 15px;
+    }
+    .questionAbout{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .question{
+        padding: 0px;
+    }
+    .questionContainer{
+        padding: 5px 15px;
+    }
+}
+@media screen and (max-width: 570px){
+    .commentLeftLine{
+        display: none;
+    }
+    .commentProfileImgConatiner{
+        display: none;
+    }
+    .commentPoints{
+        margin-left: -10px;
+    }
+    .question{
+        margin: 20px 0px;
+    }
+    .questionContainer{
+        padding: 5px;
+    }
 }

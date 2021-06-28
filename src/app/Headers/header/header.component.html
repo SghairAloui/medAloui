@@ -98,11 +98,11 @@
         </div>
     </div>
 
-    <div class="loginHeaderMenuIcon" (click)="showLoginHeaderUnder700 = true">
+    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy'" class="loginHeaderMenuIcon" (click)="showLoginHeaderUnder700 = true">
         <i class="fas fa-bars"></i>
     </div>
 
-    <div *ngIf="role == 'doctor' || role == 'secretary'" class="loginHeaderUnder700" [class.showLoginHeaderUnder700]="showLoginHeaderUnder700 == true">
+    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy'" class="loginHeaderUnder700" [class.showLoginHeaderUnder700]="showLoginHeaderUnder700 == true">
         <div (click)="showLoginHeaderUnder700 = false">
             <i class="fas fa-times-circle"></i>
         </div>
@@ -123,18 +123,6 @@
                 <div class="icon"><i class="fas fa-question"></i></div>
                 <div class="text">{{'questions'|translate}}</div>
             </div>
-            <div class="item" (click)="parentHeader='settings';showChildHeader = true">
-                <div class="icon"><i class="fas fa-cog"></i></div>
-                <div class="text">{{'settings'|translate}}</div>
-            </div>
-            <div class="item" (click)="parentHeader='notification';showChildHeader=true;showLoginHeaderUnder700 = false">
-                <div class="icon"><i class="fas fa-bell"></i></div>
-                <div class="text">{{'notifications'|translate}}</div>
-            </div>
-            <div class="item" (click)="logOut()">
-                <div class="icon"><i class="fas fa-sign-out-alt"></i></div>
-                <div class="text">{{'logOut'|translate}}</div>
-            </div>
         </div>
         <div *ngIf="role == 'secretary'" class="loginHeaderItmes">
             <div class="item" (click)="openContainerToSecretary('profile');showLoginHeaderUnder700 = false">
@@ -145,6 +133,18 @@
                 <div class="icon"><i class="fas fa-hospital-user"></i></div>
                 <div class="text">{{'patients'|translate}}</div>
             </div>
+        </div>
+        <div *ngIf="role == 'pharmacy'" class="loginHeaderItmes">
+            <div class="item" (click)="openContainerToPharmacy('profile');showLoginHeaderUnder700 = false">
+                <div class="icon"><i class="fas fa-user-circle"></i></div>
+                <div class="text">{{'profile'|translate}}</div>
+            </div>
+            <div class="item" (click)="openContainerToPharmacy('disease');showLoginHeaderUnder700 = false">
+                <div class="icon"><i class="fas fa-question"></i></div>
+                <div class="text">{{'questions'|translate}}</div>
+            </div>
+        </div>
+        <div class="loginHeaderItmes">
             <div class="item" (click)="parentHeader='settings';showChildHeader = true">
                 <div class="icon"><i class="fas fa-cog"></i></div>
                 <div class="text">{{'settings'|translate}}</div>

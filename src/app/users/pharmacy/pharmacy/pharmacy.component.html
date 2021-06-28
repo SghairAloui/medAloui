@@ -443,15 +443,17 @@
                                 <i class="fas fa-check"></i>
                             </div>
                             <div class="doctorGeneralInfo">
-                                <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}}</div>
-                                <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
+                                <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}} <i *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="fas fa-check-circle pharVerfied"></i></div>
+                                <div id="pharmacyEmail">
+                                    <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
+                                </div>
                             </div>
                         </div>
 
                         <button class="iconButton" style="margin-top: 20px;"
                             (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
 
-                        <div style="margin-left: 50%;transform: translateX(-50%);width: max-content;">
+                        <div class="pharmcyGenInfo">
                             <div class="userInfoContainer">
                                 <div class="userInfoContainerTitle">
                                     <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
@@ -644,7 +646,9 @@
                     <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved' || pharmacyGet.pharmacyStatus=='disapproved'">
                         <div class="sectionTitle">{{'notApproved'|translate}}</div>
                         <div class="sectionContainer">
-                            {{'toProveYourAccount'|translate}}
+                            <div class="toProveYourAccount">
+                                {{'toProveYourAccount'|translate}}
+                            </div>
                             <div class="pharmacyType">
                                 <div *ngIf="accountType" class="selectPharmacyType">
                                     {{'selectPharmacyType'|translate}}
@@ -774,6 +778,7 @@
                         </section>
                     </div>
                 </section>
+
                 <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="myMedicamentsSection">
                     <div class="sectionTitle">{{'myMedicaments'|translate}}</div>
                     <div class="sectionContainer">

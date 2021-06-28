@@ -26,7 +26,8 @@ html,body{
 }
 .emptyBtn{
     position: relative;
-    width: 30%;
+    width: auto;
+    padding: 0px 15px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -337,6 +338,7 @@ html,body{
     z-index: 2;
     left: 0%;
     top: 0%;
+    margin-left: 10px;
 }
 .deletedMed .deletedMedCenterText{
     position: absolute;
@@ -645,4 +647,298 @@ html,body{
 }
 .opacity0{
     opacity: 0;
+}
+.verified{
+    display: none;
+}
+.pharVerfied{
+    color: white;
+    transform: translateY(2px);
+}
+.pharmcyGenInfo{
+    margin: 0px auto;
+    width: fit-content;
+}
+@media screen and (max-width: 1400px){
+    .pharmacyContainer,.notApproved{
+        width: 77%;
+        left: 23%;
+    }
+}
+@media screen and (max-width: 1310px){
+    .pending{
+        padding: 20px 0px;
+    }
+    .pharmacyContainer,.notApproved{
+        left: 25%;
+        width: 75%;
+    }
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr 1fr;
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+    .sectionTitle{
+        padding-top: 60px;
+    }
+}
+@media screen and (max-width: 1300px){
+    .pharmacyContainer,.notApproved{
+        left: 25%;
+        width: 75%;
+    }
+}
+@media screen and (max-width: 1150px){
+    .pharmacyContainer,.notApproved{
+        left: 28%;
+        width: 72%;
+    }
+    #approvePharmacySection .infoGrid{
+        grid-template-columns: 1fr !important;
+    }
+    #approvePharmacySection .infoGrid .infoContainer:nth-child(3){
+        margin-left: 0% !important;
+    }
+}
+@media screen and (max-width: 1060px){
+    .pharmcyGenInfo .userInfoContainer{
+        display: block;
+        margin: 20px auto;
+    }
+}
+@media screen and (max-width: 1040px){
+    .newSectionContainer .infoGrid{
+        gap: 5%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 60%;
+    }
+}
+@media screen and (max-width: 1130px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+    .newSectionContainer{
+        margin: 20px 0px;
+    }
+}
+@media screen and (max-width: 1070px){
+    .pharmacyContainer,.notApproved{
+        left: 30%;
+        width: 70%;
+    }
+}
+@media screen and (max-width: 1000px){
+    .medicamentName{
+        width: 70%;
+        margin-left: 15%;
+    }
+    .pharmcyGenInfo .userInfoContainer{
+        display: inline-block;
+        margin: 20px;
+    }
+    #approvePharmacySection .infoGrid{
+        grid-template-columns: 1fr 1fr !important;
+    }
+    #approvePharmacySection .infoGrid .infoContainer:nth-child(3){
+        width: 100% !important;
+        margin-left: 51% !important;
+    }
+    .pharmacyContainer,.notApproved{
+        left: 0%;
+        width: 100%;
+    }
+    .pharmacyContainer{
+        top: 0px;
+    }
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 80%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+}
+@media screen and (max-width: 910px){
+    .exactAddress{
+        width: 70%;
+        left: 15%;
+    }
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+    .excelNote{
+        padding: 10px;
+    }
+}
+@media screen and (max-width: 850px){
+    .medicamentName{
+        width: 80%;
+        margin-left: 10%;
+    }
+    #approvePharmacySection .infoGrid{
+        grid-template-columns: 1fr !important;
+    }
+    #approvePharmacySection .infoGrid .infoContainer:nth-child(3){
+        margin-left: 0% !important;
+    }
+    .pharVerfied{
+        display: none;
+    }
+    .imgContainer{
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .verified{
+        display: block;
+        top: 185px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 50px;
+        width: 50px;
+    }
+    .verified .fa-check{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 30px;
+    }
+    .doctorGeneralInfo{
+        display: block;
+        position: relative;
+        width: max-content;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
+    }
+    #pharmacyEmail{
+        display: none;
+    }
+}
+@media screen and (max-width: 810px){
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr;
+        gap: 0px;
+        width: 70%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 0%;
+    }
+    .newSectionContainer .infoGrid .infoContainer .userInfoContainer{
+        margin-left: 0%;
+    }
+    .iconButton{
+        margin-top: 15px;
+        margin-left: 85%;
+    }
+    .infoEdit,.infoGridTowColumn{
+        grid-template-columns: 1fr;
+    }
+    .width90{
+        width: 85%;
+        left: 7.5%;
+    }
+    #changePass{
+        margin-top: 100px;
+        padding-left: 30px;
+    }
+    .patientSmallInfoGrid{
+        grid-template-columns: 1fr;
+        width: 70%;
+        margin-left: 15%;
+    }
+    .pharmcyGenInfo .userInfoContainer{
+        display: block;
+        margin: 20px auto;
+    }
+    .exactAddress{
+        width: 86%;
+        left: 7%;
+    }
+}
+@media screen and (max-width: 700px){
+    #allMyPrescriptions .sectionContainer{
+        width: 100%;
+        margin-left: 0px;
+        margin-left: 0px;
+    }
+    .notApproved{
+        top: 0px;
+    }
+    .medicamentName{
+        width: 90%;
+        margin-left: 5%;
+    }
+    .exactAddress{
+        width: 90%;
+        left: 5%;
+    }
+}
+@media screen and (max-width: 510px){
+    .exactAddress{
+        width: 96%;
+        left: 2%;
+    }
+    .medicamentName{
+        width: 98%;
+        margin-left: 1%;
+    }
+    .newSectionContainer .infoGrid{
+        width: 85%;
+    }
+    .iconButton{
+        margin-left: 80%;
+    }
+    .buttons{
+        display: block;
+    }
+    .buttons .fullyBtn{
+        min-width: max-content;
+        margin-bottom: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    #changePass{
+        padding-left: 15px;
+    }
+    .pharmacyContainer{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .sectionContainer{
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    .excelNote{
+        padding: 10px 5px;
+    }
+}
+@media screen and (max-width: 450px){
+    .sectionContainer,.newSectionContainer{
+        margin: 0px;
+        padding: 10px 0px;
+    }
+    .pharmacyContainer{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .toProveYourAccount{
+        margin-left: 10px;
+    }
+}
+@media screen and (max-width: 420px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+    .iconButton{
+        margin-left: 70%;
+    }
 }
