@@ -20,8 +20,8 @@ export class ConversationService {
 
   constructor(private http:HttpClient) { }
 
-  public getConversationByUserId (secureLogin:string,userId:number,page:number,size:number){
-    return this.http.post<ConversationGet []>(CONVERSATION_API + 'getConversationByUserId',{secureLogin,userId,page,size},httpOptions);
+  public getConversationByUserId (userId:number,page:number,size:number){
+    return this.http.post<ConversationGet []>(CONVERSATION_API + 'getConversationByUserId',{userId,page,size},httpOptions);
   }
   
   public addConversation (openedBy:number,openedTo:number){
@@ -32,16 +32,16 @@ export class ConversationService {
     return this.http.post<MessageGet []>(MESSAGE_API + 'getMessagesByConversationId',{id,page,size},httpOptions);
   }
 
-  public sendMessage (senderId:number,recipientId:number,messageContent:string,conversationId:number,secureLogin:string){
-    return this.http.post<StringGet>(MESSAGE_API + 'add',{senderId,recipientId,messageContent,conversationId,secureLogin},httpOptions);
+  public sendMessage (senderId:number,recipientId:number,messageContent:string,conversationId:number){
+    return this.http.post<StringGet>(MESSAGE_API + 'add',{senderId,recipientId,messageContent,conversationId},httpOptions);
   }
 
-  public getConversationByid (id:number,secureLogin:string){
-    return this.http.post<ConversationGet>(CONVERSATION_API + 'getConversationByid',{id,secureLogin},httpOptions);
+  public getConversationByid (convId:number,userId:number){
+    return this.http.post<ConversationGet>(CONVERSATION_API + 'getConversationByid',{convId,userId},httpOptions);
   }
 
-  public readConversationById (id:number,userId:number,secureLogin:string){
-    return this.http.post<boolean>(CONVERSATION_API + 'readConversationById',{id,userId,secureLogin},httpOptions);
+  public readConversationById (id:number,userId:number){
+    return this.http.post<boolean>(CONVERSATION_API + 'readConversationById',{id,userId},httpOptions);
   }
 
   public updateConversationStatusById (id:number,status:string,changedBy:number,changedTo:number){

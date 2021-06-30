@@ -660,7 +660,7 @@ html,body{
     width: fit-content;
 }
 @media screen and (max-width: 1400px){
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         width: 77%;
         left: 23%;
     }
@@ -669,7 +669,7 @@ html,body{
     .pending{
         padding: 20px 0px;
     }
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         left: 25%;
         width: 75%;
     }
@@ -686,13 +686,13 @@ html,body{
     }
 }
 @media screen and (max-width: 1300px){
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         left: 25%;
         width: 75%;
     }
 }
 @media screen and (max-width: 1150px){
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         left: 28%;
         width: 72%;
     }
@@ -726,7 +726,7 @@ html,body{
     }
 }
 @media screen and (max-width: 1070px){
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         left: 30%;
         width: 70%;
     }
@@ -747,7 +747,7 @@ html,body{
         width: 100% !important;
         margin-left: 51% !important;
     }
-    .pharmacyContainer,.notApproved{
+    .pharmacyContainer,.notApproved,.disapprovedByAdmin{
         left: 0%;
         width: 100%;
     }
@@ -870,7 +870,7 @@ html,body{
         margin-left: 0px;
         margin-left: 0px;
     }
-    .notApproved{
+    .notApproved,.disapprovedByAdmin{
         top: 0px;
     }
     .medicamentName{

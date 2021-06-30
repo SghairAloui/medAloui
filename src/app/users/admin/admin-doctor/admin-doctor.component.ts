@@ -138,8 +138,7 @@ export class AdminDoctorComponent implements OnInit {
   }
 
   approveDoc(id: number, key: number) {
-    this.integerAndString = new IntegerAndStringPost(id, 'approvedByAdmin');
-    this.doctorService.changeDoctorStatusById(this.integerAndString).subscribe(
+    this.doctorService.changeDoctorStatusById(id,'approvedByAdmin').subscribe(
       res => {
         if (res) {
           this.validationPost = new ValidationPost('approved', localStorage.getItem('id'), 'doctor', id);
@@ -167,11 +166,12 @@ export class AdminDoctorComponent implements OnInit {
   }
 
   disapproveDoc(id: number, doctorStatus: string, key: number) {
+    let des: string;
     if (doctorStatus == 'pending')
-      this.integerAndString = new IntegerAndStringPost(id, 'disapprovedByAdmin');
+      des = 'disapprovedByAdmin';
     else if (doctorStatus == 'reVerify')
-      this.integerAndString = new IntegerAndStringPost(id, 'disapprovedPermanently');
-    this.doctorService.changeDoctorStatusById(this.integerAndString).subscribe(
+      des = 'disapprovedPermanently';
+    this.doctorService.changeDoctorStatusById(id, des).subscribe(
       res => {
         if (res) {
           this.validationPost = new ValidationPost('disapproved', localStorage.getItem('id'), 'doctor', id);

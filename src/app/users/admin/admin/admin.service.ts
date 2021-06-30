@@ -19,8 +19,8 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  public getAdminInfoFromSecureLogin(secureLogin: SecureLoginString) {
-    return this.http.post<AdminGet>(ADMIN_API + "getAdminInfoFromSecureLogin", secureLogin, httpOptions);
+  public getAdminInfoById(userId:number) {
+    return this.http.post<AdminGet>(ADMIN_API + "getAdminInfoById",{userId}, httpOptions);
   }
   public getPendingDoctors(page: number, size: number) {
     return this.http.get<DoctorPendingGet[]>(DOCTOR_API + "getPendingDoctors/" + page + "/" + size, httpOptions);

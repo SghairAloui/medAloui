@@ -6,6 +6,7 @@ import { HeaderService } from 'src/app/Headers/header/header.service';
 import { AdminGet } from 'src/model/adminGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { AdminService } from './admin.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-admin',
@@ -27,12 +28,12 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.adminInfo = false;
-    this.secureLogin = new SecureLoginString(localStorage.getItem("secureLogin"));
-    this.getAdminInfoFromSecureLogin(this.secureLogin);
+    this.getAdminInfoById();
     this.headerService.setHeader('admin');
   }
-  getAdminInfoFromSecureLogin(secureLogin: SecureLoginString) {
-    this.adminService.getAdminInfoFromSecureLogin(secureLogin).subscribe(
+  getAdminInfoById() {
+    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    this.adminService.getAdminInfoById(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
           this.adminGet = res;

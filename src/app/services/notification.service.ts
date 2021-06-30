@@ -24,8 +24,8 @@ export class NotificationService {
     return this.http.post<boolean>(NOTIFICATION_API+'changeUnreadNotification',{id,unread},httpOptions);
   }
 
-  public deleteNotificationById(id:number,secureLogin:string){
-    return this.http.post<boolean>(NOTIFICATION_API+'deleteNotificationById',{id,secureLogin},httpOptions);
+  public deleteNotificationById(id:number){
+    return this.http.post<boolean>(NOTIFICATION_API+'deleteNotificationById',{id},httpOptions);
   }
 
   public sendNotificationWithSocket(senderId:number,recipientId:number,notificationParameter:string,notificationType:string,force:boolean){

@@ -653,7 +653,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getConversationByid(convId: number, openConv: boolean) {
-    this.conversationService.getConversationByid(convId, this.secureLogin).subscribe(
+    this.conversationService.getConversationByid(convId,this.userId).subscribe(
       res => {
         let conv: ConversationGet = res;
         let retrieveResonse: any;
@@ -701,7 +701,7 @@ export class HeaderComponent implements OnInit {
   }
 
   deleteNotificationById(notifKey: number) {
-    this.notificationService.deleteNotificationById(this.notifications[notifKey].notificationId,this.secureLogin).subscribe(
+    this.notificationService.deleteNotificationById(this.notifications[notifKey].notificationId).subscribe(
       res => {
         if (res) {
           if (this.notifications[notifKey].isUnread == true)

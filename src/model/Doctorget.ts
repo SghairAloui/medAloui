@@ -9,7 +9,7 @@ export interface DoctorGet{
     doctorStatus:string;
     doctorRate:number;
     maxPatientPerDay:number;
-    startTime:number;
+    startTime:string;
     exactAddress:string;
     workDays:string;
     appointmentApproximateDuration:number;
@@ -18,4 +18,5 @@ export interface DoctorGet{
     doctorLatitude:string;
     doctorLongitude:string;
     secureLogin:string;
+    speciality:string;
 }

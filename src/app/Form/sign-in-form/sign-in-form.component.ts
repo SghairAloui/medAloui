@@ -24,7 +24,6 @@ export class SignInFormComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   roles: string[] = [];
-  signInResponse:SignInResponse;
   waitOppeningAcc:boolean=false;
 
   InvalidInfo:boolean=false;
@@ -121,22 +120,23 @@ export class SignInFormComponent implements OnInit {
     this.waitOppeningAcc=true;
     this.authService.login(this.username, this.password).subscribe(
       data => {
-        this.signInResponse=data;
+        let signInResponse:SignInResponse=data;
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        localStorage.setItem("secureLogin",this.signInResponse.secureLogin)
-        if(this.signInResponse.roles.indexOf('PATIENT_ROLE') != -1){
+        localStorage.setItem("secureLogin",signInResponse.secureLogin)
+        localStorage.setItem("id",signInResponse.userId+'')
+        if(signInResponse.roles.indexOf('PATIENT_ROLE') != -1){
           this.router.navigate(['/patient']);
-        }else if (this.signInResponse.roles.indexOf('DOCTOR_ROLE') != -1){
+        }else if (signInResponse.roles.indexOf('DOCTOR_ROLE') != -1){
           this.router.navigate(['/doctor']);
-        }else if (this.signInResponse.roles.indexOf('ADMIN_ROLE') != -1){
+        }else if (signInResponse.roles.indexOf('ADMIN_ROLE') != -1){
           this.router.navigate(['/admin']);
-        }else if (this.signInResponse.roles.indexOf('PHARMACIST_ROLE') != -1){
+        }else if (signInResponse.roles.indexOf('PHARMACIST_ROLE') != -1){
           this.router.navigate(['/pharmacy']);
-        }else if(this.signInResponse.roles.indexOf('SECRETARY_ROLE') != -1){
+        }else if(signInResponse.roles.indexOf('SECRETARY_ROLE') != -1){
           this.router.navigate(['/secretary']);
         }
       },

@@ -425,7 +425,7 @@ export class PharmacyComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId, this.pharmacyGet.secureLogin).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -894,9 +894,10 @@ export class PharmacyComponent implements OnInit {
   }
 
   openMessages(firstTime: boolean) {
-    this.conversationService.getConversationByUserId(this.pharmacyGet.secureLogin, this.pharmacyGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.pharmacyGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
+        console.log(conversations)
         for (let conver of conversations) {
           if (conver.message_content.length >= 10)
             conver.message_content = conver.message_content.slice(0, 7) + '...';
@@ -955,7 +956,7 @@ export class PharmacyComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.pharmacyGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.pharmacyGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
           if (res) {
             this.newMessage -= 1;
@@ -1052,7 +1053,7 @@ export class PharmacyComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.pharmacyGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {

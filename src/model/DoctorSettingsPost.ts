@@ -1,6 +1,6 @@
 export class DoctorSettingsPost{
     constructor(
-        private secureLogin:string,
+        private userId:number,
         private startTime:string,
         private exactAddress:string,
         private workDays:string,

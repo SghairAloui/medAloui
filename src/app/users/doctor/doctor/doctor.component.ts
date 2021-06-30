@@ -41,6 +41,7 @@ import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
+import jwt_decode from 'jwt-decode';
 
 declare const L: any;
 
@@ -257,7 +258,6 @@ export class DoctorComponent implements OnInit {
   patientKey: number; tomorrowPatientKey: number;
   todayPatientMedicalProfileGet: medicalProfileGet[] = []; tomorrowPatientMedicalProfileGet: medicalProfileGet[] = [];
   accountDeleted: boolean = false;
-  doctorSpecialities: string[] = [];
   doctorSettingsPost: DoctorSettingsPost;
   editPass: boolean = false;
   updatePasswordPost: UpdatePasswordPost;
@@ -376,7 +376,7 @@ export class DoctorComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId, this.doctorGet.secureLogin).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -410,15 +410,16 @@ export class DoctorComponent implements OnInit {
     });
   }
 
-  userInfoLoaded:boolean=false;
+  userInfoLoaded: boolean = false;
   getDoctorInfo() {
-    this.doctorService.getDoctorInfo(this.secureLogin).subscribe(
+    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    this.doctorService.getDoctorInfo(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
           this.doctorGet = res;
-          if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000){
+          if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000) {
             this.notVerified = true;
-            this.userInfoLoaded=true;
+            this.userInfoLoaded = true;
           }
           else {
             this.notVerified = false;
@@ -429,10 +430,9 @@ export class DoctorComponent implements OnInit {
             if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
               this.deleteAccount();
               this.accountDeleted = true;
-              this.userInfoLoaded=true;
+              this.userInfoLoaded = true;
             } else {
               this.docInfo = true;
-              this.getDoctorSpecialities();
               this.openMessages(true);
               localStorage.setItem('id', this.doctorGet.userId.toString());
               if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
@@ -487,8 +487,8 @@ export class DoctorComponent implements OnInit {
         gender = 'male';
       else
         gender = 'female';
-      this.doctorPostWithSecureLogin = new DoctorPostWithSecureLogin(this.mail.toLowerCase(), this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), this.passwordRepeat, birthday, gender.toLowerCase(), localStorage.getItem("secureLogin"));
-      this.doctorService.updateDoctorInfoBySecureLogin(this.doctorPostWithSecureLogin).subscribe(
+      this.doctorPostWithSecureLogin = new DoctorPostWithSecureLogin(this.mail.toLowerCase(), this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), this.passwordRepeat, birthday, gender.toLowerCase(), this.doctorGet.userId);
+      this.doctorService.updateDoctorInfoById(this.doctorPostWithSecureLogin).subscribe(
         res => {
           if (!res) {
             this.invalidMailVariable = true;
@@ -689,16 +689,16 @@ export class DoctorComponent implements OnInit {
             workDays = workDays + 'Sat ';
           if (this.Sun == true)
             workDays = workDays + 'Sun ';
-          this.doctorSettingsPost = new DoctorSettingsPost(localStorage.getItem('secureLogin'), this.startTime, this.exactAdress, workDays, parseInt(this.maxPatientPerDay), parseInt(this.appointmentPrice), parseInt(this.appointmentApproximateDuration));
-          this.doctorService.updateDoctorSettingsBySecurelogin(this.doctorSettingsPost).subscribe(
+          this.doctorSettingsPost = new DoctorSettingsPost(this.doctorGet.userId, this.startTime, this.exactAdress, workDays, parseInt(this.maxPatientPerDay), parseInt(this.appointmentPrice), parseInt(this.appointmentApproximateDuration));
+          this.doctorService.updateDoctorSettingsById(this.doctorSettingsPost).subscribe(
             res => {
               if (res) {
                 if (status == 'set') {
-                  this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'approved');
-                  this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
+                  this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), '');
+                  this.doctorService.changeDoctorStatusById(this.doctorGet.userId,'approved').subscribe(
                     res => {
                       if (res) {
-                        this.ngOnInit();
+                        this.doctorGet.doctorStatus='approved';
                       }
                     }
                   );
@@ -707,8 +707,13 @@ export class DoctorComponent implements OnInit {
                     timeOut: 5000,
                     positionClass: 'toast-bottom-left'
                   });
-                  this.ngOnInit();
                 }
+                this.doctorGet.startTime = this.startTime;
+                this.doctorGet.workDays = workDays;
+                this.doctorGet.maxPatientPerDay = parseInt(this.maxPatientPerDay);
+                this.doctorGet.appointmentPrice = parseInt(this.appointmentPrice);
+                this.doctorGet.appointmentApproximateDuration = parseInt(this.appointmentApproximateDuration);
+                this.doctorGet.exactAddress = this.exactAdress;
               }
             },
             err => {
@@ -961,7 +966,7 @@ export class DoctorComponent implements OnInit {
         this.medicalClinicPic = true;
       else if (imageName == this.doctorGet.userId + "doctorMedicalSpecialty")
         this.medicalSpecialtyPic = true;
-      this.userInfoLoaded=true;
+      this.userInfoLoaded = true;
     } else {
       this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
         timeOut: 5000,
@@ -1002,8 +1007,7 @@ export class DoctorComponent implements OnInit {
     } else {
       this.invalidSpecialityVariable = false;
       this.specialityInformation = this.translate.instant('speciality');
-      this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'pending');
-      this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
+      this.doctorService.changeDoctorStatusById(this.doctorGet.userId,'pending').subscribe(
         res => {
           if (res) {
             this.integerAndStringPost = new IntegerAndStringPost(this.doctorGet.userId, this.specialityCode)
@@ -1235,8 +1239,7 @@ export class DoctorComponent implements OnInit {
   }
 
   reVerifyDoctorDocuments() {
-    this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), 'reVerify');
-    this.doctorService.changeDoctorStatusBySecureLogin(this.twoStringsPost).subscribe(
+    this.doctorService.changeDoctorStatusById(this.doctorGet.userId,'reVerify').subscribe(
       res => {
         if (res) {
           this.getDoctorInfo();
@@ -1868,14 +1871,6 @@ export class DoctorComponent implements OnInit {
     );
   }
 
-  getDoctorSpecialities() {
-    this.doctorService.getDoctorSpecialitiesBySecureLogin(this.secureLogin).subscribe(
-      res => {
-        this.doctorSpecialities = res;
-      }
-    );
-  }
-
   addDiagnoseBtn() {
     if (this.diagnoseAddedToCurrentPatient == 0) {
       this.addToCurrentPatient = 'disease';
@@ -2086,7 +2081,7 @@ export class DoctorComponent implements OnInit {
   }
 
   openMessages(firstTime: boolean) {
-    this.conversationService.getConversationByUserId(this.doctorGet.secureLogin, this.doctorGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.doctorGet.userId, this.conversationPage, 10).subscribe(
       res => {
         console.log(res);
         let conversations: ConversationGet[] = res;
@@ -2182,7 +2177,7 @@ export class DoctorComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.doctorGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.doctorGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -2278,7 +2273,7 @@ export class DoctorComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.doctorGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.doctorGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;

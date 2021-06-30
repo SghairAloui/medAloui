@@ -383,7 +383,7 @@ export class SecretaryComponent implements OnInit {
   smallConversations: OpenConversation[] = [];
   openConversation: OpenConversation;
   openMessages(firstTime:boolean) {
-    this.conversationService.getConversationByUserId(this.secretaryGet.secureLogin, this.secretaryGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.secretaryGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -515,7 +515,7 @@ export class SecretaryComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.secretaryGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.secretaryGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
@@ -531,7 +531,7 @@ export class SecretaryComponent implements OnInit {
   message: string;
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.secretaryGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.secretaryGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.secretaryGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {

@@ -33,16 +33,12 @@ export class DoctorService {
 
   constructor(private http:HttpClient) { }
 
-  public getDoctorSpecialitiesBySecureLogin(secureLogin:SecureLoginString){
-    return this.http.post<string[]>(DOC_API + "getDoctorSpecialitiesBySecureLogin",secureLogin,httpOptions);
+  public getDoctorInfo(userId:number){
+    return this.http.post<DoctorGet>(DOC_API + "getDoctorInfoById",{userId},httpOptions);
   }
 
-  public getDoctorInfo(secureLogin:SecureLoginString){
-    return this.http.post<DoctorGet>(DOC_API + "getDoctorInfoFromSecureLogin",secureLogin,httpOptions);
-  }
-
-  public updateDoctorInfoBySecureLogin(doctorPostWithSecureLogin:DoctorPostWithSecureLogin){
-    return this.http.post<boolean>(DOC_API + "updateDoctorInfoBySecureLogin",doctorPostWithSecureLogin,httpOptions);
+  public updateDoctorInfoById(doctorPostWithSecureLogin:DoctorPostWithSecureLogin){
+    return this.http.post<boolean>(DOC_API + "updateDoctorInfoById",doctorPostWithSecureLogin,httpOptions);
   }
 
   public updateDoctorProfilePhoto(uploadImageData:FormData){
@@ -52,20 +48,16 @@ export class DoctorService {
     return this.http.get<string>(IAMAGE_API + 'get/' + imageName,httpOptions)
   }
 
-  public changeDoctorStatusBySecureLogin(twoStringsPost:TwoStringsPost){
-    return this.http.post<boolean>(DOC_API + 'changeDoctorStatusBySecureLogin', twoStringsPost,httpOptions)
-  }
-
   public checkIfDocumentExist(oneStringPost:OneStringPost){
     return this.http.post<boolean>(IAMAGE_API + 'checkIfDocumentExist', oneStringPost)
   }
 
-  public changeDoctorStatusById(integerAndString:IntegerAndStringPost){
-    return this.http.post<boolean>(DOC_API + 'changeDoctorStatusById', integerAndString, httpOptions)
+  public changeDoctorStatusById(integer:number,string:string){
+    return this.http.post<boolean>(DOC_API + 'changeDoctorStatusById', {integer,string}, httpOptions)
   }
 
-  public updateDoctorSettingsBySecurelogin(doctorSettingsPost:DoctorSettingsPost){
-    return this.http.post<boolean>(DOC_API + 'updateDoctorSettingsBySecurelogin', doctorSettingsPost, httpOptions)
+  public updateDoctorSettingsById(doctorSettingsPost:DoctorSettingsPost){
+    return this.http.post<boolean>(DOC_API + 'updateDoctorSettingsById', doctorSettingsPost, httpOptions)
   }
 
   public deleteByImageName(imageName:string){

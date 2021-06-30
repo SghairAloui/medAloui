@@ -1472,7 +1472,7 @@ export class PatientComponent implements OnInit {
   }
 
   openMessages(firstTime:boolean) {
-    this.conversationService.getConversationByUserId(this.patientGet.secureLogin, this.patientGet.userId, this.conversationPage, 10).subscribe(
+    this.conversationService.getConversationByUserId(this.patientGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
@@ -1567,7 +1567,7 @@ export class PatientComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.patientGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.patientGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.patientGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -1612,7 +1612,7 @@ export class PatientComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.patientGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.patientGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId).subscribe(
         res => {
           if (res) {
             this.openConversation.isUnread = false;
