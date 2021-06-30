@@ -44,7 +44,7 @@ export class ConversationService {
     return this.http.post<boolean>(CONVERSATION_API + 'readConversationById',{id,userId,secureLogin},httpOptions);
   }
 
-  public updateConversationStatusById (id:number,status:string,changedBy:number,changedTo:number,secureLogin:string){
-    return this.http.post<boolean>(CONVERSATION_API + 'updateConversationStatusById',{id,status,changedBy,changedTo,secureLogin},httpOptions);
+  public updateConversationStatusById (id:number,status:string,changedBy:number,changedTo:number){
+    return this.http.post<boolean>(CONVERSATION_API + 'updateConversationStatusById',{id,status,changedBy,changedTo},httpOptions);
   }
 }

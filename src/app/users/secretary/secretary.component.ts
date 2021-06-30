@@ -218,21 +218,24 @@ export class SecretaryComponent implements OnInit {
   tomorrowAppNumber: number;
   todayPages: number[] = [];
   tomorrowPages: number[] = [];
+  accountInfoLoaded:boolean=false;
   getSecretaryInfo() {
     this.secretaryService.getSecretaryInfoBySecureLogin(localStorage.getItem('secureLogin')).subscribe(
       res => {
         this.secretaryGet = res;
-        if (parseInt(this.secretaryGet.secretaryStatus) >= 10000)
+        if (parseInt(this.secretaryGet.secretaryStatus) >= 10000){
           this.notVerified = true;
+          this.accountInfoLoaded = true;
+        }
         else {
           this.headerService.setHeader('secretary');
           this.notVerified = false;
           this.secretaryGet.profileImage = this.getSecProfileImage(this.secretaryGet.userId + "profilePic");
+          this.openMessages(true);
           this.getSecretaryWork();
           this.getMyNotifications(this.secretaryGet.userId);
           this.getUncofirmedApp();
           this.getCurrentPatient();
-          this.openMessages(true);
           let nowDate = new Date();
           this.getAppointmentByDateAndDocId(nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate()), this.tomorrowAppPage).then(
             (value) => {
@@ -254,6 +257,7 @@ export class SecretaryComponent implements OnInit {
               this.tomorrowAppNumber = value;
               for (let i = 1; i <= Math.ceil(this.todayAppNumber / 6); i++)
                 this.tomorrowPages.push(i);
+              this.accountInfoLoaded=true;
             });
         }
       },

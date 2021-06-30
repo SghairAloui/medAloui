@@ -615,9 +615,11 @@ export class HeaderComponent implements OnInit {
         if (this.role == 'doctor')
           this.doctorComp.openMessages(true);
         else if (this.role == 'patient')
-          this.patientComp.openMessages();
+          this.patientComp.openMessages(false);
         else if (this.role == 'pharmacy')
-          this.pharmacyComp.openMessages();
+          this.pharmacyComp.openMessages(false);
+        else if (this.role == 'secretary')
+          this.secretaryComponent.openMessages(false);
       }
     }
   }

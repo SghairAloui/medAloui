@@ -98,11 +98,11 @@
         </div>
     </div>
 
-    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy'" class="loginHeaderMenuIcon" (click)="showLoginHeaderUnder700 = true">
+    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy' || role == 'patient'" class="loginHeaderMenuIcon" (click)="showLoginHeaderUnder700 = true">
         <i class="fas fa-bars"></i>
     </div>
 
-    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy'" class="loginHeaderUnder700" [class.showLoginHeaderUnder700]="showLoginHeaderUnder700 == true">
+    <div *ngIf="role == 'doctor' || role == 'secretary' || role == 'pharmacy' || role == 'patient'" class="loginHeaderUnder700" [class.showLoginHeaderUnder700]="showLoginHeaderUnder700 == true">
         <div (click)="showLoginHeaderUnder700 = false">
             <i class="fas fa-times-circle"></i>
         </div>
@@ -144,6 +144,20 @@
                 <div class="text">{{'questions'|translate}}</div>
             </div>
         </div>
+        <div *ngIf="role == 'patient'" class="loginHeaderItmes">
+            <div class="item" (click)="profileCLick();showLoginHeaderUnder700 = false">
+                <div class="icon"><i class="fas fa-user-circle"></i></div>
+                <div class="text">{{'profile'|translate}}</div>
+            </div>
+            <div class="item" (click)="doctorClick();showLoginHeaderUnder700 = false">
+                <div class="icon"><i class="fas fa-user-md"></i></div>
+                <div class="text">{{'doctors'|translate}}</div>
+            </div>
+            <div class="item" (click)="diseaseClick();showLoginHeaderUnder700 = false">
+                <div class="icon"><i class="fas fa-question"></i></div>
+                <div class="text">{{'questions'|translate}}</div>
+            </div>
+        </div>
         <div class="loginHeaderItmes">
             <div class="item" (click)="parentHeader='settings';showChildHeader = true">
                 <div class="icon"><i class="fas fa-cog"></i></div>
@@ -163,7 +177,7 @@
     <div *ngIf="role=='patient'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                <li (click)="parentHeader='notification';allNotIsRead=true;showChildHeader = true" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -181,7 +195,7 @@
                     </div>
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
-                        (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                        (click)="parentHeader='settings';showChildHeader = true"><i class="fas fa-cog"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'" (click)="diseaseClick()"><i
                             class="fas fa-question"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='doctor'" (click)="doctorClick()"><i
@@ -261,7 +275,7 @@
     <div *ngIf="role=='pharmacy'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                <li (click)="parentHeader='notification';allNotIsRead=true;showChildHeader = true" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -279,7 +293,7 @@
                     </div>
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
-                        (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                        (click)="parentHeader='settings';showChildHeader = true"><i class="fas fa-cog"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'"
                         (click)="openContainerToPharmacy('disease');"><i class="fas fa-question"></i></li>
                 </ul>
@@ -295,7 +309,7 @@
     <div *ngIf="role=='secretary'" class="loginHeader">
         <header class="parentHeader">
             <div>
-                <li (click)="parentHeader='notification';allNotIsRead=true" class="notificationIcon">
+                <li (click)="parentHeader='notification';allNotIsRead=true;showChildHeader = true" class="notificationIcon">
                     <span *ngIf="unreadNotifications!=0 && allNotIsRead==false" class="newNotification"></span>
                     <a><i class="fas fa-bell faBellMenuIcon"></i></a>
                 </li>
@@ -313,7 +327,7 @@
                     </div>
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
-                        (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                        (click)="parentHeader='settings';showChildHeader = true"><i class="fas fa-cog"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='patient'"
                         (click)="openContainerToSecretary('patient')"><i class="fas fa-hospital-user"></i></li>
                 </ul>

@@ -365,6 +365,7 @@ export class PatientComponent implements OnInit {
   birthYears: number[] = [];
   newMessage: number = 0;
 
+  lodadingAcountData:boolean=true;
   ngOnInit(): void {
     for (let i = 2021; i >= 1900; i--) {
       this.birthYears.push(i);
@@ -450,10 +451,12 @@ export class PatientComponent implements OnInit {
       res => {
         if (res) {
           this.patientGet = res;
-          if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000)
+          if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000){
             this.notVerified = true;
+            this.lodadingAcountData=false;
+          }
           else {
-            this.openMessages();
+            this.openMessages(true);
             this.notVerified = false;
             this.headerService.setHeader('patient');
             this.getMyNotifications(this.patientGet.userId);
@@ -1468,7 +1471,7 @@ export class PatientComponent implements OnInit {
     );
   }
 
-  openMessages() {
+  openMessages(firstTime:boolean) {
     this.conversationService.getConversationByUserId(this.patientGet.secureLogin, this.patientGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
@@ -1499,6 +1502,8 @@ export class PatientComponent implements OnInit {
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
         this.conversationPage += 1;
+        if (firstTime == false)
+          this.headerService.showChildHeader(true);
       }
     );
   }
@@ -1998,6 +2003,7 @@ export class PatientComponent implements OnInit {
         }
         this.myPharmaciesPage = page;
         this.loadingPharmacies = false;
+        this.lodadingAcountData=false;
       },
       err => {
         this.loadingPharmacies = false;

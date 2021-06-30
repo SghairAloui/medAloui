@@ -348,25 +348,28 @@ export class PharmacyComponent implements OnInit {
     );
   }
 
+  userInfoLoaded: boolean = false;
   getUserInfo() {
     this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
     this.pharmacyService.getPharmacyInfo(this.secureLoginString).subscribe(
       res => {
         if (res) {
           this.pharmacyGet = res;
-          if (parseInt(this.pharmacyGet.pharmacyStatus) <= 99999 && parseInt(this.pharmacyGet.pharmacyStatus) >= 10000)
+          if (parseInt(this.pharmacyGet.pharmacyStatus) <= 99999 && parseInt(this.pharmacyGet.pharmacyStatus) >= 10000) {
             this.notVerified = true;
+            this.userInfoLoaded = true;
+          }
           else {
             this.notVerified = false;
             this.headerService.setHeader('pharmacy');
+            this.openMessages(true);
+            this.getImage();
             this.getTodayPrescriptionNumberById();
             this.getMyNotifications(this.pharmacyGet.userId);
             this.setPharmacyPosition();
             this.getStockNumberByPharmacyId();
-            this.getImage();
             this.intializeEdit();
             if (this.pharmacyGet.pharmacyStatus == 'notApproved' || this.pharmacyGet.pharmacyStatus == 'disapproved') {
-              this.openMessages();
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacyCinPic");
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacyOwnershipPic");
               this.checkDocDocument(this.pharmacyGet.userId + "pharmacySpecialty");
@@ -376,9 +379,12 @@ export class PharmacyComponent implements OnInit {
               this.deleteByUserId();
             this.pharmacyInfo = true;
             localStorage.setItem('id', this.pharmacyGet.userId + '');
+            this.userInfoLoaded = true;
           }
-        } else
+        } else {
           this.router.navigate(['/acceuil']);
+          this.userInfoLoaded = true;
+        }
       },
       err => {
         this.router.navigate(['/acceuil']);
@@ -419,7 +425,7 @@ export class PharmacyComponent implements OnInit {
         res => {
           if (res) {
             if (!this.position) {
-              this.notificationService.deleteNotificationById(this.geoNotId,this.pharmacyGet.secureLogin).subscribe(
+              this.notificationService.deleteNotificationById(this.geoNotId, this.pharmacyGet.secureLogin).subscribe(
                 res => {
                   if (res) {
                     this.toastr.success(this.translate.instant('positionUpdated'), this.translate.instant('position'), {
@@ -887,7 +893,7 @@ export class PharmacyComponent implements OnInit {
       this.field4Input.nativeElement.focus();
   }
 
-  openMessages() {
+  openMessages(firstTime: boolean) {
     this.conversationService.getConversationByUserId(this.pharmacyGet.secureLogin, this.pharmacyGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
@@ -918,6 +924,8 @@ export class PharmacyComponent implements OnInit {
           this.headerService.setLoadMoreConversation(false);
         this.headerService.setParentHeader('message');
         this.conversationPage += 1;
+        if (firstTime == false)
+          this.headerService.showChildHeader(true);      
       }
     );
   }
@@ -947,7 +955,7 @@ export class PharmacyComponent implements OnInit {
 
   readConversation(lastSenderId: number) {
     if (this.openConversation.isUnread == true && lastSenderId != this.pharmacyGet.userId) {
-      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId,this.pharmacyGet.secureLogin).subscribe(
+      this.conversationService.readConversationById(this.openConversation.conversationId, this.openConversation.userId, this.pharmacyGet.secureLogin).subscribe(
         res => {
           if (res) {
             this.newMessage -= 1;
@@ -989,7 +997,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   updateConversationStatusById(conversationId: number, status: string, userId: number) {
-    this.conversationService.updateConversationStatusById(conversationId, status, this.pharmacyGet.userId, userId,this.pharmacyGet.secureLogin).subscribe(
+    this.conversationService.updateConversationStatusById(conversationId, status, this.pharmacyGet.userId, userId).subscribe(
       res => {
         if (res) {
           this.openConversation.conversationStatus = status;
@@ -1044,7 +1052,7 @@ export class PharmacyComponent implements OnInit {
 
   sendMessage() {
     if (this.message && this.message.length != 0) {
-      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId,this.pharmacyGet.secureLogin).subscribe(
+      this.conversationService.sendMessage(this.pharmacyGet.userId, this.openConversation.userId, this.message, this.openConversation.conversationId, this.pharmacyGet.secureLogin).subscribe(
         async res => {
           let response: StringGet = res;
           if (response.string.length != 0) {
@@ -1204,7 +1212,7 @@ export class PharmacyComponent implements OnInit {
     this.popUpFor = '';
     this.popUpValue1 = '';
     this.popUpValue2 = '';
-    this.popUpValue3= '';
+    this.popUpValue3 = '';
   }
 
   openPopUp(popUpFor: string, value1: string, value2: string) {
@@ -1235,19 +1243,19 @@ export class PharmacyComponent implements OnInit {
   }
 
   pharmacyPrescriptionsPages: number[] = [1, 2, 3, 4, 5];
-  searchPrescription:string='';
+  searchPrescription: string = '';
   getPharmacyPrescriptionsById() {
     this.showMyPres = true;
-    if(this.searchPrescription==''){
+    if (this.searchPrescription == '') {
       this.pharmacyService.getPharmacyPrescriptionsById(this.pharmacyGet.userId, this.pharmacyPrescriptionsPage, 6).subscribe(
         async res => {
           let prescriptions: ReturnWithPag = res;
-  
+
           if (this.pharmacyPrescriptionsPage == 0)
             this.pharmacyPrescriptions = { totalPages: (prescriptions.totalPages % 6), list: [] };
-  
+
           this.pharmacyPrescriptions.list = prescriptions.list;
-  
+
           this.loadingPrescriptions = false;
           await this.sleep(1);
           document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
@@ -1259,16 +1267,16 @@ export class PharmacyComponent implements OnInit {
           });
         }
       );
-    }else{
-      this.pharmacyService.searchPharamacyPrescriptionByPatientName('%'+this.searchPrescription.split(' ').join('% %')+'%',this.pharmacyGet.userId ,this.pharmacyPrescriptionsPage, 6).subscribe(
+    } else {
+      this.pharmacyService.searchPharamacyPrescriptionByPatientName('%' + this.searchPrescription.split(' ').join('% %') + '%', this.pharmacyGet.userId, this.pharmacyPrescriptionsPage, 6).subscribe(
         async res => {
           let prescriptions: ReturnWithPag = res;
-  
+
           if (this.pharmacyPrescriptionsPage == 0)
             this.pharmacyPrescriptions = { totalPages: (prescriptions.totalPages % 6), list: [] };
-  
+
           this.pharmacyPrescriptions.list = prescriptions.list;
-  
+
           this.loadingPrescriptions = false;
           await this.sleep(1);
           document.getElementById("allMyPrescriptions").scrollIntoView({ 'behavior': 'smooth' });
@@ -1300,7 +1308,7 @@ export class PharmacyComponent implements OnInit {
     this.getPharmacyPrescriptionsById();
   }
 
-  getMedicamentsByPrescriptionId(presId: number, name: string, index: string,patientId:number,) {
+  getMedicamentsByPrescriptionId(presId: number, name: string, index: string, patientId: number,) {
     this.prescriptionService.getMedicamentsByPrescriptionId(presId).subscribe(
       res => {
         this.prescriptionMeds = [];
@@ -1310,7 +1318,7 @@ export class PharmacyComponent implements OnInit {
         this.popUp = true;
         this.popUpValue1 = presId + "";
         this.popUpValue2 = index;
-        this.popUpValue3=patientId+"";
+        this.popUpValue3 = patientId + "";
       }
     );
   }
@@ -1318,7 +1326,7 @@ export class PharmacyComponent implements OnInit {
   confirmPrescription() {
     console.log(this.popUpValue3)
     this.confirming = true;
-    this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code),parseInt(this.popUpValue3)).subscribe(
+    this.prescriptionService.confirmPrescriptionById(parseInt(this.popUpValue1), parseInt(this.field1Code + this.field2Code + this.field3Code + this.field4Code), parseInt(this.popUpValue3)).subscribe(
       res => {
         if (res == true) {
           this.pharmacyPrescriptions.list.splice(parseInt(this.popUpValue2), 1);

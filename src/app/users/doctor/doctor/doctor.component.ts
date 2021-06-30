@@ -410,13 +410,16 @@ export class DoctorComponent implements OnInit {
     });
   }
 
+  userInfoLoaded:boolean=false;
   getDoctorInfo() {
     this.doctorService.getDoctorInfo(this.secureLogin).subscribe(
       res => {
         if (res) {
           this.doctorGet = res;
-          if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000)
+          if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000){
             this.notVerified = true;
+            this.userInfoLoaded=true;
+          }
           else {
             this.notVerified = false;
             this.getMyNotifications(this.doctorGet.userId);
@@ -426,10 +429,11 @@ export class DoctorComponent implements OnInit {
             if (this.doctorGet.doctorStatus == 'disapprovedPermanently') {
               this.deleteAccount();
               this.accountDeleted = true;
+              this.userInfoLoaded=true;
             } else {
               this.docInfo = true;
-              this.openMessages(true);
               this.getDoctorSpecialities();
+              this.openMessages(true);
               localStorage.setItem('id', this.doctorGet.userId.toString());
               if (this.doctorGet.doctorStatus == 'notApproved' || this.doctorGet.doctorStatus == 'disapprovedByAdmin') {
                 this.checkDocDocument(this.doctorGet.userId + "doctorCinPic");
@@ -957,6 +961,7 @@ export class DoctorComponent implements OnInit {
         this.medicalClinicPic = true;
       else if (imageName == this.doctorGet.userId + "doctorMedicalSpecialty")
         this.medicalSpecialtyPic = true;
+      this.userInfoLoaded=true;
     } else {
       this.toastr.info(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
         timeOut: 5000,
@@ -2083,6 +2088,7 @@ export class DoctorComponent implements OnInit {
   openMessages(firstTime: boolean) {
     this.conversationService.getConversationByUserId(this.doctorGet.secureLogin, this.doctorGet.userId, this.conversationPage, 10).subscribe(
       res => {
+        console.log(res);
         let conversations: ConversationGet[] = res;
         for (let conver of conversations) {
           if (conver.message_content.length >= 10)
@@ -2286,7 +2292,7 @@ export class DoctorComponent implements OnInit {
   }
 
   updateConversationStatusById(conversationId: number, status: string, userId: number) {
-    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId, this.doctorGet.secureLogin).subscribe(
+    this.conversationService.updateConversationStatusById(conversationId, status, this.doctorGet.userId, userId).subscribe(
       res => {
         if (res) {
           this.openConversation.conversationStatus = status;

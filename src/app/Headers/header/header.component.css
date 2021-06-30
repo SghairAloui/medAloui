@@ -817,7 +817,8 @@ html,body{
     .loginHeaderUnder700 .fa-question,
     .loginHeaderUnder700 .fa-cog,
     .loginHeaderUnder700 .fa-bell,
-    .loginHeaderUnder700 .fa-sign-out-alt{
+    .loginHeaderUnder700 .fa-sign-out-alt,
+    .loginHeaderUnder700 .fa-user-md{
         font-size: 20px !important;
     }
     .loginHeaderUnder700 .loginHeaderItmes{
@@ -849,7 +850,8 @@ html,body{
     .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-question,
     .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-cog,
     .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-bell,
-    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-sign-out-alt{
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-sign-out-alt,
+    .loginHeaderUnder700 .loginHeaderItmes .item .icon .fa-user-md{
         position: absolute;
         top: 50%;
         left: 50%;

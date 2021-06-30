@@ -48,812 +48,820 @@
 </div>
 
 <body [class.disabledDiv]="popUp == true">
-    <div *ngIf="notVerified==true" class="sectionContainer notVerified">
-        <i class="fas fa-user-lock"></i>
-        <div class="accountNotVerified">
-            {{'accountNotVerified'|translate}}
-        </div>
-        <i class="fas fa-keyboard"></i> {{'enterVerificationCode'|translate}}:
-        <div class="inputVerificationCode" [class.invalidVerificationCode]="isVerificationCode==false">
-            <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1" class="verficationCodeNumber" #1
-                (keyup)="field1Keyup();isVerificationCode=null">
-            <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1" class="verficationCodeNumber" #2
-                (keyup)="field2Keyup();isVerificationCode=null">
-            <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1" class="verficationCodeNumber" #3
-                (keyup)="field3Keyup();isVerificationCode=null">
-            <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1" class="verficationCodeNumber" #4
-                (keyup)="field4Keyup();isVerificationCode=null">
-            <input type="text" name="field5Code" [(ngModel)]="field5Code" maxlength="1" class="verficationCodeNumber" #5
-                (keyup)="field5Keyup();isVerificationCode=null">
-        </div>
-        <div *ngIf="isVerificationCode==false" class="invalidText">
-            {{'verificationCodeNotValid'|translate}}
-        </div>
-        <button type="submit" class="fullyBtnSmall" (click)="checkVerificationCode()">{{'verify'|translate}}</button>
+    <div *ngIf="userInfoLoaded == false" class="loading">
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
-    <div *ngIf="notVerified==false">
-        <app-header></app-header>
-        <div class="pharmacyContainer">
-            <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer"
-                style="padding-top: 25px;">
-                <div *ngIf="!selectedUser">
-                    <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i)">
-                        <div *ngIf="user.userId != pharmacyGet.userId" class="searchedUser">
-                            <div class="searchedUserProfilePic">
-                                <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg + ')'"
-                                    class="profileImg">
-                                <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="searchedUserInfo">
-                                {{user.userFullName}}
-                                <div class="searchedUserType">
-                                    <span *ngIf="user.userType=='doctor'">
-                                        {{'doctor'|translate}}
-                                    </span>
-                                    <span *ngIf="user.userType=='patient'">
-                                        {{'patient'|translate}}
-                                    </span>
-                                    <span *ngIf="user.userType=='pharmacist'">
-                                        {{'pharmacy'|translate}}
-                                    </span>
-                                </div>
-                                <div *ngIf="user.userGender.length != 0" class="searchedUserGender">
-                                    <i class="fas fa-venus-mars"></i>
-                                    <span *ngIf="user.userGender == 'male'">
-                                        {{'male'|translate}}
-                                    </span>
-                                    <span *ngIf="user.userGender == 'female'">
-                                        {{'female'|translate}}
-                                    </span>
-                                </div>
-                                <div *ngIf="user.pharmacyType && user.pharmacyType.length != 0"
-                                    class="searchedUserGender">
-                                    <i class="fas fa-clock"></i>
-                                    <span *ngIf="user.pharmacyType == 'day'">
-                                        {{'day'|translate}}
-                                    </span>
-                                    <span *ngIf="user.pharmacyType == 'night'">
-                                        {{'night'|translate}}
-                                    </span>
-                                </div>
-                                <div class="searchedUserExactAddress">
-                                    <i class="fas fa-map-marker-alt"></i> {{user.userCity}}
-                                    <span *ngIf="user.userExactAddress && user.userExactAddress.length != 0">
-                                        - {{user.userExactAddress}}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="searchedUserSendMessage"
-                                (click)="startConversation(user.userId,user.userFullName,'',i)">
-                                <i class="fas fa-envelope"
-                                    [class.loadingMessages]="user.startingConversation==true"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="width: fit-content;margin: 10px auto;">
-                        <span *ngIf="loadMoreUsers == true" class="searchBtnOptions" (click)="findMoreUser()">
-                            {{'findMore'|translate}}
-                        </span>
-                        <span class="searchBtnOptions" (click)="searchedUsers=[]">
-                            {{'closeSearch'|translate}}
-                        </span>
-                    </div>
-                </div>
-                <div *ngIf="selectedUser" class="selectedUserContainer">
-                    <div class="selectedUserGoBack" (click)="selectedUser=null">
-                        <i class="fas fa-arrow-left"></i>
-                    </div>
-                    <div class="selectedUserFirstHalfInfo">
-                        <div class="selectedUserImgprofileContainer">
-                            <img *ngIf="selectedUser.userImg"
-                                [style.background-image]="'url(' + selectedUser.userImg + ')'" class="profileImg">
-                            <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
-                                class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="selectedUserInfo">
-                            <div class="selectedUserUsername">
-                                {{selectedUser.userFullName}}
-                            </div>
-                            <div style="border-left: 1px solid #308a7b;margin-left:5px;padding-left:10px;">
-                                <div *ngIf="selectedUser.pharmacyType && selectedUser.pharmacyType.length != 0">
-                                    <i class="fas fa-clock"></i>
-                                    <span *ngIf="selectedUser.pharmacyType == 'day'">
-                                        {{'day'|translate}}
-                                    </span>
-                                    <span *ngIf="selectedUser.pharmacyType == 'night'">
-                                        {{'night'|translate}}
-                                    </span>
-                                </div>
-                                <div>
-                                    <i class="fas fa-map-marker-alt"></i> {{selectedUser.userCity}}
-                                    <span
-                                        *ngIf="selectedUser.userExactAddress && selectedUser.userExactAddress.length != 0">
-                                        - {{selectedUser.userExactAddress}}
-                                    </span>
-                                </div>
-                                <div *ngIf="selectedUser.userGender.length != 0">
-                                    <i class="fas fa-venus-mars"></i>
-                                    <span *ngIf="selectedUser.userGender == 'male'">
-                                        {{'male'|translate}}
-                                    </span>
-                                    <span *ngIf="selectedUser.userGender == 'female'">
-                                        {{'female'|translate}}
-                                    </span>
-                                </div>
-                                <div *ngIf="selectedUser.userBirthDay.length != 0">
-                                    <i class="fas fa-birthday-cake"></i>
-                                    {{selectedUser.userBirthDay}}
-                                </div>
-                                <div *ngIf="selectedUser.userType == 'doctor'" class="selectedUserDoctorAppInfo">
-                                    <span *ngIf="selectedUser.startTime.length != 0">
-                                        <i class="fas fa-business-time"></i>
-                                        {{selectedUser.startTime}}
-                                    </span>
-                                    <span *ngIf="selectedUser.appPrice != 0">
-                                        <i class="fas fa-coins"></i>
-                                        {{selectedUser.appPrice}} Dt
-                                    </span>
-                                    <span *ngIf="selectedUser.appApproxDuration!= 0">
-                                        <i class="fas fa-hourglass-start"></i>
-                                        {{selectedUser.appApproxDuration}} Munite
-                                    </span>
-                                </div>
-                            </div>
-                            <button class="fullyBtnSmall"
-                                (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
-                                style="width: fit-content;margin: 10px auto; margin-left: 50%; transform: translateX(-50%);">
-                                {{'message'|translate}}
-                            </button>
-                        </div>
-                        <div style="width: fit-content; margin: 5px auto;">
-                            <button (click)="addMapRoute()" style="width: fit-content;" class="emptyBtn" *ngIf="(selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist')
-                         && selectedUser.userLatitude && selectedUser.userLongitude">
-                                {{'showRoute'|translate}}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="selectedUserSecondHalfInfo">
-                        <div *ngIf="selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist'">
-                            <div id="selectedUserMap">
-                                <div *ngIf="selectedUser.userLatitude && selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
-                                    class="userDontSetPos">
-                                    {{'loadingMap'|translate}}
-                                </div>
-                                <div class="userDontSetPos"
-                                    *ngIf=" selectedUser.userLatitude && selectedUser.userLatitude.length==0 && selectedUser.userLongitude.length==0">
-                                    {{selectedUser.userFullName}} {{'heHasNotSetHerPositionYet'|translate}}
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="selectedUser.userType == 'patient' && selectedUser.patientQuestions">
-                            <div style="font-weight: 600;margin: 7px auto;text-align: center;">
-                                {{'questions'|translate}}
-                            </div>
-                            <div style="margin: 7px auto;text-align: center;"
-                                *ngIf="selectedUser.patientQuestions.length == 0">
-                                <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span>
-                                {{'haveNoquestion'|translate}}
-                            </div>
-                            <div *ngIf="selectedUser.patientQuestions.length != 0">
-                                <div *ngFor="let ques of selectedUser.patientQuestions"
-                                    class="searchedUserQuestionContainer">
-                                    <div class="searchedUserQuestionContainerQuestionPostTime">
-                                        <span>
-                                            <i class="fas fa-calendar-day"></i> {{ques.questionPostTime | slice:0:10}}
-                                        </span>
-                                        <span>
-                                            <i class="fas fa-clock"></i> {{ques.questionPostTime |
-                                            slice:11:(ques.questionPostTime.length-3)}}
-                                        </span>
-                                    </div>
-                                    <div class="searchedUserQuestionContainerQuestion">
-                                        <div>
-                                            <i class="fas fa-question-circle"></i>
-                                        </div>
-                                        <div>
-                                            {{ques.question}} ?
-                                        </div>
-                                    </div>
-                                </div>
-                                <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions"
-                                    (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
-                                    <i class="fas fa-sort-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div *ngIf="userInfoLoaded == true">
+        <div *ngIf="notVerified==true" class="sectionContainer notVerified">
+            <i class="fas fa-user-lock"></i>
+            <div class="accountNotVerified">
+                {{'accountNotVerified'|translate}}
             </div>
-            <div class="messagesIcon" (click)="openMessages()">
-                <i class="fas fa-envelope"></i>
+            <i class="fas fa-keyboard"></i> {{'enterVerificationCode'|translate}}:
+            <div class="inputVerificationCode" [class.invalidVerificationCode]="isVerificationCode==false">
+                <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1" class="verficationCodeNumber" #1
+                    (keyup)="field1Keyup();isVerificationCode=null">
+                <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1" class="verficationCodeNumber" #2
+                    (keyup)="field2Keyup();isVerificationCode=null">
+                <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1" class="verficationCodeNumber" #3
+                    (keyup)="field3Keyup();isVerificationCode=null">
+                <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1" class="verficationCodeNumber" #4
+                    (keyup)="field4Keyup();isVerificationCode=null">
+                <input type="text" name="field5Code" [(ngModel)]="field5Code" maxlength="1" class="verficationCodeNumber" #5
+                    (keyup)="field5Keyup();isVerificationCode=null">
             </div>
-            <div *ngIf="newMessage != 0" class="newMessageDot"></div>
-            <div class="messagesContainer">
-                <div *ngFor="let smallConv of smallConversations; let i=index">
-                    <div [class.smallMessagesContainer]="i==0" [class.smallMessagesContainer1]="i==1"
-                        [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
-                        <div class="smallMessagesContainerImg">
-                            <div *ngIf="smallConv.userImg">
-                                <img [style.background-image]="'url(' + smallConv.userImg + ')'" class="profileImg">
-                            </div>
-                            <div *ngIf="smallConv.userImg==false">
-                                <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
-                            </div>
-                        </div>
-                        <div class="smallMessagesContainerUsername">
-                            {{smallConv.username}}
-                        </div>
-                        <div class="smallMessagesContainerClose" (click)="closeSmallConv(i)">
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div *ngIf="smallConv.isUnread==true && smallConv.lastMessageSenderId != pharmacyGet.userId"
-                            class="smallConvNewMessageDot"></div>
-                    </div>
-                </div>
-                <div *ngIf="openConversation" class="messagesConatiner">
-                    <div class="messagesContainerHeader">
-                        <div class="messageUsername">
-                            {{openConversation.username}}
-                        </div>
-                        <div class="messageCloseIcon">
-                            <span (click)="restoreConversation()" style="margin-right: 10px;">
-                                <i class="fas fa-window-restore"></i>
-                            </span>
-                            <span
-                                *ngIf="openConversation.conversationStatus == 'close' && (openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0)"
-                                style="margin-right: 10px;"
-                                (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
-                                <i class="fas fa-lock-open"></i>
-                            </span>
-                            <span
-                                *ngIf="openConversation.conversationStatus == 'open' && (openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0)"
-                                style="margin-right: 10px;"
-                                (click)="updateConversationStatusById(openConversation.conversationId,'close',openConversation.userId)">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                            <span (click)="openConversation=null">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
-                        (scroll)="messagesScroll($event)"
-                        (click)="readConversation(openConversation.lastMessageSenderId)"
-                        [class.messagesContainerBodyClosed]="openConversation.conversationStatus == 'close'">
-                        <div *ngIf="openConversation.loadMoreMessage" class="messageLoading">
-                            <div></div>
-                            <div></div>
-                        </div>
-                        <div *ngIf="!openConversation.loadMoreMessage">
-                            <div class="messageUsernameImgContainer">
-                                <div *ngIf="openConversation.userImg">
-                                    <img [style.background-image]="'url(' + openConversation.userImg + ')'"
+            <div *ngIf="isVerificationCode==false" class="invalidText">
+                {{'verificationCodeNotValid'|translate}}
+            </div>
+            <button type="submit" class="fullyBtnSmall" (click)="checkVerificationCode()">{{'verify'|translate}}</button>
+        </div>
+    
+        <div *ngIf="notVerified==false">
+            <app-header></app-header>
+            <div class="pharmacyContainer">
+                <div *ngIf="searchedUsers.length != 0" class="doctorContainer" id="searchedUsersContainer"
+                    style="padding-top: 25px;">
+                    <div *ngIf="!selectedUser">
+                        <div *ngFor="let user of searchedUsers;let i=index" (click)="showUserFullInfo(i)">
+                            <div *ngIf="user.userId != pharmacyGet.userId" class="searchedUser">
+                                <div class="searchedUserProfilePic">
+                                    <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg + ')'"
                                         class="profileImg">
+                                    <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
                                 </div>
-                                <div *ngIf="openConversation.userImg==false">
-                                    <i class="fas fa-user-tie"
-                                        style="font-size: 60px;bottom: 0px;position: absolute;"></i>
-                                </div>
-                            </div>
-                            <div class="messageUsernameContainer"> {{openConversation.username}} </div>
-                        </div>
-                        <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
-                            <div *ngIf="message.senderId==pharmacyGet.userId && message.messageContent.length != 0"
-                                class="senderMessageContainer">
-                                {{message.messageContent}}
-                            </div>
-                            <div *ngIf="message.senderId!=pharmacyGet.userId && message.messageContent.length != 0"
-                                id="{{message.messageDate}}" class="recipientMessageContainer">
-                                {{message.messageContent}}
-                            </div>
-                        </div>
-                        <div class="seenMessage"
-                            *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == pharmacyGet.userId">
-                            {{'seen'|translate}} <i class="fas fa-check"></i>
-                        </div>
-                        <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
-                            <div *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId"
-                                style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span
-                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
-                                    {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}}
-                                </span>
-                            </div>
-                            <div *ngIf="openConversation.statusUpdatedBy != pharmacyGet.userId"
-                                style="margin: 5px auto;">
-                                {{'convClosed'|translate}} <span
-                                    *ngIf="openConversation.conversationStatus == 'closeByDefault'">
-                                    {{'byDefault'|translate}} </span>
-                                <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}}
-                                    {{openConversation.username}} </span>
-                            </div>
-                            <button
-                                *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0"
-                                class="fullyBtnSmall sendRequestClosedMessage"
-                                (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
-                                {{'open'|translate}}
-                            </button>
-                            <div class="convClosed">
-                                <i class="fas fa-lock" style="margin-left: 5px;"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
-                        (click)="readConversation(openConversation.lastMessageSenderId)">
-                        <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
-                            (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}" class="messageInput">
-                        <span (click)="sendMessage()">
-                            <i class="fas fa-paper-plane sendMessageIcon"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="container=='profile' && pharmacyInfo">
-                <div *ngIf="pharmacyGet.pharmacyStatus!='approved'">
-                    <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved'" class="notApproved">
-                        <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
-                        <ng-template #showNotApprovedInfo>
-                            {{'notApprovedText'|translate}}, <span class="textLien"
-                                (click)="notApproved='why'">{{'why'|translate}}</span>
-                        </ng-template>
-                        <ng-template #showNotApprovedWhy>
-                            {{'notApprovedWhy'|translate}}
-                            <div class="center">
-                                <button (click)="toNotApprovedSection()" class="emptyBtn white">
-                                    {{'approveAccount'|translate}}
-                                </button><br>
-                                <span class="textLien"
-                                    (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
-                            </div>
-                        </ng-template>
-                    </div>
-                    <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'"
-                        class="notApproved">
-                        {{'pendingInfo'|translate}}<br>
-                    </div>
-                    <div *ngIf="pharmacyGet.pharmacyStatus=='disapproved'" class="disapprovedByAdmin">
-                        {{'disapprovedText'|translate}}<br><span class="textLien"
-                            (click)="toNotApprovedSection()">{{'disapprovedReVerify'|translate}}</span>
-                    </div>
-                    <div *ngIf="deleteAccount" class="disapprovedByAdmin">
-                        {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
-                    </div>
-                </div>
-                <section id="generalInfoSection">
-                    <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                    <div class="newSectionContainer" *ngIf="generalInfo=='show'">
-                        <div class="sectionContainerTopGreen"></div>
-                        <div>
-                            <div class="imgContainer">
-                                <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
-                                <div class="editImage">
-                                    <ng-template #showProfileImg><img
-                                            [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
-                                    </ng-template>
-                                    <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                    <div class="centerChangeText">{{'changeImage'|translate}}</div>
-                                </div>
-                                <div class="strok">
-                                    <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
-                                </div>
-                            </div>
-                            <div *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="verified">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="doctorGeneralInfo">
-                                <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}} <i *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="fas fa-check-circle pharVerfied"></i></div>
-                                <div id="pharmacyEmail">
-                                    <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="iconButton" style="margin-top: 20px;"
-                            (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
-
-                        <div class="pharmcyGenInfo">
-                            <div class="userInfoContainer">
-                                <div class="userInfoContainerTitle">
-                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                                <div class="searchedUserInfo">
+                                    {{user.userFullName}}
+                                    <div class="searchedUserType">
+                                        <span *ngIf="user.userType=='doctor'">
+                                            {{'doctor'|translate}}
+                                        </span>
+                                        <span *ngIf="user.userType=='patient'">
+                                            {{'patient'|translate}}
+                                        </span>
+                                        <span *ngIf="user.userType=='pharmacist'">
+                                            {{'pharmacy'|translate}}
+                                        </span>
                                     </div>
-                                    <div class="userInfoContainerTitleValue">
-                                        {{'city'|translate}}
+                                    <div *ngIf="user.userGender.length != 0" class="searchedUserGender">
+                                        <i class="fas fa-venus-mars"></i>
+                                        <span *ngIf="user.userGender == 'male'">
+                                            {{'male'|translate}}
+                                        </span>
+                                        <span *ngIf="user.userGender == 'female'">
+                                            {{'female'|translate}}
+                                        </span>
+                                    </div>
+                                    <div *ngIf="user.pharmacyType && user.pharmacyType.length != 0"
+                                        class="searchedUserGender">
+                                        <i class="fas fa-clock"></i>
+                                        <span *ngIf="user.pharmacyType == 'day'">
+                                            {{'day'|translate}}
+                                        </span>
+                                        <span *ngIf="user.pharmacyType == 'night'">
+                                            {{'night'|translate}}
+                                        </span>
+                                    </div>
+                                    <div class="searchedUserExactAddress">
+                                        <i class="fas fa-map-marker-alt"></i> {{user.userCity}}
+                                        <span *ngIf="user.userExactAddress && user.userExactAddress.length != 0">
+                                            - {{user.userExactAddress}}
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="userInfoContainerValue">
-                                    {{pharmacyGet.userCity}}
-                                </div>
-                            </div>
-
-                            <div class="userInfoContainer"
-                                (click)="todaysPresNumberChanged=false;pharmacyPrescriptionsPage=0;getPharmacyPrescriptionsById()">
-                                <div *ngIf="todaysPresNumberChanged" class="todaysNumberDot"></div>
-                                <div class="userInfoContainerTitle">
-                                    <div class="userInfoContainerTitleIcon"><i class="fas fa-hospital-user"></i>
-                                    </div>
-                                    <div class="userInfoContainerTitleValue">
-                                        {{'todayPres'|translate}}
-                                    </div>
-                                </div>
-                                <div class="userInfoContainerValue">
-                                    {{todaysPresNumber}}
+                                <div class="searchedUserSendMessage"
+                                    (click)="startConversation(user.userId,user.userFullName,'',i)">
+                                    <i class="fas fa-envelope"
+                                        [class.loadingMessages]="user.startingConversation==true"></i>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="sectionContainer" *ngIf="generalInfo=='edit'">
-                        <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
-                        <ng-template #updateGeneralInfo>
-                            <div class="infoEdit">
-                                <div class="formDiv">
-                                    <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable"
-                                        name="pharmacyName" [(ngModel)]="pharmacyName"
-                                        (keyup)="comparePharmacyName();pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{pharmacyNameInformation}}
-                                    </label>
-                                </div>
-                                <div class="formDiv">
-                                    <input type="text" list="governoratelistOptions"
-                                        [class.labelInvalidInfo]="invalidAdressVariable" name="adress"
-                                        [(ngModel)]="adress"
-                                        (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{adressInformation}}
-                                        <datalist id="governoratelistOptions">
-                                            <option *ngFor="let city of cities" value="{{city}}">
-                                        </datalist>
-                                    </label>
-                                </div>
-
-                            </div>
-                            <div class="textLien" style="padding-left: 50px;"
-                                (click)="changePasswordClick();passwordDis=true;">
-                                {{'changePassword'|translate}} ?</div>
-                            <div class="buttons">
-                                <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
-                                <button class="fullyBtn" (click)="checkForm()"
-                                    [disabled]="disableSaveBtn">{{'update'|translate}}</button>
-                            </div>
-                        </ng-template>
-                        <ng-template #updateSecureInfo>
-                            <span class="changeNote">{{'noteChangerPassOrUsername'|translate}}</span>
-                            <div *ngIf="editPassword; then showEditPassword else showEditUsername"></div>
-                            <ng-template #showEditPassword>
-                                <div class="infoEdit">
-                                    <div class="formDiv">
-                                        <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
-                                            name="password" [(ngModel)]="password"
-                                            (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
-                                            class="formInput" placeholder=" ">
-                                        <label for="" class="formLabel">
-                                            {{passwordInfromation}}
-                                        </label>
-                                    </div>
-                                    <div class="formDiv">
-                                        <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
-                                            name="passwordRepeat" [(ngModel)]="passwordRepeat"
-                                            (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false;passwordDis=false;"
-                                            class="formInput" placeholder=" ">
-                                        <label for="" class="formLabel">
-                                            {{passwordRepeatInfromation}}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="buttons">
-                                    <button class="fullyBtn"
-                                        (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
-                                    <button class="fullyBtn" (click)="updatePassword()"
-                                        [disabled]="passwordDis">{{'update'|translate}}</button>
-                                </div>
-                            </ng-template>
-                            <ng-template #showEditUsername>
-                                <div class="formDiv editUserName">
-                                    <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
-                                        [(ngModel)]="mail"
-                                        (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{mailInformation}}
-                                    </label>
-                                </div>
-                                <div class="buttons">
-                                    <button class="fullyBtn"
-                                        (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
-                                    <button class="fullyBtn" (click)="updateUsername()"
-                                        [disabled]="disableChnageUsernameBtn">{{'update'|translate}}</button>
-                                </div>
-                            </ng-template>
-                        </ng-template>
-                    </div>
-
-                </section>
-
-                <div *ngIf="showMyPres==true" id="allMyPrescriptions" style="padding-top: 40px;">
-
-                    <div class="sectionContainer">
-                        <div *ngIf="loadingPrescriptions == true && pharmacyPrescriptionsPage == 0 && pharmacyPrescriptions && pharmacyPrescriptions.list.length == 0"
-                            class="loadingPrescription">
-                            <i class="fas fa-file-medical" style="margin-left: 50%;"></i>
-                        </div>
-
-                        <div class="fixSearchBox">
-                            <input type="text" class="fixSearchBoxInput" placeholder="{{'search'|translate}}"
-                                (keyup)="pharmacyPrescriptionsPage=0" name="searchPrescription"
-                                [(ngModel)]="searchPrescription" (keyup.enter)="getPharmacyPrescriptionsById()">
-                            <span (click)="getPharmacyPrescriptionsById()">
-                                <i class="fas fa-search"></i>
+                        <div style="width: fit-content;margin: 10px auto;">
+                            <span *ngIf="loadMoreUsers == true" class="searchBtnOptions" (click)="findMoreUser()">
+                                {{'findMore'|translate}}
+                            </span>
+                            <span class="searchBtnOptions" (click)="searchedUsers=[]">
+                                {{'closeSearch'|translate}}
                             </span>
                         </div>
-
-                        <div *ngIf="pharmacyPrescriptions.list.length == 0" class="noWaitingPres">
-                            {{'youHaveNotAnyWaitingPrescription'|translate}}
-                        </div>
-                        <div class="closeMypres" (click)="showMyPres=false;">
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div *ngIf="pharmacyPrescriptions.list.length != 0">
-                            <div *ngFor="let pres of pharmacyPrescriptions.list;let p = index">
-                                <div class="prescription"
-                                    (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName,p,pres.patientId)"
-                                    (mouseleave)="hoveredPrescription=-2" (mouseenter)="hoveredPrescription=p">
-                                    <span style="text-transform: capitalize;">
-                                        {{pres.patientFirstName}}
-                                        <span style="font-weight: 600;">
-                                            {{pres.patientLastName}}
-                                        </span>
-                                    </span>
-                                    <div class="prescriptionTime">
-                                        <i class="fas fa-calendar-day"></i> | {{pres.time_sent | slice:0:10}} <i
-                                            class="fas fa-clock"></i> | {{pres.time_sent | slice:11:16}}
-                                    </div>
-                                    <span style="text-transform: capitalize; ">
-                                        {{pres.doctorFirstName}}
-                                        <span style="font-weight: 600;">
-                                            {{pres.doctorLastName}}
-                                        </span>
-                                    </span>
-                                    <div *ngIf="pharmacyPrescriptions.list[p+1]" class="prescriptionLine"
-                                        [class.opacity0]="hoveredPrescription == (p+1) || hoveredPrescription == (p)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-left: 50%;transform: translateX(-50%);width: fit-content;">
-                                <div *ngFor="let page of pharmacyPrescriptionsPages; let p = index" class="page"
-                                    (click)="changePharmacyPrescriptionsPage(p)"
-                                    [class.disabledPage]="page > pharmacyPrescriptions.totalPages"
-                                    [class.pageLoading]="loadingPrescriptions == true"
-                                    [class.loadingPages]="loadingPrescriptions == true">
-                                    <div [class.pageSlected]="page == (pharmacyPrescriptionsPage + 1)"
-                                        style="display: inline-block;">
-                                        <span class="pageIndex">
-                                            {{page}}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-                </div>
-
-                <section *ngIf="pharmacyGet.pharmacyStatus!='approved'" id="approvePharmacySection">
-                    <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved' || pharmacyGet.pharmacyStatus=='disapproved'">
-                        <div class="sectionTitle">{{'notApproved'|translate}}</div>
-                        <div class="sectionContainer">
-                            <div class="toProveYourAccount">
-                                {{'toProveYourAccount'|translate}}
-                            </div>
-                            <div class="pharmacyType">
-                                <div *ngIf="accountType" class="selectPharmacyType">
-                                    {{'selectPharmacyType'|translate}}
-                                    <div class="dashedLine"></div>
-                                </div>
-                                <input type="radio" id="dayPh" name="ph"
-                                    (change)="dayPh=true;nightPh=false;accountType=false;" (checked)="dayPh">
-                                <label for="dayPh" class="dayPhLabel"> {{'dayPharmacy'|translate}} </label>
-                                <input type="radio" id="nightPh" name="ph"
-                                    (change)="dayPh=false;nightPh=true;accountType=false;" (checked)="nightPh">
-                                <label for="nightPh" class="nightPhLabel"> {{'nightPharmacy'|translate}} </label>
-                            </div>
-                            <div class="infoContainer" style="box-shadow: none;">
-                                <div class="formDiv exactAddress">
-                                    <input type="text" [class.labelInvalidInfo]="invalidExactAddress"
-                                        name="exactAddress" [(ngModel)]="exactAddress"
-                                        (keyup)="exactAddressInformation=translate.instant('exactAddress');invalidExactAddress=false"
-                                        class="formInput" placeholder=" ">
-                                    <label for="" class="formLabel">
-                                        {{exactAddressInformation}}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="infoGrid">
-                                <div class="infoContainer proveContainer">
-                                    <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
-                                    <ng-template #cinUploadedSuccessfully>
-                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                        <div class="editPic">
-                                            <ng-template #showProfileImg><img
-                                                    [style.background-image]="'url(' + retrievedImage + ')'"
-                                                    class="profileImg">
-                                            </ng-template>
-                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                            <div class="center">{{'changeImage'|translate}}</div>
-                                        </div>
-                                        <div class="photoUploaded">
-                                            <i class="fas fa-check-circle"></i><br>
-                                            {{'PhotoUploadedSucc'|translate}}
-                                        </div>
-                                    </ng-template>
-                                    <ng-template #uploadCin>
-                                        <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
-                                        <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
-                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                        <div class="info">
-                                            {{'nationalIdentityCard'|translate}}
-                                        </div>
-                                    </ng-template>
-                                </div>
-                                <div class="infoContainer proveContainer">
-                                    <div
-                                        *ngIf="pharmacyOwnershipPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
-                                    </div>
-                                    <ng-template #medicalClinicUploadedSuccessfully>
-                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                            class="uploadImgBtn">
-                                        <div class="editPic">
-                                            <ng-template #showProfileImg><img
-                                                    [style.background-image]="'url(' + retrievedImage + ')'"
-                                                    class="profileImg">
-                                            </ng-template>
-                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                            <div class="center">{{'changeImage'|translate}}</div>
-                                        </div>
-                                        <div class="photoUploaded">
-                                            <i class="fas fa-check-circle"></i><br>
-                                            {{'PhotoUploadedSucc'|translate}}
-                                        </div>
-                                    </ng-template>
-                                    <ng-template #uploadMedicalClinic>
-                                        <input type="file" (change)="onFileChangedMedicalClinic($event)"
-                                            class="uploadImgBtn">
-                                        <div class="infoTitle"><input type="file"
-                                                (change)="onFileChangedMedicalClinic($event)"
-                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                        <div class="info">
-                                            {{'ownershipOfPharmacy'|translate}}
-                                        </div>
-                                    </ng-template>
-                                </div>
-                                <div class="infoContainer proveContainer">
-                                    <div
-                                        *ngIf="pharmacySpecialty; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
-                                    </div>
-                                    <ng-template #medicalSpecialtyUploadedSuccessfully>
-                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                            class="uploadImgBtn">
-                                        <div class="editPic">
-                                            <ng-template #showProfileImg><img
-                                                    [style.background-image]="'url(' + retrievedImage + ')'"
-                                                    class="profileImg">
-                                            </ng-template>
-                                            <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
-                                            <div class="center">{{'changeImage'|translate}}</div>
-                                        </div>
-                                        <div class="photoUploaded">
-                                            <i class="fas fa-check-circle"></i><br>
-                                            {{'PhotoUploadedSucc'|translate}}
-                                        </div>
-                                    </ng-template>
-                                    <ng-template #uploadMedicalSpecialty>
-                                        <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
-                                            class="uploadImgBtn">
-                                        <div class="infoTitle"><input type="file"
-                                                (change)="onFileChangedMedicalSpecialty($event)"
-                                                class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
-                                        <div class="info">
-                                            {{'PictureProvingSpecialty'|translate}}
-                                        </div>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div *ngIf="cinPic && pharmacyOwnershipPic && pharmacySpecialty">
-                                <button class="emptyBtn"
-                                    (click)="submitPharmacyDocuments();">{{'submitDocuments'|translate}}</button>
-                            </div>
+                    <div *ngIf="selectedUser" class="selectedUserContainer">
+                        <div class="selectedUserGoBack" (click)="selectedUser=null">
+                            <i class="fas fa-arrow-left"></i>
                         </div>
-                    </div>
-                    <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'">
-                        <section id="pendingSection">
-                            <div class="sectionTitle">{{'pending'|translate}}</div>
-                            <div class="sectionContainer pending">
-                                {{'pendingForConfirmation'|translate}}<br>
-                                <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
+                        <div class="selectedUserFirstHalfInfo">
+                            <div class="selectedUserImgprofileContainer">
+                                <img *ngIf="selectedUser.userImg"
+                                    [style.background-image]="'url(' + selectedUser.userImg + ')'" class="profileImg">
+                                <i *ngIf="selectedUser.userImg == false" style="font-size: 90px; bottom: 0px;"
+                                    class="fas fa-user-tie"></i>
                             </div>
-                        </section>
-                    </div>
-                </section>
-
-                <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="myMedicamentsSection">
-                    <div class="sectionTitle">{{'myMedicaments'|translate}}</div>
-                    <div class="sectionContainer">
-                        <div *ngIf="savingExcelFile" class="loadingConatiner">
-                            <div class="loading">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                        <div class="excelNote">
-                            {{'excelImportNote'|translate}}
-                        </div>
-                        <div class="uploadExcelFileBtn">
-                            <input type="file" (change)="saveExcelFile($event)" class="excelFileInput">
-                            {{'updateMyMedicaments'|translate}}
-                        </div>
-                        <div *ngIf="myMedicamentNumber == 0" class="noMedicamentInfo">
-                            {{'noMedicamentInfo'|translate}}
-                        </div>
-                        <div *ngIf="myMedicamentNumber != 0" style="margin-top: 10px;">
-                            <div class="medicamentsFound">
-                                {{myMedicamentNumber}} {{'medicamentsFound'|translate}}
-                                <div class="greenLineMed"></div>
-                            </div>
-                            <div class="findForMedicamentName">
-                                {{'find'|translate}} <i class="fas fa-search"></i>
-                            </div>
-                            <div class="formDiv medicamentName">
-                                <span class="mesure spanButton" (click)="searchMedByNameAndPharmacyId()">
-                                    {{'find'|translate}}
-                                </span>
-                                <input type="text" name="medicamentName" (keyup.enter)="searchMedByNameAndPharmacyId()"
-                                    [(ngModel)]="medicamentName" class="formInput" placeholder=" ">
-                                <label for="" class="formLabel">
-                                    {{'medicamentName'|translate}}
-                                </label>
-                            </div>
-                            <div *ngFor="let med of myMedicaments ;let m = index">
-                                <div class="medicament">
-                                    <div *ngIf="med.deleted" class="deletedMed">
-                                        <div class="deletedMedCenterText">
-                                            {{med.medicamentName}} {{'deleted'|translate}}
-                                        </div>
-                                    </div>
-                                    <div class="phMedicamentName">
-                                        {{med.medicamentName}}
+                            <div class="selectedUserInfo">
+                                <div class="selectedUserUsername">
+                                    {{selectedUser.userFullName}}
+                                </div>
+                                <div style="border-left: 1px solid #308a7b;margin-left:5px;padding-left:10px;">
+                                    <div *ngIf="selectedUser.pharmacyType && selectedUser.pharmacyType.length != 0">
+                                        <i class="fas fa-clock"></i>
+                                        <span *ngIf="selectedUser.pharmacyType == 'day'">
+                                            {{'day'|translate}}
+                                        </span>
+                                        <span *ngIf="selectedUser.pharmacyType == 'night'">
+                                            {{'night'|translate}}
+                                        </span>
                                     </div>
                                     <div>
-                                        <button class="fullyBtn red"
-                                            (click)="openPopUp('confirmDeleteMedicament',med.medicamentStockId,m)">
-                                            {{'delete'|translate}}
-                                        </button>
+                                        <i class="fas fa-map-marker-alt"></i> {{selectedUser.userCity}}
+                                        <span
+                                            *ngIf="selectedUser.userExactAddress && selectedUser.userExactAddress.length != 0">
+                                            - {{selectedUser.userExactAddress}}
+                                        </span>
+                                    </div>
+                                    <div *ngIf="selectedUser.userGender.length != 0">
+                                        <i class="fas fa-venus-mars"></i>
+                                        <span *ngIf="selectedUser.userGender == 'male'">
+                                            {{'male'|translate}}
+                                        </span>
+                                        <span *ngIf="selectedUser.userGender == 'female'">
+                                            {{'female'|translate}}
+                                        </span>
+                                    </div>
+                                    <div *ngIf="selectedUser.userBirthDay.length != 0">
+                                        <i class="fas fa-birthday-cake"></i>
+                                        {{selectedUser.userBirthDay}}
+                                    </div>
+                                    <div *ngIf="selectedUser.userType == 'doctor'" class="selectedUserDoctorAppInfo">
+                                        <span *ngIf="selectedUser.startTime.length != 0">
+                                            <i class="fas fa-business-time"></i>
+                                            {{selectedUser.startTime}}
+                                        </span>
+                                        <span *ngIf="selectedUser.appPrice != 0">
+                                            <i class="fas fa-coins"></i>
+                                            {{selectedUser.appPrice}} Dt
+                                        </span>
+                                        <span *ngIf="selectedUser.appApproxDuration!= 0">
+                                            <i class="fas fa-hourglass-start"></i>
+                                            {{selectedUser.appApproxDuration}} Munite
+                                        </span>
+                                    </div>
+                                </div>
+                                <button class="fullyBtnSmall"
+                                    (click)="startConversation(selectedUser.userId,selectedUser.userFullName,'',0)"
+                                    style="width: fit-content;margin: 10px auto; margin-left: 50%; transform: translateX(-50%);">
+                                    {{'message'|translate}}
+                                </button>
+                            </div>
+                            <div style="width: fit-content; margin: 5px auto;">
+                                <button (click)="addMapRoute()" style="width: fit-content;" class="emptyBtn" *ngIf="(selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist')
+                             && selectedUser.userLatitude && selectedUser.userLongitude">
+                                    {{'showRoute'|translate}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="selectedUserSecondHalfInfo">
+                            <div *ngIf="selectedUser.userType == 'doctor' || selectedUser.userType == 'pharmacist'">
+                                <div id="selectedUserMap">
+                                    <div *ngIf="selectedUser.userLatitude && selectedUser.userLatitude.length!=0 && selectedUser.userLongitude.length!=0"
+                                        class="userDontSetPos">
+                                        {{'loadingMap'|translate}}
+                                    </div>
+                                    <div class="userDontSetPos"
+                                        *ngIf=" selectedUser.userLatitude && selectedUser.userLatitude.length==0 && selectedUser.userLongitude.length==0">
+                                        {{selectedUser.userFullName}} {{'heHasNotSetHerPositionYet'|translate}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="selectedUser.userType == 'patient' && selectedUser.patientQuestions">
+                                <div style="font-weight: 600;margin: 7px auto;text-align: center;">
+                                    {{'questions'|translate}}
+                                </div>
+                                <div style="margin: 7px auto;text-align: center;"
+                                    *ngIf="selectedUser.patientQuestions.length == 0">
+                                    <span style="text-transform: capitalize;">{{selectedUser.userFullName}}</span>
+                                    {{'haveNoquestion'|translate}}
+                                </div>
+                                <div *ngIf="selectedUser.patientQuestions.length != 0">
+                                    <div *ngFor="let ques of selectedUser.patientQuestions"
+                                        class="searchedUserQuestionContainer">
+                                        <div class="searchedUserQuestionContainerQuestionPostTime">
+                                            <span>
+                                                <i class="fas fa-calendar-day"></i> {{ques.questionPostTime | slice:0:10}}
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-clock"></i> {{ques.questionPostTime |
+                                                slice:11:(ques.questionPostTime.length-3)}}
+                                            </span>
+                                        </div>
+                                        <div class="searchedUserQuestionContainerQuestion">
+                                            <div>
+                                                <i class="fas fa-question-circle"></i>
+                                            </div>
+                                            <div>
+                                                {{ques.question}} ?
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="selectedUser.loadMoreQuestion == true" class="searchedUserLoadMoreQuestions"
+                                        (click)="getPatientQuestionsById(selectedUser.userId, selectedUser.patientQuestionsPage)">
+                                        <i class="fas fa-sort-down"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <section id="myPositionSection">
-                        <div class="sectionTitle">{{'myPosition'|translate}}</div>
-                        <div *ngIf="position" class="myMap">
-                            <div *ngIf="position" id="map"></div>
+                </div>
+                <div class="messagesIcon" (click)="openMessages(false)">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div *ngIf="newMessage != 0" class="newMessageDot"></div>
+                <div class="messagesContainer">
+                    <div *ngFor="let smallConv of smallConversations; let i=index">
+                        <div [class.smallMessagesContainer]="i==0" [class.smallMessagesContainer1]="i==1"
+                            [class.smallMessagesContainer2]="i==2" (click)="showFullconv(i)">
+                            <div class="smallMessagesContainerImg">
+                                <div *ngIf="smallConv.userImg">
+                                    <img [style.background-image]="'url(' + smallConv.userImg + ')'" class="profileImg">
+                                </div>
+                                <div *ngIf="smallConv.userImg==false">
+                                    <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
+                                </div>
+                            </div>
+                            <div class="smallMessagesContainerUsername">
+                                {{smallConv.username}}
+                            </div>
+                            <div class="smallMessagesContainerClose" (click)="closeSmallConv(i)">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div *ngIf="smallConv.isUnread==true && smallConv.lastMessageSenderId != pharmacyGet.userId"
+                                class="smallConvNewMessageDot"></div>
                         </div>
-                        <div *ngIf="!position" class="noPosition">
-                            {{'noPositionSaved'|translate}} <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div *ngIf="openConversation" class="messagesConatiner">
+                        <div class="messagesContainerHeader">
+                            <div class="messageUsername">
+                                {{openConversation.username}}
+                            </div>
+                            <div class="messageCloseIcon">
+                                <span (click)="restoreConversation()" style="margin-right: 10px;">
+                                    <i class="fas fa-window-restore"></i>
+                                </span>
+                                <span
+                                    *ngIf="openConversation.conversationStatus == 'close' && (openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0)"
+                                    style="margin-right: 10px;"
+                                    (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
+                                    <i class="fas fa-lock-open"></i>
+                                </span>
+                                <span
+                                    *ngIf="openConversation.conversationStatus == 'open' && (openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0)"
+                                    style="margin-right: 10px;"
+                                    (click)="updateConversationStatusById(openConversation.conversationId,'close',openConversation.userId)">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <span (click)="openConversation=null">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </div>
                         </div>
-                        <button class="emptyBtn" style="margin-bottom: 15px;" (click)="updateMyPosition()">
-                            {{'updateMyPosition'|translate}}
-                        </button>
+                        <div class="messagesContainerBody" #messagesContainer id="messagesContainer"
+                            (scroll)="messagesScroll($event)"
+                            (click)="readConversation(openConversation.lastMessageSenderId)"
+                            [class.messagesContainerBodyClosed]="openConversation.conversationStatus == 'close'">
+                            <div *ngIf="openConversation.loadMoreMessage" class="messageLoading">
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div *ngIf="!openConversation.loadMoreMessage">
+                                <div class="messageUsernameImgContainer">
+                                    <div *ngIf="openConversation.userImg">
+                                        <img [style.background-image]="'url(' + openConversation.userImg + ')'"
+                                            class="profileImg">
+                                    </div>
+                                    <div *ngIf="openConversation.userImg==false">
+                                        <i class="fas fa-user-tie"
+                                            style="font-size: 60px;bottom: 0px;position: absolute;"></i>
+                                    </div>
+                                </div>
+                                <div class="messageUsernameContainer"> {{openConversation.username}} </div>
+                            </div>
+                            <div *ngFor="let message of openConversation.messages; let i=index" id="message{{i}}">
+                                <div *ngIf="message.senderId==pharmacyGet.userId && message.messageContent.length != 0"
+                                    class="senderMessageContainer">
+                                    {{message.messageContent}}
+                                </div>
+                                <div *ngIf="message.senderId!=pharmacyGet.userId && message.messageContent.length != 0"
+                                    id="{{message.messageDate}}" class="recipientMessageContainer">
+                                    {{message.messageContent}}
+                                </div>
+                            </div>
+                            <div class="seenMessage"
+                                *ngIf="openConversation.isUnread==false && openConversation.lastMessageSenderId == pharmacyGet.userId">
+                                {{'seen'|translate}} <i class="fas fa-check"></i>
+                            </div>
+                            <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
+                                <div *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId"
+                                    style="margin: 5px auto;">
+                                    {{'convClosed'|translate}} <span
+                                        *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                        {{'byDefault'|translate}} </span>
+                                    <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}}
+                                    </span>
+                                </div>
+                                <div *ngIf="openConversation.statusUpdatedBy != pharmacyGet.userId"
+                                    style="margin: 5px auto;">
+                                    {{'convClosed'|translate}} <span
+                                        *ngIf="openConversation.conversationStatus == 'closeByDefault'">
+                                        {{'byDefault'|translate}} </span>
+                                    <span *ngIf="openConversation.conversationStatus == 'close'"> {{'by'|translate}}
+                                        {{openConversation.username}} </span>
+                                </div>
+                                <button
+                                    *ngIf="openConversation.statusUpdatedBy == pharmacyGet.userId || openConversation.statusUpdatedBy == 0"
+                                    class="fullyBtnSmall sendRequestClosedMessage"
+                                    (click)="updateConversationStatusById(openConversation.conversationId,'open',openConversation.userId)">
+                                    {{'open'|translate}}
+                                </button>
+                                <div class="convClosed">
+                                    <i class="fas fa-lock" style="margin-left: 5px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
+                            (click)="readConversation(openConversation.lastMessageSenderId)">
+                            <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
+                                (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}" class="messageInput">
+                            <span (click)="sendMessage()">
+                                <i class="fas fa-paper-plane sendMessageIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="container=='profile' && pharmacyInfo">
+                    <div *ngIf="pharmacyGet.pharmacyStatus!='approved'">
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved'" class="notApproved">
+                            <div *ngIf="notApproved=='info'; then showNotApprovedInfo else showNotApprovedWhy"></div>
+                            <ng-template #showNotApprovedInfo>
+                                {{'notApprovedText'|translate}}, <span class="textLien"
+                                    (click)="notApproved='why'">{{'why'|translate}}</span>
+                            </ng-template>
+                            <ng-template #showNotApprovedWhy>
+                                {{'notApprovedWhy'|translate}}
+                                <div class="center">
+                                    <button (click)="toNotApprovedSection()" class="emptyBtn white">
+                                        {{'approveAccount'|translate}}
+                                    </button><br>
+                                    <span class="textLien"
+                                        (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'"
+                            class="notApproved">
+                            {{'pendingInfo'|translate}}<br>
+                        </div>
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='disapproved'" class="disapprovedByAdmin">
+                            {{'disapprovedText'|translate}}<br><span class="textLien"
+                                (click)="toNotApprovedSection()">{{'disapprovedReVerify'|translate}}</span>
+                        </div>
+                        <div *ngIf="deleteAccount" class="disapprovedByAdmin">
+                            {{'disapprovedPermanentlyText'|translate}}, {{'thanksForChoosingHealthCare'|translate}}
+                        </div>
+                    </div>
+                    <section id="generalInfoSection">
+                        <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                        <div class="newSectionContainer" *ngIf="generalInfo=='show'">
+                            <div class="sectionContainerTopGreen"></div>
+                            <div>
+                                <div class="imgContainer">
+                                    <div *ngIf="retrievedImage; then showProfileImg else showDefaultImg"></div>
+                                    <div class="editImage">
+                                        <ng-template #showProfileImg><img
+                                                [style.background-image]="'url(' + retrievedImage + ')'" class="profileImg">
+                                        </ng-template>
+                                        <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                        <div class="centerChangeText">{{'changeImage'|translate}}</div>
+                                    </div>
+                                    <div class="strok">
+                                        <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                                    </div>
+                                </div>
+                                <div *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="verified">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="doctorGeneralInfo">
+                                    <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}} <i *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="fas fa-check-circle pharVerfied"></i></div>
+                                    <div id="pharmacyEmail">
+                                        <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <button class="iconButton" style="margin-top: 20px;"
+                                (click)="generalInfo='edit';initializeEditLabel();"><i class="far fa-edit"></i></button>
+    
+                            <div class="pharmcyGenInfo">
+                                <div class="userInfoContainer">
+                                    <div class="userInfoContainerTitle">
+                                        <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                                        </div>
+                                        <div class="userInfoContainerTitleValue">
+                                            {{'city'|translate}}
+                                        </div>
+                                    </div>
+                                    <div class="userInfoContainerValue">
+                                        {{pharmacyGet.userCity}}
+                                    </div>
+                                </div>
+    
+                                <div class="userInfoContainer"
+                                    (click)="todaysPresNumberChanged=false;pharmacyPrescriptionsPage=0;getPharmacyPrescriptionsById()">
+                                    <div *ngIf="todaysPresNumberChanged" class="todaysNumberDot"></div>
+                                    <div class="userInfoContainerTitle">
+                                        <div class="userInfoContainerTitleIcon"><i class="fas fa-hospital-user"></i>
+                                        </div>
+                                        <div class="userInfoContainerTitleValue">
+                                            {{'todayPres'|translate}}
+                                        </div>
+                                    </div>
+                                    <div class="userInfoContainerValue">
+                                        {{todaysPresNumber}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="sectionContainer" *ngIf="generalInfo=='edit'">
+                            <div *ngIf="editeSecureInfo; then updateSecureInfo else updateGeneralInfo"></div>
+                            <ng-template #updateGeneralInfo>
+                                <div class="infoEdit">
+                                    <div class="formDiv">
+                                        <input type="text" [class.labelInvalidInfo]="invalidPharmacyNameVariable"
+                                            name="pharmacyName" [(ngModel)]="pharmacyName"
+                                            (keyup)="comparePharmacyName();pharmacyNameInformation=translate.instant('pharmacyName');invalidPharmacyNameVariable=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{pharmacyNameInformation}}
+                                        </label>
+                                    </div>
+                                    <div class="formDiv">
+                                        <input type="text" list="governoratelistOptions"
+                                            [class.labelInvalidInfo]="invalidAdressVariable" name="adress"
+                                            [(ngModel)]="adress"
+                                            (keyup)="compareCity();adressInformation=translate.instant('city');invalidAdressVariable=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{adressInformation}}
+                                            <datalist id="governoratelistOptions">
+                                                <option *ngFor="let city of cities" value="{{city}}">
+                                            </datalist>
+                                        </label>
+                                    </div>
+    
+                                </div>
+                                <div class="textLien" style="padding-left: 50px;"
+                                    (click)="changePasswordClick();passwordDis=true;">
+                                    {{'changePassword'|translate}} ?</div>
+                                <div class="buttons">
+                                    <button class="fullyBtn" (click)="generalInfo='show';">{{'goBack'|translate}}</button>
+                                    <button class="fullyBtn" (click)="checkForm()"
+                                        [disabled]="disableSaveBtn">{{'update'|translate}}</button>
+                                </div>
+                            </ng-template>
+                            <ng-template #updateSecureInfo>
+                                <span class="changeNote">{{'noteChangerPassOrUsername'|translate}}</span>
+                                <div *ngIf="editPassword; then showEditPassword else showEditUsername"></div>
+                                <ng-template #showEditPassword>
+                                    <div class="infoEdit">
+                                        <div class="formDiv">
+                                            <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
+                                                name="password" [(ngModel)]="password"
+                                                (keyup)="invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
+                                                class="formInput" placeholder=" ">
+                                            <label for="" class="formLabel">
+                                                {{passwordInfromation}}
+                                            </label>
+                                        </div>
+                                        <div class="formDiv">
+                                            <input type="password" [class.labelInvalidInfo]="invalidPasswordRepeatVariable"
+                                                name="passwordRepeat" [(ngModel)]="passwordRepeat"
+                                                (keyup)="passwordRepeatInfromation=translate.instant('repeatPassword'); invalidPasswordRepeatVariable=false;passwordDis=false;"
+                                                class="formInput" placeholder=" ">
+                                            <label for="" class="formLabel">
+                                                {{passwordRepeatInfromation}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="buttons">
+                                        <button class="fullyBtn"
+                                            (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                        <button class="fullyBtn" (click)="updatePassword()"
+                                            [disabled]="passwordDis">{{'update'|translate}}</button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #showEditUsername>
+                                    <div class="formDiv editUserName">
+                                        <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
+                                            [(ngModel)]="mail"
+                                            (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{mailInformation}}
+                                        </label>
+                                    </div>
+                                    <div class="buttons">
+                                        <button class="fullyBtn"
+                                            (click)="editeSecureInfo=false;">{{'goBack'|translate}}</button>
+                                        <button class="fullyBtn" (click)="updateUsername()"
+                                            [disabled]="disableChnageUsernameBtn">{{'update'|translate}}</button>
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+    
                     </section>
-                </section>
-            </div>
-            <div *ngIf="container=='disease'">
-                <app-pharmacy-disease></app-pharmacy-disease>
+    
+                    <div *ngIf="showMyPres==true" id="allMyPrescriptions" style="padding-top: 40px;">
+    
+                        <div class="sectionContainer">
+                            <div *ngIf="loadingPrescriptions == true && pharmacyPrescriptionsPage == 0 && pharmacyPrescriptions && pharmacyPrescriptions.list.length == 0"
+                                class="loadingPrescription">
+                                <i class="fas fa-file-medical" style="margin-left: 50%;"></i>
+                            </div>
+    
+                            <div class="fixSearchBox">
+                                <input type="text" class="fixSearchBoxInput" placeholder="{{'search'|translate}}"
+                                    (keyup)="pharmacyPrescriptionsPage=0" name="searchPrescription"
+                                    [(ngModel)]="searchPrescription" (keyup.enter)="getPharmacyPrescriptionsById()">
+                                <span (click)="getPharmacyPrescriptionsById()">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+    
+                            <div *ngIf="pharmacyPrescriptions.list.length == 0" class="noWaitingPres">
+                                {{'youHaveNotAnyWaitingPrescription'|translate}}
+                            </div>
+                            <div class="closeMypres" (click)="showMyPres=false;">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div *ngIf="pharmacyPrescriptions.list.length != 0">
+                                <div *ngFor="let pres of pharmacyPrescriptions.list;let p = index">
+                                    <div class="prescription"
+                                        (click)="getMedicamentsByPrescriptionId(pres.prescriptionId,pres.patientFirstName+' '+pres.patientLastName,p,pres.patientId)"
+                                        (mouseleave)="hoveredPrescription=-2" (mouseenter)="hoveredPrescription=p">
+                                        <span style="text-transform: capitalize;">
+                                            {{pres.patientFirstName}}
+                                            <span style="font-weight: 600;">
+                                                {{pres.patientLastName}}
+                                            </span>
+                                        </span>
+                                        <div class="prescriptionTime">
+                                            <i class="fas fa-calendar-day"></i> | {{pres.time_sent | slice:0:10}} <i
+                                                class="fas fa-clock"></i> | {{pres.time_sent | slice:11:16}}
+                                        </div>
+                                        <span style="text-transform: capitalize; ">
+                                            {{pres.doctorFirstName}}
+                                            <span style="font-weight: 600;">
+                                                {{pres.doctorLastName}}
+                                            </span>
+                                        </span>
+                                        <div *ngIf="pharmacyPrescriptions.list[p+1]" class="prescriptionLine"
+                                            [class.opacity0]="hoveredPrescription == (p+1) || hoveredPrescription == (p)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-left: 50%;transform: translateX(-50%);width: fit-content;">
+                                    <div *ngFor="let page of pharmacyPrescriptionsPages; let p = index" class="page"
+                                        (click)="changePharmacyPrescriptionsPage(p)"
+                                        [class.disabledPage]="page > pharmacyPrescriptions.totalPages"
+                                        [class.pageLoading]="loadingPrescriptions == true"
+                                        [class.loadingPages]="loadingPrescriptions == true">
+                                        <div [class.pageSlected]="page == (pharmacyPrescriptionsPage + 1)"
+                                            style="display: inline-block;">
+                                            <span class="pageIndex">
+                                                {{page}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <section *ngIf="pharmacyGet.pharmacyStatus!='approved'" id="approvePharmacySection">
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='notApproved' || pharmacyGet.pharmacyStatus=='disapproved'">
+                            <div class="sectionTitle">{{'notApproved'|translate}}</div>
+                            <div class="sectionContainer">
+                                <div class="toProveYourAccount">
+                                    {{'toProveYourAccount'|translate}}
+                                </div>
+                                <div class="pharmacyType">
+                                    <div *ngIf="accountType" class="selectPharmacyType">
+                                        {{'selectPharmacyType'|translate}}
+                                        <div class="dashedLine"></div>
+                                    </div>
+                                    <input type="radio" id="dayPh" name="ph"
+                                        (change)="dayPh=true;nightPh=false;accountType=false;" (checked)="dayPh">
+                                    <label for="dayPh" class="dayPhLabel"> {{'dayPharmacy'|translate}} </label>
+                                    <input type="radio" id="nightPh" name="ph"
+                                        (change)="dayPh=false;nightPh=true;accountType=false;" (checked)="nightPh">
+                                    <label for="nightPh" class="nightPhLabel"> {{'nightPharmacy'|translate}} </label>
+                                </div>
+                                <div class="infoContainer" style="box-shadow: none;">
+                                    <div class="formDiv exactAddress">
+                                        <input type="text" [class.labelInvalidInfo]="invalidExactAddress"
+                                            name="exactAddress" [(ngModel)]="exactAddress"
+                                            (keyup)="exactAddressInformation=translate.instant('exactAddress');invalidExactAddress=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{exactAddressInformation}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="infoGrid">
+                                    <div class="infoContainer proveContainer">
+                                        <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
+                                        <ng-template #cinUploadedSuccessfully>
+                                            <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                            <div class="editPic">
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
+                                                        class="profileImg">
+                                                </ng-template>
+                                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                                <div class="center">{{'changeImage'|translate}}</div>
+                                            </div>
+                                            <div class="photoUploaded">
+                                                <i class="fas fa-check-circle"></i><br>
+                                                {{'PhotoUploadedSucc'|translate}}
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #uploadCin>
+                                            <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                            <div class="infoTitle"><input type="file" (change)="onFileChangedCin($event)"
+                                                    class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                            <div class="info">
+                                                {{'nationalIdentityCard'|translate}}
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class="infoContainer proveContainer">
+                                        <div
+                                            *ngIf="pharmacyOwnershipPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
+                                        </div>
+                                        <ng-template #medicalClinicUploadedSuccessfully>
+                                            <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                                class="uploadImgBtn">
+                                            <div class="editPic">
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
+                                                        class="profileImg">
+                                                </ng-template>
+                                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                                <div class="center">{{'changeImage'|translate}}</div>
+                                            </div>
+                                            <div class="photoUploaded">
+                                                <i class="fas fa-check-circle"></i><br>
+                                                {{'PhotoUploadedSucc'|translate}}
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #uploadMedicalClinic>
+                                            <input type="file" (change)="onFileChangedMedicalClinic($event)"
+                                                class="uploadImgBtn">
+                                            <div class="infoTitle"><input type="file"
+                                                    (change)="onFileChangedMedicalClinic($event)"
+                                                    class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                            <div class="info">
+                                                {{'ownershipOfPharmacy'|translate}}
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class="infoContainer proveContainer">
+                                        <div
+                                            *ngIf="pharmacySpecialty; then medicalSpecialtyUploadedSuccessfully else uploadMedicalSpecialty">
+                                        </div>
+                                        <ng-template #medicalSpecialtyUploadedSuccessfully>
+                                            <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                                class="uploadImgBtn">
+                                            <div class="editPic">
+                                                <ng-template #showProfileImg><img
+                                                        [style.background-image]="'url(' + retrievedImage + ')'"
+                                                        class="profileImg">
+                                                </ng-template>
+                                                <ng-template #showDefaultImg><i class="fas fa-user-tie"></i></ng-template>
+                                                <div class="center">{{'changeImage'|translate}}</div>
+                                            </div>
+                                            <div class="photoUploaded">
+                                                <i class="fas fa-check-circle"></i><br>
+                                                {{'PhotoUploadedSucc'|translate}}
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #uploadMedicalSpecialty>
+                                            <input type="file" (change)="onFileChangedMedicalSpecialty($event)"
+                                                class="uploadImgBtn">
+                                            <div class="infoTitle"><input type="file"
+                                                    (change)="onFileChangedMedicalSpecialty($event)"
+                                                    class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
+                                            <div class="info">
+                                                {{'PictureProvingSpecialty'|translate}}
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div *ngIf="cinPic && pharmacyOwnershipPic && pharmacySpecialty">
+                                    <button class="emptyBtn"
+                                        (click)="submitPharmacyDocuments();">{{'submitDocuments'|translate}}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="pharmacyGet.pharmacyStatus=='pending' || pharmacyGet.pharmacyStatus=='reVerify'">
+                            <section id="pendingSection">
+                                <div class="sectionTitle">{{'pending'|translate}}</div>
+                                <div class="sectionContainer pending">
+                                    {{'pendingForConfirmation'|translate}}<br>
+                                    <div class="thanksForTrust">{{'thanksForTrust'|translate}}</div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+    
+                    <section *ngIf="pharmacyGet.pharmacyStatus=='approved'" id="myMedicamentsSection">
+                        <div class="sectionTitle">{{'myMedicaments'|translate}}</div>
+                        <div class="sectionContainer">
+                            <div *ngIf="savingExcelFile" class="loadingConatiner">
+                                <div class="loading">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="excelNote">
+                                {{'excelImportNote'|translate}}
+                            </div>
+                            <div class="uploadExcelFileBtn">
+                                <input type="file" (change)="saveExcelFile($event)" class="excelFileInput">
+                                {{'updateMyMedicaments'|translate}}
+                            </div>
+                            <div *ngIf="myMedicamentNumber == 0" class="noMedicamentInfo">
+                                {{'noMedicamentInfo'|translate}}
+                            </div>
+                            <div *ngIf="myMedicamentNumber != 0" style="margin-top: 10px;">
+                                <div class="medicamentsFound">
+                                    {{myMedicamentNumber}} {{'medicamentsFound'|translate}}
+                                    <div class="greenLineMed"></div>
+                                </div>
+                                <div class="findForMedicamentName">
+                                    {{'find'|translate}} <i class="fas fa-search"></i>
+                                </div>
+                                <div class="formDiv medicamentName">
+                                    <span class="mesure spanButton" (click)="searchMedByNameAndPharmacyId()">
+                                        {{'find'|translate}}
+                                    </span>
+                                    <input type="text" name="medicamentName" (keyup.enter)="searchMedByNameAndPharmacyId()"
+                                        [(ngModel)]="medicamentName" class="formInput" placeholder=" ">
+                                    <label for="" class="formLabel">
+                                        {{'medicamentName'|translate}}
+                                    </label>
+                                </div>
+                                <div *ngFor="let med of myMedicaments ;let m = index">
+                                    <div class="medicament">
+                                        <div *ngIf="med.deleted" class="deletedMed">
+                                            <div class="deletedMedCenterText">
+                                                {{med.medicamentName}} {{'deleted'|translate}}
+                                            </div>
+                                        </div>
+                                        <div class="phMedicamentName">
+                                            {{med.medicamentName}}
+                                        </div>
+                                        <div>
+                                            <button class="fullyBtn red"
+                                                (click)="openPopUp('confirmDeleteMedicament',med.medicamentStockId,m)">
+                                                {{'delete'|translate}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <section id="myPositionSection">
+                            <div class="sectionTitle">{{'myPosition'|translate}}</div>
+                            <div *ngIf="position" class="myMap">
+                                <div *ngIf="position" id="map"></div>
+                            </div>
+                            <div *ngIf="!position" class="noPosition">
+                                {{'noPositionSaved'|translate}} <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <button class="emptyBtn" style="margin-bottom: 15px;" (click)="updateMyPosition()">
+                                {{'updateMyPosition'|translate}}
+                            </button>
+                        </section>
+                    </section>
+                </div>
+                <div *ngIf="container=='disease'">
+                    <app-pharmacy-disease></app-pharmacy-disease>
+                </div>
             </div>
         </div>
     </div>

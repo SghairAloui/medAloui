@@ -17,12 +17,15 @@ html,body{
 }
 .emptyBtn{
     position: relative;
-    width: 30%;
+    width: fit-content;
+    padding: 0px 15px;
     left: 50%;
     transform: translateX(-50%);
 }
 .fullyBtn{
-    width: 30%;
+    min-width: 30%;
+    width: fit-content;
+    padding: 0px 15px;
 }
 .patientName{
     font-size: 1.5rem;
@@ -130,6 +133,7 @@ html,body{
     padding-right: 10px;
 }
 .appInfoTitleCon .appInfo{
+    text-transform: capitalize;
     display: inline-block;
     background-color: #308a7b;
     color: white;
@@ -143,30 +147,25 @@ html,body{
     margin-top: 2%;
 }
 .fullyBtnRed{
+    width: max-content;
     background-color: red;
-    width: 80%;
-    margin-left: 10%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.3rem;
-    padding-top: 3px;
+    margin: 0px auto;
+    font-size: 1.2rem;
 }
 .fullyBtnRed:hover{
     border: 2px solid red;
 }
-.fa-trash-alt,.fa-edit{
+.fullyBtnRed .fa-trash-alt,.fullyBtnGreen .fa-edit{
     font-size: 1.5rem;
-    margin: 4px 5px;
+    margin-left: 5px;
 }
 .fullyBtnGreen{
-    margin-top: 3%;
+    width: max-content;
+    margin-top: 15px;
     background-color: #308a7b;
-    width: 80%;
-    margin-left: 10%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.3rem;
-    padding-top: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2rem;
 }
 .fullyBtnGreen:hover{
     border: 2px solid #308a7b;
@@ -246,11 +245,10 @@ html,body{
 }
 .patientPrescriptionMeds{
     position: relative;
-    width: fit-content;
-    display: inline-block;
+    width: fit-content !important;
+    max-width: fit-content;
     padding: 10px 5px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 5px auto;
 }
 .patientPrescriptionMed{
     display: inline-block;
@@ -859,15 +857,15 @@ html,body{
 }
 .presCode{
     display: block;
-    margin-left: 50%;
-    transform: translateX(-50%); 
-    margin-top: 10px;
+    margin: 10px auto;
     font-family: Arial, Helvetica, sans-serif;
 }
 .usedPres{
     color:#51A351;
 }
 .myDoctorContainer{
+    display: inline-block;
+    vertical-align: top;
     position: relative;
     margin: 0.5%;
     width: 49%;
@@ -1046,3 +1044,330 @@ html,body{
 .medicalProfileInfoConatiner .medicalProfileChart::-webkit-scrollbar-button {
     width: 35%;
   }
+#changePass{
+    margin-top: 20px;
+}
+.medicalProfileInfoConatiner .userInfoContainer{
+    width: max-content;
+}
+@media screen and (max-width: 1400px){
+    .medicalProfileInfoConatiner .userInfoContainer{
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    .patientContainer{
+        width: 77%;
+        left: 23%;
+    }
+    .newSectionContainer{
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    .fullyBtnRed .fa-trash-alt,.fullyBtnGreen .fa-edit{
+        display: none;
+    }
+}
+@media screen and (max-width: 1350px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 40px;
+    }
+}
+@media screen and (max-width: 1310px){
+    .pending{
+        padding: 20px 0px;
+    }
+    .patientContainer{
+        left: 25%;
+        width: 75%;
+    }
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr 1fr;
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+    .sectionTitle{
+        padding-top: 60px;
+    }
+}
+@media screen and (max-width: 1300px){
+    .patientContainer{
+        left: 25%;
+        width: 75%;
+    }
+    .appointmentsGrid{
+        grid-template-columns: 1fr 1fr;
+    }
+    .appointmentsGrid .div:nth-child(3){
+        margin-top: 20px;
+        margin-left: 50%;
+    }
+    .appointmentsGrid .div{
+        max-width: 100%;
+        min-width: 100%;
+    }
+    .appointmentsGrid .div:nth-child(3) .centerInDivGrid{
+        min-width: max-content;
+    }
+    .appointmentsGrid .div:nth-child(3) button{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    #appointmentsGridTitle{
+        display: none;
+    }
+}
+@media screen and (max-width: 1200px){
+    .medicalProfileInfoConatiner{
+        width: 99%;
+    }
+}
+@media screen and (max-width: 1070px){
+    .newSectionContainer .infoGrid{
+        gap: 2%;
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 30px;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 57%;
+    }
+}
+@media screen and (max-width: 1150px){
+    .patientContainer{
+        left: 28%;
+        width: 72%;
+    }
+    .myDoctorContainer{
+        width: 70%;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+}
+@media screen and (max-width: 1040px){
+    .newSectionContainer .infoGrid{
+        gap: 5%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 60%;
+    }
+}
+@media screen and (max-width: 1135px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 1070px){
+    .myDoctorContainer{
+        width: 80%;
+    }
+    .patientContainer{
+        left: 30%;
+        width: 70%;
+        padding: 20px 15px;
+    }
+}
+@media screen and (max-width: 1000px){
+    .myDoctorContainer{
+        width: 49%;
+        margin-left: 0.5%;
+        transform: translateX(0%);
+    }
+    .appointmentsGrid .div:nth-child(3) .centerInDivGrid{
+        min-width: fit-content;
+    }
+    .appointmentsGrid .div:nth-child(3){
+        margin-top: 0px;
+        margin-left: 0%;
+    }
+    .appointmentsGrid{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .marginTopGenInfo{
+        margin-top: -50px;
+    }
+    .patientContainer{
+        left: 0%;
+        width: 100%;
+    }
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 80%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+}
+@media screen and (max-width: 910px){
+    .myDoctorContainer{
+        width: 70%;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    .newSectionContainer .infoGrid{
+        gap: 10%;
+        width: 90%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 65%;
+    }
+    .appointmentsGrid{
+        grid-template-columns: 1fr 1fr;
+    }
+    .appointmentsGrid .div:nth-child(3){
+        margin-top: 20px;
+        margin-left: 50%;
+    }
+    .appointmentsGrid .div{
+        max-width: 100%;
+        min-width: 100%;
+    }
+    .appointmentsGrid .div:nth-child(3) .centerInDivGrid{
+        min-width: fit-content;
+    }
+}
+@media screen and (max-width: 850px){
+    .myDoctorContainer{
+        width: 75%;
+    }
+    .imgContainer{
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .patientEmail{
+        display: none;
+    }
+    .doctorGeneralInfo{
+        display: block;
+        position: relative;
+        width: max-content;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
+    }
+}
+@media screen and (max-width: 810px){
+    .newSectionContainer .infoGrid{
+        grid-template-columns:1fr;
+        gap: 0px;
+        width: 70%;
+    }
+    .newSectionContainer .infoGrid .infoContainer:nth-child(3) .userInfoContainer{
+        margin-left: 0%;
+    }
+    .newSectionContainer .infoGrid .infoContainer .userInfoContainer{
+        margin-left: 0%;
+    }
+    .iconButton{
+        margin-top: 15px;
+        margin-left: 85%;
+    }
+    .infoEdit,.infoGridTowColumn{
+        grid-template-columns: 1fr;
+    }
+    .width90{
+        width: 85%;
+        left: 7.5%;
+    }
+    #changePass{
+        margin-top: 100px;
+        padding-left: 30px;
+    }
+    .newSectionContainer{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+@media screen and (max-width: 700px){
+    .myDoctorContainer{
+        width: 85%;
+    }
+    .appointmentsGrid{
+        grid-template-columns: 1fr;
+    }
+    .appointmentsGrid .div:nth-child(3){
+        margin-left: 0px;
+    }
+    .marginTopGenInfo{
+        margin-top: -100px;
+    }
+    .docProfileImgForMedicalProfileDis{
+        float: none;
+    }
+    .diseaseDocInfo{
+        min-width: fit-content;
+    }
+}
+.docDiseaseGeneralInfo .diseaseName{
+    display: block;
+}
+.diseaseDocInfo{
+    min-width: max-content;
+}
+@media screen and (max-width: 550px){
+    .myDoctorContainer{
+        width: 90%;
+    }
+    .diseaseDocName,.docDiseaseGeneralInfo{
+        margin-top: 30px;
+        float: none;
+    }
+    .docDiseaseGeneralInfo{
+        margin-top: 0px;
+    }
+    .doctorRatePres{
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    .docDiseaseGeneralInfo .diseaseName{
+        display: inline-block;
+        vertical-align: top;
+    }
+    .patientContainer{
+        padding: 20px 0px;
+    }
+}
+@media screen and (max-width: 510px){
+    .myDoctorContainer{
+        width: 98%;
+    }
+    .newSectionContainer .infoGrid{
+        width: 85%;
+    }
+    .iconButton{
+        margin-left: 80%;
+    }
+    .buttons{
+        display: block;
+    }
+    .buttons .fullyBtn{
+        min-width: max-content;
+        margin-bottom: 10px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    #changePass{
+        padding-left: 15px;
+    }
+    .appointmentsGrid{
+        padding: 20px 2px;
+    }
+}
+@media screen and (max-width: 450px){
+    .sectionContainer,.newSectionContainer{
+        margin: 0px;
+        padding: 10px 0px;
+    }
+}
+@media screen and (max-width: 420px){
+    .newSectionContainer .infoGrid{
+        width: 100%;
+    }
+    .iconButton{
+        margin-left: 70%;
+    }
+}
