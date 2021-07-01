@@ -27,6 +27,7 @@ import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../doctor/doctor/doctor.service';
 import { SecretaryService } from './secretary.service';
+import jwt_decode from 'jwt-decode';
 
 declare const L: any;
 
@@ -220,7 +221,8 @@ export class SecretaryComponent implements OnInit {
   tomorrowPages: number[] = [];
   accountInfoLoaded:boolean=false;
   getSecretaryInfo() {
-    this.secretaryService.getSecretaryInfoBySecureLogin(localStorage.getItem('secureLogin')).subscribe(
+    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    this.secretaryService.getSecretaryInfoById(parseInt(token.jti)).subscribe(
       res => {
         this.secretaryGet = res;
         if (parseInt(this.secretaryGet.secretaryStatus) >= 10000){
@@ -771,7 +773,7 @@ export class SecretaryComponent implements OnInit {
       gender = 'male';
     else
       gender = 'female';
-    this.secretaryService.updateSecretaryInfoBySecureLogin(this.firstName, this.lastName, birthday, this.adress, gender, this.secretaryGet.secureLogin).subscribe(
+    this.secretaryService.updateSecretaryInfoById(this.firstName, this.lastName, birthday, this.adress, gender, this.secretaryGet.userId).subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('notification'), {
@@ -816,7 +818,7 @@ export class SecretaryComponent implements OnInit {
       this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
     }
     if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
-      this.secretaryService.updatePasswordBySecureLogin(this.passwordRepeat, this.secretaryGet.secureLogin).subscribe(
+      this.secretaryService.updatePasswordById(this.passwordRepeat, this.secretaryGet.userId).subscribe(
         async res => {
           this.router.navigate(['/acceuil']);
           this.toastr.success(this.translate.instant('passwordChanged'), this.translate.instant('info'), {
@@ -1007,7 +1009,7 @@ export class SecretaryComponent implements OnInit {
   getUncofirmedApp() {
     console.log(this.pendingRequestsPage)
     this.loadingRequests = true;
-    this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.secretaryGet.secureLogin, this.pendingRequestsPage, 4).subscribe(
+    this.secretaryService.getUncofirmedApp(this.secretaryGet.userId, this.pendingRequestsPage, 4).subscribe(
       res => {
         let pendingAppointment: AppointmentForSecWithPag = res;
         this.pendingAppointment = { totalPages: this.pendingAppointment ? pendingAppointment.totalPages : 0, list: [] };
@@ -1057,7 +1059,7 @@ export class SecretaryComponent implements OnInit {
   }
 
   getNextRequest(appId: number) {
-    this.secretaryService.getNextRequestByAppId(this.secretaryGet.userId, this.secretaryGet.secureLogin, appId).subscribe(
+    this.secretaryService.getNextRequestByAppId(this.secretaryGet.userId, appId).subscribe(
       res => {
         let app: AppointmentForSec = res;
         this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
@@ -1098,7 +1100,7 @@ export class SecretaryComponent implements OnInit {
   }
 
   getAppointmentInfoById(appId: number) {
-    this.secretaryService.getAppointmentInfoById(this.secretaryGet.userId, this.secretaryGet.secureLogin, appId).subscribe(
+    this.secretaryService.getAppointmentInfoById(this.secretaryGet.userId, appId).subscribe(
       res => {
         let app: AppointmentForSec = res;
         this.getImage(app.userId + 'profilePic').then((value) => { app.patientProfilePic = value; });
@@ -1111,7 +1113,7 @@ export class SecretaryComponent implements OnInit {
 
   confirmAppointment(appkey: number) {
     this.pendingAppointment.list[appkey].confirmingApp = true;
-    this.secretaryService.confirmAppointmentById(this.secretaryGet.userId, this.secretaryGet.secureLogin,
+    this.secretaryService.confirmAppointmentById(this.secretaryGet.userId,
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {
@@ -1132,7 +1134,7 @@ export class SecretaryComponent implements OnInit {
 
   refuseAppointment(appkey: number) {
     this.pendingAppointment.list[appkey].refusingApp = true;
-    this.secretaryService.refuseAppointmentById(this.secretaryGet.userId, this.secretaryGet.secureLogin,
+    this.secretaryService.refuseAppointmentById(this.secretaryGet.userId,
       this.pendingAppointment.list[appkey].appointmentId, this.pendingAppointment.list[appkey].userId, this.secretaryGet.doctorId,
       this.pendingAppointment.list[appkey].appointmentStatus).subscribe(
         res => {

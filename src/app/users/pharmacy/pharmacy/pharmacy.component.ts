@@ -18,7 +18,6 @@ import { OneStringPost } from 'src/model/OneStringPost';
 import { OpenConversation } from 'src/model/OpenConversation';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
-import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
 import { PrescriptionMedicament } from 'src/model/PrescriptionMedicament';
 import { ReturnWithPag } from 'src/model/ReturnWithPag';
 import { SecureLoginString } from 'src/model/SecureLoginString';
@@ -29,6 +28,7 @@ import { UserSearchGet } from 'src/model/UserSearchGet';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../pharmacy.service';
+import jwt_decode from 'jwt-decode';
 
 declare const L: any;
 
@@ -304,8 +304,8 @@ export class PharmacyComponent implements OnInit {
     }
 
     if (!this.invalidAdressVariable && !this.invalidPharmacyNameVariable) {
-      let data: PharmacyPostWithSecureLogin = new PharmacyPostWithSecureLogin(this.pharmacyName, this.adress, localStorage.getItem('secureLogin'));
-      this.pharmacyService.updatePharmacyInfoBySecureLogin(data).subscribe(
+      let data: PharmacyPostWithSecureLogin = new PharmacyPostWithSecureLogin(this.pharmacyName, this.adress, this.pharmacyGet.userId);
+      this.pharmacyService.updatePharmacyInfoById(data).subscribe(
         res => {
           if (res) {
             this.toastr.success(this.translate.instant('infoUpdated'), this.translate.instant('update'), {
@@ -350,8 +350,8 @@ export class PharmacyComponent implements OnInit {
 
   userInfoLoaded: boolean = false;
   getUserInfo() {
-    this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
-    this.pharmacyService.getPharmacyInfo(this.secureLoginString).subscribe(
+    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    this.pharmacyService.getPharmacyInfo(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
           this.pharmacyGet = res;
@@ -421,7 +421,7 @@ export class PharmacyComponent implements OnInit {
 
   updateMyPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.pharmacyService.updatePositionBySecureLogin(localStorage.getItem('secureLogin'), position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+      this.pharmacyService.updatePositionById(this.pharmacyGet.userId, position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
         res => {
           if (res) {
             if (!this.position) {
@@ -459,49 +459,6 @@ export class PharmacyComponent implements OnInit {
     });
   }
 
-  updateUsername() {
-    if (this.mail.length < 6) {
-      this.invalidMailVariable = true;
-      this.mailInformation = this.translate.instant('mailApha');
-    } else {
-      if (this.mail.indexOf(' ') !== -1) {
-        this.invalidMailVariable = true;
-        this.mailInformation = this.translate.instant('enterValidMail');
-      }
-      else {
-        this.invalidMailVariable = false;
-        this.mailInformation = this.translate.instant('mail');
-      }
-    }
-    if (!this.invalidMailVariable) {
-      this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), this.mail.toLowerCase())
-      this.userService.updateUsernameBySecureLogin(this.twoStringsPost).subscribe(
-        async res => {
-          if (!res) {
-            this.invalidMailVariable = true;
-            this.mailInformation = this.translate.instant('mailExist');
-          } else {
-            this.router.navigate(['/acceuil']);
-            this.toastr.success(this.translate.instant('usernameChanged'), this.translate.instant('info'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-            localStorage.setItem('secureLogin', '');
-            localStorage.setItem('id', '');
-            await this.sleep(1000);
-            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
-          }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
-    }
-  }
-
   updatePassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -520,8 +477,8 @@ export class PharmacyComponent implements OnInit {
       this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
     }
     if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
-      this.updatePasswordPost = new UpdatePasswordPost(localStorage.getItem('secureLogin'), this.passwordRepeat);
-      this.userService.updateUserPasswordBySecurelogin(this.updatePasswordPost).subscribe(
+      this.updatePasswordPost = new UpdatePasswordPost(this.pharmacyGet.userId, this.passwordRepeat);
+      this.userService.updateUserPasswordById(this.updatePasswordPost).subscribe(
         async res => {
           if (!res) {
             this.toastr.warning(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
@@ -715,7 +672,7 @@ export class PharmacyComponent implements OnInit {
       else if (this.nightPh)
         pharmacyType = 'night';
 
-      this.pharmacyService.changePharamcyStatusAndSettingsBySecureLogin(localStorage.getItem('secureLogin'), status, this.exactAddress, pharmacyType).subscribe(
+      this.pharmacyService.changePharamcyStatusAndSettingsById(this.pharmacyGet.userId, status, this.exactAddress, pharmacyType).subscribe(
         res => {
           if (res) {
             this.pharmacyGet.pharmacyStatus = status;

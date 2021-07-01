@@ -20,48 +20,48 @@ export class SecretaryService {
 
   constructor(private http:HttpClient) { }
 
-  public getSecretaryInfoBySecureLogin(secureLogin: string) {
-    return this.http.post<SecretaryInfo>(SECRETARY_API + "getSecretaryInfoBySecureLogin", {secureLogin}, httpOptions);
+  public getSecretaryInfoById(userId:number) {
+    return this.http.post<SecretaryInfo>(SECRETARY_API + "getSecretaryInfoById", {userId}, httpOptions);
   }
   
-  public updateSecretaryInfoBySecureLogin(firstName: string,lastName: string,birthday: string,city: string,gender: string,secureLogin: string) {
-    return this.http.post<boolean>(SECRETARY_API + "updateSecretaryInfoBySecureLogin", {firstName,lastName,birthday,city,gender,secureLogin}, httpOptions);
+  public updateSecretaryInfoById(firstName: string,lastName: string,birthday: string,city: string,gender: string,userId: number) {
+    return this.http.post<boolean>(SECRETARY_API + "updateSecretaryInfoById", {firstName,lastName,birthday,city,gender,userId}, httpOptions);
   }
 
-  public updatePasswordBySecureLogin(password:string,secureLogin: string) {
-    return this.http.post<boolean>(SECRETARY_API + "updatePasswordBySecureLogin", {password,secureLogin}, httpOptions);
+  public updatePasswordById(password:string,userId:number) {
+    return this.http.post<boolean>(SECRETARY_API + "updatePasswordById", {password,userId}, httpOptions);
   }
 
   public getSecretaryWorkById(id:number) {
     return this.http.get<SecretaryWork []>(SECRETARY_API + "getSecretaryWorkById/"+id, httpOptions);
   }
 
-  public acceptDoctorAddRequest(doctorId:number,notificationId:number,secretaryId:number,secureLogin:string) {
-    return this.http.post<boolean>(SECRETARY_API + "acceptDoctorAddRequest",{doctorId,notificationId,secretaryId,secureLogin}, httpOptions);
+  public acceptDoctorAddRequest(doctorId:number,notificationId:number,secretaryId:number) {
+    return this.http.post<boolean>(SECRETARY_API + "acceptDoctorAddRequest",{doctorId,notificationId,secretaryId}, httpOptions);
   }
 
-  public refuseDoctorAddRequest(notificationId:number,secureLogin:string,doctorId:number,secretaryId:number) {
-    return this.http.post<boolean>(SECRETARY_API + "refuseDoctorAddRequest",{notificationId,secureLogin,doctorId,secretaryId}, httpOptions);
+  public refuseDoctorAddRequest(notificationId:number,doctorId:number,secretaryId:number) {
+    return this.http.post<boolean>(SECRETARY_API + "refuseDoctorAddRequest",{notificationId,doctorId,secretaryId}, httpOptions);
   }
 
-  public getUncofirmedApp(secretaryId:number,secureLogin:string,page:number,size:number) {
-    return this.http.post<AppointmentForSecWithPag>(SECRETARY_API + "getUncofirmedApp",{secretaryId,secureLogin,page,size}, httpOptions);
+  public getUncofirmedApp(secretaryId:number,page:number,size:number) {
+    return this.http.post<AppointmentForSecWithPag>(SECRETARY_API + "getUncofirmedApp",{secretaryId,page,size}, httpOptions);
   }
 
-  public getAppointmentInfoById(secretaryId:number,secureLogin:string,appointmentId:number) {
-    return this.http.post<AppointmentForSec>(SECRETARY_API + "getAppointmentInfoById",{secretaryId,secureLogin,appointmentId}, httpOptions);
+  public getAppointmentInfoById(secretaryId:number,appointmentId:number) {
+    return this.http.post<AppointmentForSec>(SECRETARY_API + "getAppointmentInfoById",{secretaryId,appointmentId}, httpOptions);
   }
 
-  public confirmAppointmentById(secretaryId:number,secureLogin:string,appointmentId:number,patientId:number,doctorId:number,appointmentStatus:string) {
-    return this.http.post<boolean>(SECRETARY_API + "confirmAppointmentById",{secretaryId,secureLogin,appointmentId,patientId,doctorId,appointmentStatus}, httpOptions);
+  public confirmAppointmentById(secretaryId:number,appointmentId:number,patientId:number,doctorId:number,appointmentStatus:string) {
+    return this.http.post<boolean>(SECRETARY_API + "confirmAppointmentById",{secretaryId,appointmentId,patientId,doctorId,appointmentStatus}, httpOptions);
   }
   
-  public refuseAppointmentById(secretaryId:number,secureLogin:string,appointmentId:number,patientId:number,doctorId:number,appointmentStatus:string) {
-    return this.http.post<boolean>(SECRETARY_API + "refuseAppointmentById",{secretaryId,secureLogin,appointmentId,patientId,doctorId,appointmentStatus}, httpOptions);
+  public refuseAppointmentById(secretaryId:number,appointmentId:number,patientId:number,doctorId:number,appointmentStatus:string) {
+    return this.http.post<boolean>(SECRETARY_API + "refuseAppointmentById",{secretaryId,appointmentId,patientId,doctorId,appointmentStatus}, httpOptions);
   }
 
-  public getNextRequestByAppId(secretaryId:number,secureLogin:string,appointmentId:number) {
-    return this.http.post<AppointmentForSec>(SECRETARY_API + "getNextRequestByAppId",{secretaryId,secureLogin,appointmentId}, httpOptions);
+  public getNextRequestByAppId(secretaryId:number,appointmentId:number) {
+    return this.http.post<AppointmentForSec>(SECRETARY_API + "getNextRequestByAppId",{secretaryId,appointmentId}, httpOptions);
   }
 
   public getDoctorCurrentPatient(doctorId:number,date:string) {

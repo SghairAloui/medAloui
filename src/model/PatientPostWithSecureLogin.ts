@@ -5,6 +5,6 @@ export class PatientPostWithSecureLogin{
         private userCity:string,
         private patientBirthDay:string,
         private patientGender:string,
-        private userSecureLogin:string
+        private userId:number
     ){};
 }

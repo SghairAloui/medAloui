@@ -3,5 +3,4 @@ export interface AdminGet{
     userUsername:string;
     adminFullName:string;
     userCity:string;
-    secureLogin:string;
 }

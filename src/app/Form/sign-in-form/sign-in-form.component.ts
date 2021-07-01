@@ -126,7 +126,6 @@ export class SignInFormComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        localStorage.setItem("secureLogin",signInResponse.secureLogin)
         localStorage.setItem("id",signInResponse.userId+'')
         if(signInResponse.roles.indexOf('PATIENT_ROLE') != -1){
           this.router.navigate(['/patient']);

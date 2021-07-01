@@ -9,7 +9,6 @@ import { medicalProfileGet } from 'src/model/medicalProfileGet';
 import { MyUserWithPag } from 'src/model/MyUserWithPag';
 import { PatientGet } from 'src/model/PatientGet';
 import { PatientPostWithSecureLogin } from 'src/model/PatientPostWithSecureLogin';
-import { SecureLoginString } from 'src/model/SecureLoginString';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
 import { WeightValues } from 'src/model/WeightValues';
 
@@ -29,8 +28,8 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-  public getPatientInfo(secureLogin: SecureLoginString) {
-    return this.http.post<PatientGet>(PATIENT_API + "getPatientInfoFromSecureLogin", secureLogin, httpOptions);
+  public getPatientInfo(userId:number) {
+    return this.http.post<PatientGet>(PATIENT_API + "getPatientInfoById", {userId}, httpOptions);
   }
 
   public getPatientMedicalProfileByMedicalProfileId(id: number) {
@@ -45,8 +44,8 @@ export class PatientService {
     return this.http.get<number>(MEDICALPROFILEDISEASE_API + "getPateintMedicalProfileDiseasesNumberByMedicalProfileId/" + id, httpOptions);
   }
 
-  public updatePatientInfoBySecureLogin(patientPostWithSecureLogin: PatientPostWithSecureLogin) {
-    return this.http.post<boolean>(PATIENT_API + "updatePatientInfoBySecureLogin", patientPostWithSecureLogin, httpOptions);
+  public updatePatientInfoById(patientPostWithSecureLogin: PatientPostWithSecureLogin) {
+    return this.http.post<boolean>(PATIENT_API + "updatePatientInfoById", patientPostWithSecureLogin, httpOptions);
   }
 
   public updateMedicalProfileByMedicalProfileId(updateMedicalProfilePost: UpdateMedicalProfilePost) {
@@ -85,23 +84,23 @@ export class PatientService {
     return this.http.get<FirstAndLastNameGet>(PATIENT_API + 'getUserFullNameById/'+patientId, httpOptions);
   }
 
-  public getMyDoctors(secureLogin: string, page: number,size:number) {
-    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMyDoctors', { secureLogin,page, size }, httpOptions);
+  public getMyDoctors(userId: number, page: number,size:number) {
+    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMyDoctors', { userId,page, size }, httpOptions);
   } 
 
-  public getMySecretaries(secureLogin: string, page: number,size:number) {
-    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMySecretaries', { secureLogin,page, size }, httpOptions);
+  public getMySecretaries(userId: number, page: number,size:number) {
+    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMySecretaries', { userId,page, size }, httpOptions);
   } 
 
-  public getMyPharmacies(secureLogin: string, page: number,size:number) {
-    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMyPharmacies', { secureLogin,page, size }, httpOptions);
+  public getMyPharmacies(userId: number, page: number,size:number) {
+    return this.http.post<MyUserWithPag>(PATIENT_API + 'getMyPharmacies', { userId,page, size }, httpOptions);
   } 
 
-  public getHeightValues(secureLogin: string) {
-    return this.http.post<HeightValues []>(PATIENT_API + 'getHeightValues', { secureLogin}, httpOptions);
+  public getHeightValues(userId: number) {
+    return this.http.post<HeightValues []>(PATIENT_API + 'getHeightValues', { userId}, httpOptions);
   } 
 
-  public getWeightValues(secureLogin: string) {
-    return this.http.post<WeightValues []>(PATIENT_API + 'getWeightValues', { secureLogin}, httpOptions);
+  public getWeightValues(userId: number) {
+    return this.http.post<WeightValues []>(PATIENT_API + 'getWeightValues', { userId}, httpOptions);
   } 
 }

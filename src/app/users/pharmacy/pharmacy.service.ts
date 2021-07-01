@@ -5,10 +5,8 @@ import { GetPendingPharmacy } from 'src/model/GetPendingPharmacy';
 import { MedicamentStockGet } from 'src/model/MedicamentStockGet';
 import { PharmacyGet } from 'src/model/PharmacyGet';
 import { PharmacyPostWithSecureLogin } from 'src/model/PharmacyPostWithSecureLogin';
-import { PrescriptionForPharmacy } from 'src/model/PrescriptionForPharmacy';
 import { ReturnWithPag } from 'src/model/ReturnWithPag';
 import { SecureLoginString } from 'src/model/SecureLoginString';
-import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
 const PHARMACY_API = environment.apiUrl+'api/pharmacy/';
 const IMAGE_API = environment.apiUrl+'api/image/';
@@ -27,12 +25,12 @@ export class PharmacyService {
 
   constructor(private http: HttpClient) { }
 
-  public getPharmacyInfo(secureLogin: SecureLoginString) {
-    return this.http.post<PharmacyGet>(PHARMACY_API + "getPharmacyInfoFromSecureLogin", secureLogin, httpOptions);
+  public getPharmacyInfo(userId: number) {
+    return this.http.post<PharmacyGet>(PHARMACY_API + "getPharmacyInfoById", {userId}, httpOptions);
   }
 
-  public updatePharmacyInfoBySecureLogin(pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin) {
-    return this.http.post<boolean>(PHARMACY_API + "updatePharmacyInfoBySecureLogin", pharmacyPostWithSecureLogin, httpOptions);
+  public updatePharmacyInfoById(pharmacyPostWithSecureLogin: PharmacyPostWithSecureLogin) {
+    return this.http.post<boolean>(PHARMACY_API + "updatePharmacyInfoById", pharmacyPostWithSecureLogin, httpOptions);
   }
 
   public updatePharmacyProfilePhoto(uploadImageData: FormData) {
@@ -43,8 +41,8 @@ export class PharmacyService {
     return this.http.get<string>(IMAGE_API + 'get/' + name, httpOptions)
   }
 
-  public changePharamcyStatusAndSettingsBySecureLogin(secureLogin: string, status: string, exactAddress: string, accountType: string) {
-    return this.http.post<boolean>(PHARMACY_API + 'changePharamcyStatusAndSettingsBySecureLogin', { secureLogin, status, exactAddress, accountType }, httpOptions);
+  public changePharamcyStatusAndSettingsById(userId:number, status: string, exactAddress: string, accountType: string) {
+    return this.http.post<boolean>(PHARMACY_API + 'changePharamcyStatusAndSettingsById', { userId, status, exactAddress, accountType }, httpOptions);
   }
 
   public getPendingPharmacies(page: number, size: number) {
@@ -87,8 +85,8 @@ export class PharmacyService {
     return this.http.delete<boolean>(MEDSTOCK_API + 'deleteByMedicamentStockId/' + stockId, httpOptions);
   }
 
-  public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
-    return this.http.post<boolean>(PHARMACY_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
+  public updatePositionById(userId:number,latitude:string,longitude:string){
+    return this.http.post<boolean>(PHARMACY_API+'updatePositionById',{userId,latitude,longitude},httpOptions);
   }
 
   public searchPharmaciesByMedicaments(medicamentsName:string[],userLatitude:string,userLongitude:string,searchRaduis:number,page:number,size:number){

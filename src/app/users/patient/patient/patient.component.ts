@@ -44,6 +44,7 @@ import { WeightValues } from 'src/model/WeightValues';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../../pharmacy/pharmacy.service';
 import { PatientService } from './patient.service';
+import jwt_decode from 'jwt-decode';
 
 declare const L: any;
 
@@ -420,13 +421,13 @@ export class PatientComponent implements OnInit {
         gender = 'male';
       else
         gender = 'female';
-      this.patientPostWithSecureLogin = new PatientPostWithSecureLogin(this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), birthday, gender.toLowerCase(), localStorage.getItem("secureLogin"));
-      this.updateDoctorInfo();
+      this.patientPostWithSecureLogin = new PatientPostWithSecureLogin(this.firstName.toLowerCase(), this.lastName.toLowerCase(), this.adress.toLowerCase(), birthday, gender.toLowerCase(), this.patientGet.userId);
+      this.updatePatientInfo();
     }
   }
 
-  updateDoctorInfo() {
-    this.patientService.updatePatientInfoBySecureLogin(this.patientPostWithSecureLogin).subscribe(
+  updatePatientInfo() {
+    this.patientService.updatePatientInfoById(this.patientPostWithSecureLogin).subscribe(
       res => {
         this.getUserInfo();
         this.invalidMailVariable = false;
@@ -446,8 +447,8 @@ export class PatientComponent implements OnInit {
   }
 
   getUserInfo() {
-    this.secureLoginString = new SecureLoginString(localStorage.getItem("secureLogin"));
-    this.patientService.getPatientInfo(this.secureLoginString).subscribe(
+    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    this.patientService.getPatientInfo(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
           this.patientGet = res;
@@ -534,49 +535,6 @@ export class PatientComponent implements OnInit {
     }
   }
 
-  updateUsername() {
-    if (this.mail.length < 6) {
-      this.invalidMailVariable = true;
-      this.mailInformation = this.translate.instant('mailApha');
-    } else {
-      if (this.mail.indexOf(' ') !== -1) {
-        this.invalidMailVariable = true;
-        this.mailInformation = this.translate.instant('enterValidMail');
-      }
-      else {
-        this.invalidMailVariable = false;
-        this.mailInformation = this.translate.instant('mail');
-      }
-    }
-    if (!this.invalidMailVariable) {
-      this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), this.mail.toLowerCase())
-      this.userService.updateUsernameBySecureLogin(this.twoStringsPost).subscribe(
-        async res => {
-          if (!res) {
-            this.invalidMailVariable = true;
-            this.mailInformation = this.translate.instant('mailExist');
-          } else {
-            this.router.navigate(['/acceuil']);
-            this.toastr.success(this.translate.instant('usernameChanged'), this.translate.instant('info'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-            localStorage.setItem('secureLogin', '');
-            localStorage.setItem('id', '');
-            await this.sleep(1000);
-            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
-          }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
-    }
-  }
-
   updatePassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -595,8 +553,8 @@ export class PatientComponent implements OnInit {
       this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
     }
     if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
-      this.updatePasswordPost = new UpdatePasswordPost(localStorage.getItem('secureLogin'), this.passwordRepeat);
-      this.userService.updateUserPasswordBySecurelogin(this.updatePasswordPost).subscribe(
+      this.updatePasswordPost = new UpdatePasswordPost(this.patientGet.userId, this.passwordRepeat);
+      this.userService.updateUserPasswordById(this.updatePasswordPost).subscribe(
         async res => {
           if (!res) {
             this.toastr.warning(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
@@ -1926,7 +1884,7 @@ export class PatientComponent implements OnInit {
   loadingDoctors: boolean;
   getMyDoctors(page: number) {
     this.loadingDoctors = true;
-    this.patientService.getMyDoctors(this.patientGet.secureLogin, page, 4).subscribe(
+    this.patientService.getMyDoctors(this.patientGet.userId, page, 4).subscribe(
       res => {
         let myDoctors: MyUserWithPag = res;
         this.myDoctors.count = Math.ceil(myDoctors.count / 4);
@@ -1956,7 +1914,7 @@ export class PatientComponent implements OnInit {
   loadingSecretaries: boolean;
   getMySecretaries(page: number) {
     this.loadingSecretaries = true;
-    this.patientService.getMySecretaries(this.patientGet.secureLogin, page, 4).subscribe(
+    this.patientService.getMySecretaries(this.patientGet.userId, page, 4).subscribe(
       res => {
         let mySecretaries: MyUserWithPag = res;
         this.mySecretaries.count = Math.ceil(mySecretaries.count / 4);
@@ -1986,7 +1944,7 @@ export class PatientComponent implements OnInit {
   loadingPharmacies: boolean;
   getMyPharmacies(page: number) {
     this.loadingPharmacies = true;
-    this.patientService.getMyPharmacies(this.patientGet.secureLogin, page, 4).subscribe(
+    this.patientService.getMyPharmacies(this.patientGet.userId, page, 4).subscribe(
       res => {
         let myPharmacies: MyUserWithPag = res;
         this.myPharmacies.count = Math.ceil(myPharmacies.count / 4);
@@ -2053,7 +2011,7 @@ export class PatientComponent implements OnInit {
   heightChartWidth: number;
   getHeightValues() {
     if (this.heightValues == false) {
-      this.patientService.getHeightValues(this.patientGet.secureLogin).subscribe(
+      this.patientService.getHeightValues(this.patientGet.userId).subscribe(
         res => {
           let labels: any[] = [];
           let dataCases: any[] = [];
@@ -2079,7 +2037,7 @@ export class PatientComponent implements OnInit {
   weightChartWidth: number;
   getWeightValues() {
     if (this.weightValues == false) {
-      this.patientService.getWeightValues(this.patientGet.secureLogin).subscribe(
+      this.patientService.getWeightValues(this.patientGet.userId).subscribe(
         res => {
           let labels: any[] = [];
           let dataCases: any[] = [];

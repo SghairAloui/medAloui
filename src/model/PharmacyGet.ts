@@ -9,5 +9,4 @@ export interface PharmacyGet{
     pharmacyExactAddress:string;
     distance:string;
     pharmacyType:string;
-    secureLogin:string;
 }

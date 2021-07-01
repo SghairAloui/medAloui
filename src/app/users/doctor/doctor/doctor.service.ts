@@ -14,9 +14,7 @@ import { SearchDoctorDoctorPost } from 'src/model/SearchDoctorDoctorPost';
 import { SearchedDocGet } from 'src/model/SearchedDocGet';
 import { SecretaryPublicInfo } from 'src/model/SecretaryPublicInfo';
 import { SecretaryWork } from 'src/model/SecretaryWork';
-import { SecureLoginString } from 'src/model/SecureLoginString';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
-import { TwoStringsPost } from 'src/model/TwoStringsPost';
 
 const DOC_API = environment.apiUrl+'api/doctor/';
 const IAMAGE_API = environment.apiUrl+'api/image/';
@@ -92,8 +90,8 @@ export class DoctorService {
     return this.http.get<AppointmentPatientInfo>(DOC_API + 'getAppPatientInfoById/' + id,httpOptions)
   }
 
-  public changeCurrentPatientBySecureLogin(secureLogin:string,patientTurn,allPatientNumber,doctorId:number){
-    return this.http.post<boolean>(DOC_API + 'changeCurrentPatientBySecureLogin',{secureLogin,patientTurn,allPatientNumber,doctorId},httpOptions)
+  public changeCurrentPatientById(patientTurn,allPatientNumber,doctorId:number){
+    return this.http.post<boolean>(DOC_API + 'changeCurrentPatientById',{patientTurn,allPatientNumber,doctorId},httpOptions)
   }
 
   public getPatientInfoById(id:number){
@@ -112,8 +110,8 @@ export class DoctorService {
     return this.http.post<TopRatedDoctorGet []>(DOC_API+'getTopRatedDoctor',{page,size},httpOptions);
   }
 
-  public updatePositionBySecureLogin(secureLogin:string,latitude:string,longitude:string){
-    return this.http.post<boolean>(DOC_API+'updatePositionBySecureLogin',{secureLogin,latitude,longitude},httpOptions);
+  public updatePositionById(userId:number,latitude:string,longitude:string){
+    return this.http.post<boolean>(DOC_API+'updatePositionById',{userId,latitude,longitude},httpOptions);
   }
 
   public sendSeeSecretaryWorkRequest(email:string,doctorId:number){
@@ -132,12 +130,12 @@ export class DoctorService {
       userPassword,userCity,userFirstName,userLastName,userBirthday,userGender,doctorId},httpOptions);
   }
 
-  public getMySecretaries(secureLogin:string,doctorId:number){
-    return this.http.post<SecretaryPublicInfo []>(DOC_API+"getMySecretaries",{secureLogin,doctorId},httpOptions);
+  public getMySecretaries(userId:number,doctorId:number){
+    return this.http.post<SecretaryPublicInfo []>(DOC_API+"getMySecretaries",{userId,doctorId},httpOptions);
   }
   
-  public getSecretaryWork(secureLogin:string,secretaryId:number){
-    return this.http.post<SecretaryWork []>(DOC_API+"getSecretaryWorkById",{secureLogin,secretaryId},httpOptions);
+  public getSecretaryWork(secretaryId:number){
+    return this.http.post<SecretaryWork []>(DOC_API+"getSecretaryWorkById",{secretaryId},httpOptions);
   }
 
   public checkSecretaryCode(doctorId:number,email:string,code:number){

@@ -1,6 +1,6 @@
 export class UpdatePasswordPost{
     constructor(
-        private userSecureLogin:string,
+        private userId:number,
         private userPassword:string
     ){};
 }

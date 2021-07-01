@@ -25,12 +25,8 @@ export class UserService {
     return this.http.get<boolean>(USER_API+'existsByUsername/'+username,httpOptions);
   }
 
-  updateUserPasswordBySecurelogin(updatePasswordPost:UpdatePasswordPost){
-    return this.http.post<boolean>(USER_API+'updateUserPasswordBySecurelogin',updatePasswordPost,httpOptions);
-  }
-
-  updateUsernameBySecureLogin(twoStringsPost:TwoStringsPost){
-    return this.http.post<boolean>(USER_API + 'updateUsernameBySecureLogin',twoStringsPost,httpOptions);
+  updateUserPasswordById(updatePasswordPost:UpdatePasswordPost){
+    return this.http.post<boolean>(USER_API+'updateUserPasswordById',updatePasswordPost,httpOptions);
   }
 
   public getUserFullNameById(docId:number) {

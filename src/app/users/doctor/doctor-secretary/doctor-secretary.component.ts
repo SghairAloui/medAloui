@@ -150,6 +150,7 @@ export class DoctorSecretaryComponent implements OnInit {
     this.loading = true;
     this.doctorService.addSecretary(this.email, this.doctorComp.doctorGet.userId).subscribe(
       res => {
+        this.searchedSecretary = null;
         this.newSecretary = 'secretaryAdded';
         this.loading = false;
         this.email = '';
@@ -316,7 +317,7 @@ export class DoctorSecretaryComponent implements OnInit {
   mySecretaries: SecretaryPublicInfo[] = [];
   loadingSecretaries: boolean = true;
   getMySecretaries() {
-    this.doctorService.getMySecretaries(this.doctorComp.doctorGet.secureLogin, this.doctorComp.doctorGet.userId).subscribe(
+    this.doctorService.getMySecretaries(this.doctorComp.doctorGet.userId, this.doctorComp.doctorGet.userId).subscribe(
       res => {
         this.mySecretaries = res;
         for (let secretary of this.mySecretaries) {
@@ -350,7 +351,7 @@ export class DoctorSecretaryComponent implements OnInit {
       this.selectedSecretaryKey = secretaryKey;
     else {
       this.loadingSecretaryWork = true;
-      this.doctorService.getSecretaryWork(this.doctorComp.doctorGet.secureLogin, this.mySecretaries[secretaryKey].userId).subscribe(
+      this.doctorService.getSecretaryWork(this.mySecretaries[secretaryKey].userId).subscribe(
         res => {
           this.mySecretaries[secretaryKey].secretaryWork = res;
           for (let work of this.mySecretaries[secretaryKey].secretaryWork) {

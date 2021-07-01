@@ -372,7 +372,7 @@ export class DoctorComponent implements OnInit {
 
   updateMyPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.doctorService.updatePositionBySecureLogin(localStorage.getItem('secureLogin'), position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+      this.doctorService.updatePositionById(this.doctorGet.userId, position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
         res => {
           if (res) {
             if (!this.position) {
@@ -513,49 +513,6 @@ export class DoctorComponent implements OnInit {
     }
   }
 
-  updateUsername() {
-    if (this.mail.length < 6) {
-      this.invalidMailVariable = true;
-      this.mailInformation = this.translate.instant('mailApha');
-    } else {
-      if (this.mail.indexOf(' ') !== -1) {
-        this.invalidMailVariable = true;
-        this.mailInformation = this.translate.instant('enterValidMail');
-      }
-      else {
-        this.invalidMailVariable = false;
-        this.mailInformation = this.translate.instant('mail');
-      }
-    }
-    if (!this.invalidMailVariable) {
-      this.twoStringsPost = new TwoStringsPost(localStorage.getItem('secureLogin'), this.mail.toLowerCase())
-      this.userService.updateUsernameBySecureLogin(this.twoStringsPost).subscribe(
-        async res => {
-          if (!res) {
-            this.invalidMailVariable = true;
-            this.mailInformation = this.translate.instant('mailExist');
-          } else {
-            this.router.navigate(['/acceuil']);
-            this.toastr.success(this.translate.instant('usernameChanged'), this.translate.instant('info'), {
-              timeOut: 5000,
-              positionClass: 'toast-bottom-left'
-            });
-            localStorage.setItem('secureLogin', '');
-            localStorage.setItem('id', '');
-            await this.sleep(1000);
-            document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
-          }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
-    }
-  }
-
   updatePassword() {
     if (this.password.length > 5) {
       this.invalidPasswordVariable = false;
@@ -574,8 +531,8 @@ export class DoctorComponent implements OnInit {
       this.passwordRepeatInfromation = this.translate.instant('repeatPasswordErr');
     }
     if (!this.invalidPasswordVariable && !this.invalidPasswordRepeatVariable) {
-      this.updatePasswordPost = new UpdatePasswordPost(localStorage.getItem('secureLogin'), this.password);
-      this.userService.updateUserPasswordBySecurelogin(this.updatePasswordPost).subscribe(
+      this.updatePasswordPost = new UpdatePasswordPost(this.doctorGet.userId, this.password);
+      this.userService.updateUserPasswordById(this.updatePasswordPost).subscribe(
         async res => {
           if (!res) {
             this.toastr.warning(this.translate.instant('applicationDataChanged'), this.translate.instant('Data'), {
@@ -1616,7 +1573,7 @@ export class DoctorComponent implements OnInit {
       else
         patientTurn = parseInt(this.doctorGet.currentPatient.toString()) + 1;
       if (firsttime == false) {
-        this.doctorService.changeCurrentPatientBySecureLogin(localStorage.getItem('secureLogin'), patientTurn, this.todayPatientNumber, this.doctorGet.userId).subscribe(
+        this.doctorService.changeCurrentPatientById(patientTurn, this.todayPatientNumber, this.doctorGet.userId).subscribe(
           res => {
             if (res) {
               if (this.currentPatientInfo[parseInt(this.doctorGet.currentPatient.toString()) - 1])

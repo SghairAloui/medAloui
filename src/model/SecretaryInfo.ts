@@ -11,6 +11,5 @@ export interface SecretaryInfo{
     userCity:string;
     userId:number;
     profileImage:any;
-    secureLogin:string;
 
 }

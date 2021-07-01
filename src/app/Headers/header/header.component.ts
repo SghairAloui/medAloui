@@ -64,7 +64,6 @@ export class HeaderComponent implements OnInit {
   currentSearch: string;
   searchPage: number = 0;
   searchingUsers: boolean = false;
-  secureLogin:string;
 
   @ViewChild('notificationsScrollEL') private notificationsScrollEl: ElementRef;
   @ViewChild('conversationsScrollEl') private conversationsScrollEl: ElementRef;
@@ -242,23 +241,18 @@ export class HeaderComponent implements OnInit {
         this.role = message;
         if (this.role == 'doctor'){
           this.userId = this.doctorComp.doctorGet.userId;
-          this.secureLogin = this.doctorComp.doctorGet.secureLogin;
         }
         else if (this.role == 'patient'){
           this.userId = this.patientComp.patientGet.userId;
-          this.secureLogin = this.patientComp.patientGet.secureLogin;
         }
         else if (this.role == 'pharmacy'){
           this.userId = this.pharmacyComp.pharmacyGet.userId;
-          this.secureLogin = this.pharmacyComp.pharmacyGet.secureLogin;
         }
         else if (this.role == 'admin'){
           this.userId = this.adminComp.adminGet.userId;
-          this.secureLogin = this.adminComp.adminGet.secureLogin;
         }
         else if (this.role == 'secretary'){
           this.userId = this.secretaryComponent.secretaryGet.userId;
-          this.secureLogin = this.secretaryComponent.secretaryGet.secureLogin;
         }
       }
     );
@@ -833,7 +827,7 @@ export class HeaderComponent implements OnInit {
   }
 
   acceptDoctorAddRequest(notKey:number){
-    this.secretaryService.acceptDoctorAddRequest(this.notifications[notKey].senderId,this.notifications[notKey].notificationId,this.userId,this.secureLogin).subscribe(
+    this.secretaryService.acceptDoctorAddRequest(this.notifications[notKey].senderId,this.notifications[notKey].notificationId,this.userId).subscribe(
       res=>{
         if(res){
           this.notifications[notKey].notificationParameter = 'accepted';
@@ -849,7 +843,7 @@ export class HeaderComponent implements OnInit {
   }
 
   refuseDoctorAddRequest(notKey:number){
-    this.secretaryService.refuseDoctorAddRequest(this.notifications[notKey].notificationId,this.secureLogin,this.notifications[notKey].senderId,this.userId).subscribe(
+    this.secretaryService.refuseDoctorAddRequest(this.notifications[notKey].notificationId,this.notifications[notKey].senderId,this.userId).subscribe(
       res=>{
         if(res)
           this.notifications[notKey].notificationParameter = 'refused';
