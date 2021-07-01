@@ -561,7 +561,6 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            localStorage.setItem('secureLogin', '');
             localStorage.setItem('id', '');
             await this.sleep(1000);
             document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });
@@ -571,7 +570,6 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            localStorage.setItem('secureLogin', '');
             localStorage.setItem('id', '');
             await this.sleep(1);
             document.getElementById("connexionSection").scrollIntoView({ behavior: "smooth" });

@@ -415,6 +415,7 @@ export class DoctorComponent implements OnInit {
     let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
     this.doctorService.getDoctorInfo(parseInt(token.jti)).subscribe(
       res => {
+        console.log(res);
         if (res) {
           this.doctorGet = res;
           if (parseInt(this.doctorGet.doctorStatus) <= 99999 && parseInt(this.doctorGet.doctorStatus) >= 10000) {
