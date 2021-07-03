@@ -37,11 +37,24 @@ export class PatientDiseaseComponent implements OnInit {
   loadMoreQuestion: boolean = true;
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
-  loading:boolean=false;
-  position: number=0;
+  loading: boolean = false;
+  position: number = 0;
 
   ngOnInit(): void {
+    this.getQuestionsTypes();
     this.getAllQuestions();
+  }
+
+  questionsTypes: string[] = [this.translate.instant('all')];
+  selectedType: number = 0;
+  getQuestionsTypes() {
+    this.questionService.getQuestionsTypes().subscribe(
+      res => {
+        let questionsTypes: string[] = res;
+        for (let type of questionsTypes)
+          this.questionsTypes.push(type);
+      }
+    );
   }
 
   postQuestion() {
@@ -81,7 +94,7 @@ export class PatientDiseaseComponent implements OnInit {
         timeOut: 5000,
         positionClass: 'toast-bottom-left'
       });
-    }else {
+    } else {
       let questionName: string;
       let questionAbout: string;
       let questionText: string;
@@ -139,30 +152,51 @@ export class PatientDiseaseComponent implements OnInit {
     }
   }
 
+  getQuestions(key: number) {
+    this.selectedType = key;
+    this.questionPage = 0;
+    this.search='';
+    this.getAllQuestions();
+  }
+
+  searchQuestions(){
+    this.questionPage = 0;
+    this.getAllQuestions();
+  }
+
+  search: string = '';
   getAllQuestions() {
-    if(this.loading==false){
-      this.loading=true;
-      this.questionService.getAll(this.questionPage, 4).subscribe(
-        res => {
-          let questions: QuestionGet[] = [];
-          questions = res;
-          for (let ques of questions) {
-            ques.commentPage = 0;
-            ques.comments = [];
-            this.questions.push(ques);
-            this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-            this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
-            this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+    if (this.loading == false) {
+      let search;
+      if (this.search.length == 0)
+        search = 'all';
+      else
+        search ='%'+ this.search.split(' ').join('%%') +'%';
+      this.loading = true;
+      this.questionService.getQuestionsByType(this.questionPage, 4,
+        this.selectedType == 0 ? 'all' : this.questionsTypes[this.selectedType], search).subscribe(
+          res => {
+            if (this.questionPage == 0)
+              this.questions = [];
+            let questions: QuestionGet[] = [];
+            questions = res;
+            for (let ques of questions) {
+              ques.commentPage = 0;
+              ques.comments = [];
+              this.questions.push(ques);
+              this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
+              this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+              this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+            }
+            this.questionPage += 1;
+            if (questions.length == 4)
+              this.loadMoreQuestion = true;
+            else
+              this.loadMoreQuestion = false;
+            document.getElementById('allQuestionSection').scrollIntoView({ behavior: 'smooth' });
+            this.loading = false;
           }
-          this.questionPage += 1;
-          if (questions.length == 4)
-            this.loadMoreQuestion = true;
-          else
-            this.loadMoreQuestion = false;
-          document.documentElement.scrollTop = this.position;
-          this.loading=false;
-        }
-      );
+        );
     }
   }
 

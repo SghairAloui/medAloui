@@ -24,8 +24,8 @@ export class QuestionService {
     return this.http.post<number>(QUESTION_API + 'add',{question,questionAbout,questionName,postBy},httpOptions);
   }
 
-  public getAll(page:number,size:number){
-    return this.http.post<QuestionGet []>(QUESTION_API + 'getAll',{page,size},httpOptions);
+  public getQuestionsByType(page:number,size:number,type:string,words:string){
+    return this.http.post<QuestionGet []>(QUESTION_API + 'getQuestionsByType',{page,size,type,words},httpOptions);
   }
 
   public getComments(id:number,page:number,size:number){
@@ -46,5 +46,9 @@ export class QuestionService {
 
   public getQuestionsByUserId(id:number,page:number,size:number){
     return this.http.post<QuestionGet []>(QUESTION_API + 'getQuestionsByUserId',{id,page,size},httpOptions);
+  }
+
+  public getQuestionsTypes(){
+    return this.http.get<string []>(QUESTION_API + 'getQuestionsTypes',httpOptions);
   }
 }

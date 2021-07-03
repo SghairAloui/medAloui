@@ -28,38 +28,72 @@ export class PharmacyDiseaseComponent implements OnInit {
   questions: QuestionGet[] = [];
   loadingQuestions: boolean = false;
   position: number = 0;
-  loading:boolean=false;
+  loading: boolean = false;
 
   ngOnInit(): void {
+    this.getQuestionsTypes();
     this.getAllQuestions();
   }
 
+  questionsTypes: string[] = [this.translate.instant('all')];
+  selectedType: number = 0;
+  getQuestionsTypes() {
+    this.questionService.getQuestionsTypes().subscribe(
+      res => {
+        let questionsTypes: string[] = res;
+        for (let type of questionsTypes)
+          this.questionsTypes.push(type);
+      }
+    );
+  }
+
+  getQuestions(key: number) {
+    this.selectedType = key;
+    this.questionPage = 0;
+    this.search='';
+    this.getAllQuestions();
+  }
+
+  searchQuestions() {
+    this.questionPage = 0;
+    this.getAllQuestions();
+  }
+
+  search: string = '';
   getAllQuestions() {
-    if(this.loading==false){
-      this.loading=true;
+    if (this.loading == false) {
+      let search;
+      if (this.search.length == 0)
+        search = 'all';
+      else
+        search = '%' + this.search.split(' ').join('%%') + '%';
+      this.loading = true;
       this.loadingQuestions = true;
-      this.questionService.getAll(this.questionPage, 4).subscribe(
-        res => {
-          let questions: QuestionGet[] = [];
-          questions = res;
-          for (let ques of questions) {
-            ques.commentPage = 0;
-            ques.comments = [];
-            ques.invalidComment = false;
-            this.questions.push(ques);
-            this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-            this.getCommentPosterProfileImg(ques.postBy+'profilePic',(this.questions.length-1),0,'question');
-            this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+      this.questionService.getQuestionsByType(this.questionPage, 4,
+        this.selectedType == 0 ? 'all' : this.questionsTypes[this.selectedType], search).subscribe(
+          res => {
+            if (this.questionPage == 0)
+              this.questions = [];
+            let questions: QuestionGet[] = [];
+            questions = res;
+            for (let ques of questions) {
+              ques.commentPage = 0;
+              ques.comments = [];
+              ques.invalidComment = false;
+              this.questions.push(ques);
+              this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
+              this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+              this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+            }
+            this.questionPage += 1;
+            if (questions.length == 4)
+              this.loadMoreQuestion = true;
+            else
+              this.loadMoreQuestion = false;
+            document.documentElement.scrollTop = this.position;
+            this.loading = false;
           }
-          this.questionPage += 1;
-          if (questions.length == 4)
-            this.loadMoreQuestion = true;
-          else
-            this.loadMoreQuestion = false;
-          document.documentElement.scrollTop = this.position;
-          this.loading=false;
-        }
-      );
+        );
     }
   }
 
@@ -96,19 +130,19 @@ export class PharmacyDiseaseComponent implements OnInit {
     this.userService.getUserFullNameById(userId).subscribe(
       res => {
         let name: FirstAndLastNameGet = res;
-        if (name.doctor_first_name){
+        if (name.doctor_first_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Dr. ' + name.doctor_first_name + ' ' + name.doctor_last_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId+'profilePic',questionKey,commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
-        else if (name.pharmacy_full_name){
+        else if (name.pharmacy_full_name) {
           this.questions[questionKey].comments[commentKey].commentPostBy = 'Ph. ' + name.pharmacy_full_name.toUpperCase();
-          this.getCommentPosterProfileImg(userId+'profilePic',questionKey,commentKey,'comment');
+          this.getCommentPosterProfileImg(userId + 'profilePic', questionKey, commentKey, 'comment');
         }
       }
     );
   }
 
-  getCommentPosterProfileImg(imageName:string,questionKey:number,commentKey:number,status:string){
+  getCommentPosterProfileImg(imageName: string, questionKey: number, commentKey: number, status: string) {
     let retrieveResonse: any;
     let base64Data: any;
     let retrievedImage: any;
@@ -132,8 +166,8 @@ export class PharmacyDiseaseComponent implements OnInit {
     );
   }
 
-  addPointToComment(commentId: number, questionKey: number,commentKey:number) {
-    this.questionService.addPointToPost(commentId, this.pharmacyComponent.pharmacyGet.userId,'comment').subscribe(
+  addPointToComment(commentId: number, questionKey: number, commentKey: number) {
+    this.questionService.addPointToPost(commentId, this.pharmacyComponent.pharmacyGet.userId, 'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointAdded'), this.translate.instant('point'), {
@@ -157,8 +191,8 @@ export class PharmacyDiseaseComponent implements OnInit {
     );
   }
 
-  deletePointFromComment(questionId: number, questionKey: number,commentKey:number) {
-    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.pharmacyComponent.pharmacyGet.userId,'comment').subscribe(
+  deletePointFromComment(questionId: number, questionKey: number, commentKey: number) {
+    this.questionService.deletePointByQuestionIdAndUserId(questionId, this.pharmacyComponent.pharmacyGet.userId, 'comment').subscribe(
       res => {
         if (res) {
           this.toastr.success(this.translate.instant('pointDeleted'), this.translate.instant('point'), {
@@ -205,13 +239,13 @@ export class PharmacyDiseaseComponent implements OnInit {
       this.questionService.addComment(questionId, this.pharmacyComponent.pharmacyGet.userId, this.questions[questionKey].doctorComment).subscribe(
         res => {
           if (res) {
-            let comment: CommentGet={commentId:res,commentPostDate:'', comment : this.questions[questionKey].doctorComment,postedBy : this.pharmacyComponent.pharmacyGet.userId,postId:this.questions[questionKey].questionId,commentPoints:0,commentPostBy:'Ph. '+this.pharmacyComponent.pharmacyGet.pharmacyFullName,posterProfileImage:this.pharmacyComponent.retrievedImage};
+            let comment: CommentGet = { commentId: res, commentPostDate: '', comment: this.questions[questionKey].doctorComment, postedBy: this.pharmacyComponent.pharmacyGet.userId, postId: this.questions[questionKey].questionId, commentPoints: 0, commentPostBy: 'Ph. ' + this.pharmacyComponent.pharmacyGet.pharmacyFullName, posterProfileImage: this.pharmacyComponent.retrievedImage };
             this.toastr.success(this.translate.instant('commentAdded'), this.translate.instant('comment'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
             this.questions[questionKey].comments.push(comment);
-            this.questions[questionKey].doctorComment='';
+            this.questions[questionKey].doctorComment = '';
           }
         },
         err => {

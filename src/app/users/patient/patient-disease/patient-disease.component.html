@@ -94,18 +94,40 @@
 
     <section id="allQuestionSection">
         <div class="sectionTitle">{{'allQuestion'|translate}}</div>
+        <div *ngIf="questionsTypes.length != 1 && questionsTypes.length != 0" class="quesTypes">
+            <div>
+                {{'topQues'|translate}}
+            </div>
+            <div *ngFor="let type of questionsTypes; let q = index" class="questionType" [class.selectedQuestionType]="selectedType == q"
+            (click)="getQuestions(q)">
+                {{type}}
+            </div>
+        </div>
         <div *ngIf="questions">
+            <div class="fixSearchBox">
+                <input type="text" class="fixSearchBoxInput" placeholder="{{'search'|translate}}" name="search"
+                    [(ngModel)]="search" (keyup.enter)="searchQuestions()">
+                <span (click)="searchQuestions()">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
             <div *ngFor="let ques of questions; let i =index" class="question" id="question{{i}}">
                 <div class="questionPoints">
                     <div class="centerQuestionPoints">
-                        <div (click)="addPointToQuestion(ques.questionId,i)">
+                        <div (click)="addPointToQuestion(ques.questionId,i)" id="addPointArrow">
                             <i class="fas fa-sort-up"></i>
+                            <div class="addPointInfo">
+                                {{'clickingHere'|translate}} {{'give'|translate}} {{'thisQuestion'|translate}} {{'getToTop'|translate}} {{'qustions'|translate}} {{'soUsersFind'|translate}}
+                            </div>
                         </div>
                         <div class="points">
                             {{ques.questionPoints}}
                         </div>
-                        <div (click)="deletePointFromQuestion(ques.questionId,i)">
+                        <div (click)="deletePointFromQuestion(ques.questionId,i)" id="removePointArrow">
                             <i class="fas fa-sort-down"></i>
+                            <div class="removePointInfo">
+                                {{'ifYouSee'|translate}} {{'thisQuestion'|translate}} {{'deletPoint'|translate}}
+                            </div>
                         </div>
                     </div>
                 </div>

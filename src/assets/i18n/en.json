@@ -652,5 +652,17 @@
     "youNeedToWait7Days":"You must wait 7 days from the last update to be able to update your medical profile again",
     "now":"Now",
     "notifications":"notifications",
-    "profile":"profile"
+    "profile":"profile",
+    "all":"All",
+    "topQues":"Top questions talk about",
+    "clickingHere":"Clicking here will",
+    "give":"give",
+    "ifYouSee":"If you see that",
+    "deletPoint":"is not helpful, you can delete your added point by clicking here.",
+    "thisQuestion":"this question",
+    "thisComment":"this comment",
+    "getToTop":"a point that will help it get to the top of the",
+    "soUsersFind":"so that users can find it easily.",
+    "qustions":"questions",
+    "comments":"comments"
 }

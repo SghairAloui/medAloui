@@ -32,35 +32,69 @@ export class DoctorDiseaseComponent implements OnInit {
   loading: boolean = false;
 
   ngOnInit(): void {
+    this.getQuestionsTypes();
     this.getAllQuestions();
   }
 
+  questionsTypes: string[] = [this.translate.instant('all')];
+  selectedType: number = 0;
+  getQuestionsTypes() {
+    this.questionService.getQuestionsTypes().subscribe(
+      res => {
+        let questionsTypes: string[] = res;
+        for (let type of questionsTypes)
+          this.questionsTypes.push(type);
+      }
+    );
+  }
+
+  getQuestions(key: number) {
+    this.selectedType = key;
+    this.questionPage = 0;
+    this.search='';
+    this.getAllQuestions();
+  }
+
+  searchQuestions(){
+    this.questionPage = 0;
+    this.getAllQuestions();
+  }
+
+  search: string = '';
   getAllQuestions() {
     if (this.loading == false) {
+      let search;
+      if (this.search.length == 0)
+        search = 'all';
+      else
+        search ='%'+ this.search.split(' ').join('%%') +'%';
       this.loading = true;
       this.loadingQuestions = true;
-      this.questionService.getAll(this.questionPage, 4).subscribe(
-        res => {
-          let questions: QuestionGet[] = [];
-          questions = res;
-          for (let ques of questions) {
-            ques.commentPage = 0;
-            ques.comments = [];
-            ques.invalidComment = false;
-            this.questions.push(ques);
-            this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
-            this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
-            this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+      this.questionService.getQuestionsByType(this.questionPage, 4,
+        this.selectedType == 0 ? 'all' : this.questionsTypes[this.selectedType], search).subscribe(
+          res => {
+            if (this.questionPage == 0)
+              this.questions = [];
+            let questions: QuestionGet[] = [];
+            questions = res;
+            for (let ques of questions) {
+              ques.commentPage = 0;
+              ques.comments = [];
+              ques.invalidComment = false;
+              this.questions.push(ques);
+              this.getUserFullNameById(ques.postBy, (this.questions.length - 1));
+              this.getCommentPosterProfileImg(ques.postBy + 'profilePic', (this.questions.length - 1), 0, 'question');
+              this.getPostCommentsByPostId(ques.questionId, (this.questions.length - 1));
+            }
+            this.questionPage += 1;
+            if (questions.length == 4)
+              this.loadMoreQuestion = true;
+            else
+              this.loadMoreQuestion = false;
+            document.documentElement.scrollTop = this.position;
+            this.loading = false;
           }
-          this.questionPage += 1;
-          if (questions.length == 4)
-            this.loadMoreQuestion = true;
-          else
-            this.loadMoreQuestion = false;
-          document.documentElement.scrollTop = this.position;
-          this.loading = false;
-        }
-      );
+        );
     }
   }
 

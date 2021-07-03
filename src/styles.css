@@ -1891,7 +1891,11 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     position: relative;
     width: 40%;
     height: 40px;
-    margin: 20px 30%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    min-width: 250px;
 }
 .fixSearchBox .fixSearchBoxInput{
     width: 100%;
@@ -2093,7 +2097,59 @@ input[type=radio]:disabled + #day1Lab:hover,input[type=radio]:disabled + #day2La
     color: #f4bb02;
 }
 
+.questionType{
+    width: fit-content;
+    display: inline-block;
+    vertical-align: top;
+    padding: 3px 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #308a7b;
+    color: #308a7b;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+.questionType:hover{
+    background-color: #308a7b;
+    color: white;
+}
+.selectedQuestionType{
+    background-color: #308a7b;
+    color: white;
+    cursor: default;
+}
 
+.quesTypes{
+    margin-left: 20px;
+}
+.addPointInfo{
+    top: -80px;
+}
+.removePointInfo{
+    top: -10px;
+}
+.addPointInfoCom{
+    top: -80px;
+}
+.removePointInfoCom{
+    top: -30px;
+}
+.addPointInfo,.removePointInfo,.addPointInfoCom,.removePointInfoCom{
+    position: absolute;
+    padding: 5px;
+    border-radius: 5px;
+    width: 350px;
+    background-color: var(--smallMessageUsernameBackgroundColor);
+    color: var(--smallMessageUsernameColor);
+    z-index: 1002 !important;
+    display: none;
+}
+#addPointArrow:hover .addPointInfo,#addPointArrow:hover .addPointInfoCom{
+    display: block;
+}
+#removePointArrow:hover .removePointInfo,#removePointArrow:hover .removePointInfoCom{
+    display: block;
+}
 @media screen and (max-width: 700px){
     .messagesContainer .messagesConatiner{
         z-index: 1111;
