@@ -64,6 +64,7 @@ export class HeaderComponent implements OnInit {
   currentSearch: string;
   searchPage: number = 0;
   searchingUsers: boolean = false;
+  header:string='';
 
   @ViewChild('notificationsScrollEL') private notificationsScrollEl: ElementRef;
   @ViewChild('conversationsScrollEl') private conversationsScrollEl: ElementRef;
@@ -393,14 +394,17 @@ export class HeaderComponent implements OnInit {
 
   doctorClick() {
     this.patientComp.container = 'patientDoctor';
+    this.header='doctor';
   }
 
   profileCLick() {
     this.patientComp.container='profile';
+    this.header='profile';
   }
 
   diseaseClick() {
     this.patientComp.container = 'patientDisease';
+    this.header='disease';
   }
 
   toFindDoctorSection() {
@@ -434,6 +438,7 @@ export class HeaderComponent implements OnInit {
   //doctor header
   openContainerToDoctor(containerName: string) {
     this.doctorComp.container = containerName;
+    this.header=containerName;
   }
   //doctor header
 

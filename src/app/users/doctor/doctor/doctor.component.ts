@@ -42,6 +42,9 @@ import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { PatientService } from '../../patient/patient/patient.service';
 import { DoctorService } from './doctor.service';
 import jwt_decode from 'jwt-decode';
+import { HeightValues } from 'src/model/HeightValues';
+import * as Chart from 'chart.js';
+import { WeightValues } from 'src/model/WeightValues';
 
 declare const L: any;
 
@@ -2388,5 +2391,95 @@ export class DoctorComponent implements OnInit {
         }
       }
     );
+  }
+
+  heightValues: boolean = false;
+  heightChartWidth: number;
+  getHeightValues(userId:number) {
+    if (this.heightValues == false) {
+      this.patientService.getHeightValues(userId).subscribe(
+        res => {
+          let labels: any[] = [];
+          let dataCases: any[] = [];
+          let heightValues: HeightValues[] = res;
+          for (let height of heightValues) {
+            if (height.time.length != 0)
+              labels.push(height.time.slice(2, 10));
+            else
+              labels.push(this.translate.instant('now'));
+            dataCases.push(height.height);
+          }
+          this.heightChartWidth = 50 * labels.length;
+          this.chartjs(labels, dataCases, 'heightChart');
+        }
+      );
+    } else {
+      this.heightValues = false;
+    }
+  }
+
+  chartjs(labels, dataCases, chartId) {
+    let canvas:any = document.getElementById(chartId);
+    let ctx:any = canvas.getContext('2d');
+
+    let chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: dataCases,
+          backgroundColor: '#08a0f6',
+          borderColor: '#08a0f6',
+          fill: false,
+          borderWidth: 2
+        }]
+      }, options: {
+        maintainAspectRatio: false,
+        title: {
+          display: false,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: false
+        },
+        legend: {
+          display: false
+        }
+      }
+    });
+    if(chartId == 'heightChart'){
+      this.heightValues = true;
+    } else if (chartId == 'weightChart'){
+      this.weightValues = true;
+    }
+  }
+
+  weightValues: boolean = false;
+  weightChartWidth: number;
+  getWeightValues(userId:number) {
+    if (this.weightValues == false) {
+      this.patientService.getWeightValues(userId).subscribe(
+        res => {
+          let labels: any[] = [];
+          let dataCases: any[] = [];
+          let weightValues: WeightValues[] = res;
+          for (let weight of weightValues) {
+            if (weight.time.length != 0)
+              labels.push(weight.time.slice(2, 10));
+            else
+              labels.push(this.translate.instant('now'));
+            dataCases.push(weight.weight);
+          }
+          this.weightChartWidth = 50 * labels.length;
+          this.chartjs(labels, dataCases, 'weightChart');
+        }
+      );
+    } else {
+      this.weightValues = false;
+    }
   }
 }

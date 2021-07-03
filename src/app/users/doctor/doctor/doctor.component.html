@@ -20,21 +20,22 @@
             </div>
             <i class="fas fa-keyboard"></i> {{'enterVerificationCode'|translate}}:
             <div class="inputVerificationCode" [class.invalidVerificationCode]="isVerificationCode==false">
-                <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1" class="verficationCodeNumber" #1
-                    (keyup)="field1Keyup();isVerificationCode=null">
-                <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1" class="verficationCodeNumber" #2
-                    (keyup)="field2Keyup();isVerificationCode=null">
-                <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1" class="verficationCodeNumber" #3
-                    (keyup)="field3Keyup();isVerificationCode=null">
-                <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1" class="verficationCodeNumber" #4
-                    (keyup)="field4Keyup();isVerificationCode=null">
-                <input type="text" name="field5Code" [(ngModel)]="field5Code" maxlength="1" class="verficationCodeNumber" #5
-                    (keyup)="field5Keyup();isVerificationCode=null">
+                <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1"
+                    class="verficationCodeNumber" #1 (keyup)="field1Keyup();isVerificationCode=null">
+                <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1"
+                    class="verficationCodeNumber" #2 (keyup)="field2Keyup();isVerificationCode=null">
+                <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1"
+                    class="verficationCodeNumber" #3 (keyup)="field3Keyup();isVerificationCode=null">
+                <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1"
+                    class="verficationCodeNumber" #4 (keyup)="field4Keyup();isVerificationCode=null">
+                <input type="text" name="field5Code" [(ngModel)]="field5Code" maxlength="1"
+                    class="verficationCodeNumber" #5 (keyup)="field5Keyup();isVerificationCode=null">
             </div>
             <div *ngIf="isVerificationCode==false" class="invalidText">
                 {{'verificationCodeNotValid'|translate}}
             </div>
-            <button type="submit" class="fullyBtnSmall" (click)="checkVerificationCode()">{{'verify'|translate}}</button>
+            <button type="submit" class="fullyBtnSmall"
+                (click)="checkVerificationCode()">{{'verify'|translate}}</button>
         </div>
         <div *ngIf="notVerified==false">
             <app-header></app-header>
@@ -51,7 +52,8 @@
                                 <div class="searchedUserProfilePic">
                                     <img *ngIf="user.userImg" [style.background-image]="'url(' + user.userImg + ')'"
                                         class="profileImg">
-                                    <i *ngIf="user.userImg == false" style="font-size: 45px;" class="fas fa-user-tie"></i>
+                                    <i *ngIf="user.userImg == false" style="font-size: 45px;"
+                                        class="fas fa-user-tie"></i>
                                 </div>
                                 <div class="searchedUserInfo">
                                     {{user.userFullName}}
@@ -203,7 +205,8 @@
                                     {{'youHaveNoAppWithThisPat'|translate}}
                                 </div>
                                 <div *ngIf="selectedUser.patientAppointment.length != 0" class="selectedUserApp">
-                                    <div *ngFor="let app of selectedUser.patientAppointment" class="selectedUserAppDate">
+                                    <div *ngFor="let app of selectedUser.patientAppointment"
+                                        class="selectedUserAppDate">
                                         <i class="fas fa-calendar-day"></i>
                                         <div>
                                             {{app.appointmentDate}}
@@ -227,7 +230,8 @@
                                     <img [style.background-image]="'url(' + smallConv.userImg+ ')'" class="profileImg">
                                 </div>
                                 <div *ngIf="smallConv.userImg==false">
-                                    <i class="fas fa-user-tie" style="font-size: 40px;bottom: 0px;position: absolute;"></i>
+                                    <i class="fas fa-user-tie"
+                                        style="font-size: 40px;bottom: 0px;position: absolute;"></i>
                                 </div>
                             </div>
                             <div class="smallMessagesContainerUsername">
@@ -302,14 +306,16 @@
                                 {{'seen'|translate}} <i class="fas fa-check"></i>
                             </div>
                             <div *ngIf="openConversation.conversationStatus != 'open'" class="convClosed">
-                                <div *ngIf="openConversation.statusUpdatedBy == doctorGet.userId" style="margin: 5px auto;">
+                                <div *ngIf="openConversation.statusUpdatedBy == doctorGet.userId"
+                                    style="margin: 5px auto;">
                                     {{'convClosed'|translate}} <span
                                         *ngIf="openConversation.conversationStatus == 'closeByDefault'">
                                         {{'byDefault'|translate}} </span>
                                     <span *ngIf="openConversation.conversationStatus == 'close'"> {{'byYou'|translate}}
                                     </span>
                                 </div>
-                                <div *ngIf="openConversation.statusUpdatedBy != doctorGet.userId" style="margin: 5px auto;">
+                                <div *ngIf="openConversation.statusUpdatedBy != doctorGet.userId"
+                                    style="margin: 5px auto;">
                                     {{'convClosed'|translate}} <span
                                         *ngIf="openConversation.conversationStatus == 'closeByDefault'">
                                         {{'byDefault'|translate}} </span>
@@ -330,7 +336,8 @@
                         <div *ngIf="openConversation.conversationStatus == 'open'" class="messagesContainerFooter"
                             (click)="readConversation(openConversation.lastMessageSenderId)">
                             <input type="text" autocomplete="off" name="message" [(ngModel)]="message"
-                                (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}" class="messageInput">
+                                (keyup.enter)="sendMessage()" placeholder="{{'message...'|translate}}"
+                                class="messageInput">
                             <span (click)="sendMessage()">
                                 <i class="fas fa-paper-plane sendMessageIcon"></i>
                             </span>
@@ -379,7 +386,8 @@
                                     <div class="infoContainer">
                                         <div class="userInfoContainer">
                                             <div class="userInfoContainerTitle">
-                                                <div class="userInfoContainerTitleIcon"><i class="fas fa-venus-mars"></i>
+                                                <div class="userInfoContainerTitleIcon"><i
+                                                        class="fas fa-venus-mars"></i>
                                                 </div>
                                                 <div class="userInfoContainerTitleValue">
                                                     {{'gender'|translate}}
@@ -398,7 +406,8 @@
                                     <div class="infoContainer">
                                         <div class="userInfoContainer">
                                             <div class="userInfoContainerTitle">
-                                                <div class="userInfoContainerTitleIcon"><i class="fas fa-birthday-cake"></i>
+                                                <div class="userInfoContainerTitleIcon"><i
+                                                        class="fas fa-birthday-cake"></i>
                                                 </div>
                                                 <div class="userInfoContainerTitleValue">
                                                     {{'birthday'|translate}}
@@ -449,8 +458,9 @@
                                             </label>
                                         </div>
                                         <div class="formDiv">
-                                            <input type="tex" maxlength="2" [class.labelInvalidInfo]="invalidDayVariable"
-                                                name="day" [(ngModel)]="day"
+                                            <input type="tex" maxlength="2"
+                                                [class.labelInvalidInfo]="invalidDayVariable" name="day"
+                                                [(ngModel)]="day"
                                                 (keyup)="compareDay();dayInformation=translate.instant('day');invalidDayVariable=false"
                                                 class="formInput" list="daylistOptions" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -491,8 +501,8 @@
                                             </datalist>
                                         </div>
                                         <div class="formDiv">
-                                            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable" name="month"
-                                                [(ngModel)]="month"
+                                            <input type="text" [class.labelInvalidInfo]="invalidMonthVariable"
+                                                name="month" [(ngModel)]="month"
                                                 (keyup)="compareMonth();monthInformation=translate.instant('month');invalidMonthVariable=false"
                                                 maxlength="2" list="monthlistOptions" class="formInput" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -514,8 +524,8 @@
                                             </datalist>
                                         </div>
                                         <div class="formDiv">
-                                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable" name="year"
-                                                [(ngModel)]="year"
+                                            <input type="text" [class.labelInvalidInfo]="invalidYearVariable"
+                                                name="year" [(ngModel)]="year"
                                                 (keyup)="compareYear();yearInformation=translate.instant('year');invalidYearVariable=false"
                                                 maxlength="4" list="yearlistOptions" class="formInput" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -538,7 +548,8 @@
                                                 </datalist>
                                             </label>
                                         </div>
-                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group"
+                                            aria-label="Basic radio toggle button group">
                                             <input type="radio" class="maleRadio"
                                                 (change)="checkBoxInvaledInfoVriable=false;maleCheckBox=true;femaleCheckBox=fals"
                                                 [checked]="maleCheckBox" name="btnradio" id="male">
@@ -566,8 +577,9 @@
                                     <ng-template #showEditPassword>
                                         <div class="infoEdit">
                                             <div class="formDiv">
-                                                <input type="password" [class.labelInvalidInfo]="invalidPasswordVariable"
-                                                    name="password" [(ngModel)]="password"
+                                                <input type="password"
+                                                    [class.labelInvalidInfo]="invalidPasswordVariable" name="password"
+                                                    [(ngModel)]="password"
                                                     (keyup)="comparePassword();invalidPasswordVariable=false; passwordInfromation=translate.instant('password')"
                                                     class="formInput" placeholder=" ">
                                                 <label for="" class="formLabel">
@@ -594,8 +606,8 @@
                                     </ng-template>
                                     <ng-template #showEditUsername>
                                         <div class="formDiv editUserName">
-                                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable" name="mail"
-                                                [(ngModel)]="mail"
+                                            <input type="text" [class.labelInvalidInfo]="invalidMailVariable"
+                                                name="mail" [(ngModel)]="mail"
                                                 (keyup)="compareUserName();mailInformation=translate.instant('mail');invalidMailVariable=false"
                                                 class="formInput" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -622,7 +634,8 @@
                                     <div class="specialtyInput">
                                         <div class="formDiv">
                                             <input type="text" [class.labelInvalidInfo]="invalidSpecialityVariable"
-                                                name="specialityName" [(ngModel)]="specialityName" list="specialtyOptions"
+                                                name="specialityName" [(ngModel)]="specialityName"
+                                                list="specialtyOptions"
                                                 (keyup)="specialityInformation=translate.instant('speciality');invalidSpecialityVariable=false"
                                                 class="formInput" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -638,7 +651,8 @@
                                         <div class="infoContainer proveContainer">
                                             <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
                                             <ng-template #cinUploadedSuccessfully>
-                                                <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                                <input type="file" (change)="onFileChangedCin($event)"
+                                                    class="uploadImgBtn">
                                                 <div class="editPic">
                                                     <ng-template #showProfileImg><img
                                                             [style.background-image]="'url(' + retrievedImage + ')'"
@@ -654,7 +668,8 @@
                                                 </div>
                                             </ng-template>
                                             <ng-template #uploadCin>
-                                                <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                                <input type="file" (change)="onFileChangedCin($event)"
+                                                    class="uploadImgBtn">
                                                 <div class="infoTitle"><input type="file"
                                                         (change)="onFileChangedCin($event)"
                                                         class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
@@ -668,7 +683,7 @@
                                                 *ngIf="medicalClinicPic; then medicalClinicUploadedSuccessfully else uploadMedicalClinic">
                                             </div>
                                             <ng-template #medicalClinicUploadedSuccessfully>
-    
+
                                                 <input type="file" (change)="onFileChangedMedicalClinic($event)"
                                                     class="uploadImgBtn">
                                                 <div class="editPic">
@@ -751,23 +766,24 @@
                                 <div class="sectionContainer pending" id="settings">
                                     <div class="infoGridTowColumn">
                                         <div class="infoContainer" style="box-shadow: none;">
-                                        <div class="formDiv">
-                                            <span class="mesure">{{'mn'|translate}}</span>
-                                            <input type="text" maxlength="50"
-                                                [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
-                                                name="appointmentApproximateDuration"
-                                                [(ngModel)]="appointmentApproximateDuration"
-                                                (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{appointmentApproximateDurationInformation}}
-                                            </label>
+                                            <div class="formDiv">
+                                                <span class="mesure">{{'mn'|translate}}</span>
+                                                <input type="text" maxlength="50"
+                                                    [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
+                                                    name="appointmentApproximateDuration"
+                                                    [(ngModel)]="appointmentApproximateDuration"
+                                                    (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false"
+                                                    class="formInput" placeholder=" ">
+                                                <label for="" class="formLabel">
+                                                    {{appointmentApproximateDurationInformation}}
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
                                         <div class="infoContainer" style="box-shadow: none;">
                                             <div class="formDiv">
-                                                <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
-                                                    name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
+                                                <input type="text" maxlength="5"
+                                                    [class.labelInvalidInfo]="invalidStartTime" name="maxPatientPerDay"
+                                                    [(ngModel)]="startTime" list="startTimeOptions"
                                                     (keyup)="startTimeInformation=translate.instant('startTime');invalidStartTime=false"
                                                     class="formInput" placeholder=" ">
                                                 <label for="" class="formLabel">
@@ -827,17 +843,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                        <div class="formDiv width90">
-                                            <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                                name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                                (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{maxPatientPerDayInformation}}
-                                            </label>
-                                        </div>
-                                    
+
+                                    <div class="formDiv width90">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+
                                     <div class="weekDays">
                                         <div class="workDays">{{'workDays'|translate}}</div><br>
                                         <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
@@ -890,7 +906,8 @@
                                         </div>
                                         <div class="userInfoContainerSecondValue">
                                             <div class="userInfoContainerSecondValuePoint"></div>
-                                            <div class="userInfoContainerSecondValueText">{{'maxPatientPerDay'|translate}}
+                                            <div class="userInfoContainerSecondValueText">
+                                                {{'maxPatientPerDay'|translate}}
                                             </div>
                                         </div>
                                     </div>
@@ -906,12 +923,14 @@
                                         </div>
                                         <div class="userInfoContainerSecondValue">
                                             <div class="userInfoContainerSecondValuePoint"></div>
-                                            <div class="userInfoContainerSecondValueText">{{'startTime'|translate}}</div>
+                                            <div class="userInfoContainerSecondValueText">{{'startTime'|translate}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="userInfoContainer">
                                         <div class="userInfoContainerTitle">
-                                            <div class="userInfoContainerTitleIcon"><i class="fas fa-hand-holding-usd"></i>
+                                            <div class="userInfoContainerTitleIcon"><i
+                                                    class="fas fa-hand-holding-usd"></i>
                                             </div>
                                             <div class="userInfoContainerTitleValue">
                                                 {{'price'|translate}}
@@ -922,13 +941,15 @@
                                         </div>
                                         <div class="userInfoContainerSecondValue">
                                             <div class="userInfoContainerSecondValuePoint"></div>
-                                            <div class="userInfoContainerSecondValueText">{{'appointmentPrice'|translate}}
+                                            <div class="userInfoContainerSecondValueText">
+                                                {{'appointmentPrice'|translate}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="userInfoContainer">
                                         <div class="userInfoContainerTitle">
-                                            <div class="userInfoContainerTitleIcon"><i class="fas fa-user-clock"></i></div>
+                                            <div class="userInfoContainerTitleIcon"><i class="fas fa-user-clock"></i>
+                                            </div>
                                             <div class="userInfoContainerTitleValue">
                                                 {{'time'|translate}}
                                             </div>
@@ -938,13 +959,15 @@
                                         </div>
                                         <div class="userInfoContainerSecondValue">
                                             <div class="userInfoContainerSecondValuePoint"></div>
-                                            <div class="userInfoContainerSecondValueText">{{'AppointmentTime'|translate}}
+                                            <div class="userInfoContainerSecondValueText">
+                                                {{'AppointmentTime'|translate}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="userInfoContainer">
                                         <div class="userInfoContainerTitle">
-                                            <div class="userInfoContainerTitleIcon"><i class="fas fa-map-marked-alt"></i>
+                                            <div class="userInfoContainerTitleIcon"><i
+                                                    class="fas fa-map-marked-alt"></i>
                                             </div>
                                             <div class="userInfoContainerTitleValue">
                                                 {{'address'|translate}}
@@ -955,7 +978,8 @@
                                         </div>
                                         <div class="userInfoContainerSecondValue">
                                             <div class="userInfoContainerSecondValuePoint"></div>
-                                            <div class="userInfoContainerSecondValueText">{{doctorGet.exactAddress}}</div>
+                                            <div class="userInfoContainerSecondValueText">{{doctorGet.exactAddress}}
+                                            </div>
                                         </div>
                                     </div>
                                 </drag-scroll>
@@ -1012,23 +1036,24 @@
                                 <div class="sectionContainer" id="settings">
                                     <div class="infoGridTowColumn">
                                         <div class="infoContainer" style="box-shadow: none;">
-                                        <div class="formDiv">
-                                            <span class="mesure">{{'mn'|translate}}</span>
-                                            <input type="text" maxlength="50"
-                                                [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
-                                                name="appointmentApproximateDuration"
-                                                [(ngModel)]="appointmentApproximateDuration"
-                                                (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false;compareAppointmenTime()"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{appointmentApproximateDurationInformation}}
-                                            </label>
+                                            <div class="formDiv">
+                                                <span class="mesure">{{'mn'|translate}}</span>
+                                                <input type="text" maxlength="50"
+                                                    [class.labelInvalidInfo]="invalidAppointmentApproximateDuration"
+                                                    name="appointmentApproximateDuration"
+                                                    [(ngModel)]="appointmentApproximateDuration"
+                                                    (keyup)="appointmentApproximateDurationInformation=translate.instant('appointmentApproximateDuration');invalidAppointmentApproximateDuration=false;compareAppointmenTime()"
+                                                    class="formInput" placeholder=" ">
+                                                <label for="" class="formLabel">
+                                                    {{appointmentApproximateDurationInformation}}
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
                                         <div class="infoContainer" style="box-shadow: none;">
                                             <div class="formDiv">
-                                                <input type="text" maxlength="5" [class.labelInvalidInfo]="invalidStartTime"
-                                                    name="maxPatientPerDay" [(ngModel)]="startTime" list="startTimeOptions"
+                                                <input type="text" maxlength="5"
+                                                    [class.labelInvalidInfo]="invalidStartTime" name="maxPatientPerDay"
+                                                    [(ngModel)]="startTime" list="startTimeOptions"
                                                     (keyup)="compareStartTime();startTimeInformation=translate.instant('startTime');invalidStartTime=false"
                                                     class="formInput" placeholder=" ">
                                                 <label for="" class="formLabel">
@@ -1076,8 +1101,9 @@
                                             </div>
                                         </div>
                                         <div class="formDiv">
-                                            <input type="text" maxlength="50" [class.labelInvalidInfo]="invalidExactAdress"
-                                                name="exactAdress" [(ngModel)]="exactAdress"
+                                            <input type="text" maxlength="50"
+                                                [class.labelInvalidInfo]="invalidExactAdress" name="exactAdress"
+                                                [(ngModel)]="exactAdress"
                                                 (keyup)="compareExactAdress();exactAdressInformation=translate.instant('exactAdress');invalidExactAdress=false"
                                                 class="formInput" placeholder=" ">
                                             <label for="" class="formLabel">
@@ -1085,17 +1111,17 @@
                                             </label>
                                         </div>
                                     </div>
-                                        <div class="formDiv width90">
-                                            <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
-                                                name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
-                                                (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
-                                                class="formInput" placeholder=" ">
-                                            <label for="" class="formLabel">
-                                                {{maxPatientPerDayInformation}}
-                                            </label>
-                                        </div>
-                                    
-    
+                                    <div class="formDiv width90">
+                                        <input type="number" [class.labelInvalidInfo]="invalidMaxPatientPerDay"
+                                            name="maxPatientPerDay" [(ngModel)]="maxPatientPerDay"
+                                            (keyup)="compareMaxPateintPerDay();maxPatientPerDayInformation=translate.instant('maxPatientPerDay');invalidMaxPatientPerDay=false"
+                                            class="formInput" placeholder=" ">
+                                        <label for="" class="formLabel">
+                                            {{maxPatientPerDayInformation}}
+                                        </label>
+                                    </div>
+
+
                                     <div class="weekDays">
                                         <div class="workDays">{{'workDays'|translate}}</div><br>
                                         <div *ngIf="selectDay" style="color: red; margin-bottom: 5px;">
@@ -1159,7 +1185,8 @@
                                         <div class="infoContainer proveContainer">
                                             <div *ngIf="cinPic; then cinUploadedSuccessfully else uploadCin"></div>
                                             <ng-template #cinUploadedSuccessfully>
-                                                <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                                <input type="file" (change)="onFileChangedCin($event)"
+                                                    class="uploadImgBtn">
                                                 <div class="editPic">
                                                     <ng-template #showProfileImg><img
                                                             [style.background-image]="'url(' + retrievedImage + ')'"
@@ -1175,7 +1202,8 @@
                                                 </div>
                                             </ng-template>
                                             <ng-template #uploadCin>
-                                                <input type="file" (change)="onFileChangedCin($event)" class="uploadImgBtn">
+                                                <input type="file" (change)="onFileChangedCin($event)"
+                                                    class="uploadImgBtn">
                                                 <div class="infoTitle"><input type="file"
                                                         (change)="onFileChangedCin($event)"
                                                         class="uploadImgBtn">{{'clicktoUploadPhoto'|translate}}</div>
@@ -1263,7 +1291,8 @@
                                 <div class="sectionTitle">{{'todayPatient'|translate}}</div>
                                 <div class="sectionContainer">
                                     <div *ngIf="toadyAppointmentPatientInfo.length == 0">
-                                        <div style="text-align: center;padding: 20px;">{{'noPatientToday'|translate}}</div>
+                                        <div style="text-align: center;padding: 20px;">{{'noPatientToday'|translate}}
+                                        </div>
                                     </div>
                                     <div *ngIf="toadyAppointmentPatientInfo.length != 0">
                                         <div *ngIf="docTodayAppointments[0].appointmentStatus=='completed'"
@@ -1271,7 +1300,8 @@
                                             {{'todayPatientDiagnosed'|translate}}
                                         </div>
                                         <div *ngIf="docTodayAppointments[0].appointmentStatus=='pending'">
-                                            <div *ngIf="patientInfo; then showPatientinfo else showPatientSmallInfo "></div>
+                                            <div *ngIf="patientInfo; then showPatientinfo else showPatientSmallInfo ">
+                                            </div>
                                             <ng-template #showPatientinfo>
                                                 <div class="patientProfilePicBigContainer">
                                                     <div
@@ -1339,21 +1369,21 @@
                                                                 </span>
                                                                 <div class="diseasesContainerTitleLine"></div>
                                                             </div>
-    
+
                                                             <div class="content">
                                                                 <div style="width: fit-content;margin: 5px auto;"
                                                                     *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length == 0">
                                                                     {{'notDiagnosedYet'|translate}}
                                                                 </div>
-    
+
                                                                 <div *ngIf="todayPatientMedicalProfileGet[patientKey].medicalProfileDisease.length != 0 && !todayDiseaseFullInfo"
                                                                     class="userInfoContainers"
                                                                     style="display: inline-block; cursor: pointer;">
-    
+
                                                                     <div *ngFor="let dis of todayPatientMedicalProfileGet[patientKey].medicalProfileDisease | keyvalue"
                                                                         class="userInfoContainer userInfoContainerHover"
                                                                         (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'today')">
-    
+
                                                                         <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
                                                                             class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
                                                                             <div class="loading">
@@ -1374,24 +1404,27 @@
                                                                             {{dis.value.medicalProfileDiseaseName}}
                                                                         </div>
                                                                         <div class="userInfoContainerSecondValue">
-                                                                            <div class="userInfoContainerSecondValuePoint">
+                                                                            <div
+                                                                                class="userInfoContainerSecondValuePoint">
                                                                             </div>
-                                                                            <div class="userInfoContainerSecondValueText">
+                                                                            <div
+                                                                                class="userInfoContainerSecondValueText">
                                                                                 {{dis.value.medicalProfileDiseaseDiagnoseDay}}
                                                                             </div>
                                                                         </div>
                                                                     </div>
-    
+
                                                                     <div class="userInfoContainers"
                                                                         style="display: inline-block; cursor: pointer;">
                                                                         <div class="userInfoContainer"
                                                                             [class.userInfoContainerHover]="todayLoadMoreDiagnose"
                                                                             (click)="getMedicalProfileDiseases(todayPatientMedicalProfileId,patientKey,'today',todayMedicalProfileDiseasePage[patientKey])">
                                                                             <div class="userInfoContainerTitle">
-                                                                                <div class="userInfoContainerTitleIcon"><i
-                                                                                        class="fas fa-search"></i>
+                                                                                <div class="userInfoContainerTitleIcon">
+                                                                                    <i class="fas fa-search"></i>
                                                                                 </div>
-                                                                                <div class="userInfoContainerTitleValue">
+                                                                                <div
+                                                                                    class="userInfoContainerTitleValue">
                                                                                     {{'search'|translate}}
                                                                                 </div>
                                                                             </div>
@@ -1410,7 +1443,8 @@
                                                                                 </div>
                                                                                 <div
                                                                                     class="userInfoContainerSecondValueText">
-                                                                                    <span *ngIf="!todayLoadMoreDiagnose">
+                                                                                    <span
+                                                                                        *ngIf="!todayLoadMoreDiagnose">
                                                                                         {{'allDiseasesLoaded'|translate}}
                                                                                     </span>
                                                                                     <span *ngIf="todayLoadMoreDiagnose">
@@ -1421,8 +1455,9 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-    
-                                                                <div *ngIf="todayDiseaseFullInfo" id="todayDiseaseFullInfo">
+
+                                                                <div *ngIf="todayDiseaseFullInfo"
+                                                                    id="todayDiseaseFullInfo">
                                                                     <div class="diseaseDocInfo">
                                                                         <div class="docProfileImgForMedicalProfileDis">
                                                                             <div
@@ -1437,7 +1472,8 @@
                                                                             </ng-template>
                                                                         </div>
                                                                         <div class="diseaseDocName">
-                                                                            Dr.<span style="text-transform: capitalize;">
+                                                                            Dr.<span
+                                                                                style="text-transform: capitalize;">
                                                                                 {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorFirstName}}</span>
                                                                             <span style="text-transform: uppercase;">
                                                                                 {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorLastName}}</span><br>
@@ -1526,13 +1562,15 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="docDiseaseGeneralInfo">
-                                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                            <div
+                                                                                class="diseaseName newDiseaseNameMargin">
                                                                                 <i class="fas fa-venus-mars"></i>
                                                                                 <span class="disease">
                                                                                     {{doctorInfoForMedicalProfileDis[todayDiseaseKey].doctorGender}}
                                                                                 </span>
                                                                             </div><br>
-                                                                            <div class="diseaseName newDiseaseNameMargin">
+                                                                            <div
+                                                                                class="diseaseName newDiseaseNameMargin">
                                                                                 <i class="fas fa-map-marked-alt"></i>
                                                                                 <span class="disease">
                                                                                     {{doctorInfoForMedicalProfileDis[todayDiseaseKey].userCity}}
@@ -1542,11 +1580,13 @@
                                                                     </div>
                                                                     <div class="medicalProfileDiseasePrescription"
                                                                         *ngIf="todayMedicalProfilePrescription[todayDiseaseKey]">
-                                                                        <div style="margin: 0px auto;width: fit-content;">
+                                                                        <div
+                                                                            style="margin: 0px auto;width: fit-content;">
                                                                             {{'prescription'|translate}}
                                                                         </div>
                                                                         <hr class="greenLine">
-                                                                        <div style="margin: 0px auto;width: fit-content;">
+                                                                        <div
+                                                                            style="margin: 0px auto;width: fit-content;">
                                                                             <span
                                                                                 *ngFor="let med of todayMedicalProfilePrescription[todayDiseaseKey].medicament">
                                                                                 <span
@@ -1567,7 +1607,7 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
-    
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1661,28 +1701,52 @@
                                     <div class="patientMedicalProfile">
                                         <div class="tilte"> {{'medicalProfile'|translate}} </div>
                                         <div class="medicalProfileinfo">
-                                            <div *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1]">
+                                            <div *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1]"
+                                                class="medicalProfileInfoConatiner">
                                                 <div class="infoGridTowColumn newPadding">
-                                                    <div class="infoContainer">
-                                                        <div class="infoIcon">
-                                                            <i class="fas fa-male"></i><i class="fas fa-arrows-alt-v"></i>
+                                                    <div class="infoContainer" id="heightSection"
+                                                        (click)="getHeightValues(currentPatientInfo[doctorGet.currentPatient-1].userId)">
+                                                        <div class="infoIcon" *ngIf="heightValues == false">
+                                                            <i class="fas fa-male"></i><i
+                                                                class="fas fa-arrows-alt-v"></i>
                                                         </div>
                                                         <div class="info">
-                                                            {{currentPatientMedicalProfile[doctorGet.currentPatient-1].height}}
-                                                            {{'metre'|translate}}
+                                                            <div *ngIf="heightValues == false">
+                                                                {{currentPatientMedicalProfile[doctorGet.currentPatient-1].height}}
+                                                                {{'metre'|translate}}
+                                                            </div>
+                                                            <div [class.hideChart]="heightValues == false"
+                                                                [class.bigUserInfo]="heightValues == true"
+                                                                [class.medicalProfileChart]="heightValues == true">
+                                                                <div [class.hideChart]="heightValues == false"
+                                                                    [class.heightChart]="heightValues == true"
+                                                                    [style.width.px]="heightChartWidth">
+                                                                    <canvas id="heightChart"></canvas>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="infoTitle">{{'height'|translate}}</div>
                                                     </div>
-                                                    <div class="infoContainer">
-                                                        <div class="infoIcon"><i class="fas fa-weight"></i></div>
-                                                        <div class="info">
+                                                    <div class="infoContainer" id="weightSection"
+                                                    (click)="getWeightValues(currentPatientInfo[doctorGet.currentPatient-1].userId)">
+                                                        <div class="infoIcon" *ngIf="weightValues == false"><i class="fas fa-weight"></i></div>
+                                                        <div class="info" *ngIf="weightValues == false">
                                                             {{currentPatientMedicalProfile[doctorGet.currentPatient-1].weight}}
                                                             {{'kilogram'|translate}}
+                                                        </div>
+                                                        <div [class.hideChart]="weightValues == flase"
+                                                            [class.bigUserInfo]="weightValues == true"
+                                                            [class.medicalProfileChart]="weightValues == true">
+                                                            <div [class.hideChart]="weightValues == false"
+                                                                [class.heightChart]="weightValues == true"
+                                                                [style.width.px]="weightChartWidth">
+                                                                <canvas id="weightChart"></canvas>
+                                                            </div>
                                                         </div>
                                                         <div class="infoTitle">{{'weight'|translate}}</div>
                                                     </div>
                                                 </div>
-    
+
                                                 <div class="diseasesContainerTitle">
                                                     <span *ngIf="!currentDiseaseFullInfo">
                                                         {{'diseases'|translate}}
@@ -1692,22 +1756,22 @@
                                                     </span>
                                                     <div class="diseasesContainerTitleLine"></div>
                                                 </div>
-    
+
                                                 <div class="content">
-    
+
                                                     <div style="width: fit-content;margin: 5px auto;"
                                                         *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length == 0">
                                                         {{'notDiagnosedYet'|translate}}
                                                     </div>
-    
+
                                                     <div *ngIf="currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease.length != 0 && !currentDiseaseFullInfo"
                                                         class="userInfoContainers"
                                                         style="display: inline-block; cursor: pointer;">
-    
+
                                                         <div *ngFor="let dis of currentPatientMedicalProfile[doctorGet.currentPatient-1].medicalProfileDisease | keyvalue"
                                                             class="userInfoContainer userInfoContainerHover"
                                                             (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'current')">
-    
+
                                                             <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
                                                                 class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
                                                                 <div class="loading">
@@ -1735,7 +1799,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-    
+
                                                         <div class="userInfoContainers"
                                                             style="display: inline-block; cursor: pointer;">
                                                             <div class="userInfoContainer"
@@ -1773,7 +1837,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-    
+
                                                     <div *ngIf="currentDiseaseFullInfo" id="todayDiseaseFullInfo">
                                                         <div class="diseaseDocInfo">
                                                             <div class="docProfileImgForMedicalProfileDis">
@@ -1918,7 +1982,7 @@
                                                         </button>
                                                     </div>
                                                 </div>
-    
+
                                             </div>
                                         </div>
                                     </div>
@@ -1948,7 +2012,8 @@
                                                     </div>
                                                     <hr class="hr">
                                                     <div class="formDiv">
-                                                        <input type="text" class="formInput" name="currentMedicamentName"
+                                                        <input type="text" class="formInput"
+                                                            name="currentMedicamentName"
                                                             [(ngModel)]="currentMedicamentName" list="medList"
                                                             (keyup)="getMedicaments()" id="currentMedicamentName"
                                                             placeholder=" ">
@@ -1957,17 +2022,20 @@
                                                     </div>
                                                     <div *ngIf="searchedMedicaments.length != 0">
                                                         <datalist id="medList">
-                                                            <option *ngFor="let med of searchedMedicaments" value="{{med}}">
+                                                            <option *ngFor="let med of searchedMedicaments"
+                                                                value="{{med}}">
                                                             </option>
                                                         </datalist>
                                                     </div>
                                                     <input type="radio" id="treatmentDay" name="treatment"
-                                                        (change)="changeTreatmentPeriode('d')" [checked]="treatmentPerday">
+                                                        (change)="changeTreatmentPeriode('d')"
+                                                        [checked]="treatmentPerday">
                                                     <label for="treatmentDay" class="treatmentDay treatment"
                                                         (click)="periodMesure=translate.instant('D')">
                                                         {{'day'|translate}} </label>
                                                     <input type="radio" id="treatmentWeek" name="treatment"
-                                                        (change)="changeTreatmentPeriode('w')" [checked]="treatmentPerWeek">
+                                                        (change)="changeTreatmentPeriode('w')"
+                                                        [checked]="treatmentPerWeek">
                                                     <label for="treatmentWeek" class="treatmentWeek treatment"
                                                         (click)="periodMesure=translate.instant('W')">
                                                         {{'week'|translate}} </label>
@@ -1994,7 +2062,8 @@
                                                         <button class="emptyBtn emptyCentred"
                                                             (click)="medicaments=[];addToCurrentPatient=null;savePrescription=true;">
                                                             {{'cancel'|translate}} </button>
-                                                        <button class="emptyBtn emptyCentred" [disabled]="savePrescription"
+                                                        <button class="emptyBtn emptyCentred"
+                                                            [disabled]="savePrescription"
                                                             (click)="addPrescription(currentPatientInfo[doctorGet.currentPatient-1].userId);savePrescription=true;">
                                                             {{'save'|translate}} </button>
                                                     </div>
@@ -2021,8 +2090,8 @@
                                                     <hr class="hr">
                                                     <div class="formDiv">
                                                         <input type="text" class="formInput" name="diseaseName"
-                                                            [class.labelInvalidInfo]="falseSpec" [(ngModel)]="diseaseName"
-                                                            id="diseaseName" placeholder=" ">
+                                                            [class.labelInvalidInfo]="falseSpec"
+                                                            [(ngModel)]="diseaseName" id="diseaseName" placeholder=" ">
                                                         <label for="diseaseName"
                                                             class="formLabel">{{'disease'|translate}}</label>
                                                     </div>
@@ -2031,8 +2100,8 @@
                                                             {{'add'|translate}}
                                                         </span>
                                                         <input type="text" class="formInput" name="docDiagnose"
-                                                            [class.labelInvalidInfo]="falseSpec" [(ngModel)]="docDiagnose"
-                                                            id="docDiagnose" placeholder=" ">
+                                                            [class.labelInvalidInfo]="falseSpec"
+                                                            [(ngModel)]="docDiagnose" id="docDiagnose" placeholder=" ">
                                                         <label for="docDiagnose"
                                                             class="formLabel">{{'diagnose'|translate}}</label>
                                                     </div>
@@ -2134,7 +2203,8 @@
                             <div class="sectionTitle">{{'tomorrowPatient'|translate}}</div>
                             <div class="sectionContainer">
                                 <div *ngIf="tomorrowAppointmentPatientInfo.length == 0">
-                                    <div style="text-align: center;padding: 20px;">{{'notomorrowPatient'|translate}}</div>
+                                    <div style="text-align: center;padding: 20px;">{{'notomorrowPatient'|translate}}
+                                    </div>
                                 </div>
                                 <div *ngIf="tomorrowAppointmentPatientInfo.length != 0">
                                     <div
@@ -2197,7 +2267,7 @@
                                                             <div class="infoTitle">{{'weight'|translate}}</div>
                                                         </div>
                                                     </div>
-    
+
                                                     <div class="diseasesContainerTitle">
                                                         <span *ngIf="!tomorrowDiseaseFullInfo">
                                                             {{'diseases'|translate}}
@@ -2207,21 +2277,21 @@
                                                         </span>
                                                         <div class="diseasesContainerTitleLine"></div>
                                                     </div>
-    
+
                                                     <div class="content">
                                                         <div style="width: fit-content;margin: 5px auto;"
                                                             *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length == 0">
                                                             {{'notDiagnosedYet'|translate}}
                                                         </div>
-    
+
                                                         <div *ngIf="tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease.length != 0 && !tomorrowDiseaseFullInfo"
                                                             class="userInfoContainers"
                                                             style="display: inline-block; cursor: pointer;">
-    
+
                                                             <div *ngFor="let dis of tomorrowPatientMedicalProfileGet[tomorrowPatientKey].medicalProfileDisease | keyvalue"
                                                                 class="userInfoContainer userInfoContainerHover"
                                                                 (click)="getDoctorFullInfo(dis.value.doctorId,dis.key,'tomorrow')">
-    
+
                                                                 <div *ngIf="loadDoctorInfoForMedicalProfileDis[dis.key]"
                                                                     class="loadingCuurentPatientInfo newloadingCuurentPatientInfoRaduis">
                                                                     <div class="loading">
@@ -2249,7 +2319,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-    
+
                                                             <div class="userInfoContainers"
                                                                 style="display: inline-block; cursor: pointer;">
                                                                 <div class="userInfoContainer"
@@ -2287,7 +2357,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-    
+
                                                         <div *ngIf="tomorrowDiseaseFullInfo" id="todayDiseaseFullInfo">
                                                             <div class="diseaseDocInfo">
                                                                 <div class="docProfileImgForMedicalProfileDis">
@@ -2415,7 +2485,8 @@
                                                                 <div style="margin: 0px auto;width: fit-content;">
                                                                     <span
                                                                         *ngFor="let med of tomorrowMedicalProfilePrescription[tomorrowDiseaseKey].medicament">
-                                                                        <span class="greenContainer">{{med.medicamentName}}
+                                                                        <span
+                                                                            class="greenContainer">{{med.medicamentName}}
                                                                             |
                                                                             {{med.treatmentPeriode}}</span>
                                                                     </span>
@@ -2432,7 +2503,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -2444,7 +2515,8 @@
                                             {{tomorrowPatientNumber}}
                                             {{'patientTommorow'|translate}}</div>
                                         <div class="todayPatientCon">
-                                            <div class="patientNavigationRight" (click)="getTomorrowAppPatientByDate(false)"
+                                            <div class="patientNavigationRight"
+                                                (click)="getTomorrowAppPatientByDate(false)"
                                                 *ngIf="showTomorrowpatientNavigationRight"><i
                                                     class="fas fa-chevron-right"></i>
                                             </div>
@@ -2468,7 +2540,8 @@
                                                                 class="profileImg">
                                                         </ng-template>
                                                         <ng-template #showTomorrowPPatientDefaultImg><i
-                                                                class="fas fa-user-tie patientUserTie"></i></ng-template>
+                                                                class="fas fa-user-tie patientUserTie"></i>
+                                                        </ng-template>
                                                     </div>
                                                     <div class="patientSmallInfo">
                                                         <span class="info">
@@ -2519,13 +2592,16 @@
                     <ng-template #showNotApprovedWhy>
                         {{'notApprovedWhy'|translate}}
                         <div class="center">
-                            <button (click)="toNotApprovedSection()" class="emptyBtn white"> {{'approveAccount'|translate}}
+                            <button (click)="toNotApprovedSection()" class="emptyBtn white">
+                                {{'approveAccount'|translate}}
                             </button><br>
-                            <span class="textLien" (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
+                            <span class="textLien"
+                                (click)="notApproved='info'">{{'approveAccountLater'|translate}}</span>
                         </div>
                     </ng-template>
                 </div>
-                <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'" class="notApproved">
+                <div *ngIf="doctorGet.doctorStatus=='pending' || doctorGet.doctorStatus=='reVerify'"
+                    class="notApproved">
                     {{'pendingInfo'|translate}}<br>
                 </div>
                 <div *ngIf="doctorGet.doctorStatus=='approvedByAdmin'" class="notApproved">

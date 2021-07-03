@@ -196,9 +196,9 @@
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
                         (click)="parentHeader='settings';showChildHeader = true"><i class="fas fa-cog"></i></li>
-                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'" (click)="diseaseClick()"><i
+                    <li class="iconMenu" [class.selectedIconMenu]="header=='disease'" (click)="diseaseClick()"><i
                             class="fas fa-question"></i></li>
-                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='doctor'" (click)="doctorClick()"><i
+                    <li class="iconMenu" [class.selectedIconMenu]="header=='doctor'" (click)="doctorClick()"><i
                             class="fas fa-user-md"></i></li>
                 </ul>
             </nav>
@@ -254,11 +254,11 @@
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
                         (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
-                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='disease'"
+                    <li class="iconMenu" [class.selectedIconMenu]="header=='disease'"
                         (click)="openContainerToDoctor('disease');"><i class="fas fa-question"></i></li>
-                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='patient'"
+                    <li class="iconMenu" [class.selectedIconMenu]="header=='patient'"
                         (click)="openContainerToDoctor('patient');"><i class="fas fa-hospital-user"></i></li>
-                    <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='secretary'"
+                    <li class="iconMenu" [class.selectedIconMenu]="header=='secretary'"
                         (click)="openContainerToDoctor('secretary');">
                         <i class="fas fa-female"></i>
                     </li>
@@ -661,7 +661,7 @@
     <div *ngIf="role != 'home' && parentHeader=='message'" id="childHeader" class="loginHeader">
         <div class="headerChild" style="overflow-y: scroll;" (scroll)="conversationsScroll($event)"
             id="conversationsScroll" #conversationsScrollEl [class.showChildHeader]="showChildHeader == true">
-            <div class="closeIcon" style="margin-top: 20px;" (click)="showChildHeader=false">
+            <div class="closeIcon" (click)="showChildHeader=false">
                 <i class="fas fa-times-circle"></i>
             </div>
             <nav class="navItem">
