@@ -9,12 +9,16 @@
     <section id="pendingPharmaciesSection">
         <div class="sectionTitle">{{'pending'|translate}}</div>
         <div class="sectionContainer">
+            <div *ngIf="pendingPharmacies.length == 0" style="text-align: center;margin-top: 40px;
+            font-weight: 600;">
+                {{'allPharmaciessApproved'|translate}}
+            </div>
             <div *ngIf="pendingPharmacies" class="notApprovedDocGrid">
                 <div *ngFor="let pharmacy of pendingPharmacies ; let p = index" class="col">
                     <div *ngIf="pharmacy.decision != 'null'" class="docDecision">
                         <div class="docNotAppNameText">Ph. <span
                                 style="text-transform: capitalize;">{{pharmacy.pharmacyFullName}} </span>
-                             {{pharmacy.decision}}
+                            {{pharmacy.decision}}
                         </div>
                     </div>
                     <div *ngIf="pharmacy.pharmacyStatus == 'pending'" class="pendingStatus">
@@ -25,7 +29,8 @@
                         <div class="strok"></div>
                         <div *ngIf="pharmacy.profilePic; then showDocProfileImg else showDocDefaultImg">
                         </div>
-                        <ng-template #showDocProfileImg><img class="profileImg" [style.background-image]="'url(' + pharmacy.profilePic + ')'" class="profileImg">
+                        <ng-template #showDocProfileImg><img class="profileImg"
+                                [style.background-image]="'url(' + pharmacy.profilePic + ')'" class="profileImg">
                         </ng-template>
                         <ng-template #showDocDefaultImg>
                             <i class="fas fa-user-tie"></i>
@@ -57,7 +62,7 @@
                             <span class="pharmacyInfoIncon">
                                 <i class="fas fa-clock"></i>
                             </span>
-                            <span  class="pharmacyInfoText">
+                            <span class="pharmacyInfoText">
                                 {{pharmacy.pharmacyType}}
                             </span>
                         </span>
@@ -100,19 +105,13 @@
                     </ng-template>
                 </div>
             </div>
-            <div *ngIf="loadPendingPharmacies; then loadingMore else allDoctorsLoaded"></div>
-            <ng-template #loadingMore>
-                <div *ngIf="loadingPharmacies" class="loadPendingDocStatus">
-                    <div class="loading">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+            <div *ngIf="loadPendingPharmacies && loadingPharmacies" class="loadPendingDocStatus">
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </ng-template>
-            <ng-template #allDoctorsLoaded>
-                <div class="loadPendingDocStatus">{{'allPharLoaded'|translate}}</div>
-            </ng-template>
+            </div>
         </div>
     </section>
 </body>

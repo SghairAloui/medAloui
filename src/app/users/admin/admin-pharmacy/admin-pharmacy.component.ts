@@ -112,9 +112,6 @@ export class AdminPharmacyComponent implements OnInit {
       res => {
         if (res) {
           this.addValidation(decision, pharmacyId, pharmacyKey);
-          this.deleteByImageName(pharmacyId + 'pharmacyCinPic');
-          this.deleteByImageName(pharmacyId + 'pharmacyOwnershipPic');
-          this.deleteByImageName(pharmacyId + 'pharmacySpecialty');
         }
       }
     );
@@ -124,12 +121,20 @@ export class AdminPharmacyComponent implements OnInit {
     let data: ValidationPost = new ValidationPost(decision, this.adminComponent.adminGet.userId.toString(), 'pharmacy', userId);
     this.validationService.addValidation(data).subscribe(
       res => {
-        if (res) {
+        if (res == true) {
           this.toastr.success(this.translate.instant(decision), this.translate.instant('info'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
           });
           this.pendingPharmacies[pharmacyKey].decision = this.translate.instant(decision).toLocaleLowerCase();
+          this.deleteByImageName(userId + 'pharmacyCinPic');
+          this.deleteByImageName(userId + 'pharmacyOwnershipPic');
+          this.deleteByImageName(userId + 'pharmacySpecialty');
+        }else{
+          this.toastr.warning(this.translate.instant('youAlreadyDis'), this.translate.instant('Notification'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
         }
       },
       err => {

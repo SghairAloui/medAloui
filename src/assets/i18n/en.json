@@ -667,5 +667,7 @@
     "comments":"comments",
     "finished":"finished",
     "addCommentToYourPost":"add comment to your post",
-    "showPost":"Show post"
+    "showPost":"Show post",
+    "youAlreadyDis":"You already disapproved this user you cannot do it twice",
+    "allPharmaciessApproved":"All pharmacies approved"
 }

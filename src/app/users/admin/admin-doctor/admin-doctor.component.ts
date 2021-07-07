@@ -9,6 +9,7 @@ import { SpecialityPost } from 'src/model/SpecialityPost';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { ValidationPost } from 'src/model/ValidationPost';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
+import { AdminComponent } from '../admin/admin.component';
 import { AdminService } from '../admin/admin.service';
 
 @Component({
@@ -41,7 +42,8 @@ export class AdminDoctorComponent implements OnInit {
     private translate: TranslateService,
     private doctorService: DoctorService,
     private validationService: ValidationService,
-    private specialityService: SpecialityService) { }
+    private specialityService: SpecialityService,
+    private adminComponent:AdminComponent) { }
 
   ngOnInit(): void {
     this.getPendingDoctorsNumber();
@@ -171,11 +173,11 @@ export class AdminDoctorComponent implements OnInit {
       des = 'disapprovedByAdmin';
     else if (doctorStatus == 'reVerify')
       des = 'disapprovedPermanently';
-    this.doctorService.changeDoctorStatusById(id, des).subscribe(
+    this.validationPost = new ValidationPost('disapproved', this.adminComponent.adminGet.userId+"", 'doctor', id);
+    this.validationService.addValidation(this.validationPost).subscribe(
       res => {
-        if (res) {
-          this.validationPost = new ValidationPost('disapproved', localStorage.getItem('id'), 'doctor', id);
-          this.validationService.addValidation(this.validationPost).subscribe(
+        if (res == true) {
+          this.doctorService.changeDoctorStatusById(id, des).subscribe(
             res => {
               if (res) {
                 this.doctorService.deleteByImageName(id + 'doctorCinPic').subscribe(
@@ -244,6 +246,11 @@ export class AdminDoctorComponent implements OnInit {
               }
             }
           );
+        } else{
+          this.toastr.warning(this.translate.instant('youAlreadyDis'), this.translate.instant('Notification'), {
+            timeOut: 5000,
+            positionClass: 'toast-bottom-left'
+          });
         }
       },
       err => {

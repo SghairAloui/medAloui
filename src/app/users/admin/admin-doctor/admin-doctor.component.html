@@ -45,7 +45,8 @@
         <div class="pendingDoctorContainer">
             <div *ngIf="pendingDoctors.length==0; then showAllDocApp else showNotAppDoc" style="text-align: center;">
             </div>
-            <ng-template #showAllDocApp>{{'allDoctorsApproved'|translate}}</ng-template>
+            <ng-template #showAllDocApp> <div style="text-align: center;
+                font-weight: 600;">{{'allDoctorsApproved'|translate}}</div></ng-template>
             <ng-template #showNotAppDoc>
                 <div class="notApprovedDocGrid">
                     <div *ngFor="let doc of pendingDoctors ; let d = index" class="col">
@@ -126,16 +127,13 @@
                     </div>
                 </div>
             </ng-template>
-            <div *ngIf="loadPendingDoc == true; then loadingMore else allDoctorsLoaded"></div>
-            <ng-template #loadingMore> <div class="loadPendingDocStatus">
+            <div *ngIf="loadPendingDoc == true;" class="loadPendingDocStatus">
                 <div class="loading">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-            </div> </ng-template>
-            <ng-template #allDoctorsLoaded> <div class="loadPendingDocStatus">{{'allDocLoaded'|translate}}</div>
-            </ng-template>
+            </div>
         </div>
     </section>
 </body>
