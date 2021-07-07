@@ -45,6 +45,7 @@ import jwt_decode from 'jwt-decode';
 import { HeightValues } from 'src/model/HeightValues';
 import * as Chart from 'chart.js';
 import { WeightValues } from 'src/model/WeightValues';
+import { environment } from 'src/environments/environment.prod';
 
 declare const L: any;
 
@@ -375,7 +376,7 @@ export class DoctorComponent implements OnInit {
 
   updateMyPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.doctorService.updatePositionById(this.doctorGet.userId, position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+      this.doctorService.updatePositionById(this.doctorGet.userId, /*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/).subscribe(
         res => {
           if (res) {
             if (!this.position) {
@@ -386,8 +387,8 @@ export class DoctorComponent implements OnInit {
                       timeOut: 3500,
                       positionClass: 'toast-bottom-left'
                     });
-                    this.doctorGet.doctorLatitude = position.coords.latitude.toString();
-                    this.doctorGet.doctorLongitude = position.coords.longitude.toString();
+                    this.doctorGet.doctorLatitude = /*position.coords.latitude*/environment.isimaLatitude;
+                    this.doctorGet.doctorLongitude =environment.isimaLongitude /*position.coords.longitude*/;
                     this.setDoctorPosition();
                   }
                 },
@@ -2349,7 +2350,7 @@ export class DoctorComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);

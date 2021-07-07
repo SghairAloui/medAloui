@@ -17,6 +17,7 @@ import { AppointmentDocInfoGet } from 'src/model/AppointmentDocInfoGet';
 import { TopRatedDoctorGet } from 'src/model/TopRatedDoctorGet';
 import { ConversationService } from 'src/app/services/conversation.service';
 import { AppointmentGet } from 'src/model/AppointmentGet';
+import { environment } from 'src/environments/environment.prod';
 
 declare const L: any;
 
@@ -579,7 +580,7 @@ export class PatientDoctorComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude, this.appointmentDocInfo[this.selectedDoctorKey].doctorLongitude)
         ]
       }).addTo(this.doctorMap);

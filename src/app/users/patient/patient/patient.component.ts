@@ -45,6 +45,7 @@ import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../../pharmacy/pharmacy.service';
 import { PatientService } from './patient.service';
 import jwt_decode from 'jwt-decode';
+import { environment } from 'src/environments/environment.prod';
 
 declare const L: any;
 
@@ -1349,7 +1350,7 @@ export class PatientComponent implements OnInit {
       if ((firstTime && this.pharmacyPage == 0) || !firstTime) {
         let meds: string[] = this.prescriptions[this.presPresKey].medicament.map((meds) => meds.medicamentName);
         navigator.geolocation.getCurrentPosition((position) => {
-          this.pharmacyService.searchPharmaciesByMedicaments(meds, position.coords.latitude.toString(), position.coords.longitude.toString(), 0, this.pharmacyPage, 4).subscribe(
+          this.pharmacyService.searchPharmaciesByMedicaments(meds, /*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/, 0, this.pharmacyPage, 4).subscribe(
             res => {
               let pharmacies: PharmacyGet[] = res;
               for (let pharmacy of pharmacies) {
@@ -1402,7 +1403,7 @@ export class PatientComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude)
         ]
       }).addTo(pharmacyMap);
@@ -1756,7 +1757,7 @@ export class PatientComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);

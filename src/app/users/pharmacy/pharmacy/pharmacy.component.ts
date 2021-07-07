@@ -29,6 +29,7 @@ import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { PharmacyService } from '../pharmacy.service';
 import jwt_decode from 'jwt-decode';
+import { environment } from 'src/environments/environment.prod';
 
 declare const L: any;
 
@@ -421,7 +422,7 @@ export class PharmacyComponent implements OnInit {
 
   updateMyPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.pharmacyService.updatePositionById(this.pharmacyGet.userId, position.coords.latitude.toString(), position.coords.longitude.toString()).subscribe(
+      this.pharmacyService.updatePositionById(this.pharmacyGet.userId, /*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/).subscribe(
         res => {
           if (res) {
             if (!this.position) {
@@ -1150,7 +1151,7 @@ export class PharmacyComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);

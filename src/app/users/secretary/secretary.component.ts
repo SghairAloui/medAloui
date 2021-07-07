@@ -28,6 +28,7 @@ import { WebSocketNotification } from 'src/model/WebSocketNotification';
 import { DoctorService } from '../doctor/doctor/doctor.service';
 import { SecretaryService } from './secretary.service';
 import jwt_decode from 'jwt-decode';
+import { environment } from 'src/environments/environment.prod';
 
 declare const L: any;
 
@@ -927,7 +928,7 @@ export class SecretaryComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(position.coords.latitude, position.coords.longitude),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);
