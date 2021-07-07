@@ -664,5 +664,8 @@
     "getToTop":"a point that will help it get to the top of the",
     "soUsersFind":"so that users can find it easily.",
     "qustions":"questions",
-    "comments":"comments"
+    "comments":"comments",
+    "finished":"finished",
+    "addCommentToYourPost":"add comment to your post",
+    "showPost":"Show post"
 }

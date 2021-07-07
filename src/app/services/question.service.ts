@@ -28,6 +28,10 @@ export class QuestionService {
     return this.http.post<QuestionGet []>(QUESTION_API + 'getQuestionsByType',{page,size,type,words},httpOptions);
   }
 
+  public getQuestionById(questionId:number){
+    return this.http.get<QuestionGet>(QUESTION_API + 'getQuestionById/'+questionId,httpOptions);
+  }
+
   public getComments(id:number,page:number,size:number){
     return this.http.post<CommentGet []>(COMMENT_API + 'getAll',{id,page,size},httpOptions);
   }

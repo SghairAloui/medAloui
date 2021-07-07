@@ -267,6 +267,25 @@ export class PatientComponent implements OnInit {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
+          } else if (not.notification.notificationType == 'patientAppCompleted') {
+            let index = 0;
+            for(let app of this.myAppointment){
+              if(app.appointmentId == parseInt(not.notification.notificationParameter)){
+                app.appointmentStatus='completed';
+                break;
+              }
+              index += 1;
+            }
+            this.toastr.info(this.translate.instant('yourAppWithDoctor') + ' ' + not.data + ' ' + this.translate.instant('finished'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
+          } else if (not.notification.notificationType == 'commentedYourPost') {
+            let index = 0;
+            this.toastr.info(not.data + ' ' + this.translate.instant('addCommentToYourPost'), this.translate.instant('Notification'), {
+              timeOut: 5000,
+              positionClass: 'toast-bottom-left'
+            });
           }
           if (not.notification.notificationType != 'doctorDeletePrescription') {
             not.notification.name = not.data;
@@ -276,10 +295,9 @@ export class PatientComponent implements OnInit {
         } else if (not.type == 'confirmPrescription') {
           for (let pres of this.prescriptions) {
             let i: number = 0;
-            console.log(not.data);
             if (pres.prescriptionId == parseInt(not.data)) {
               this.prescription = 'all';
-              this.prescriptions.splice(i, 1);
+              this.prescriptions[i].prescriptionStatus='used';
             }
             i++;
           }

@@ -101,7 +101,7 @@ import {ChartsModule} from 'ng2-charts';
     AdminComponent,DoctorComponent,PharmacyComponent,SpecialityService,AppointmentService,UserService,
     MedicamentService,PrescriptionService,HeaderService,PharmacyService,QuestionService,EmailService,
     NotificationService,ConversationService,WebSocketService,SecretaryService,SecretaryComponent,
-    RateService,authInterceptorProviders
+    RateService,PatientDiseaseComponent,authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -9,7 +9,9 @@ import { UserService } from 'src/app/services/user.service';
 import { AdminComponent } from 'src/app/users/admin/admin/admin.component';
 import { DoctorComponent } from 'src/app/users/doctor/doctor/doctor.component';
 import { DoctorService } from 'src/app/users/doctor/doctor/doctor.service';
+import { PatientDiseaseComponent } from 'src/app/users/patient/patient-disease/patient-disease.component';
 import { PatientComponent } from 'src/app/users/patient/patient/patient.component';
+import { PatientService } from 'src/app/users/patient/patient/patient.service';
 import { PharmacyComponent } from 'src/app/users/pharmacy/pharmacy/pharmacy.component';
 import { SecretaryComponent } from 'src/app/users/secretary/secretary.component';
 import { SecretaryService } from 'src/app/users/secretary/secretary.service';
@@ -45,7 +47,9 @@ export class HeaderComponent implements OnInit {
     private doctorService: DoctorService,
     private userService: UserService,
     private secretaryComponent: SecretaryComponent,
-    private secretaryService: SecretaryService) {
+    private secretaryService: SecretaryService,
+    private patientDiseaseComponent: PatientDiseaseComponent,
+    private patientService: PatientService) {
     translate.addLangs(['en', 'fr']);
     /*document.addEventListener('click', this.closeAllMenu.bind(this));*/
   }
@@ -863,4 +867,10 @@ export class HeaderComponent implements OnInit {
 
   showLoginHeaderUnder700:boolean=false;
   showChildHeader:boolean=false;
+
+  openQuestion(questionId:number){
+    if(this.patientComp.container != 'patientDisease')
+      this.patientComp.container='patientDisease';
+    this.patientService.openQuestion(questionId);
+  }
 }

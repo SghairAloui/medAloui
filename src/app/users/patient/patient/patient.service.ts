@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { dignoses } from 'src/model/dignoses';
 import { FirstAndLastNameGet } from 'src/model/FirstAndLastNameGet';
@@ -103,4 +104,10 @@ export class PatientService {
   public getWeightValues(userId: number) {
     return this.http.post<WeightValues []>(PATIENT_API + 'getWeightValues', { userId}, httpOptions);
   } 
+
+  private quesstionId: Subject<number>= new BehaviorSubject<any>("");
+  quesstionId$ = this.quesstionId.asObservable();
+  openQuestion(data:number){
+    this.quesstionId.next(data);
+  }
 }

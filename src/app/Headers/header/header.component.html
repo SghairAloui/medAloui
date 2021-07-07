@@ -253,7 +253,7 @@
                     </div>
                     <li class="iconMenu"></li>
                     <li class="iconMenu" [class.selectedIconMenu]="parentHeader=='settings'"
-                        (click)="parentHeader='settings'"><i class="fas fa-cog"></i></li>
+                        (click)="parentHeader='settings';showChildHeader = true"><i class="fas fa-cog"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="header=='disease'"
                         (click)="openContainerToDoctor('disease');"><i class="fas fa-question"></i></li>
                     <li class="iconMenu" [class.selectedIconMenu]="header=='patient'"
@@ -617,6 +617,18 @@
                                 <div style="margin-top: 5px;">
                                     {{'newTurn'|translate}} <div class="numberContainer">{{notif.notificationParameter |
                                         slice:11:notif.notificationParameter.length}}</div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="notif.notificationType=='commentedYourPost'">
+                                <div>
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div style="margin: 5px;">
+                                    {{notif.name}} {{'addCommentToYourPost'|translate}}
+                                </div>
+                                <div class="textLien" style="margin-top: 5px;" (click)="openQuestion(notif.notificationParameter)">
+                                   {{'showPost'|translate}} ? 
                                 </div>
                             </div>
 

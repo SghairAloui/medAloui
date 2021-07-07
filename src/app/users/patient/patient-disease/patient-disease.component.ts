@@ -39,10 +39,21 @@ export class PatientDiseaseComponent implements OnInit {
   loadingQuestions: boolean = false;
   loading: boolean = false;
   position: number = 0;
+  questionById: boolean = false;
 
   ngOnInit(): void {
     this.getQuestionsTypes();
-    this.getAllQuestions();
+    this.patientService.quesstionId$.subscribe(
+      (message) => {
+        if (message > 0) {
+          this.questionById = true;
+          this.loadMoreQuestion = false;
+          this.getQuestionById(message);
+        }
+      }
+    );
+    if (this.questionById == false)
+      this.getAllQuestions();
   }
 
   questionsTypes: string[] = [this.translate.instant('all')];
@@ -155,11 +166,11 @@ export class PatientDiseaseComponent implements OnInit {
   getQuestions(key: number) {
     this.selectedType = key;
     this.questionPage = 0;
-    this.search='';
+    this.search = '';
     this.getAllQuestions();
   }
 
-  searchQuestions(){
+  searchQuestions() {
     this.questionPage = 0;
     this.getAllQuestions();
   }
@@ -171,7 +182,7 @@ export class PatientDiseaseComponent implements OnInit {
       if (this.search.length == 0)
         search = 'all';
       else
-        search ='%'+ this.search.split(' ').join('%%') +'%';
+        search = '%' + this.search.split(' ').join('%%') + '%';
       this.loading = true;
       this.questionService.getQuestionsByType(this.questionPage, 4,
         this.selectedType == 0 ? 'all' : this.questionsTypes[this.selectedType], search).subscribe(
@@ -193,11 +204,36 @@ export class PatientDiseaseComponent implements OnInit {
               this.loadMoreQuestion = true;
             else
               this.loadMoreQuestion = false;
+
             document.getElementById('allQuestionSection').scrollIntoView({ behavior: 'smooth' });
             this.loading = false;
           }
         );
     }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+  
+  getQuestionById(questionId: number) {
+    this.questionService.getQuestionById(questionId).subscribe(
+      async res => {
+        this.questions = [];
+        let ques: QuestionGet = res;
+        ques.commentPage = 0;
+        ques.comments = [];
+        let index = 0;
+        this.questions.push(ques);
+        this.getUserFullNameById(ques.postBy, 0);
+        this.getPostCommentsByPostId(ques.questionId, 0);
+        this.getCommentPosterProfileImg(ques.postBy + 'profilePic', 0, 0, 'question');
+        await this.sleep(1);
+        document.getElementById('allQuestionSection').scrollIntoView({ behavior: 'smooth' });
+      }
+    );
   }
 
   getUserFullNameById(patientId: number, questionKey: number) {

@@ -242,6 +242,10 @@ html,body{
     height: fit-content !important;
     min-width: 100% !important;
     max-width: 100% !important;
+    cursor: pointer;
+}
+.medicalProfileInfoConatiner .infoGridTowColumn .infoContainer:hover{
+    scale: 1.05;
 }
 .infoGridTowColumn .backgroundColor{
     background-color: var(--background-color);
