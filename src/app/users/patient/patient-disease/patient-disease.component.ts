@@ -68,6 +68,7 @@ export class PatientDiseaseComponent implements OnInit {
     );
   }
 
+  rejectedQuestion:boolean;
   postQuestion() {
     if (this.question == 'disease' && this.diseaseName == null) {
       this.invalidDiseaseName = true;
@@ -122,44 +123,54 @@ export class PatientDiseaseComponent implements OnInit {
         questionAbout = 'inquire';
         questionText = this.inquireQuestion;
       }
-      this.questionService.addQuestion(questionName, questionAbout, questionText, this.patientComponent.patientGet.userId).subscribe(
-        res => {
-          if (res) {
-            this.toastr.success(this.translate.instant('questionPosted'), this.translate.instant('question'), {
+      let rejectedWords:string[] = ['test','ttt'];
+      this.rejectedQuestion = false;
+      for(let word of rejectedWords){
+        if(word.indexOf(questionText) || questionName.indexOf(questionText)){
+          this.rejectedQuestion = true;
+          break;
+        }
+      }
+      if(this.rejectedQuestion == false){
+        this.questionService.addQuestion(questionName, questionAbout, questionText, this.patientComponent.patientGet.userId).subscribe(
+          res => {
+            if (res) {
+              this.toastr.success(this.translate.instant('questionPosted'), this.translate.instant('question'), {
+                timeOut: 5000,
+                positionClass: 'toast-bottom-left'
+              });
+              this.diseaseName = '';
+              this.medicamentName = '';
+              this.diseaseQuestion = '';
+              this.medicamentQuestion = '';
+              let question: QuestionGet = {
+                questionId: res,
+                questionName: questionName,
+                questionAbout: questionAbout,
+                question: questionText,
+                questionPostTime: '',
+                postBy: this.patientComponent.patientGet.userId,
+                questionPoints: 0,
+                userFullName: this.patientComponent.patientGet.patientFirstName + ' ' + this.patientComponent.patientGet.patientLastName.toUpperCase(),
+                comments: [],
+                commentPage: 0,
+                loadMoreComment: false,
+                doctorComment: null,
+                invalidComment: null,
+                posterImageProfile: this.patientComponent.retrievedImage
+              }
+              this.questions.unshift(question);
+              document.getElementById("allQuestionSection").scrollIntoView({ behavior: 'smooth' });
+            }
+          },
+          err => {
+            this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.diseaseName = '';
-            this.medicamentName = '';
-            this.diseaseQuestion = '';
-            this.medicamentQuestion = '';
-            let question: QuestionGet = {
-              questionId: res,
-              questionName: questionName,
-              questionAbout: questionAbout,
-              question: questionText,
-              questionPostTime: '',
-              postBy: this.patientComponent.patientGet.userId,
-              questionPoints: 0,
-              userFullName: this.patientComponent.patientGet.patientFirstName + ' ' + this.patientComponent.patientGet.patientLastName.toUpperCase(),
-              comments: [],
-              commentPage: 0,
-              loadMoreComment: false,
-              doctorComment: null,
-              invalidComment: null,
-              posterImageProfile: this.patientComponent.retrievedImage
-            }
-            this.questions.unshift(question);
-            document.getElementById("allQuestionSection").scrollIntoView({ behavior: 'smooth' });
           }
-        },
-        err => {
-          this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {
-            timeOut: 5000,
-            positionClass: 'toast-bottom-left'
-          });
-        }
-      );
+        );
+      }
     }
   }
 

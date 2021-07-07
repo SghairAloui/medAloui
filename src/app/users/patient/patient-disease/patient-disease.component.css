@@ -294,6 +294,12 @@
 .addQuesQuesAbout .fa-question-circle{
     margin-left: 7px;
 }
+.rejectedQuestion{
+    color: red;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+}
 @media screen and (max-width: 800px){
     .questionTitle .title{
         display: none;

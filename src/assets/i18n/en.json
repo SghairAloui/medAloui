@@ -592,7 +592,6 @@
     "usedPres":"Used",
     "pendingPres":"Not used yet",
     "emailOrPassInvalid":"Invalid email or password",
-
     "youHaveNotAnySerc":"You have not any secretary yet",
     "addSecretary":"Add secretary",
     "createSecretaryAccount":"Create secretary account",
@@ -669,5 +668,6 @@
     "addCommentToYourPost":"add comment to your post",
     "showPost":"Show post",
     "youAlreadyDis":"You already disapproved this user you cannot do it twice",
-    "allPharmaciessApproved":"All pharmacies approved"
+    "allPharmaciessApproved":"All pharmacies approved",
+    "yourQuestionContainRejectedWords":"Your question contain rejected words, sorry you can't post this question, try changing it"
 }

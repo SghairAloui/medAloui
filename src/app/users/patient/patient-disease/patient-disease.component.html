@@ -23,17 +23,20 @@
                     {{'inquire'|translate}}
                 </button>
             </div>
+            <div *ngIf="rejectedQuestion == true" class="rejectedQuestion">
+                {{'yourQuestionContainRejectedWords'|translate}}
+            </div>
             <div *ngIf="question=='disease'">
                 <div class="formDiv questionName">
                     <input type="text" class="formInput" [class.labelInvalidInfo]="invalidDiseaseName"
                         name="diseaseName" [(ngModel)]="diseaseName" id="diseaseName" placeholder=" "
-                        (keyup)="invalidDiseaseName=false">
+                        (keyup)="invalidDiseaseName=false;rejectedQuestion=false;">
                     <label for="chooseSpeciality" class="formLabel">{{'diseaseName'|translate}}</label>
                 </div>
                 <div class="formDiv">
                     <input type="text" class="formInput" [class.labelInvalidInfo]="invalidDiseaseQuestion"
                         name="diseaseQuestion" [(ngModel)]="diseaseQuestion" id="diseaseQuestion" placeholder=" "
-                        (keyup)="invalidDiseaseQuestion=false">
+                        (keyup)="invalidDiseaseQuestion=false;rejectedQuestion=false;">
                     <label for="chooseSpeciality" class="formLabel">{{'question'|translate}}</label>
                 </div>
                 <div class="buttons">
@@ -49,13 +52,13 @@
                 <div class="formDiv questionName">
                     <input type="text" class="formInput" name="medicamentName"
                         [class.labelInvalidInfo]="invalidMedicamentName" [(ngModel)]="medicamentName"
-                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentName=false">
+                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentName=false;rejectedQuestion=false;">
                     <label for="chooseSpeciality" class="formLabel">{{'medicamentName'|translate}}</label>
                 </div>
                 <div class="formDiv">
                     <input type="text" class="formInput" name="medicamentQuestion"
                         [class.labelInvalidInfo]="invalidMedicamentQuestion" [(ngModel)]="medicamentQuestion"
-                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentQuestion=false">
+                        id="chooseSpeciality" placeholder=" " (keyup)="invalidMedicamentQuestion=false;rejectedQuestion=false;">
                     <label for="chooseSpeciality" class="formLabel">{{'question'|translate}}</label>
                 </div>
                 <div class="buttons">
@@ -71,13 +74,13 @@
                 <div class="formDiv questionName">
                     <input type="text" class="formInput" name="inquireName"
                         [class.labelInvalidInfo]="invalidInquireName" [(ngModel)]="inquireName"
-                        id="inquireName" placeholder=" " (keyup)="invalidInquireName=false">
+                        id="inquireName" placeholder=" " (keyup)="invalidInquireName=false;rejectedQuestion=false;">
                     <label for="inquireName" class="formLabel" style="text-transform: capitalize;">{{'inquire'|translate}}</label>
                 </div>
                 <div class="formDiv">
                     <input type="text" class="formInput" name="inquireQuestion"
                         [class.labelInvalidInfo]="invalidInquireQuestion" [(ngModel)]="inquireQuestion"
-                        id="inquireQuestion" placeholder=" " (keyup)="invalidInquireQuestion=false">
+                        id="inquireQuestion" placeholder=" " (keyup)="invalidInquireQuestion=false;rejectedQuestion=false;">
                     <label for="inquireQuestion" class="formLabel">{{'question'|translate}}</label>
                 </div>
                 <div class="buttons">
