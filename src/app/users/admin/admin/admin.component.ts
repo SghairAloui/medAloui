@@ -299,20 +299,34 @@ export class AdminComponent implements OnInit {
   changeAdminPosition(adminKey:number){
     this.adminService.changeAdminPosition(this.admins[adminKey].userId,this.admins[adminKey].newPosition,this.adminGet.userId).subscribe(
       res=>{
-        if(this.admins[adminKey].newPosition == 'delete'){
-          this.toastr.success(this.translate.instant('Admin') +' '+this.admins[parseInt(this.popUpValue1)].adminFullName+' '+this.translate.instant('deleted'), this.translate.instant('Notification'), {
-            timeOut: 3500,
-            positionClass: 'toast-bottom-left'
-          });
-          this.closePopUp();
-          this.admins.splice(adminKey,1);
+        if(res == true){
+          if(this.admins[adminKey].newPosition == 'delete'){
+            this.toastr.success(this.translate.instant('Admin') +' '+this.admins[parseInt(this.popUpValue1)].adminFullName+' '+this.translate.instant('deleted'), this.translate.instant('Notification'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+            this.closePopUp();
+            this.admins.splice(adminKey,1);
+          }else{
+            this.toastr.success(this.translate.instant('adminPosUpdated'), this.translate.instant('Notification'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+            this.admins[adminKey].adminPosition=this.admins[adminKey].newPosition;
+            this.admins[adminKey].newPosition=null;
+          }
         }else{
-          this.toastr.success(this.translate.instant('adminPosUpdated'), this.translate.instant('Notification'), {
-            timeOut: 3500,
-            positionClass: 'toast-bottom-left'
-          });
-          this.admins[adminKey].adminPosition=this.admins[adminKey].newPosition;
-          this.admins[adminKey].newPosition=null;
+          if(this.admins[adminKey].newPosition == 'delete'){
+            this.toastr.warning(this.translate.instant('youCantDeleteThisAdmin'), this.translate.instant('Notification'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+          } else{
+            this.toastr.warning(this.translate.instant('youCantChnageAdminPos'), this.translate.instant('Notification'), {
+              timeOut: 3500,
+              positionClass: 'toast-bottom-left'
+            });
+          }
         }
       },err=>{
         this.toastr.warning(this.translate.instant('checkCnx'), this.translate.instant('cnx'), {

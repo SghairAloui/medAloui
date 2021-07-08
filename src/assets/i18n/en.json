@@ -685,5 +685,7 @@
     "confirmDeleting":"Confirm deleting",
     "areYouSureToDelete":"Are you sure to delete admin",
     "thisActionIsIrr":"this action is irreversible",
-    "yourAccountWasDeleted":"Your account was deleted"
+    "yourAccountWasDeleted":"Your account was deleted",
+    "youCantDeleteThisAdmin":"You can't delete this admin while its the last supervisor",
+    "youCantChnageAdminPos":"You can't change this admin position while its the last supervisor"
 }

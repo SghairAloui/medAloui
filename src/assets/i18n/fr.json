@@ -688,5 +688,7 @@
     "confirmDeleting":"Confirmer la suppression",
     "areYouSureToDelete":"Êtes-vous sûr de supprimer l'administrateur",
     "thisActionIsIrr":"cette action est irréversible",
-    "yourAccountWasDeleted":"Votre compte a été supprimé"
+    "yourAccountWasDeleted":"Votre compte a été supprimé",
+    "youCantDeleteThisAdmin":"Vous ne pouvez pas supprimer cet administrateur tant qu'il est le dernier superviseur",
+    "youCantChnageAdminPos":"Vous ne pouvez pas changer ce poste d'administrateur tant que c'est le dernier superviseur"
 }
