@@ -451,8 +451,77 @@
                                 </div>
                                 <div class="doctorGeneralInfo">
                                     <div class="doctorName">Ph. {{pharmacyGet.pharmacyFullName}} <i *ngIf="pharmacyGet.pharmacyStatus=='approved'" class="fas fa-check-circle pharVerfied"></i></div>
-                                    <div id="pharmacyEmail">
-                                        <i class="fas fa-user"></i> {{pharmacyGet.userUsername}}
+                                    <div class="doctorRatePres" *ngIf="pharmacyGet.pharmacyRate !=0">
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 0.5">
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 1">
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 1.5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 2.5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 3">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 3.5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 4">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 4.5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <div *ngIf="pharmacyGet.pharmacyRate == 5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -779,6 +779,11 @@ html,body{
     }
 }
 @media screen and (max-width: 850px){
+    .doctorRatePres{
+        margin-left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+    }
     .medicamentName{
         width: 80%;
         margin-left: 10%;

@@ -375,8 +375,77 @@
                                                 <i *ngIf="doctorGet.doctorStatus=='approved'"
                                                     class="fas fa-check-circle docVerified"></i>
                                             </span></div>
-                                        <div class="doctorEmail">
-                                            <i class="fas fa-user"></i> {{doctorGet.userUsername}}
+                                        <div class="doctorRatePres" *ngIf="doctorGet.doctorRate !=0">
+                                            <div *ngIf="doctorGet.doctorRate == 0.5">
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 1">
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 1.5">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 2">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 2.5">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 3">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 3.5">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 4">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 4.5">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                            </div>
+                                            <div *ngIf="doctorGet.doctorRate == 5">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1728,8 +1797,9 @@
                                                         <div class="infoTitle">{{'height'|translate}}</div>
                                                     </div>
                                                     <div class="infoContainer" id="weightSection"
-                                                    (click)="getWeightValues(currentPatientInfo[doctorGet.currentPatient-1].userId)">
-                                                        <div class="infoIcon" *ngIf="weightValues == false"><i class="fas fa-weight"></i></div>
+                                                        (click)="getWeightValues(currentPatientInfo[doctorGet.currentPatient-1].userId)">
+                                                        <div class="infoIcon" *ngIf="weightValues == false"><i
+                                                                class="fas fa-weight"></i></div>
                                                         <div class="info" *ngIf="weightValues == false">
                                                             {{currentPatientMedicalProfile[doctorGet.currentPatient-1].weight}}
                                                             {{'kilogram'|translate}}

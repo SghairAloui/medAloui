@@ -1415,6 +1415,11 @@ html,body{
     }
 }
 @media screen and (max-width: 850px){
+    .doctorRatePres{
+        margin-left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+    }
     #approve .infoGrid{
         grid-template-columns: 1fr;
     }
