@@ -669,5 +669,21 @@
     "showPost":"Show post",
     "youAlreadyDis":"You already disapproved this user you cannot do it twice",
     "allPharmaciessApproved":"All pharmacies approved",
-    "yourQuestionContainRejectedWords":"Your question contain rejected words, sorry you can't post this question, try changing it"
+    "yourQuestionContainRejectedWords":"Your question contain rejected words, sorry you can't post this question, try changing it",
+    "allAdmins":"All admins",
+    "addAdmin":"Add admin",
+    "admins":"Admins",
+    "addedOn":"Added on",
+    "supervisor":"supervisor",
+    "observer":"observer",
+    "changeAdminPos":"Change admin position",
+    "savePosition":"Save position",
+    "adminAdded":"Admin added successfully",
+    "Admin":"Admin",
+    "changeYourPosition":"change your position to",
+    "adminPosUpdated":"Admin position updated",
+    "confirmDeleting":"Confirm deleting",
+    "areYouSureToDelete":"Are you sure to delete admin",
+    "thisActionIsIrr":"this action is irreversible",
+    "yourAccountWasDeleted":"Your account was deleted"
 }

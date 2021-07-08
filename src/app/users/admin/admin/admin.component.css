@@ -9,6 +9,124 @@
     color: var(--text-color);
     transition: all .3s ease-in-out;
 }
+.admin{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 20px 0.5%;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: var(--box-color);
+    box-shadow: var(--box-shadow);
+    transition: all .3s ease-in-out;
+    width: 49%;
+    text-align: center;
+}
+.admin .adminAddTime{
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    color: var(--gray-text);
+    text-align: right;
+    font-size: 14px;
+}
+.admin .adminName{
+    font-weight: 600;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+.changePosition .supervisorLabel,.changePosition .observerLabel{
+    padding: 5px 10px;
+    border: 1px solid #308a7b;
+    color: #308a7b;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+.changePosition .supervisorLabel{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.changePosition .observerLabel{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.changePosition .supervisorLabel:hover,.changePosition .observerLabel:hover{
+    background-color: #308a7bbd;
+    color: white;
+}
+.changePosition .supervisorRadio:checked ~ .supervisorLabel,.changePosition .observerRadio:checked ~ .observerLabel{
+    background-color: #308a7b;
+    color: white;
+    font-weight: 600;
+}
+.changePosition .supervisorRadio,.changePosition .observerRadio{
+    display: none;
+}
+.changeAdminPos{
+    text-align: left;
+    margin: 10px;
+}
+.emptyBtn{
+    width: fit-content;
+    margin: 5px auto;
+}
+.admin .adminProfilePic{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #308a7b;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+#addAdmin .Div45{
+    display: inline-block;
+    width: 45%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+#addAdmin .Div90{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+#addAdmin .addAdmin{
+    text-align: left;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.infoErr{
+    text-align: center;
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.fa-user-lock{
+    position: relative;
+    font-size: 50px;
+    margin-top: 10px;
+    margin-left: 0%;
+    transform: translateX(0%);
+}
+.deleteAdmin{
+    position: relative;
+    background-color: #308a7b;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin: 10px;
+}
+.deleteAdmin .fa-trash{
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 20px;
+}
 .sectionTitle{
     padding-top: 5%;
     font-size: 2.5rem;
@@ -16,7 +134,7 @@
     text-transform: capitalize;
 }
 .sectionContainer{
-    padding: 10% 25px;
+    padding: 30px 25px;
     text-align: center;
     border-radius: 20px;
     background-color: var(--box-color);

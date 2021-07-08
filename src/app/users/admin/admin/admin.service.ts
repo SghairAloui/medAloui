@@ -25,4 +25,16 @@ export class AdminService {
   public getPendingDoctors(page: number, size: number) {
     return this.http.get<DoctorPendingGet[]>(DOCTOR_API + "getPendingDoctors/" + page + "/" + size, httpOptions);
   }
+  public getAdmins(page: number, size: number) {
+    return this.http.post<AdminGet[]>(ADMIN_API + "getAdmins",{page,size}, httpOptions);
+  }
+  public add(adminFullName:string, userCity: string,userPassword:string,userUsername:string) {
+    return this.http.post<boolean>(ADMIN_API + "add",{adminFullName,userCity,userPassword,userUsername}, httpOptions);
+  }
+  public changeAdminPosition(userId:number, position: string,adminId:number) {
+    return this.http.post<boolean>(ADMIN_API + "changeAdminPosition",{userId,position,adminId}, httpOptions);
+  }
+  public deleteAdmin(userId:number) {
+    return this.http.delete<boolean>(ADMIN_API + "deleteAdmin/"+userId, httpOptions);
+  }
 }

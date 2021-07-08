@@ -213,7 +213,7 @@
     <div *ngIf="role=='admin'" class="loginHeader">
         <header class="parentHeader">
             <!--<a><strong class="headerTitle">Health Care</strong></a>-->
-            <img src="../../../assets/img/healthCareLogo.png" style="height: 40px;">
+            <a><strong class="headerTitle">Health Care</strong></a>
             <nav>
                 <ul class="navItem">
                     <li (click)="logOut()"><a class="menuHoverEffect">{{'logOut'|translate}}</a></li>
@@ -221,6 +221,9 @@
                     <li (click)="openContainerToAdmin('pharmacy');"><a
                             class="menuHoverEffect">{{'pharmacies'|translate}}</a></li>
                     <li (click)="openContainerToAdmin('doctor');"><a class="menuHoverEffect">{{'doctors'|translate}}</a>
+                    </li>
+                    <li *ngIf="adminComp.adminGet && adminComp.adminGet.adminPosition == 'supervisor'"
+                    (click)="openContainerToAdmin('admin');"><a class="menuHoverEffect">{{'admins'|translate}}</a>
                     </li>
                     <li (click)="openContainerToAdmin('profile');"><a><i class="fas fa-user-circle"></i></a></li>
                 </ul>

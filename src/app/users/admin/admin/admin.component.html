@@ -5,19 +5,147 @@
     <meta name="veiwport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
-    <app-header></app-header>
+<div *ngIf="popUp == true" class="popUp">
+    <div>
+        <span class="popUpTitle">
+            {{popUpTitle}}
+        </span> <span [disabled]="confirming == true" (click)="closePopUp()"><i
+                class="fas fa-times-circle closePopUpIcon"></i></span>
+    </div>
+    <div class="popUpText">
+        {{popUpText}}
+    </div>
+    <div class="popUpConfirmButton" (click)="confirmPopUp()">
+        <span *ngIf="confirming == false" class="popUpConfirmIcon">
+            <i class="fas fa-check-circle"></i>
+        </span>
+        <span *ngIf="confirming == false" class="popUpConfirmText"> {{'confirm'|translate}} </span>
+        <div *ngIf="confirming == true" class="confirmingPopUp">
+            <i class="fas fa-spinner"></i>
+        </div>
+    </div>
+</div>
+
+<body [class.disabledDiv]="popUp == true">
+    <div *ngIf="notVerified==true" class="sectionContainer notVerified">
+        <i class="fas fa-user-lock"></i>
+        <div class="accountNotVerified">
+            {{'accountNotVerified'|translate}}
+        </div>
+        <i class="fas fa-keyboard"></i> {{'enterVerificationCode'|translate}}:
+        <div class="inputVerificationCode" [class.invalidVerificationCode]="isVerificationCode==false">
+            <input type="text" name="field1Code" [(ngModel)]="field1Code" maxlength="1"
+                class="verficationCodeNumber" #1 (keyup)="field1Keyup();isVerificationCode=null">
+            <input type="text" name="field2Code" [(ngModel)]="field2Code" maxlength="1"
+                class="verficationCodeNumber" #2 (keyup)="field2Keyup();isVerificationCode=null">
+            <input type="text" name="field3Code" [(ngModel)]="field3Code" maxlength="1"
+                class="verficationCodeNumber" #3 (keyup)="field3Keyup();isVerificationCode=null">
+            <input type="text" name="field4Code" [(ngModel)]="field4Code" maxlength="1"
+                class="verficationCodeNumber" #4 (keyup)="field4Keyup();isVerificationCode=null">
+            <input type="text" name="field5Code" [(ngModel)]="field5Code" maxlength="1"
+                class="verficationCodeNumber" #5 (keyup)="field5Keyup();isVerificationCode=null">
+        </div>
+        <div *ngIf="isVerificationCode==false" class="invalidText">
+            {{'verificationCodeNotValid'|translate}}
+        </div>
+        <button type="submit" class="fullyBtnSmall"
+            (click)="checkVerificationCode()">{{'verify'|translate}}</button>
+    </div>
+    <div *ngIf="notVerified == false">
+        <app-header></app-header>
     <div class="adminContainer">
         <div *ngIf="adminInfo">
             <div *ngIf="container=='profile'">
-                <div *ngIf="container=='profile'">
-                    <section id="generalInfoSection">
-                        <div class="sectionTitle">{{'generalInfo'|translate}}</div>
-                        <div class="sectionContainer">
-                            <div class="patientName">{{adminGet.adminFullName}}</div>
-                            <i class="fas fa-user"></i> {{adminGet.userUsername}}
+                <section id="generalInfoSection">
+                    <div class="sectionTitle">{{'generalInfo'|translate}}</div>
+                    <div class="sectionContainer">
+                        <div class="imgContainer">
+                            <img *ngIf="adminGet.userImg" [style.background-image]="'url(' + adminGet.userImg + ')'"
+                                    class="profileImg" style="margin-left: -52%;">
+                            <i *ngIf="adminGet.userImg == false" class="fas fa-user-tie"></i>
+                            <div class="editImage">
+                                <div class="centerChangeText">{{'changeImage'|translate}}</div>
+                            </div>
+                            <div class="strok">
+                                <input type="file" (change)="onFileChanged($event)" class="uploadImgBtn">
+                            </div>
                         </div>
-                    </section>
+                        <div class="patientName">{{adminGet.adminFullName}}</div>
+                        <i class="fas fa-user"></i> {{adminGet.userUsername}}
+                    </div>
+                </section>
+            </div>
+            <div *ngIf="container=='admin' && adminGet.adminPosition == 'supervisor'">
+                <div class="sectionContainer" id="addAdmin">
+                    <div class="addAdmin">
+                        {{'addAdmin'|translate}}
+                    </div>
+                    <div *ngIf="infoErrAddAdmin != ''" class="infoErr">
+                        {{infoErrAddAdmin|translate}}
+                    </div>
+                    <div class="formDiv Div45">
+                        <input type="text" [(ngModel)]="name" (keyup)="infoErrAddAdmin=''" class="formInput" id="name" placeholder=" ">
+                        <label for="name" class="formLabel" style="text-transform: capitalize;">{{'name'|translate}}</label>
+                    </div>
+                    <div class="formDiv Div45">
+                        <input type="text" [(ngModel)]="city" (keyup)="infoErrAddAdmin=''" list="cities"  class="formInput" id="city" placeholder=" ">
+                        <label for="city" class="formLabel">{{'city'|translate}}</label>
+                        <datalist id="cities">
+                            <option *ngFor="let city of cities" value="{{city}}"></option>
+                        </datalist>
+                    </div>
+                    <div class="formDiv Div45">
+                        <input type="password" [(ngModel)]="password" (keyup)="infoErrAddAdmin=''"  class="formInput" id="password" placeholder=" ">
+                        <label for="password" class="formLabel">{{'password'|translate}}</label>
+                    </div>
+                    <div class="formDiv Div45">
+                        <input type="password" [(ngModel)]="passwordRepeat" (keyup)="infoErrAddAdmin=''"  class="formInput" id="repeatPassword" placeholder=" ">
+                        <label for="repeatPassword" class="formLabel">{{'repeatPassword'|translate}}</label>
+                    </div>
+                    <div class="formDiv Div90">
+                        <input type="text" [(ngModel)]="email" (keyup)="infoErrAddAdmin=''"  class="formInput" id="mail" placeholder=" ">
+                        <label for="mail" class="formLabel">{{'mail'|translate}}</label>
+                    </div>
+                    <div>
+                        <button class="emptyBtn" (click)="addAdmin()">
+                            {{'addAdmin'|translate}}
+                        </button>
+                    </div>
+                </div>
+                <div class="sectionTitle">{{'allAdmins'|translate}}</div>
+                <div *ngFor="let admin of admins;let a = index" class="admin">
+                    <div class="adminProfilePic">
+                        <img *ngIf="admin.userImg" [style.background-image]="'url(' + admin.userImg + ')'"
+                                class="profileImg" style="margin-left: -52%;">
+                        <i *ngIf="admin.userImg == false" style="font-size: 90px;" class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="adminName">
+                        {{admin.adminFullName}}
+                    </div>
+                    <div class="changeAdminPos">
+                        {{'changeAdminPos'|translate}}
+                    </div>
+                    <div class="changePosition">
+                        <input type="radio" id="supervisor{{a}}" class="supervisorRadio" name="position{{a}}"
+                            (change)="admin.newPosition = 'supervisor'"
+                            [checked]="admin.adminPosition == 'supervisor'">
+                        <label for="supervisor{{a}}" class="supervisorLabel"> {{'supervisor'|translate}} </label>
+                        <input type="radio" id="observer{{a}}" class="observerRadio" name="position{{a}}" (change)="admin.newPosition = 'observer'"
+                            [checked]="admin.adminPosition == 'observer'">
+                        <label for="observer{{a}}" class="observerLabel"> {{'observer'|translate}} </label>
+                    </div>
+                    <div>
+                        <button *ngIf="admin.newPosition && admin.adminPosition != admin.newPosition && admin.newPosition != 'delete'"
+                            class="emptyBtn" (click)="changeAdminPosition(a)">
+                            {{'savePosition'|translate}}
+                        </button>
+                    </div>
+                    <div class="deleteAdmin" (click)="openPopUp('deleteAdmin', a+'','')">
+                        <i class="fas fa-trash"></i>
+                    </div>
+                    <div class="adminAddTime">
+                        {{'addedOn'|translate}} {{admin.creationDate | slice:0:10}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,6 +169,7 @@
                 <app-admin-patient></app-admin-patient>
             </section>
         </div>
+    </div>
     </div>
 </body>
 

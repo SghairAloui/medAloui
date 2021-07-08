@@ -672,5 +672,21 @@
     "showPost":"Afficher la question",
     "youAlreadyDis":"Vous avez déjà désapprouvé cet utilisateur, vous ne pouvez pas le faire deux fois",
     "allPharmaciessApproved":"Toutes les pharmacies approuvées",
-    "yourQuestionContainRejectedWords":"Votre question contient des mots rejetés, désolé de ne pas pouvoir poster cette question, essayez de la modifier"
+    "yourQuestionContainRejectedWords":"Votre question contient des mots rejetés, désolé de ne pas pouvoir poster cette question, essayez de la modifier",
+    "allAdmins":"Tous les administrateurs",
+    "addAdmin":"Ajouter un administrateur",
+    "admins":"Administrateurs",
+    "addedOn":"Ajouté le",
+    "supervisor":"superviseur",
+    "observer":"observateur",
+    "changeAdminPos":"Changer de poste d'administrateur",
+    "savePosition":"Sauvegarder la position",
+    "adminAdded":"Administrateur ajouté avec succès",
+    "Admin":"Administrateur",
+    "changeYourPosition":"changé votre position pour",
+    "adminPosUpdated":"La position d'administrateur mis à jour",
+    "confirmDeleting":"Confirmer la suppression",
+    "areYouSureToDelete":"Êtes-vous sûr de supprimer l'administrateur",
+    "thisActionIsIrr":"cette action est irréversible",
+    "yourAccountWasDeleted":"Votre compte a été supprimé"
 }
