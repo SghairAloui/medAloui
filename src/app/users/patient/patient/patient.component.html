@@ -1142,7 +1142,8 @@
                                                             style="font-weight: 600;color: #51A351;">
                                                             {{'appPassed'|translate}}
                                                         </div>
-                                                        <div *ngIf="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed'"
+                                                        <div *ngIf="(app.value.appointmentStatus=='missed' || isDatePassed(app.value.appointmentDate) == true) && app.value.appointmentStatus!='completed' 
+                                                        && app.value.appointmentStatus!='refused'"
                                                             style="font-weight: 600;color: #BD362F;">
                                                             {{'appMissed'|translate}}
                                                         </div>

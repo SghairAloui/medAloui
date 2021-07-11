@@ -2101,7 +2101,7 @@ export class DoctorComponent implements OnInit {
 
   getConversationMessages(firstTime: boolean) {
     this.loadingMessages = true;
-    if (this.openConversation.loadMoreMessage == true && this.closeGetMessage == false) {
+    if (this.closeGetMessage == false) {
       this.closeGetMessage = true;
       this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
         async res => {

@@ -173,26 +173,26 @@ export class SecretaryComponent implements OnInit {
             this.headerService.addNotification(not.notification);
           }
           this.notificationSound();
-        } else if (not.type == 'delayPatientTurn'){
+        } else if (not.type == 'delayPatientTurn') {
           this.toastr.info(not.data + ' ' + this.translate.instant('postponeTheApp'), this.translate.instant('Notification'), {
             timeOut: 5000,
             positionClass: 'toast-bottom-left'
           });
           this.getCurrentPatient();
           this.notificationSound();
-        } else if (not.type == 'nextPatient'){
-          if(not.extraData != '0'){
+        } else if (not.type == 'nextPatient') {
+          if (not.extraData != '0') {
             this.toastr.info(not.data + ' ' + this.translate.instant('getTheNextPat'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
             this.getCurrentPatient();
-          }else{
+          } else {
             this.toastr.info(not.data + ' ' + this.translate.instant('finishAllThePatients'), this.translate.instant('Notification'), {
               timeOut: 5000,
               positionClass: 'toast-bottom-left'
             });
-            this.currentPatient=null;
+            this.currentPatient = null;
           }
 
           this.notificationSound();
@@ -220,13 +220,13 @@ export class SecretaryComponent implements OnInit {
   tomorrowAppNumber: number;
   todayPages: number[] = [];
   tomorrowPages: number[] = [];
-  accountInfoLoaded:boolean=false;
+  accountInfoLoaded: boolean = false;
   getSecretaryInfo() {
-    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    let token: any = jwt_decode(sessionStorage.getItem('auth-token'));
     this.secretaryService.getSecretaryInfoById(parseInt(token.jti)).subscribe(
       res => {
         this.secretaryGet = res;
-        if (parseInt(this.secretaryGet.secretaryStatus) >= 10000){
+        if (parseInt(this.secretaryGet.secretaryStatus) >= 10000) {
           this.notVerified = true;
           this.accountInfoLoaded = true;
         }
@@ -260,7 +260,7 @@ export class SecretaryComponent implements OnInit {
               this.tomorrowAppNumber = value;
               for (let i = 1; i <= Math.ceil(this.todayAppNumber / 6); i++)
                 this.tomorrowPages.push(i);
-              this.accountInfoLoaded=true;
+              this.accountInfoLoaded = true;
             });
         }
       },
@@ -385,7 +385,7 @@ export class SecretaryComponent implements OnInit {
   newMessage: number = 0;
   smallConversations: OpenConversation[] = [];
   openConversation: OpenConversation;
-  openMessages(firstTime:boolean) {
+  openMessages(firstTime: boolean) {
     this.conversationService.getConversationByUserId(this.secretaryGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
@@ -488,32 +488,30 @@ export class SecretaryComponent implements OnInit {
   loadingMessages: boolean = false;
   getConversationMessages(firstTime: boolean) {
     this.loadingMessages = true;
-    if (this.openConversation.loadMoreMessage == true) {
-      this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
-        async res => {
-          let messages: MessageGet[] = res;
-          for (let message of messages)
-            this.openConversation.messages.unshift(message);
-          if (firstTime) {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
-          }
-          else {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
-              left: 0
-            });
-          }
-          if (messages.length == 20)
-            this.openConversation.loadMoreMessage = true;
-          else
-            this.openConversation.loadMoreMessage = false;
-          this.openConversation.messagePage += 1;
-          this.loadingMessages = false;
+    this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+      async res => {
+        let messages: MessageGet[] = res;
+        for (let message of messages)
+          this.openConversation.messages.unshift(message);
+        if (firstTime) {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
         }
-      );
-    }
+        else {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scroll({
+            top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+            left: 0
+          });
+        }
+        if (messages.length == 20)
+          this.openConversation.loadMoreMessage = true;
+        else
+          this.openConversation.loadMoreMessage = false;
+        this.openConversation.messagePage += 1;
+        this.loadingMessages = false;
+      }
+    );
   }
 
   readConversation(lastSenderId: number) {
@@ -928,7 +926,7 @@ export class SecretaryComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);
@@ -1200,21 +1198,21 @@ export class SecretaryComponent implements OnInit {
     this.headerService.searchUserNow(true);
   }
 
-  currentPatient:AppointmentInfoForSec;
-  getCurrentPatient(){
+  currentPatient: AppointmentInfoForSec;
+  getCurrentPatient() {
     let nowDate = new Date();
-    this.secretaryService.getDoctorCurrentPatient(this.secretaryGet.doctorId,nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate())).subscribe(
-      res=>{
-        if(res){
-          this.currentPatient=res;
+    this.secretaryService.getDoctorCurrentPatient(this.secretaryGet.doctorId, nowDate.getFullYear() + '/' + ((nowDate.getMonth() + 1) < 10 ? '0' + (nowDate.getMonth() + 1) : (nowDate.getMonth() + 1)) + '/' + (nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate())).subscribe(
+      res => {
+        if (res) {
+          this.currentPatient = res;
           this.getImage(this.currentPatient.userId + 'profilePic').then((value) => { this.currentPatient.profileImg = value; });
         }
       }
     );
   }
-  
+
   delayToLastTurn() {
-    this.appointmentService.delayAppointmentByAppId(this.secretaryGet.doctorId, this.currentPatient.userId, this.currentPatient.appointmentId, this.todayAppNumber, this.currentPatient.patientTurn,this.secretaryGet.userId,'secretary').subscribe(
+    this.appointmentService.delayAppointmentByAppId(this.secretaryGet.doctorId, this.currentPatient.userId, this.currentPatient.appointmentId, this.todayAppNumber, this.currentPatient.patientTurn, this.secretaryGet.userId, 'secretary').subscribe(
       res => {
         if (res) {
           this.getCurrentPatient();

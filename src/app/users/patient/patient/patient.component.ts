@@ -270,9 +270,9 @@ export class PatientComponent implements OnInit {
             });
           } else if (not.notification.notificationType == 'patientAppCompleted') {
             let index = 0;
-            for(let app of this.myAppointment){
-              if(app.appointmentId == parseInt(not.notification.notificationParameter)){
-                app.appointmentStatus='completed';
+            for (let app of this.myAppointment) {
+              if (app.appointmentId == parseInt(not.notification.notificationParameter)) {
+                app.appointmentStatus = 'completed';
                 break;
               }
               index += 1;
@@ -298,7 +298,7 @@ export class PatientComponent implements OnInit {
             let i: number = 0;
             if (pres.prescriptionId == parseInt(not.data)) {
               this.prescription = 'all';
-              this.prescriptions[i].prescriptionStatus='used';
+              this.prescriptions[i].prescriptionStatus = 'used';
             }
             i++;
           }
@@ -385,7 +385,7 @@ export class PatientComponent implements OnInit {
   birthYears: number[] = [];
   newMessage: number = 0;
 
-  lodadingAcountData:boolean=true;
+  lodadingAcountData: boolean = true;
   ngOnInit(): void {
     for (let i = 2021; i >= 1900; i--) {
       this.birthYears.push(i);
@@ -466,14 +466,14 @@ export class PatientComponent implements OnInit {
   }
 
   getUserInfo() {
-    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    let token: any = jwt_decode(sessionStorage.getItem('auth-token'));
     this.patientService.getPatientInfo(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
           this.patientGet = res;
-          if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000){
+          if (parseInt(this.patientGet.patientStatus) <= 99999 && parseInt(this.patientGet.patientStatus) >= 10000) {
             this.notVerified = true;
-            this.lodadingAcountData=false;
+            this.lodadingAcountData = false;
           }
           else {
             this.openMessages(true);
@@ -490,6 +490,7 @@ export class PatientComponent implements OnInit {
             this.intializeEdit();
             this.patientInfo = true;
             localStorage.setItem('id', this.patientGet.userId + '')
+            this.lodadingAcountData = false;
           }
         } else
           this.router.navigate(['/acceuil']);
@@ -504,7 +505,7 @@ export class PatientComponent implements OnInit {
   }
 
   getMyNotifications(userId: number) {
-    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 6).subscribe(
       res => {
         let notifications: NotificationGet[] = [];
         notifications = res;
@@ -1350,7 +1351,7 @@ export class PatientComponent implements OnInit {
       if ((firstTime && this.pharmacyPage == 0) || !firstTime) {
         let meds: string[] = this.prescriptions[this.presPresKey].medicament.map((meds) => meds.medicamentName);
         navigator.geolocation.getCurrentPosition((position) => {
-          this.pharmacyService.searchPharmaciesByMedicaments(meds, /*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/, 0, this.pharmacyPage, 4).subscribe(
+          this.pharmacyService.searchPharmaciesByMedicaments(meds, /*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/, 0, this.pharmacyPage, 4).subscribe(
             res => {
               let pharmacies: PharmacyGet[] = res;
               for (let pharmacy of pharmacies) {
@@ -1399,11 +1400,11 @@ export class PatientComponent implements OnInit {
     }).addTo(pharmacyMap);
 
     let marker = L.marker([this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude]).addTo(pharmacyMap);
-    marker.bindPopup(this.translate.instant('helloIm') + "<br><b>Ph. " + this.prescriptionPharmacies[pharmacyKey].pharmacyFullName + "</b>").openPopup();
+    marker.bindPopup(this.translate.instant('helloIm') + "<br><b>Ph. " + this.prescriptionPharmacies[pharmacyKey].pharmacyFullName.toLocaleUpperCase() + "</b>").openPopup();
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.prescriptionPharmacies[pharmacyKey].pharmacyLatitude, this.prescriptionPharmacies[pharmacyKey].pharmacyLongitude)
         ]
       }).addTo(pharmacyMap);
@@ -1446,7 +1447,7 @@ export class PatientComponent implements OnInit {
     );
   }
 
-  openMessages(firstTime:boolean) {
+  openMessages(firstTime: boolean) {
     this.conversationService.getConversationByUserId(this.patientGet.userId, this.conversationPage, 10).subscribe(
       res => {
         let conversations: ConversationGet[] = res;
@@ -1504,32 +1505,32 @@ export class PatientComponent implements OnInit {
 
   getConversationMessages(firstTime: boolean) {
     this.loadingMessages = true;
-    if (this.openConversation.loadMoreMessage == true) {
-      this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
-        async res => {
-          let messages: MessageGet[] = res;
-          for (let message of messages)
-            this.openConversation.messages.unshift(message);
-          if (firstTime) {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
-          }
-          else {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
-              left: 0
-            });
-          }
-          if (messages.length == 20)
-            this.openConversation.loadMoreMessage = true;
-          else
-            this.openConversation.loadMoreMessage = false;
-          this.openConversation.messagePage += 1;
-          this.loadingMessages = false;
+    this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+      async res => {
+        console.log(res)
+        let messages: MessageGet[] = res;
+        for (let message of messages)
+          this.openConversation.messages.unshift(message);
+        if (firstTime) {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
         }
-      );
-    }
+        else {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scroll({
+            top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+            left: 0
+          });
+        }
+        if (messages.length == 20)
+          this.openConversation.loadMoreMessage = true;
+        else
+          this.openConversation.loadMoreMessage = false;
+
+        this.openConversation.messagePage += 1;
+        this.loadingMessages = false;
+      }
+    );
   }
 
   @HostListener('scroll', ['$event'])
@@ -1757,7 +1758,7 @@ export class PatientComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);
@@ -1978,7 +1979,6 @@ export class PatientComponent implements OnInit {
         }
         this.myPharmaciesPage = page;
         this.loadingPharmacies = false;
-        this.lodadingAcountData=false;
       },
       err => {
         this.loadingPharmacies = false;
@@ -2077,8 +2077,8 @@ export class PatientComponent implements OnInit {
   }
 
   chartjs(labels, dataCases, chartId) {
-    let canvas:any = document.getElementById(chartId);
-    let ctx:any = canvas.getContext('2d');
+    let canvas: any = document.getElementById(chartId);
+    let ctx: any = canvas.getContext('2d');
 
     let chart = new Chart(ctx, {
       type: 'line',
@@ -2109,10 +2109,10 @@ export class PatientComponent implements OnInit {
         }
       }
     });
-    if(chartId == 'heightChart'){
+    if (chartId == 'heightChart') {
       this.heightValues = true;
       document.getElementById("heightSection").scrollIntoView({ behavior: 'smooth' });
-    } else if (chartId == 'weightChart'){
+    } else if (chartId == 'weightChart') {
       this.weightValues = true;
       document.getElementById("weightSection").scrollIntoView({ behavior: 'smooth' });
     }

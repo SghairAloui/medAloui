@@ -330,7 +330,7 @@ export class PharmacyComponent implements OnInit {
   }
 
   getMyNotifications(userId: number) {
-    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 5).subscribe(
+    this.notificationService.getAllNotificationByUserId(userId, this.notificationPage, 6).subscribe(
       res => {
         let notifications: NotificationGet[] = [];
         notifications = res;
@@ -351,7 +351,7 @@ export class PharmacyComponent implements OnInit {
 
   userInfoLoaded: boolean = false;
   getUserInfo() {
-    let token:any = jwt_decode(sessionStorage.getItem('auth-token'));
+    let token: any = jwt_decode(sessionStorage.getItem('auth-token'));
     this.pharmacyService.getPharmacyInfo(parseInt(token.jti)).subscribe(
       res => {
         if (res) {
@@ -422,7 +422,7 @@ export class PharmacyComponent implements OnInit {
 
   updateMyPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.pharmacyService.updatePositionById(this.pharmacyGet.userId, /*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/).subscribe(
+      this.pharmacyService.updatePositionById(this.pharmacyGet.userId, /*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/).subscribe(
         res => {
           if (res) {
             if (!this.position) {
@@ -884,7 +884,7 @@ export class PharmacyComponent implements OnInit {
         this.headerService.setParentHeader('message');
         this.conversationPage += 1;
         if (firstTime == false)
-          this.headerService.showChildHeader(true);      
+          this.headerService.showChildHeader(true);
       }
     );
   }
@@ -981,32 +981,30 @@ export class PharmacyComponent implements OnInit {
 
   getConversationMessages(firstTime: boolean) {
     this.loadingMessages = true;
-    if (this.openConversation.loadMoreMessage == true) {
-      this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
-        async res => {
-          let messages: MessageGet[] = res;
-          for (let message of messages)
-            this.openConversation.messages.unshift(message);
-          if (firstTime == true) {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
-          }
-          else if (firstTime == false) {
-            await this.sleep(1);
-            this.messagesContainer.nativeElement.scroll({
-              top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
-              left: 0
-            });
-          }
-          if (messages.length == 20)
-            this.openConversation.loadMoreMessage = true;
-          else
-            this.openConversation.loadMoreMessage = false;
-          this.openConversation.messagePage += 1;
-          this.loadingMessages = false;
+    this.conversationService.getMessagesByConversationId(this.openConversation.conversationId, this.openConversation.messagePage, 20).subscribe(
+      async res => {
+        let messages: MessageGet[] = res;
+        for (let message of messages)
+          this.openConversation.messages.unshift(message);
+        if (firstTime == true) {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
         }
-      );
-    }
+        else if (firstTime == false) {
+          await this.sleep(1);
+          this.messagesContainer.nativeElement.scroll({
+            top: document.getElementById("message" + messages.length).getBoundingClientRect().top - document.getElementById("messagesContainer").getBoundingClientRect().top,
+            left: 0
+          });
+        }
+        if (messages.length == 20)
+          this.openConversation.loadMoreMessage = true;
+        else
+          this.openConversation.loadMoreMessage = false;
+        this.openConversation.messagePage += 1;
+        this.loadingMessages = false;
+      }
+    );
   }
 
   sendMessage() {
@@ -1151,7 +1149,7 @@ export class PharmacyComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       L.Routing.control({
         waypoints: [
-          L.latLng(/*position.coords.latitude*/environment.isimaLatitude,environment.isimaLongitude /*position.coords.longitude*/),
+          L.latLng(/*position.coords.latitude*/environment.isimaLatitude, environment.isimaLongitude /*position.coords.longitude*/),
           L.latLng(this.selectedUser.userLatitude, this.selectedUser.userLongitude)
         ]
       }).addTo(this.myMap);

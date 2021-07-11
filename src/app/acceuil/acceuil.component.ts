@@ -238,6 +238,7 @@ export class AcceuilComponent implements OnInit {
   }
 
   searchDoctor() {
+    this.docInfo=false;
     for (let spec of this.specialityGet) {
       if (this.specialityName.toLowerCase() == this.translate.instant(spec.specialityCode).toLowerCase()) {
         this.specialityCode = spec.specialityCode;
@@ -414,7 +415,7 @@ export class AcceuilComponent implements OnInit {
 
     for (var i = this.today; i <= this.lastMonthDay; i++) {
       this.monthDays[day] = i;
-      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)) % 7]) == -1)
+      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+3) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)

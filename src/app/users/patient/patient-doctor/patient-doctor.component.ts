@@ -157,6 +157,7 @@ export class PatientDoctorComponent implements OnInit {
   }
 
   searchDoctor() {
+    this.docInfo=false;
     for (let spec of this.specialityGet) {
       if (this.specialityName.toLowerCase() == this.translate.instant(spec.specialityCode).toLowerCase()) {
         this.specialityCode = spec.specialityCode;
@@ -261,7 +262,7 @@ export class PatientDoctorComponent implements OnInit {
 
     for (var i = this.today; i <= this.lastMonthDay; i++) {
       this.monthDays[day] = i;
-      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+1) % 7]) == -1)
+      if (this.appointmentDocInfo[this.selectedDoctorKey].workDays.indexOf(this.daysNameEn[(this.todayNumber + i + (7 - this.todayNumber)+3) % 7]) == -1)
         this.monthDaysDis[i] = true;
       else {
         if (i == this.today)
@@ -429,6 +430,8 @@ export class PatientDoctorComponent implements OnInit {
   }
 
   showDoctorInfo(key: number, userId: number) {
+    this.monthDays = [];
+    this.monthDaysDis = [];
     this.showAppointment=true;
     this.loadDoctorInfo[this.selectedDoctorKey] = false;
     this.selectedDoctorKey = key;
@@ -572,7 +575,7 @@ export class PatientDoctorComponent implements OnInit {
       }).addTo(this.doctorMap);
 
       let marker = L.marker([this.appointmentDocInfo[this.selectedDoctorKey].doctorLatitude, this.appointmentDocInfo[this.selectedDoctorKey].doctorLongitude]).addTo(this.doctorMap);
-      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Ph. " + this.searchedDoc[this.selectedDoctorKey].doctorFirstName + ' ' + this.searchedDoc[this.selectedDoctorKey].doctorLastName + + "</b>").openPopup();
+      marker.bindPopup(this.translate.instant('helloIm') + "<br><b> Dr. " + this.searchedDoc[this.selectedDoctorKey].doctorFirstName.toLocaleUpperCase() + ' ' + this.searchedDoc[this.selectedDoctorKey].doctorLastName.toLocaleUpperCase() + "</b>").openPopup();
     }
   }
 
