@@ -33,7 +33,6 @@ import { PharmacyGet } from 'src/model/PharmacyGet';
 import { prescriptionGet } from 'src/model/prescriptionGet';
 import { QuestionGet } from 'src/model/QuestionGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
-import { StringAndTwoDoublePost } from 'src/model/stringAndTwoDoublePost';
 import { StringGet } from 'src/model/StringGet';
 import { TwoStringsPost } from 'src/model/TwoStringsPost';
 import { UpdateMedicalProfilePost } from 'src/model/UpdateMedicalProfilePost';
@@ -46,6 +45,7 @@ import { PharmacyService } from '../../pharmacy/pharmacy.service';
 import { PatientService } from './patient.service';
 import jwt_decode from 'jwt-decode';
 import { environment } from 'src/environments/environment.prod';
+import { StringAndTwoDoublePost } from 'src/model/StringAndTwoDoublePost';
 
 declare const L: any;
 

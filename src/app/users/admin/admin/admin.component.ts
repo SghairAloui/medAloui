@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/Headers/header/header.service';
-import { AdminGet } from 'src/model/adminGet';
 import { SecureLoginString } from 'src/model/SecureLoginString';
 import { AdminService } from './admin.service';
 import jwt_decode from 'jwt-decode';
@@ -11,6 +10,7 @@ import { DoctorService } from '../../doctor/doctor/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { WebSocketNotification } from 'src/model/WebSocketNotification';
+import { AdminGet } from 'src/model/AdminGet';
 
 @Component({
   selector: 'app-admin',
